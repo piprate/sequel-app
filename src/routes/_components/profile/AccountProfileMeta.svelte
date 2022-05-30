@@ -1,0 +1,117 @@
+<script>
+  import SvgIcon from '../SvgIcon.svelte'
+  import { emojifyText } from '../../_utils/emojifyText'
+  import { autoplayGifs } from '../../_store/local'
+
+  export let account;
+
+  $: emojis = account.emojis || [];
+  $: fields = account.fields || [];
+  $: massagedFields = (fields.map(field => ({
+    name: field.name,
+    value: emojifyText(field.value, emojis, $autoplayGifs),
+    verified: !!field.verified_at
+  })));
+</script>
+
+{#if massagedFields.length}
+  <h2 class="sr-only">{intl.fields}</h2>
+  <div class="account-profile-meta">
+    <div class="account-profile-meta-border"></div>
+    {#each massagedFields as field, i}
+      <div
+              id="account-profile-meta-name-{i}"
+              class="account-profile-meta-cell account-profile-meta-name"
+              role="term"
+      >
+        {field.name}
+      </div>
+      <div
+              class="account-profile-meta-cell account-profile-meta-value"
+              role="definition"
+              aria-labelledby="account-profile-meta-name-{i}"
+      >
+        {@html field.value}
+      </div>
+      <div class="account-profile-meta-cell account-profile-meta-verified">
+        {#if field.verified}
+          <SvgIcon className="account-profile-meta-verified-svg" href="#fa-check" />
+        {/if}
+      </div>
+    {/each}
+    <div class="account-profile-meta-border"></div>
+  </div>
+{/if}
+<style>
+  .account-profile-meta {
+    grid-area: meta;
+    display: grid;
+    grid-template-columns: auto 1fr max-content;
+    grid-row-gap: 5px;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .account-profile-meta-border {
+    height: 1px;
+    width: 100%;
+    grid-column: 1 / 4;
+    background: var(--main-border);
+    justify-self: center;
+  }
+
+  .account-profile-meta-cell {
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: pre-wrap;
+    text-overflow: ellipsis;
+    font-size: 1.1em;
+  }
+
+  :global(.account-profile-meta-verified-svg) {
+    width: 24px;
+    height: 24px;
+    fill: var(--svg-fill);
+  }
+
+  .account-profile-meta-name {
+    padding: 10px 20px 10px 0;
+    text-transform: uppercase;
+    color: var(--deemphasized-text-color);
+    position: relative;
+    max-width: 300px;
+  }
+
+  .account-profile-meta-name:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 15%;
+    height: 70%;
+    border-right: 1px solid var(--main-border);
+  }
+
+  .account-profile-meta-value {
+    padding: 10px 10px 10px 20px;
+  }
+
+  :global(.underline-links .account-profile-meta a) {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 767px) {
+    .account-profile-meta {
+      padding: 5px 0;
+    }
+    .account-profile-meta-cell {
+      font-size: 1em;
+    }
+    .account-profile-meta-name {
+      padding: 5px 10px 5px 0;
+      max-width: 40vw;
+    }
+    .account-profile-meta-value {
+      padding: 5px 10px 5px 10px;
+    }
+  }
+</style>

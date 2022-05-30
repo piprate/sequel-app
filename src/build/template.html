@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="{process.env.LOCALE}" dir="{process.env.LOCALE_DIRECTION}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, viewport-fit=cover">
+  <meta id="theThemeColor" name="theme-color" content="#4169e1">
+  <meta name="description" content="{intl.appDescription}">
+
+  %sapper.base%
+
+  <link id="theManifest" rel="manifest" href="/manifest.json">
+  <link id="theFavicon" rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-icon.png">
+  <!-- both of these *-web-app-capable are required, for Chrome on Android and Safari on iOS
+       https://developers.google.com/web/fundamentals/native-hardware/fullscreen/ -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="{intl.appName}">
+  <meta name="apple-mobile-web-app-status-bar-style" content="white">
+
+  <!-- inline CSS -->
+
+  <style id="theGrayscaleStyle" media="only x">
+    /* Firefox doesn't seem to like applying filter: grayscale() to
+     * the entire body, so we apply individually.
+     */
+    img, svg, video,
+    input[type="checkbox"], input[type="radio"],
+    .inline-emoji, .theme-preview {
+      filter: grayscale(100%);
+    }
+  </style>
+
+  <style id="theFocusVisiblePolyfillStyle" media="only x">
+    /* polyfill */
+    /* Note we have to use [data-focus-visible-added] rather than .focus-visible because
+     * Svelte overrides classes */
+    .js-focus-visible :focus:not([data-focus-visible-added]) {
+      outline: none !important; /* important to win the specificity war */
+    }
+    .js-focus-visible :focus:not([data-focus-visible-added]).focus-after::after {
+      display: none;
+    }
+  </style>
+  <style id="theFocusVisibleStyle" media="only x">
+    /* standard version */
+    :focus:not(:focus-visible) {
+      outline: none !important; /* important to win the specificity war */
+    }
+    :focus:not(:focus-visible).focus-after::after {
+      display: none;
+    }
+  </style>
+
+  <noscript>
+    <style>
+      .hidden-from-ssr {
+        opacity: 1 !important;
+      }
+    </style>
+  </noscript>
+
+  <!-- Sapper generates a <style> tag containing critical CSS
+       for the current page. CSS for the rest of the app is
+       lazily loaded when it precaches secondary pages -->
+  %sapper.styles%
+
+  <!-- This contains the contents of the <svelte:head> component, if
+       the current page has one -->
+  %sapper.head%
+</head>
+<body>
+  <!-- inline JS -->
+
+  <!-- The application will be rendered inside this element,
+       because `src/client.js` references it -->
+  <div id="sapper">%sapper.html%</div>
+
+  <!-- Toast.svelte gets rendered here -->
+  <div id="theToast"></div>
+
+  <!-- Snackbar.svelte gets rendered here -->
+  <div id="theSnackbar"></div>
+
+  <!-- LoadingMask.svelte gets rendered here -->
+  <div id="loading-mask" aria-hidden="true"></div>
+
+  <!-- inline SVG -->
+
+  <!-- Sapper creates a <script> tag containing `src/client.js`
+       and anything else it needs to hydrate the app and
+       initialise the router -->
+  %sapper.scripts%
+</body>
+</html>

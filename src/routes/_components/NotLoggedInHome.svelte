@@ -1,0 +1,57 @@
+<script>
+  import FreeTextLayout from './FreeTextLayout.svelte'
+  import HiddenFromSSR from './HiddenFromSSR.svelte'
+  import SvgIcon from './SvgIcon.svelte'
+</script>
+
+<HiddenFromSSR>
+  <FreeTextLayout>
+    <div class="not-logged-in-home">
+      <div class="banner">
+        <SvgIcon className="not-logged-in-home-svg" href="#pinafore-logo" />
+        <h1>{intl.appName}</h1>
+      </div>
+      <div>
+        {@html intl.homeDescription}
+        <p style="text-align: right;">
+          <a class="button primary" rel="prefetch" href="/settings/instances/add">{intl.logIn}</a>
+        </p>
+      </div>
+    </div>
+  </FreeTextLayout>
+</HiddenFromSSR>
+<style>
+  .not-logged-in-home {
+    margin: 10px;
+  }
+  .not-logged-in-home .banner {
+    display: flex;
+    align-items: center;
+    margin: 0 0 30px;
+  }
+  :global(.not-logged-in-home-svg) {
+    width: 70px;
+    height: 70px;
+    fill: var(--banner-fill);
+    display: inline-block;
+  }
+  .not-logged-in-home h1 {
+    color: var(--banner-fill);
+    display: inline-block;
+    font-size: 3em;
+    margin: auto 15px;
+  }
+
+  @media (max-width: 767px) {
+    .not-logged-in-home h1 {
+      font-size: 2.7em;
+    }
+  }
+
+  @media (max-width: 240px) {
+    .not-logged-in-home h1 {
+      font-size: 2.5em;
+    }
+  }
+</style>
+

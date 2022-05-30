@@ -1,0 +1,53 @@
+<script>
+  import Avatar from '../Avatar.svelte'
+  import { isVeryTinyMobileSize } from '../../_store/local'
+
+  export let uuid;
+  export let isStatusInOwnThread;
+  export let originalAccount;
+  export let originalAccountId;
+
+  $: elementId = `status-author-avatar-${uuid}`;
+
+  $: size = (() => {
+    if ($isVeryTinyMobileSize) {
+      return isStatusInOwnThread ? 'small' : 'extra-small'
+    }
+    return isStatusInOwnThread ? 'medium' : 'small'
+  })();
+</script>
+
+<a id={elementId}
+   class="status-sidebar size-{size}"
+   rel="prefetch"
+   href="/accounts/{originalAccountId}"
+   aria-hidden="true"
+   tabindex="-1"
+>
+  <!-- the avatar is duplicated information, so hide from tab order and screenreaders -->
+  <Avatar account={originalAccount}
+          isLink="true"
+          {size} />
+</a>
+<style>
+  .status-sidebar {
+    grid-area: sidebar;
+    margin-right: 15px;
+  }
+
+  .status-sidebar.size-small {
+    width: 48px;
+    height: 48px;
+  }
+
+  .status-sidebar.size-medium {
+    width: 64px;
+    height: 64px;
+  }
+
+  @media (max-width: 767px) {
+    .status-sidebar {
+      margin-right: 5px;
+    }
+  }
+</style>

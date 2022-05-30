@@ -1,0 +1,202 @@
+<script>
+  import ExternalLink from '../ExternalLink.svelte'
+  import { disableFavCounts, disableReblogCounts, isMobileSize } from '../../_store/local'
+  import { absoluteDateFormatter, shortAbsoluteDateFormatter } from '../../_utils/formatters'
+  import SvgIcon from '../SvgIcon.svelte'
+  import { on } from '../../_utils/eventBus'
+  import { formatIntl } from '../../_utils/formatIntl'
+  import {onMount} from "svelte";
+
+  export let originalStatus;
+  export let createdAtDate;
+  export let createdAtDateTS;
+  export let absoluteFormattedDate;
+
+  let overrideNumReblogs = undefined;
+  let overrideNumFavs = undefined;
+
+  $: originalStatusId = originalStatus.id;
+  $: application = originalStatus.application;
+  $: applicationName = (application && application.name);
+  $: applicationWebsite = (application && application.website);
+  $: numReblogs = (() => {
+    if ($disableReblogCounts) {
+      return 0
+    }
+    if (typeof overrideNumReblogs === 'number') {
+      return overrideNumReblogs
+    }
+    return originalStatus.reblogs_count || 0
+  })();
+  $: numFavs = (() => {
+    if ($disableFavCounts) {
+      return 0
+    }
+    if (typeof overrideNumFavs === 'number') {
+      return overrideNumFavs
+    }
+    return originalStatus.favourites_count || 0
+  })();
+  $: displayAbsoluteFormattedDate = (
+          ($isMobileSize ? shortAbsoluteDateFormatter : absoluteDateFormatter)().format(createdAtDateTS)
+  );
+  $: reblogsLabel = (() => {
+    if ($disableReblogCounts) {
+      return 'intl.reblogCountsHidden'
+    }
+    return formatIntl('intl.rebloggedTimes', { count: numReblogs })
+  })();
+  $: favoritesLabel = (() => {
+    if ($disableFavCounts) {
+      return 'intl.favoriteCountsHidden'
+    }
+    return formatIntl('intl.favoritedTimes', { count: numFavs })
+  })();
+  $: externalLinkLabel = (
+          formatIntl('intl.opensInNewWindow', { label: displayAbsoluteFormattedDate })
+  );
+  $: applicationLinkLabel = (
+          formatIntl('intl.opensInNewWindow', { label: applicationName })
+  );
+
+  onMount(() => {
+    return on('statusUpdated', status => {
+      if (status.id === originalStatusId) {
+        overrideNumReblogs = status.reblogs_count || 0;
+        overrideNumFavs = status.favourites_count || 0;
+      }
+    })
+  });
+</script>
+
+<div class="status-details">
+  <ExternalLink className="status-absolute-date"
+                href={originalStatus.url}
+                showIcon={true}
+                ariaLabel={externalLinkLabel}
+  >
+    <time datetime={createdAtDate} title={absoluteFormattedDate}>
+      {displayAbsoluteFormattedDate}
+    </time>
+  </ExternalLink>
+  {#if applicationName}
+    {#if applicationWebsite}
+      <ExternalLink className="status-application"
+                    href={applicationWebsite}
+                    showIcon={false}
+                    ariaLabel={applicationLinkLabel}>
+        <span class="status-application-span">
+          {applicationName}
+        </span>
+      </ExternalLink>
+    {:else}
+      <span class="status-application status-application-span">
+        {applicationName}
+      </span>
+    {/if}
+  {/if}
+  <a class="status-favs-reblogs status-reblogs"
+     rel="prefetch"
+     href="/statuses/{originalStatusId}/reblogs"
+     aria-label={reblogsLabel}>
+    <SvgIcon className="status-favs-reblogs-svg" href="#fa-retweet" />
+    <span>{numReblogs}</span>
+  </a>
+  <a class="status-favs-reblogs status-favs"
+     rel="prefetch"
+     href="/statuses/{originalStatusId}/favorites"
+     aria-label={favoritesLabel}>
+    <SvgIcon className="status-favs-reblogs-svg" href="#fa-star" />
+    <span>{numFavs}</span>
+  </a>
+</div>
+<style>
+  .status-details {
+    grid-area: details;
+    display: grid;
+    grid-template-columns: minmax(0, max-content) repeat(3, max-content);
+    grid-gap: 20px;
+    align-items: center;
+    justify-content: left;
+    margin: 0 5px 10px;
+  }
+  :global(.status-absolute-date) {
+    font-size: 1.1em;
+    min-width: 0;
+  }
+
+  :global(.status-absolute-date time) {
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  :global(.status-application) {
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: pre-wrap;
+    font-size: 1.1em;
+  }
+
+  :global(.status-application, a.status-application, a.status-application:hover) {
+    color: var(--deemphasized-text-color);
+  }
+
+  :global(a.status-application) {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .status-application-span {
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .status-favs-reblogs {
+    font-size: 1.1em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .status-favs-reblogs span {
+    margin-left: 5px;
+  }
+
+  .status-favs-reblogs,
+  .status-favs-reblogs:hover,
+  .status-favs-reblogs:visited {
+    color: var(--deemphasized-text-color);
+  }
+
+  :global(.status-favs-reblogs-svg) {
+    fill: var(--deemphasized-text-color);
+    width: 18px;
+    height: 18px;
+  }
+
+  :global(.status-absolute-date, .status-absolute-date:hover, .status-absolute-date:visited) {
+    color: var(--deemphasized-text-color);
+  }
+
+  @media (max-width: 479px) {
+    :global(.status-absolute-date) {
+      font-size: 1em;
+    }
+    .status-favs-reblogs {
+      font-size: 1em;
+    }
+    :global(.status-application) {
+      font-size: 1em;
+    }
+    .status-details {
+      grid-gap: 5px;
+      justify-content: space-between;
+    }
+
+  }
+
+</style>

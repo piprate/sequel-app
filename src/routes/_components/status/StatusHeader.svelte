@@ -1,0 +1,150 @@
+<script>
+  import Avatar from '../Avatar.svelte'
+  import AccountDisplayName from '../profile/AccountDisplayName.svelte'
+  import SvgIcon from '../SvgIcon.svelte'
+  import { currentVerifyCredentials } from '../../_store/instance'
+
+  export let account;
+  export let accountId;
+  export let uuid;
+  export let isStatusInNotification;
+  export let notification;
+  export let timelineType;
+
+  $: elementId = `status-header-${uuid}`;
+  $: notificationType = notification && notification.type;
+  $: icon = (() => {
+    if (timelineType === 'pinned') {
+      return '#fa-thumb-tack'
+    } else if ((notificationType === 'reblog') || (status && status.reblog)) {
+      return '#fa-retweet'
+    } else if (notificationType === 'follow') {
+      return '#fa-user-plus'
+    } else if (notificationType === 'poll') {
+      return '#fa-bar-chart'
+    }
+    return '#fa-star'
+  })();
+  $: actionText = (() => {
+    if (notificationType === 'reblog') {
+      return 'intl.rebloggedYou'
+    } else if (notificationType === 'favourite') {
+      return 'intl.favoritedYou'
+    } else if (notificationType === 'follow') {
+      return 'intl.followedYou'
+    } else if (notificationType === 'poll') {
+      if ($currentVerifyCredentials && status && $currentVerifyCredentials.id === status.account.id) {
+        return 'intl.pollYouCreatedEnded'
+      } else {
+        return 'intl.pollYouVotedEnded'
+      }
+    } else if (status && status.reblog) {
+      return 'intl.reblogged'
+    } else {
+      return ''
+    }
+  })();
+</script>
+
+<div class="status-header {isStatusInNotification ? 'status-in-notification' : ''} {notificationType === 'follow' ? 'header-is-follow' : ''}">
+  <div class="status-header-avatar {timelineType === 'pinned' || notificationType === 'poll' ? 'hidden' : ''}">
+    <Avatar {account} size="extra-small"/>
+  </div>
+  <SvgIcon className="status-header-svg" href={icon} />
+
+  <div class="status-header-content">
+    {#if timelineType === 'pinned'}
+      <span class="status-header-author">
+        {intl.pinnedStatus}
+      </span>
+    {:else if notificationType !== 'poll'}
+      <a id={elementId}
+         href="/accounts/{accountId}"
+         rel="prefetch"
+         class="status-header-author"
+         title="{'@' + account.acct}"
+      >
+        <AccountDisplayName {account} />
+      </a>
+    {/if}
+
+    <span class="status-header-action">{actionText}</span>
+  </div>
+</div>
+<style>
+  .status-header {
+    grid-area: header;
+    margin: 0 10px 5px 5px;
+    display: flex;
+    align-items: center;
+  }
+  .status-header.header-is-follow {
+    margin-bottom: 0; /* standalone, so doesn't need a bottom margin */
+  }
+
+  .status-header-avatar {
+    margin-left: 19px; /* offset for avatar, 48px - 24px - 5px */
+  }
+
+  :global(.status-header-svg) {
+    min-width: 18px;
+    margin-left: 20px;
+    width: 18px;
+    height: 18px;
+    fill: var(--deemphasized-text-color);
+  }
+
+  :global(.status-header.status-in-notification .status-header-svg) {
+    fill: var(--body-text-color);
+  }
+
+  .status-header-content {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    width: 0;
+  }
+
+  .status-header-author {
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .status-header-action {
+    margin-left: 0.5ch;
+    white-space: nowrap;
+    flex: 1;
+  }
+
+  .status-header-action,
+  .status-header-author,
+  .status-header-author:visited,
+  .status-header-author:hover {
+    color: var(--deemphasized-text-color);
+  }
+
+  .status-in-notification .status-header-action,
+  .status-in-notification .status-header-author,
+  .status-in-notification .status-header-author:visited,
+  .status-in-notification .status-header-author:hover {
+    color: var(--body-text-color);
+  }
+
+  @media (max-width: 767px) {
+    :global(.status-header-svg) {
+      margin-left: 10px;
+    }
+  }
+
+  @media (max-width: 240px) {
+    .status-header {
+      margin-left: 0;
+    }
+    .status-header-avatar {
+      margin-left: 0;
+    }
+  }
+</style>

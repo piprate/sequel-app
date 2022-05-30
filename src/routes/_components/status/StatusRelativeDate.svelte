@@ -1,0 +1,54 @@
+<script>
+  import { formatIntl } from '../../_utils/formatIntl'
+  import { disableTapOnStatus } from '../../_store/local'
+
+  export let uuid;
+  export let isStatusInNotification;
+  export let originalStatusId;
+  export let createdAtDate;
+  export let shortInlineFormattedDate;
+  export let absoluteFormattedDate;
+
+  $: elementId = `status-relative-date-${uuid}`;
+  $: tabindex = (
+          // If you can't tap on the entire status, then you need some way to click on it. Otherwise it's
+          // just a duplicate link in the focus order.
+          $disableTapOnStatus ? '0' : '-1'
+  );
+  $: createdAtLabel = (
+          formatIntl('intl.clickToShowThread', { time: shortInlineFormattedDate })
+  );
+</script>
+
+<a id={elementId}
+   class="status-relative-date {isStatusInNotification ? 'status-in-notification' : '' }"
+   href="/statuses/{originalStatusId}"
+   rel="prefetch"
+   {tabindex}
+>
+  <time datetime={createdAtDate} title={absoluteFormattedDate}
+        aria-label={createdAtLabel}>
+    {shortInlineFormattedDate}
+  </time>
+</a>
+<style>
+  .status-relative-date {
+    grid-area: relative-date;
+    align-self: center;
+    margin-left: 5px;
+    margin-right: 10px;
+    font-size: 1.1em;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .status-relative-date, .status-relative-date:hover, .status-relative-date:visited {
+    color: var(--deemphasized-text-color);
+  }
+
+  .status-relative-date.status-in-notification,
+  .status-relative-date.status-in-notification:hover,
+  .status-relative-date.status-in-notification:visited {
+    color: var(--very-deemphasized-text-color);
+  }
+
+</style>

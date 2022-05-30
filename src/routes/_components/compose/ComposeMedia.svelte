@@ -1,0 +1,31 @@
+<script>
+  import ComposeMediaItem from './ComposeMediaItem.svelte'
+
+  export let realm;
+  export let media;
+</script>
+
+{#if media.length}
+  <ul class="compose-media-container"
+      aria-label="{intl.mediaUploads}"
+      style="grid-template-columns: repeat({media.length}, 1fr);"
+  >
+    {#each media as mediaItem, index}
+      <ComposeMediaItem {realm} {mediaItem} {index} {media} />
+    {/each}
+  </ul>
+{/if}
+<style>
+  .compose-media-container {
+    grid-area: media;
+    list-style: none;
+    display: grid;
+    grid-column-gap: 5px;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0 0 0;
+    background: var(--form-bg);
+    padding: 5px;
+    border-radius: 4px;
+  }
+</style>

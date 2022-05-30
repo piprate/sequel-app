@@ -1,0 +1,113 @@
+<script>
+  import LazyImage from '../LazyImage.svelte'
+  import Shortcut from '../shortcut/Shortcut.svelte'
+  import { unescape } from '../../_thirdparty/unescape/unescape'
+
+  export let originalStatus;
+  export let enableShortcuts;
+  export let shortcutScope;
+
+  $: card = originalStatus.card;
+  $: title = card.title;
+  $: unescapedTitle = title && unescape(title);
+  $: url = card.url;
+  $: hostname = window.URL ? new window.URL(url).hostname : '';
+  $: description = card.description || card.provider_name || hostname;
+  $: unescapedDescription = description && unescape(description);
+  $: imageUrl = card.image;
+
+  let cardlink;
+
+  function open() {
+    if (cardlink) {
+      cardlink.click();
+    }
+  }
+</script>
+
+<a bind:this={cardlink} href={url} class="status-card" target="_blank" rel="noopener noreferrer">
+    <strong class="card-title" title={unescapedTitle}>
+     {unescapedTitle}
+    </strong>
+  {#if description}
+    <div class="card-content">
+  {#if imageUrl}
+    <div class="status-card-image-container">
+      <LazyImage src={imageUrl} ariaHidden={true} />
+    </div>
+  {/if}
+    <span class="card-description">
+      {unescapedDescription}
+    </span>
+  </div>
+  {/if}
+  {#if enableShortcuts}
+  <Shortcut scope={shortcutScope} key="l" on:pressed="{ () => open(url) }" />
+  {/if}
+</a>
+<style>
+  .status-card {
+    grid-area: card;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+
+    text-decoration: none;
+    color: inherit;
+
+    overflow: hidden;
+    margin: 10px 10px 10px 5px;
+
+    border: 1px solid var(--settings-list-item-border);
+    background: var(--settings-list-item-bg-hover);
+    border-radius: 6px;
+  }
+
+  .status-card:hover {
+    background: transparent;
+  }
+
+  .status-card :first-child:not(span) {
+    flex-shrink: 0;
+  }
+
+  .card-content {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    opacity: 0.8;
+  }
+
+  .status-card-image-container {
+    position: relative;
+    width: 50px;
+    height: 50px;
+  }
+
+  :global(.status-card-image-container img) {
+    object-fit: cover;
+  }
+
+  .card-title {
+    font-weight: 600;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: inline-block;
+    opacity: 0.8;
+  }
+
+  .card-description {
+    font-size: small;
+    line-height: 1.4;
+    max-height: 5.6em; /* 4 * line-height */
+    overflow: hidden;
+  }
+
+  .card-description:not(:first-child) {
+    margin-left: 15px;
+  }
+
+
+</style>

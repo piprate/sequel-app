@@ -1,0 +1,157 @@
+<script>
+  import IconButton from '../IconButton.svelte'
+  import { importShowAccountProfileOptionsDialog } from '../dialog/asyncDialogs/importShowAccountProfileOptionsDialog.js'
+  import { LOCALE } from '../../_static/intl'
+  import { formatIntl } from '../../_utils/formatIntl'
+  import { thunk } from '../../_utils/thunk'
+  import { disableFollowerCounts } from '../../_store/local'
+
+  const numberFormat = thunk(() => new Intl.NumberFormat(LOCALE))
+
+  export let account;
+  export let relationship;
+  export let verifyCredentials;
+
+  $: numStatuses = account.statuses_count || 0;
+  $: numFollowing = account.following_count || 0;
+  $: numFollowers = account.followers_count || 0;
+  $: numStatusesDisplay = numberFormat().format(numStatuses);
+  $: numFollowingDisplay = numberFormat().format(numFollowing);
+  $: numFollowersDisplay = (() => {
+    if ($disableFollowerCounts && numFollowers >= 10) {
+      return '10+'
+    }
+    return numberFormat().format(numFollowers)
+  })();
+  $: followersLabel = formatIntl('intl.followersLabel', { count: numFollowers });
+  $: followingLabel = formatIntl('intl.followingLabel', { count: numFollowing });
+
+  async function onMoreOptionsClick() {
+    const showAccountProfileOptionsDialog = await importShowAccountProfileOptionsDialog();
+    showAccountProfileOptionsDialog(account, relationship, verifyCredentials);
+  }
+</script>
+
+<h2 class="sr-only">{intl.statisticsAndMoreOptions}</h2>
+<div class="account-profile-details">
+  <div class="account-profile-details-item">
+    <span class="account-profile-details-item-title">
+      {intl.statuses}
+    </span>
+    <span class="account-profile-details-item-datum">
+      {numStatusesDisplay}
+    </span>
+  </div>
+  <a class="account-profile-details-item"
+     href='/accounts/{account.id}/follows'
+     aria-label={followingLabel}
+     rel="prefetch"
+  >
+    <span class="account-profile-details-item-title">
+      {intl.follows}
+    </span>
+    <span class="account-profile-details-item-datum">
+      {numFollowingDisplay}
+    </span>
+  </a>
+  <a class="account-profile-details-item"
+     href='/accounts/{account.id}/followers'
+     aria-label={followersLabel}
+     rel="prefetch"
+  >
+    <span class="account-profile-details-item-title">
+      {intl.followers}
+    </span>
+    <span class="account-profile-details-item-datum">
+      {numFollowersDisplay}
+    </span>
+  </a>
+  <!-- TODO: re-enable this when we support profile editing -->
+  {#if account && verifyCredentials && account.id !== verifyCredentials.id}
+    <div class="account-profile-more-options">
+      <IconButton
+        label="{intl.moreOptions}"
+        href="#fa-bars"
+        muted="true"
+        on:click="{onMoreOptionsClick}"
+      />
+    </div>
+  {/if}
+</div>
+<style>
+  .account-profile-details {
+    grid-area: details;
+    display: grid;
+    margin: 0 5px;
+    align-items: center;
+    grid-template-columns: 1fr 1fr 1fr min-content;
+  }
+
+  .account-profile-details-item {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    justify-content: center;
+    font-size: 1.1em;
+  }
+
+  .account-profile-details-item:hover {
+    text-decoration: none;
+    background: var(--button-bg-hover);
+    cursor: pointer;
+  }
+
+  .account-profile-details-item:active {
+    background: var(--button-bg-active);
+  }
+
+  .account-profile-details-item-title {
+    text-transform: uppercase;
+    color: var(--deemphasized-text-color);
+    margin-right: 5px;
+  }
+
+  .account-profile-details-item-datum {
+    color: var(--body-text-color);
+    margin-left: 5px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 767px) {
+    .account-profile-details-item {
+      flex-direction: column;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    .account-profile-details-item:last-child {
+      margin-right: 0;
+    }
+
+    .account-profile-details-item:first-child {
+      margin-left: 0;
+    }
+
+    .account-profile-details-item-title {
+      margin-right: 0;
+      text-align: center;
+    }
+    .account-profile-details-item-datum {
+      margin-left: 0;
+      text-align: center;
+    }
+    .account-profile-details-item {
+      font-size: 1em;
+    }
+  }
+
+  @media (max-width: 240px) {
+    .account-profile-details {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .account-profile-more-options {
+      justify-self: flex-end;
+      grid-column: 1 / 4;
+    }
+  }
+</style>
