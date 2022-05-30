@@ -46,7 +46,7 @@ module.exports = {
       <a rel="noopener" target="_blank" href="https://sequel.space">Sequel</a>
       developed by
       <a rel="noopener" target="_blank" href="https://piprate.com">Piprate</a> 
-      and distributed under the <a rel="noopener" target="_blank" href="piprate/sequel-app/blob/main/LICENSE">AGPL License</a>.
+      and distributed under the <a rel="noopener" target="_blank" href="https://github.com/piprate/sequel-app/blob/main/LICENSE">AGPL License</a>.
       Here are the <a rel="noopener" target="_blank" href="https://sequel.space/home/application-privacy-policy/">Privacy Policy</a>
       and <a rel="noopener" target="_blank" href="https://sequel.space/home/code-of-conduct/">Code of Conduct</a>.
     </p>
