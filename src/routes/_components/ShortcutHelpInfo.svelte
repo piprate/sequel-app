@@ -1,0 +1,70 @@
+<script>
+  import { leftRightChangesFocus } from '../_store/local'
+  import { formatIntl } from '../_utils/formatIntl'
+
+  let inDialog = false;
+
+  $: globalHotkeysText = formatIntl('intl.globalHotkeys', { leftRightChangesFocus: $leftRightChangesFocus });
+</script>
+
+<div class="shortcut-help-info {inDialog ? 'in-dialog' : ''}"
+     tabindex="{inDialog ? '0' : '-1'}"
+>
+  <h2>{intl.global}</h2>
+  <div class="hotkey-group">
+    <ul>
+      {@html globalHotkeysText}
+    </ul>
+  </div>
+  <h2>{intl.timeline}</h2>
+  <div class="hotkey-group">
+    <ul>
+      {@html intl.timelineHotkeys}
+    </ul>
+  </div>
+  {#if !$leftRightChangesFocus}
+    <h2>{intl.media}</h2>
+    <div class="hotkey-group">
+      <ul>
+        {@html intl.mediaHotkeys}
+      </ul>
+    </div>
+  {/if}
+</div>
+<style>
+  .shortcut-help-info.in-dialog {
+    overflow-y: auto;
+  }
+  .shortcut-help-info.in-dialog:not(:focus) {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .shortcut-help-info.in-dialog:not(:focus)::-webkit-scrollbar {
+    display: none;
+  }
+  :global(.shortcut-help-info li) {
+    list-style-type: none;
+  }
+  :global(.shortcut-help-info.in-dialog li) {
+    color: var(--muted-modal-text);
+    font-size: 0.9em;
+  }
+  :global(.shortcut-help-info.in-dialog h2) {
+    color: var(--muted-modal-text);
+  }
+  :global(.shortcut-help-info.hotkey-group) {
+    margin: 0 0 10px 10px;
+  }
+  :global(.shortcut-help-info h2) {
+    margin: 10px 0;
+  }
+  :global(.shortcut-help-info kbd) {
+    color: #333;
+    display: inline-block;
+    border: 1px solid #333;
+    border-radius: 2px;
+    padding: 0.1em;
+    margin: 0.2em;
+    background-color: #dadada;
+  }
+</style>

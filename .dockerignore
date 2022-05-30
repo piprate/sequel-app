@@ -1,0 +1,16 @@
+.git
+docs
+README.md
+tests
+.DS_Store
+/node_modules
+/__sapper__
+/src/template.html
+/static/*.css
+/static/icons.svg
+/static/inline-script.js.map
+/static/emoji-*.json
+/static/manifest.json
+/src/inline-script/checksum.js
+yarn-error.log
+/vercel.json

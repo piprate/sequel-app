@@ -1,0 +1,206 @@
+<script>
+  import Avatar from '../Avatar.svelte';
+  import BubbleDisplayName from './BubbleDisplayName.svelte';
+  import Location from "../Location.svelte";
+  import CreatedAt from "../CreatedAt.svelte";
+  import { removeEmoji } from '../../_utils/removeEmoji';
+  import { isTinyMobileSize, isVeryTinyMobileSize, omitEmojiInDisplayNames } from '../../_store/local';
+  import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js';
+  import { getImageNativeDimensions } from '../../_utils/getImageNativeDimensions';
+  import { formatIntl } from '../../_utils/formatIntl';
+
+  export let bubble;
+  export let relationship;
+
+  let emojis = [];
+
+  $: displayName = bubble.name;
+  $: accessibleName = (() => {
+    return $omitEmojiInDisplayNames
+            ? removeEmoji(displayName, emojis) || displayName
+            : displayName;
+  })();
+  $: avatarSize = $isVeryTinyMobileSize ? 'small' : $isTinyMobileSize ? 'medium' : 'big';
+  $: externalLinkLabel = formatIntl('intl.opensInNewWindow', { label: accessibleName });
+  $: joined = relationship && (relationship.status === 'active');
+  $: memberType = joined? relationship.memberType : '';
+  $: memberTypeLabel = (() => {
+    switch(memberType) {
+      case 'owner':
+        return 'intl.memberTypeOwner';
+      case 'moderator':
+        return 'intl.memberTypeModerator';
+      case 'writer':
+        return 'intl.memberTypeMember';
+      case 'observer':
+        return 'intl.memberTypeReader';
+    }
+    return '';
+  })();
+  $: readOnlyLabel = bubble.writerMode === 'none' ? 'intl.readOnly' : ''
+  $: inviteOnlyLabel = bubble.membershipMode === 'invite_only' ? 'intl.inviteOnly' : ''
+
+  async function onAvatarClick () {
+    if (!bubble.avatar) {
+      return
+    }
+    const avatar = bubble.avatar.url
+    const avatarStatic = bubble.avatar.staticUrl
+    const [showMediaDialog, nativeDimensions] = await Promise.all([
+      importShowMediaDialog(),
+      getImageNativeDimensions(avatarStatic)
+    ]);
+    // pretend this is a media attachment so it will work in the media dialog
+    const { width, height } = nativeDimensions;
+    const mediaAttachments = [
+      {
+        description: formatIntl('intl.avatarForBubble', { bubble: bubble.name }),
+        type: 'image',
+        previewUrl: avatarStatic,
+        url: avatar,
+        meta: {
+          width,
+          height
+        },
+        thumbnails: {
+          preview: {
+            width: 100,
+            height: 100
+          }
+        }
+      }
+    ];
+    showMediaDialog(mediaAttachments, /* index */ 0);
+  }
+</script>
+
+<h2 class="sr-only">{intl.nameAndSubscriptions}</h2>
+<div class="bubble-profile-avatar">
+  <button class="bubble-profile-avatar-button"
+          aria-label="{intl.clickToSeeAvatar}"
+          on:click="{onAvatarClick}" >
+    <Avatar entity={bubble} size={avatarSize} showNFT="{true}" />
+  </button>
+</div>
+<div class="bubble-profile-name">
+  <BubbleDisplayName {bubble} />
+</div>
+<div class="bubble-profile-properties">
+  {#if bubble.worldRef }
+    <Location world={bubble.worldRef} />
+  {/if}
+  <CreatedAt createdAt={bubble.createdAt} className={ bubble.worldRef ? 'with-left-margin' : '' } flavour="created" />
+</div>
+<div class="bubble-profile-relationship">
+  {#if relationship }
+    {#if relationship.managed && memberType !== 'owner' }
+      <span class="bubble-profile-relationship-span">{intl.managed}</span>
+    {/if}
+    {#if memberTypeLabel}
+      <span class="bubble-profile-relationship-span">{memberTypeLabel}</span>
+    {/if}
+    {#if readOnlyLabel}
+      <span class="bubble-profile-relationship-span">{readOnlyLabel}</span>
+    {/if}
+    {#if inviteOnlyLabel}
+      <span class="bubble-profile-relationship-span">{inviteOnlyLabel}</span>
+    {/if}
+    {#if relationship.blocked}
+      <span class="bubble-profile-relationship-span">{intl.blocked}</span>
+    {/if}
+    {#if relationship.muted}
+      <span class="bubble-profile-relationship-span">{intl.muted}</span>
+    {/if}
+  {/if}
+</div>
+<style>
+  .bubble-profile-relationship {
+    grid-area: relationship;
+    align-self: center;
+    text-transform: uppercase;
+    color: var(--deemphasized-text-color);
+    font-size: 0.8em;
+    white-space: nowrap;
+  }
+  .bubble-profile-relationship-span {
+    background: rgba(30, 30, 30, 0.2);
+    border-radius: 4px;
+    padding: 3px 5px;
+    white-space: nowrap;
+  }
+  .bubble-profile-avatar {
+    grid-area: avatar;
+  }
+
+  /*.bubble-profile-username {*/
+  /*  grid-area: username;*/
+  /*  color: var(--deemphasized-text-color);*/
+  /*  white-space: nowrap;*/
+  /*  overflow: hidden;*/
+  /*  text-overflow: ellipsis;*/
+  /*  align-self: center;*/
+  /*}*/
+
+  .bubble-profile-properties {
+    grid-area: properties;
+    color: var(--deemphasized-text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-self: center;
+  }
+
+  .bubble-profile-name {
+    grid-area: name;
+    font-size: 1.5em;
+    align-self: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .bubble-profile-avatar-button {
+    border: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+
+  .bubble-profile-avatar-button:hover {
+    opacity: 0.9;
+  }
+
+  .bubble-profile-avatar-button:active {
+    opacity: 0.8;
+  }
+
+  :global(a.bubble-profile-name-link) {
+    color: var(--body-text-color);
+    text-decoration: none;
+  }
+
+  :global(a.bubble-profile-name-link:hover) {
+    color: var(--body-text-color);
+    text-decoration: underline;
+  }
+
+  :global(.bubble-profile-label) {
+    grid-area: label;
+    justify-content: left !important;
+  }
+
+  @media (max-width: 767px) {
+    .bubble-profile-name {
+      font-size: 1.3em;
+    }
+    /*.bubble-profile-username {*/
+    /*  font-size: 1.1em;*/
+    /*}*/
+    /*.bubble-profile-name, .bubble-profile-username {*/
+    .bubble-profile-name {
+      align-self: flex-start;
+    }
+  }
+</style>

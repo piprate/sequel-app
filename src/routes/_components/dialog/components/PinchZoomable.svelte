@@ -1,0 +1,87 @@
+<script>
+  import IconButton from '../../IconButton.svelte'
+  import 'pinch-zoom-element'
+
+  const ZOOM_INCREMENT = 0.1
+
+  export let className;
+
+  let node;
+
+  function zoomBy (increment) {
+    const scale = node.scale || 1
+    node.scaleTo(scale + increment, {
+      originX: '50%',
+      originY: '50%'
+    })
+  }
+
+  function zoomIn () {
+    zoomBy(ZOOM_INCREMENT)
+  }
+
+  function zoomOut () {
+    zoomBy(-ZOOM_INCREMENT)
+  }
+</script>
+<div class="pinch-zoom {className ? className : ''}" >
+  <pinch-zoom class="pinch-zoom-inner" bind:this={node}>
+    <slot></slot>
+  </pinch-zoom>
+  <IconButton
+          className="pinch-zoom-button pinch-zoom-button-zoom-out"
+          muted={true}
+          label="{intl.zoomOut}"
+          href="#fa-search-minus"
+          on:click="{zoomOut}"
+  />
+  <IconButton
+          className="pinch-zoom-button pinch-zoom-button-zoom-in"
+          muted={true}
+          label="{intl.zoomIn}"
+          href="#fa-search-plus"
+          on:click="{zoomIn}"
+  />
+</div>
+
+<style>
+  .pinch-zoom {
+    position: relative;
+  }
+  .pinch-zoom-inner {
+    width: 100%;
+    height: 100%;
+  }
+
+  :global(.icon-button.pinch-zoom-button) {
+    position: absolute;
+    z-index: 110;
+    bottom: 10px;
+    background: var(--mask-opaque-bg);
+  }
+
+  :global(.pinch-zoom-button-zoom-in) {
+    right: 10px;
+  }
+
+  :global(.pinch-zoom-button-zoom-out) {
+    left: 10px;
+  }
+
+  @media (max-width: 767px) {
+    :global(.pinch-zoom-button-zoom-in) {
+      right: 5px;
+    }
+
+    :global(.pinch-zoom-button-zoom-out) {
+      left: 5px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    :global(.icon-button.pinch-zoom-button) {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+</style>
