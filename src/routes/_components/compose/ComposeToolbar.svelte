@@ -3,24 +3,26 @@
   import { currentInstance } from '../../_store/local'
   import { importShowEmojiDialog } from '../dialog/asyncDialogs/importShowEmojiDialog'
   import { importShowPostPrivacyDialog } from '../dialog/asyncDialogs/importShowPostPrivacyDialog'
-  import { doMediaUpload, uploadingMedia } from '../../_actions/media'
+  import { doMediaUpload, doTokenMediaUpload, uploadingMedia } from '../../_actions/media'
   import { toggleContentWarningShown } from '../../_actions/contentWarnings'
   import { mediaAccept } from '../../_static/media'
   import { updateCustomEmojiForInstance } from '../../_actions/emoji'
   import { formatIntl } from '../../_utils/formatIntl'
+  import { importShowNFTSelectionDialog } from '../dialog/asyncDialogs/importShowNFTSelectionDialog'
 
-  export let realm;
-  export let postPrivacy;
-  export let media;
-  export let contentWarningShown;
-  contentWarningShown = false;
+  export let realm
+  export let postPrivacy
+  export let media
+  export let contentWarningShown
+  export let enableNFT = false
+  contentWarningShown = false
 
-  let input;
+  let input
 
-  $: postPrivacyLabel = formatIntl('intl.postPrivacyLabel', { label: postPrivacy.label });
-  $: uploadInProgress = $uploadingMedia === realm;
+  $: postPrivacyLabel = formatIntl('intl.postPrivacyLabel', { label: postPrivacy.label })
+  $: uploadInProgress = $uploadingMedia === realm
 
-  async function onEmojiClick() {
+  async function onEmojiClick () {
     const [showEmojiDialog] = await Promise.all([
       importShowEmojiDialog(),
       updateCustomEmojiForInstance($currentInstance)
@@ -28,23 +30,32 @@
     showEmojiDialog(realm)
   }
 
-  function onMediaClick() {
+  function onMediaClick () {
     input.click()
   }
 
-  async function onFileChange(e) {
+  async function onNFTSelectorClick () {
+    const showDialog = await importShowNFTSelectionDialog()
+    showDialog('', async function (event) {
+      const nft = event.detail
+      console.log('NFT selected', nft)
+      await doTokenMediaUpload(realm, '', nft, true, '')
+    }, '')
+  }
+
+  async function onFileChange (e) {
     const { files } = e.target
     for (const file of files) {
       await doMediaUpload(realm, '', file, true, '')
     }
   }
 
-  async function onPostPrivacyClick() {
+  async function onPostPrivacyClick () {
     const showPostPrivacyDialog = await importShowPostPrivacyDialog()
     showPostPrivacyDialog(realm)
   }
 
-  function onContentWarningClick() {
+  function onContentWarningClick () {
     toggleContentWarningShown(realm)
   }
 </script>
@@ -65,6 +76,16 @@
     on:click="{onMediaClick}"
     disabled={$uploadingMedia || (media.length === 4)}
     />
+    {#if enableNFT}
+      <IconButton
+              className="compose-toolbar-button"
+              svgClassName={uploadInProgress ? 'spin' : ''}
+              label="{intl.addNFTMedia}"
+              href={uploadInProgress ? '#fa-spinner' : '#nft-diamond'}
+              on:click="{onNFTSelectorClick}"
+              disabled={$uploadingMedia}
+      />
+    {/if}
     <IconButton
             className="compose-toolbar-button"
             label={postPrivacyLabel}

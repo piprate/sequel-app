@@ -143,7 +143,7 @@
     <ComposeInput {realm} {text} {autoFocus} on:publishAction="{doPublishPost}" />
     <ComposeLengthGauge {length} {overLimit} />
     <ComposeAutosuggest {realm} {dialogId} />
-    <ComposeToolbar {realm} {postPrivacy} {media} {contentWarningShown} />
+    <ComposeToolbar {realm} {postPrivacy} {media} {contentWarningShown} enableNFT=true />
     <ComposeLengthIndicator {length} {overLimit} />
     <ComposeMedia {realm} {media} />
 <!--    <ComposeMediaSensitive {realm} {media} {sensitive} {contentWarning} {contentWarningShown} />-->
