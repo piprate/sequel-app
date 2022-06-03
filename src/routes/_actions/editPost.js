@@ -11,17 +11,11 @@ export async function editPost (post) {
     contentWarningShown: false,
     contentWarning: '',
     postPrivacy: post.visibility,
-    media: post.media && post.media.map(_ => ({
-      url: _.url,
-      previewUrl: _.previewUrl,
-      description: _.description || '',
-      data: {
-        id: _.id,
-        type: _.type,
-        mediaType: _.mediaType,
-        blurhash: _.blurhash || '',
-        meta: _.meta || {}
-      }
+    media: post.media && post.media.map(mediaObj => ({
+      url: mediaObj.url,
+      previewUrl: mediaObj.previewUrl,
+      description: mediaObj.description || '',
+      data: mediaObj
     })),
     inReplyToId: post.inReplyTo,
     originalPostId: post.id,
