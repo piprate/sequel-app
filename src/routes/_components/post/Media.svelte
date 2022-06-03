@@ -3,6 +3,7 @@
   import PlayVideoIcon from '../PlayVideoIcon.svelte'
   import LazyImage from '../LazyImage.svelte'
   import AutoplayVideo from '../AutoplayVideo.svelte'
+  import NFTMediaTag from '../NFTMediaTag.svelte'
   import { DEFAULT_MEDIA_HEIGHT, DEFAULT_MEDIA_WIDTH, ONE_TRANSPARENT_PIXEL } from '../../_static/media'
   import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js'
   import { mouseover } from '../../_utils/events'
@@ -17,6 +18,7 @@
   export let mediaAttachments
   export let index
   export let showAsSensitive
+  export let showNFT = false
 
   let oneTransparentPixel = ONE_TRANSPARENT_PIXEL
   let mouseoverVar = undefined
@@ -73,6 +75,7 @@
   $: animatedLabel = (
           formatIntl('intl.animatedImage', { description })
   )
+  $: nftReference = media.partOf
 
   function onClick () {
     (async () => {
@@ -157,6 +160,9 @@
               background="var(--loading-bg)"
               {focus}
       />
+    {/if}
+    {#if showNFT && nftReference}
+      <NFTMediaTag nft={nftReference}/>
     {/if}
   </button>
 {/if}

@@ -24,7 +24,7 @@
 <div class={computedClass}
      style="grid-template-columns: repeat({nCols}, 1fr);" >
   {#each mediaAttachments as media, index}
-    <Media {media} {uuid} {mediaAttachments} {index} {showAsSensitive} />
+    <Media {media} {uuid} {mediaAttachments} {index} {showAsSensitive} showNFT=true />
   {/each}
 </div>
 <style>
