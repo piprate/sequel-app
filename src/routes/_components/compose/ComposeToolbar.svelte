@@ -21,6 +21,7 @@
 
   $: postPrivacyLabel = formatIntl('intl.postPrivacyLabel', { label: postPrivacy.label })
   $: uploadInProgress = $uploadingMedia === realm
+  $: hasOriginalToken = !!(media.data && media.data.partOf)
 
   async function onEmojiClick () {
     const [showEmojiDialog] = await Promise.all([
@@ -36,7 +37,8 @@
 
   async function onNFTSelectorClick () {
     const showDialog = await importShowNFTSelectionDialog()
-    showDialog('', async function (event) {
+    // we pass empty current NFT values, as there may be multiple media items in the post
+    showDialog('', '', async function (event) {
       const nft = event.detail
       console.log('NFT selected', nft)
       await doTokenMediaUpload(realm, '', nft, true, '')

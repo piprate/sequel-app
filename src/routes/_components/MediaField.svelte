@@ -1,8 +1,8 @@
 <script>
   import IconButton from './IconButton.svelte'
+  import MediaItem from './MediaItem.svelte'
   import { doMediaUpload, doTokenMediaUpload, uploadingMedia } from '../_actions/media'
   import { mediaAccept } from '../_static/media'
-  import MediaItem from './MediaItem.svelte'
   import { currentComposeData } from '../_store/instance'
   import { importShowNFTSelectionDialog } from './dialog/asyncDialogs/importShowNFTSelectionDialog'
 
@@ -18,6 +18,9 @@
   $: composeData = $currentComposeData[realm] || {}
   $: mediaItem = composeData[field]
   $: showElement = !!(mediaItem && mediaItem.data)
+  $: hasOriginalToken = showElement && mediaItem.data && mediaItem.data.partOf
+  $: originalSource = hasOriginalToken ? mediaItem.data.partOf.source : undefined
+  $: originalToken = hasOriginalToken ? mediaItem.data.partOf.token : undefined
   $: uploadInProgress = $uploadingMedia === realm + field
 
   let input
@@ -26,11 +29,9 @@
     input.click()
   }
 
-  let selectedNFT
-
   async function onNFTSelectorClick () {
     const showDialog = await importShowNFTSelectionDialog()
-    showDialog(selectedNFT, async function (event) {
+    showDialog(originalSource, originalToken, async function (event) {
       const nft = event.detail
       console.log('NFT selected', nft)
       await doTokenMediaUpload(realm, field, nft, addHash, mediaProfile)

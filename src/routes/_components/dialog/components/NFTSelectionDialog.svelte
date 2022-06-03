@@ -6,17 +6,18 @@
   import RadioGroupButton from '../../radio/RadioGroupButton.svelte'
   import WorldDisplayName from '../../world/WorldDisplayName.svelte'
   import FlowConnect from '../../flow/FlowConnect.svelte'
+  import LoadingSpinner from '../../LoadingSpinner.svelte'
   import { close } from '../helpers/closeDialog'
   import { createEventDispatcher } from 'svelte'
   import { currentInstance, flowLoggedInAccount, instanceUsers } from '../../../_store/local'
   import { formatIntl } from '../../../_utils/formatIntl'
   import { toast } from '../../toast/toast'
   import { readNFTCollection } from '../../../_actions/flow'
-  import LoadingSpinner from '../../LoadingSpinner.svelte'
 
   export let id
   export let label
-  export let selectedNFT = ''
+  export let currentSource = undefined
+  export let currentToken = undefined
 
   const dispatch = createEventDispatcher()
 
@@ -113,6 +114,10 @@
     }
   }
 
+  function isCurrent (nft) {
+    return nft.source === currentSource && nft.token === currentToken
+  }
+
   function onBackClick (e) {
     currentSelectionTree = selectionHistory.pop()
     // cause variable refresh
@@ -178,7 +183,7 @@
                           className="nft-selector-button"
                           label={nft.name}
                           index={idx}
-                          checked={nft.id === selectedNFT}
+                          checked={isCurrent(nft)}
                           on:click="{ (e) => onClick(nft) }">
                     <div class="search-result-nft">
                       <div class="search-result-nft-image">
@@ -191,7 +196,7 @@
                         {nft.token}
                       </div>
                       <div class="nft-selector-button-wrapper">
-                        <SvgIcon className="nft-selector-button-svg {nft.selected ? '' : 'hidden'}"
+                        <SvgIcon className="nft-selector-button-svg {isCurrent(nft) ? '' : 'hidden'}"
                                  href="#fa-check" />
                       </div>
                     </div>

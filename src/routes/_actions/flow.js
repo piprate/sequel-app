@@ -233,7 +233,7 @@ export async function readNFTCollection (source, account) {
   if (source === 'sequel') {
     list = Array.from(Object.entries(col)).map(([id, meta]) => (
       {
-        token: id,
+        token: parseInt(id),
         name: meta.name,
         source: source,
         account: account,
@@ -243,7 +243,7 @@ export async function readNFTCollection (source, account) {
   } else {
     list = Array.from(Object.entries(col)).map(([id, name]) => (
       {
-        token: id,
+        token: parseInt(id),
         name,
         source: source,
         account: account,

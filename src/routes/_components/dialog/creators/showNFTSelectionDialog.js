@@ -1,9 +1,10 @@
 import NFTSelectionDialog from '../components/NFTSelectionDialog.svelte'
 import { showDialog } from './showDialog'
 
-export default function showNFTSelectionDialog (selectedNFT, onSelect, label) {
+export default function showNFTSelectionDialog (currentSource, currentToken, onSelect, label) {
   return showDialog(NFTSelectionDialog, {
-    selectedNFT,
+    currentSource,
+    currentToken,
     label
   }, {
     select: onSelect
