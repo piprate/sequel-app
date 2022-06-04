@@ -8,7 +8,7 @@
   import FlowConnect from '../../flow/FlowConnect.svelte'
   import LoadingSpinner from '../../LoadingSpinner.svelte'
   import { close } from '../helpers/closeDialog'
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, onMount } from 'svelte'
   import { currentInstance, flowLoggedInAccount, instanceUsers } from '../../../_store/local'
   import { formatIntl } from '../../../_utils/formatIntl'
   import { toast } from '../../toast/toast'
@@ -95,7 +95,7 @@
 
     currentSelectionTree = folder
 
-    if (folder.type !== 'folder' && !folder.loaded) {
+    if (folder.type !== 'folder' && !folder.loaded && !folder.notSupported) {
       loadingNFTs = true
       try {
         folder.nftList = await readNFTCollection(folder.id, flowAddress)
@@ -123,6 +123,13 @@
     // cause variable refresh
     selectionHistory = selectionHistory
   }
+
+  onMount(() => {
+    if (flowNetwork === 'mainnet') {
+      // disable Sequel NFT lookup on mainnet
+      rootSelectionTree.folderList[0].notSupported = true
+    }
+  })
 </script>
 
 <ModalDialog
