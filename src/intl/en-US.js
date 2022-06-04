@@ -23,6 +23,7 @@ module.exports = {
       and confirm that you are at least 18 years old.`,
   continueAsVisitorLink: 'continue as Visitor',
   logIn: 'Log in',
+  changeInstance: 'Change Instance',
   visitorBreadcrumb: 'Visitor Mode',
   visitorTitle: 'Enter as Visitor',
   visitorNotice: `

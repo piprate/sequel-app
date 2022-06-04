@@ -38,14 +38,12 @@
 
   let recoveryPhrase = ''
 
+  let showInstance = !production
+
   if (!production) {
     $instanceNameInSearch = 'localhost'
     email = 'test@sequel'
     password = 'pass'
-  } else if (window.location.hostname !== 'sequel.space') {
-    // we are in test environment
-    $instanceNameInSearch = 'sequeltest.piprate.com'
-    production = false
   }
 
   let password2 = password
@@ -83,6 +81,10 @@
     goto('/settings/flow?new')
   }
 
+  function onChangeInstance () {
+    showInstance = true
+  }
+
   onMount(async () => {
     hasIndexedDB = testHasIndexedDB()
     hasLocalStorage = testHasLocalStorage()
@@ -113,12 +115,6 @@
           </div>
         </noscript>
 
-        {#if !production}
-          <label for="instanceInput">{intl.instanceColon}</label>
-          <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" id="instanceInput"
-                 bind:value='{$instanceNameInSearch}' placeholder="{intl.enterInstanceName}" required
-          >
-        {/if}
         <label for="email">{intl.emailColon}</label>
         <input type="text" inputmode="email" autocapitalize="none" spellcheck="false" id="email"
                bind:value='{email}' placeholder="{intl.enterInstanceEmail}" required
@@ -131,6 +127,14 @@
         <input type="password" inputmode="text" autocapitalize="none" spellcheck="false" id="password2"
                bind:value='{password2}' placeholder="{intl.confirmInstancePassword}" required
         >
+        {#if showInstance}
+          <label for="instanceInput">{intl.instanceColon}</label>
+          <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" id="instanceInput"
+                 bind:value='{$instanceNameInSearch}' placeholder="{intl.enterInstanceName}" required
+          >
+        {:else}
+          <div on:click={onChangeInstance} class="change-instance-link">{'intl.changeInstance'}</div>
+        {/if}
         {#if askForRegistrationCode}
           <label for="code">{intl.registrationCodeColon}</label>
           <div class="legal-notice">
@@ -228,6 +232,13 @@
 
   .button-panel {
     display: flex;
+  }
+
+  .change-instance-link {
+    color: var(--anchor-text);
+    text-decoration: underline;
+    cursor: pointer;
+    margin: 20px 5px;
   }
 
   @media (max-width: 767px) {

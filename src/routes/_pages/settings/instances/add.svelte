@@ -28,10 +28,6 @@
     $instanceNameInSearch = 'localhost'
     email = 'test@sequel'
     password = 'pass'
-  } else if (window.location.hostname !== "sequel.space") {
-    // we are in test environment
-    $instanceNameInSearch = 'sequeltest.piprate.com'
-    production = false
   }
 
   // suppress warnings
@@ -39,9 +35,14 @@
   params = undefined
   const intl = {}
 
+  let showInstance = !production
+
   $: pageLabel = $isUserLoggedIn ? 'intl.addInstance' : 'intl.logIn'
   $: buttonDisabled = !$instanceNameInSearch || !email || !password || $logInToInstanceLoading
-  $: showInstance = $isUserLoggedIn || !production
+
+  function onChangeInstance () {
+    showInstance = true
+  }
 
   function onSubmitInstance (event) {
     event.preventDefault()
@@ -79,13 +80,6 @@
         </div>
       </noscript>
 
-      {#if showInstance}
-        <label for="instanceInput">{intl.instanceColon}</label>
-        <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" id="instanceInput"
-               bind:value='{$instanceNameInSearch}' placeholder="{intl.enterInstanceName}" required
-        >
-      {/if}
-
       <label for="email">{intl.emailColon}</label>
       <input type="text" inputmode="email" autocapitalize="none" spellcheck="false" id="email"
              bind:value='{email}' placeholder="{intl.enterInstanceEmail}" required
@@ -94,6 +88,14 @@
       <input type="password" inputmode="url" autocapitalize="none" spellcheck="false" id="password"
              bind:value='{password}' placeholder="{intl.enterInstancePassword}" required
       >
+      {#if showInstance}
+        <label for="instanceInput">{intl.instanceColon}</label>
+        <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" id="instanceInput"
+               bind:value='{$instanceNameInSearch}' placeholder="{intl.enterInstanceName}" required
+        >
+      {:else}
+        <div on:click={onChangeInstance} class="change-instance-link">{'intl.changeInstance'}</div>
+      {/if}
       <button class="primary inline-button" type="submit" id="submitButton" disabled={buttonDisabled}>
         {intl.logIn}
       </button>
@@ -135,6 +137,13 @@
 
   .register-option {
     font-size: 1.1em;
+  }
+
+  .change-instance-link {
+    color: var(--anchor-text);
+    text-decoration: underline;
+    cursor: pointer;
+    margin: 20px 5px;
   }
 
   @media (max-width: 767px) {
