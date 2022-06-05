@@ -90,22 +90,15 @@
   }
 
   let preview = ONE_TRANSPARENT_PIXEL;
-  let previewLoaded = false;
 
   async function loadPreview (mediaItem) {
     if (type !== 'Audio') {
       try {
         preview = await loadSecureMedia($accessToken, mediaItem.previewUrl);
-        previewLoaded = true;
       } catch (e) {
         console.error('Image loading error', mediaItem.previewUrl, e);
       }
     }
-  }
-
-  $: if (previewLoaded) {
-    // update preview if mediaItem changes
-    loadPreview(mediaItem);
   }
 
   onMount(async () => {
