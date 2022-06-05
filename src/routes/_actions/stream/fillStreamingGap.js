@@ -11,6 +11,10 @@ export async function fillStreamingGap (instanceName, accessToken, timelineName,
   let numRequests = 0
   let newTimelineItems
 
+  if (timelineName.startsWith('post/')) {
+    // don't fill gap in post timelines
+    return
+  }
   do {
     numRequests++
     newTimelineItems = (await getTimeline(instanceName, accessToken, asSpark,
