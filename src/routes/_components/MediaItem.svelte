@@ -1,113 +1,113 @@
 <script>
-  import { setComposeData } from '../_store/local';
-  import { deleteMedia } from "../_actions/media";
-  import { scheduleIdleTask } from '../_utils/scheduleIdleTask';
-  import SvgIcon from './SvgIcon.svelte';
-  import { autosize } from '../_thirdparty/autosize/autosize';
-  import { ONE_TRANSPARENT_PIXEL } from '../_static/media';
-  import { get } from '../_utils/lodash-lite';
-  import { coordsToPercent } from '../_utils/coordsToPercent';
-  import { importShowMediaEditDialog } from './dialog/asyncDialogs/importShowMediaEditDialog.js';
-  import { throttleTimer } from '../_utils/throttleTimer';
-  import { onMount } from "svelte";
-  import { loadSecureMedia } from "../_api/media";
-  import { accessToken } from "../_store/instance";
+  import SvgIcon from './SvgIcon.svelte'
+  import { setComposeData } from '../_store/local'
+  import { deleteMedia } from '../_actions/media'
+  import { scheduleIdleTask } from '../_utils/scheduleIdleTask'
+  import { autosize } from '../_thirdparty/autosize/autosize'
+  import { ONE_TRANSPARENT_PIXEL } from '../_static/media'
+  import { get } from '../_utils/lodash-lite'
+  import { coordsToPercent } from '../_utils/coordsToPercent'
+  import { importShowMediaEditDialog } from './dialog/asyncDialogs/importShowMediaEditDialog.js'
+  import { throttleTimer } from '../_utils/throttleTimer'
+  import { onMount } from 'svelte'
+  import { loadSecureMedia } from '../_api/media'
+  import { accessToken } from '../_store/instance'
 
-  const updateMediaInStore = throttleTimer(scheduleIdleTask);
-  const resizeTextarea = process.browser && throttleTimer(requestAnimationFrame);
+  const updateMediaInStore = throttleTimer(scheduleIdleTask)
+  const resizeTextarea = process.browser && throttleTimer(requestAnimationFrame)
 
-  export let realm;
-  export let mediaItem;
-  export let field = '';
-  export let index = 0;
-  export let media = undefined;
+  export let realm
+  export let mediaItem
+  export let field = ''
+  export let index = 0
+  export let media = undefined
 
-  let rawText = '';
-  let focusX = 0;
-  let focusY = 0;
+  let rawText = ''
+  let focusX = 0
+  let focusY = 0
 
-  $: type = mediaItem.data.type;
+  $: type = mediaItem.data.type
   $: shortName = (
           // sometimes we no longer have the file, e.g. in a delete and redraft situation,
           // so fall back to the description if it was provided
           get(mediaItem, ['file', 'name']) || get(mediaItem, ['description']) || 'media'
-  );
-  $: uuid = `${realm}-${mediaItem.data.uploadID}`;
+  )
+  $: uuid = `${realm}-${mediaItem.data.uploadID}`
   $: objectPosition = (() => {
     if (!focusX && !focusY) {
-      return 'center center';
+      return 'center center'
     }
-    return `${coordsToPercent(focusX)}% ${100 - coordsToPercent(focusY)}%`;
-  })();
+    return `${coordsToPercent(focusX)}% ${100 - coordsToPercent(focusY)}%`
+  })()
 
-  let textarea;
+  let textarea
 
   function mediaObserver (mediaItem) {
-    const text = mediaItem.description || '';
+    const text = mediaItem.description || ''
     if (rawText !== text) {
-      rawText = text;
-      resizeTextarea(() => autosize.update(textarea));
+      rawText = text
+      resizeTextarea(() => autosize.update(textarea))
     }
-    focusX = mediaItem.focusX || 0;
-    focusY = mediaItem.focusY || 0;
+    focusX = mediaItem.focusX || 0
+    focusY = mediaItem.focusY || 0
   }
 
-  $: mediaObserver(mediaItem);
+  $: mediaObserver(mediaItem)
 
   function rawTextObserver (rawText) {
     updateMediaInStore(() => {
       if (mediaItem.description !== rawText) {
-        mediaItem.description = rawText;
+        mediaItem.description = rawText
         if (field) {
-          setComposeData(realm, { [field]: mediaItem });
+          setComposeData(realm, { [field]: mediaItem })
         } else {
-          setComposeData(realm, { media });
+          setComposeData(realm, { media })
         }
       }
-    });
+    })
   }
 
-  $: rawTextObserver(rawText);
+  $: rawTextObserver(rawText)
 
   function setupAutosize () {
-    autosize(textarea);
+    autosize(textarea)
   }
 
   function teardownAutosize () {
-    autosize.destroy(textarea);
+    autosize.destroy(textarea)
   }
 
   function onDeleteMedia () {
-    deleteMedia(realm, field, index);
+    deleteMedia(realm, field, index)
   }
 
   async function onEdit (e) {
     e.preventDefault()
     e.stopPropagation()
 
-    const showMediaEditDialog = await importShowMediaEditDialog();
-    showMediaEditDialog(realm, field, index, type);
+    const showMediaEditDialog = await importShowMediaEditDialog()
+    showMediaEditDialog(realm, field, index, type)
   }
 
-  let preview = ONE_TRANSPARENT_PIXEL;
+  let preview = ONE_TRANSPARENT_PIXEL
 
   async function loadPreview (mediaItem) {
     if (type !== 'Audio') {
       try {
-        preview = await loadSecureMedia($accessToken, mediaItem.previewUrl);
+        preview = await loadSecureMedia($accessToken, mediaItem.previewUrl)
       } catch (e) {
-        console.error('Image loading error', mediaItem.previewUrl, e);
+        console.error('Image loading error', mediaItem.previewUrl, e)
       }
     }
   }
 
   onMount(async () => {
-    setupAutosize();
+    setupAutosize()
 
-    await loadPreview(mediaItem);
+    await loadPreview(mediaItem)
 
-    return teardownAutosize;
-  });
+    return teardownAutosize
+  })
 </script>
 
 <li class="compose-media compose-media-realm-{realm}" aria-label={shortName}>

@@ -1,150 +1,147 @@
 <script>
-  import { setComposeData } from '../../../_store/local';
-  import { get } from '../../../_utils/lodash-lite';
-  import { scheduleIdleTask } from '../../../_utils/scheduleIdleTask';
-  import { coordsToPercent, percentToCoords } from '../../../_utils/coordsToPercent';
-  import SvgIcon from '../../SvgIcon.svelte';
-  import { intrinsicScale } from '../../../_thirdparty/intrinsic-scale/intrinsicScale';
-  import { resize } from '../../../_utils/events';
-  import Draggable from '../../Draggable.svelte';
-  import { loadSecureMedia } from "../../../_api/media";
-  import { accessToken } from "../../../_store/instance";
-  import { onMount } from "svelte";
-  import { ONE_TRANSPARENT_PIXEL } from "../../../_static/media";
+  import Draggable from '../../Draggable.svelte'
+  import SvgIcon from '../../SvgIcon.svelte'
+  import { setComposeData } from '../../../_store/local'
+  import { get } from '../../../_utils/lodash-lite'
+  import { scheduleIdleTask } from '../../../_utils/scheduleIdleTask'
+  import { coordsToPercent, percentToCoords } from '../../../_utils/coordsToPercent'
+  import { intrinsicScale } from '../../../_thirdparty/intrinsic-scale/intrinsicScale'
+  import { resize } from '../../../_utils/events'
+  import { loadSecureMedia } from '../../../_api/media'
+  import { accessToken } from '../../../_store/instance'
+  import { onMount } from 'svelte'
+  import { ONE_TRANSPARENT_PIXEL } from '../../../_static/media'
 
-  export let className = '';
-  export let realm;
-  export let mediaItem;
-  export let field = '';
-  //export let index = 0;
-  export let media = undefined;
+  export let className = ''
+  export let realm
+  export let mediaItem
+  export let field = ''
+  export let media = undefined
 
   const parseAndValidateFloat = rawText => {
-    let float = parseFloat(rawText);
+    let float = parseFloat(rawText)
     if (Number.isNaN(float)) {
-      float = 0;
+      float = 0
     }
-    float = Math.min(1, float);
-    float = Math.max(-1, float);
-    float = Math.round(float * 100) / 100;
-    return float;
-  };
+    float = Math.min(1, float)
+    float = Math.max(-1, float)
+    float = Math.round(float * 100) / 100
+    return float
+  }
 
-  let dragging = false;
-  let rawFocusX = '0';
-  let rawFocusY = '0';
-  let containerWidth = 0;
-  let containerHeight = 0;
-  let imageLoaded = false;
+  let dragging = false
+  let rawFocusX = '0'
+  let rawFocusY = '0'
+  let containerWidth = 0
+  let containerHeight = 0
+  let imageLoaded = false
 
-  $: focusX = get(mediaItem, ['focusX'], 0);
-  $: focusY = get(mediaItem, ['focusY'], 0);
+  $: focusX = get(mediaItem, ['focusX'], 0)
+  $: focusY = get(mediaItem, ['focusY'], 0)
   $: nativeWidth = (
           get(mediaItem, ['data', 'meta', 'width'], 300)
-  );
+  )
   $: nativeHeight = (
           get(mediaItem, ['data', 'meta', 'height'], 200)
-  );
+  )
   $: shortName = (
           // sometimes we no longer have the file, e.g. in a delete and redraft situation,
           // so fall back to the description if it was provided
           get(mediaItem, ['file', 'name']) || get(mediaItem, ['description']) || 'media'
-  );
+  )
   // intrinsic width/height to avoid layout shifting https://chromestatus.com/feature/5695266130755584
   // note pleroma does not give us intrinsic width/height
-  $: intrinsicWidth = get(mediaItem, ['data', 'meta', 'width']);
-  $: intrinsicHeight = get(mediaItem, ['data', 'meta', 'height']);
-  $: scale = intrinsicScale(containerWidth, containerHeight, nativeWidth, nativeHeight);
-  $: scaleWidth = scale.width;
-  $: scaleHeight = scale.height;
-  $: scaleX = scale.x;
-  $: scaleY = scale.y;
-  $: indicatorX = (coordsToPercent(focusX) / 100);
-  $: indicatorY = ((100 - coordsToPercent(focusY)) / 100);
+  $: intrinsicWidth = get(mediaItem, ['data', 'meta', 'width'])
+  $: intrinsicHeight = get(mediaItem, ['data', 'meta', 'height'])
+  $: scale = intrinsicScale(containerWidth, containerHeight, nativeWidth, nativeHeight)
+  $: scaleWidth = scale.width
+  $: scaleHeight = scale.height
+  $: scaleX = scale.x
+  $: scaleY = scale.y
+  $: indicatorX = (coordsToPercent(focusX) / 100)
+  $: indicatorY = ((100 - coordsToPercent(focusY)) / 100)
   $: draggableAreaStyle = (
           `top: ${scaleY}px; left: ${scaleX}px; width: ${scaleWidth}px; height: ${scaleHeight}px;`
-  );
+  )
 
   function updateMediaItem () {
     if (field) {
-      setComposeData(realm, { [field]: mediaItem });
+      setComposeData(realm, { [field]: mediaItem })
     } else {
-      setComposeData(realm, { media });
+      setComposeData(realm, { media })
     }
   }
 
-  let container;
+  let container
 
   $: {
-    // FIXME: rawFocusX and rawFocusY may not be updated
-
-    const focusX = get(mediaItem, ['focusX'], 0) || 0;
-    const focusXAsString = focusX.toString();
+    const focusX = get(mediaItem, ['focusX'], 0) || 0
+    const focusXAsString = focusX.toString()
     if (focusXAsString !== rawFocusX) {
-      rawFocusX = focusXAsString;
+      rawFocusX = focusXAsString
     }
 
-    const focusY = get(mediaItem, ['focusY'], 0) || 0;
-    const focusYAsString = focusY.toString();
+    const focusY = get(mediaItem, ['focusY'], 0) || 0
+    const focusYAsString = focusY.toString()
     if (focusYAsString !== rawFocusY) {
-      rawFocusY = focusYAsString;
+      rawFocusY = focusYAsString
     }
   }
 
   function observeAndSync (rawFocus, key) {
-    const rawFocusDecimal = parseAndValidateFloat(rawFocus);
+    const rawFocusDecimal = parseAndValidateFloat(rawFocus)
     if (mediaItem[key] !== rawFocusDecimal) {
-      mediaItem[key] = rawFocusDecimal;
-      updateMediaItem();
+      mediaItem[key] = rawFocusDecimal
+      updateMediaItem()
     }
   }
 
-  $: observeAndSync(rawFocusX, 'focusX');
-  $: observeAndSync(rawFocusY, 'focusY');
+  $: observeAndSync(rawFocusX, 'focusX')
+  $: observeAndSync(rawFocusY, 'focusY')
 
   function onDraggableChange (e) {
-    const { x, y } = e.detail;
+    const { x, y } = e.detail
     scheduleIdleTask(() => {
-      const focusX = parseAndValidateFloat(percentToCoords(x * 100));
-      const focusY = parseAndValidateFloat(percentToCoords(100 - (y * 100)));
+      const focusX = parseAndValidateFloat(percentToCoords(x * 100))
+      const focusY = parseAndValidateFloat(percentToCoords(100 - (y * 100)))
       if (mediaItem.focusX !== focusX || mediaItem.focusY !== focusY) {
-        mediaItem.focusX = focusX;
-        mediaItem.focusY = focusY;
-        updateMediaItem();
+        mediaItem.focusX = focusX
+        mediaItem.focusY = focusY
+        updateMediaItem()
       }
-    });
+    })
   }
 
   function onDragStart () {
-    dragging = true;
+    dragging = true
   }
 
   function onDragEnd () {
-    dragging = false;
+    dragging = false
   }
 
   export function measure () {
     requestAnimationFrame(() => {
       if (!container) {
-        return;
+        return
       }
-      const rect = container.getBoundingClientRect();
-      containerWidth = rect.width;
-      containerHeight = rect.height;
-    });
+      const rect = container.getBoundingClientRect()
+      containerWidth = rect.width
+      containerHeight = rect.height
+    })
   }
 
-  let preview = ONE_TRANSPARENT_PIXEL;
+  let preview = ONE_TRANSPARENT_PIXEL
 
   onMount(async () => {
     try {
-      preview = await loadSecureMedia($accessToken, mediaItem.previewUrl);
-      measure();
-      imageLoaded = true;
+      preview = await loadSecureMedia($accessToken, mediaItem.previewUrl)
+      measure()
+      imageLoaded = true
     } catch (e) {
-      console.error('Image loading error', mediaItem.previewUrl, e);
+      console.error('Image loading error', mediaItem.previewUrl, e)
     }
-  });
+  })
 </script>
 
 <form class="media-focal-point-container {className}"

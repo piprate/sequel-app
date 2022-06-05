@@ -1,8 +1,8 @@
 <script>
   import MediaItem from '../MediaItem.svelte'
 
-  export let realm;
-  export let media;
+  export let realm
+  export let media
 </script>
 
 {#if media.length}
