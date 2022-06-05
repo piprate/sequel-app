@@ -122,10 +122,8 @@ export async function saveSpark (realm, sparkId, template) {
     const avatar = getComposeData(realm, 'avatar')
     const hadAvatar = getComposeData(realm, 'avatarPresent')
     if (avatar) {
-      if (avatar.data.uploadID) {
-        prepareMediaItem(avatar)
-        submission.avatar = avatar.data
-      }
+      prepareMediaItem(avatar)
+      submission.avatar = avatar.data
     } else if (hadAvatar) {
       submission.avatar = {}
     }
@@ -133,10 +131,8 @@ export async function saveSpark (realm, sparkId, template) {
     const header = getComposeData(realm, 'header')
     const hadHeader = getComposeData(realm, 'headerPresent')
     if (header) {
-      if (header.data.uploadID) {
-        prepareMediaItem(header)
-        submission.header = header.data
-      }
+      prepareMediaItem(header)
+      submission.header = header.data
     } else if (hadHeader) {
       submission.header = {}
     }

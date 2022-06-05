@@ -1,56 +1,45 @@
 <script>
-  import WorldEdit from "../../../_components/world/WorldEdit.svelte";
-  import DynamicPageBanner from "../../../_components/DynamicPageBanner.svelte";
+  import WorldEdit from '../../../_components/world/WorldEdit.svelte'
+  import DynamicPageBanner from '../../../_components/DynamicPageBanner.svelte'
   import RestrictedPageWarning from '../../../_components/RestrictedPageWarning.svelte'
-  import { onMount } from "svelte";
-  import { clearComposeData, isAuthenticated, setComposeData } from "../../../_store/local";
-  import { loadWorld } from "../../../_actions/worlds";
+  import { onMount } from 'svelte'
+  import { clearComposeData, isAuthenticated, setComposeData } from '../../../_store/local'
+  import { loadWorld } from '../../../_actions/worlds'
+  import { setComposeImage } from '../../../_actions/media'
 
-  export let params;
+  export let params
 
   // suppress warnings
-  const intl = {};
+  const intl = {}
 
-  let realm = `world/${params.worldId}`;
-  let template;
-
-  function setComposeImage (world, field) {
-    const obj = {
-      data: world[field],
-      url: world[field].url,
-      previewUrl: world[field].previewUrl,
-      description: ''
-    };
-    setComposeData(realm, {
-      [field]: obj
-    });
-  }
+  let realm = `world/${params.worldId}`
+  let template
 
   onMount(async () => {
     if (!$isAuthenticated) {
       return
     }
 
-    const world = await loadWorld(params.worldId);
-    console.log("LOADED WORLD", world);
+    const world = await loadWorld(params.worldId)
+    console.log('LOADED WORLD', world)
 
     template = {
       name: world.name,
       summary: world.summary,
-    };
+    }
 
-    clearComposeData(realm);
+    clearComposeData(realm)
 
     if (world.avatar) {
-      setComposeImage(world, 'avatar');
-      setComposeData(realm, { avatarPresent: true });
+      setComposeImage(realm, world, 'avatar')
+      setComposeData(realm, { avatarPresent: true })
     }
 
     if (world.header) {
-      setComposeImage(world, 'header');
-      setComposeData(realm, { headerPresent: true });
+      setComposeImage(realm, world, 'header')
+      setComposeData(realm, { headerPresent: true })
     }
-  });
+  })
 </script>
 <DynamicPageBanner title="{intl.editWorld}" />
 {#if $isAuthenticated }

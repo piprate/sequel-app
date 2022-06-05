@@ -1,5 +1,6 @@
 import { clearComposeData, currentInstance, getComposeData, setComposeData } from '../_store/local'
 import { mediaAssetPreviewURL, mediaAssetURL, uploadMedia, uploadTokenMedia } from '../_api/media'
+import { get as getLodash } from '../_utils/lodash-lite'
 import { toast } from '../_components/toast/toast'
 import { formatIntl } from '../_utils/formatIntl'
 import { database } from '../_database/database'
@@ -22,7 +23,9 @@ export async function doMediaUpload (realm, field, file, calculateBlurhash, medi
       file: { name: file.name },
       url: mediaAssetURL(_currentInstance, response),
       previewUrl: mediaAssetPreviewURL(_currentInstance, response),
-      description: ''
+      description: '',
+      focusX: 0,
+      focusY: 0
     }
 
     let obj
@@ -72,7 +75,9 @@ export async function doTokenMediaUpload (realm, field, nft, calculateBlurhash, 
       file: { name: nft.name },
       url: mediaAssetURL(_currentInstance, response),
       previewUrl: mediaAssetPreviewURL(_currentInstance, response),
-      description: ''
+      description: '',
+      focusX: 0,
+      focusY: 0
     }
 
     let obj
@@ -118,12 +123,27 @@ export function deleteMedia (realm, field, i) {
   }
 }
 
+export function setComposeImage (realm, entity, field) {
+  const obj = {
+    data: entity[field],
+    url: entity[field].url,
+    previewUrl: entity[field].previewUrl,
+    description: entity[field].description || '',
+    focusX: getLodash(entity[field], ['meta', 'focus', 'x'], 0),
+    focusY: getLodash(entity[field], ['meta', 'focus', 'y'], 0)
+  }
+  setComposeData(realm, {
+    [field]: obj
+  })
+}
+
 export function prepareMediaItem (mediaItem) {
-  if (mediaItem.data.meta && mediaItem.data.meta.focus) {
-    mediaItem.data.meta.focus.x = mediaItem.focusX || 0
-    mediaItem.data.meta.focus.y = mediaItem.focusY || 0
+  if (!mediaItem.data.meta) {
+    mediaItem.data.meta = {}
   }
-  if (mediaItem.description) {
-    mediaItem.data.description = mediaItem.description
+  mediaItem.data.meta.focus = {
+    x: mediaItem.focusX || 0,
+    y: mediaItem.focusY || 0
   }
+  mediaItem.data.description = mediaItem.description
 }

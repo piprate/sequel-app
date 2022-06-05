@@ -3,78 +3,76 @@
   import { mark, stop } from '../../../_utils/marks'
   import { autosize } from '../../../_thirdparty/autosize/autosize'
   import { throttleTimer } from '../../../_utils/throttleTimer'
-  import { get } from '../../../_utils/lodash-lite'
   import { setComposeData } from '../../../_store/local'
   import { MEDIA_ALT_CHAR_LIMIT } from '../../../_static/media'
   import LengthGauge from '../../LengthGauge.svelte'
   import LengthIndicator from '../../LengthIndicator.svelte'
   import { length as stringzLength } from 'stringz'
   import { runTesseract } from '../../../_utils/runTesseract'
-  import SvgIcon from '../../SvgIcon.svelte'
   import { toast } from '../../toast/toast'
   import { formatIntl } from '../../../_utils/formatIntl'
   import { database } from '../../../_database/database'
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from 'svelte'
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
   const updateRawTextInStore = throttleTimer(requestPostAnimationFrame)
 
-  export let className = '';
-  export let realm;
-  export let mediaItem;
-  export let field = '';
-  export let index = 0;
-  export let media = undefined;
+  export let className = ''
+  export let realm
+  export let mediaItem
+  export let field = ''
+  export let index = 0
+  export let media = undefined
 
-  let rawText = '';
-  let mediaAltCharLimit = MEDIA_ALT_CHAR_LIMIT;
-  let extracting = false;
+  let rawText = ''
+  let mediaAltCharLimit = MEDIA_ALT_CHAR_LIMIT
+  let extracting = false
 
-  let extractionProgress = 0;
+  let extractionProgress = 0
 
-  $: length = stringzLength(rawText || '');
-  $: overLimit = length > mediaAltCharLimit;
-  $: url = mediaItem.url;
-  $: mediaId = mediaItem.data.id;
-  $: extractButtonText = extracting ? 'intl.extractingText' : 'intl.extractText';
+  $: length = stringzLength(rawText || '')
+  $: overLimit = length > mediaAltCharLimit
+  $: url = mediaItem.url
+  $: mediaId = mediaItem.data.id
+  $: extractButtonText = extracting ? 'intl.extractingText' : 'intl.extractText'
   $: extractButtonLabel = (() => {
     if (extracting) {
       return formatIntl('intl.extractingTextCompletion', { percent: Math.round(extractionProgress) })
     }
     return extractButtonText
-  })();
+  })()
 
   function updateMediaItem () {
     if (field) {
       setComposeData(realm, { [field]: mediaItem })
     } else {
-      setComposeData(realm, { media });
+      setComposeData(realm, { media })
     }
   }
 
-  let textarea;
+  let textarea
 
-  function mediaObserver(mediaItem) {
-    const text = mediaItem.description || '';
+  function mediaObserver (mediaItem) {
+    const text = mediaItem.description || ''
     if (rawText !== text) {
-      rawText = text;
+      rawText = text
     }
   }
 
-  $: mediaObserver(mediaItem);
+  $: mediaObserver(mediaItem)
 
-  function rawTextObserver(rawText) {
+  function rawTextObserver (rawText) {
     updateRawTextInStore(() => {
       if (mediaItem.description !== rawText) {
         mediaItem.description = rawText
-        updateMediaItem();
+        updateMediaItem()
       }
       dispatch('resize')
     })
   }
 
-  $: rawTextObserver(rawText);
+  $: rawTextObserver(rawText)
 
   function setupAutosize () {
     requestPostAnimationFrame(() => {
@@ -95,11 +93,11 @@
   }
 
   async function onClick () {
-    extracting = true;
+    extracting = true
     try {
       const onProgress = progress => {
         requestAnimationFrame(() => {
-          extractionProgress = progress * 100;
+          extractionProgress = progress * 100
         })
       }
       const file = await database.getCachedMediaFile(mediaId)
@@ -116,27 +114,28 @@
       }
       if (mediaItem.description !== text) {
         mediaItem.description = text
-        updateMediaItem();
+        updateMediaItem()
       }
     } catch (err) {
       console.error(err)
-      /* no await */ toast.say('intl.unableToExtractText')
+      /* no await */
+      toast.say('intl.unableToExtractText')
     } finally {
-      extracting = false;
+      extracting = false
       setTimeout(() => {
         requestAnimationFrame(() => {
-          extractionProgress = 0;
+          extractionProgress = 0
         })
       }, 400)
     }
   }
 
   onMount(() => {
-    setupAutosize();
+    setupAutosize()
     // setupSyncFromStore();
     // setupSyncToStore();
-    return teardownAutosize;
-  });
+    return teardownAutosize
+  })
 </script>
 
 <div class="media-alt-editor {className}">
