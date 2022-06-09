@@ -25,7 +25,7 @@
   $: displayPosts = (
           posts.map(post => ({
             id: post.id,
-            text: postHtmlToPlainText(post.content, post.mentions) || 'intl.noContent',
+            text: postHtmlToPlainText(post.body, post.mentions) || 'intl.noContent',
             report: reportMap[post.id]
           }))
   );

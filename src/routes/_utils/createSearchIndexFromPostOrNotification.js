@@ -6,7 +6,7 @@ export const createSearchIndexFromPostOrNotification = postOrNotification => {
   const post = postOrNotification.subjectPost || postOrNotification // post on a notification
   domParser = domParser || new DOMParser()
   const spoilerText = post.spoiler_text || ''
-  const searchContent = [spoilerText, post.content]
+  const searchContent = [spoilerText, post.body]
     .join('\n\n').replace(/<br\s*\/?>/g, '\n').replace(/<\/p><p>/g, '\n\n')
   return domParser.parseFromString(searchContent, 'text/html').documentElement.textContent
 }

@@ -59,7 +59,7 @@ async function calculatePlainTextContent (postOrNotification) {
   if (!post) {
     return
   }
-  const content = post.content || ''
+  const content = post.body || ''
   const mentions = post.mentions || []
   // Calculating the plaintext from the HTML is a non-trivial operation, so we might
   // as well do it in advance, while blurhash is being decoded on the worker thread.
