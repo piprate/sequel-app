@@ -6,7 +6,7 @@
 
   let emojis = [];
 
-  $: massagedSummary = massageUserText(bubble.summary, emojis, $autoplayGifs);
+  $: massagedSummary = massageUserText(bubble.summaryHTML, emojis, $autoplayGifs);
 </script>
 
 <h2 class="sr-only">{intl.description}</h2>

@@ -68,16 +68,16 @@
   $: postAuthorId = postAuthor.id
   $: sparkForShortcut = notification ? notification.actor : postAuthor
   $: visibility = post.visibility
-  $: plainTextContent = post.plainTextContent || ''
-  $: plainTextContentOverLength = (
+  $: plainTextBody = post.bodyText || ''
+  $: plainTextBodyOverLength = (
           // measureText() is expensive, so avoid doing it when possible.
           // Also measureText() typically only makes text shorter, not longer, so we can measure the raw length
           // as a shortcut. (The only case where it makes text longer is with short URLs which get expanded to a longer
           // placeholder.) This isn't 100% accurate, but we don't need perfect accuracy here because this is just
           // to show a "long post" content warning.
-          plainTextContent.length > LONG_POST_LENGTH && measureText(plainTextContent) > LONG_POST_LENGTH
+          plainTextBody.length > LONG_POST_LENGTH && measureText(plainTextBody) > LONG_POST_LENGTH
   )
-  $: spoilerText = post.spoiler_text || (plainTextContentOverLength && LONG_POST_TEXT)
+  $: spoilerText = post.spoiler_text || (plainTextBodyOverLength && LONG_POST_TEXT)
   $: inReplyToId = post.inReplyTo
   $: uuid = createPostOrNotificationUuid($currentInstance, timelineType, timelineValue, notificationId, postId)
   $: elementId = uuid
@@ -112,7 +112,7 @@
                   : formatTimeagoDate(createdAtDateTS, $now)
   )
   $: ariaLabel = (
-          getAccessibleLabelForPost(postAuthor, plainTextContent,
+          getAccessibleLabelForPost(postAuthor, plainTextBody,
                   shortInlineFormattedDate, spoilerText, showContent,
                   notification, visibility, $omitEmojiInDisplayNames, $disableLongAriaLabels,
                   showMedia, showPoll
@@ -131,7 +131,7 @@
           $underlineLinks && 'underline-links',
           !$disableTapOnPost && !isPostInOwnThread && 'tap-on-post'
   )
-  $: content = post.body || ''
+  $: content = post.bodyHTML || ''
   $: showContent = !spoilerText || spoilerShown
 
   function onClickOrKeydown (e) {

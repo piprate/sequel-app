@@ -26,13 +26,13 @@ function cleanupText (text) {
   return text.replace(/\s+/g, ' ').trim()
 }
 
-export function getAccessibleLabelForPost (postAuthor, plainTextContent,
+export function getAccessibleLabelForPost (postAuthor, plainTextBody,
   shortInlineFormattedDate, spoilerText, showContent,
   notification, visibility, omitEmojiInDisplayNames,
   disableLongAriaLabels, showMedia, showPoll) {
   const postAuthorDisplayName = getSparkAccessibleName(postAuthor, omitEmojiInDisplayNames)
   const contentTextToShow = (showContent || !spoilerText)
-    ? cleanupText(plainTextContent)
+    ? cleanupText(plainTextBody)
     : formatIntl('intl.contentWarningContent', { spoiler: cleanupText(spoilerText) })
   const mediaTextToShow = showMedia && 'intl.hasMedia'
   const pollTextToShow = showPoll && 'intl.hasPoll'

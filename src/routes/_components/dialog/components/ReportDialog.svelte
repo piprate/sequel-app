@@ -2,7 +2,7 @@
   import GenericConfirmationDialog from './GenericConfirmationDialog.svelte'
   import LoadingSpinner from '../../LoadingSpinner.svelte'
   import { getRecentPostsForSpark } from '../../../_actions/getRecentPostsForSpark'
-  import { postHtmlToPlainText } from '../../../_utils/postHtmlToPlainText'
+  import { postBodyToPlainText } from '../../../_utils/postBodyToPlainText'
   import { toast } from '../../toast/toast'
   import { currentInstance } from '../../../_store/local'
   import { reportPosts } from '../../../_actions/reportPosts'
@@ -25,7 +25,7 @@
   $: displayPosts = (
           posts.map(post => ({
             id: post.id,
-            text: postHtmlToPlainText(post.body, post.mentions) || 'intl.noContent',
+            text: postBodyToPlainText(post) || 'intl.noContent',
             report: reportMap[post.id]
           }))
   );

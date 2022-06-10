@@ -2,7 +2,7 @@ import { database } from '../_database/database'
 import { decode as decodeBlurhash, init as initBlurhash } from '../_utils/blurhash'
 import { mark, stop } from '../_utils/marks'
 import { get } from '../_utils/lodash-lite'
-import { postHtmlToPlainText } from '../_utils/postHtmlToPlainText'
+import { postBodyToPlainText } from '../_utils/postBodyToPlainText'
 import { scheduleIdleTask } from '../_utils/scheduleIdleTask'
 
 async function getNotification (instanceName, timelineType, timelineValue, itemId, asSpark) {
@@ -59,13 +59,11 @@ async function calculatePlainTextContent (postOrNotification) {
   if (!post) {
     return
   }
-  const content = post.body || ''
-  const mentions = post.mentions || []
   // Calculating the plaintext from the HTML is a non-trivial operation, so we might
   // as well do it in advance, while blurhash is being decoded on the worker thread.
   await new Promise(resolve => {
     scheduleIdleTask(() => {
-      post.plainTextContent = postHtmlToPlainText(content, mentions)
+      post.bodyText = postBodyToPlainText(post)
       resolve()
     })
   })

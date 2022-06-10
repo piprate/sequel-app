@@ -1,12 +1,12 @@
 <script>
-  import { autoplayGifs } from '../../_store/local';
-  import { massageUserText } from '../../_utils/massageUserText';
+  import { autoplayGifs } from '../../_store/local'
+  import { massageUserText } from '../../_utils/massageUserText'
 
-  export let spark;
+  export let spark
 
-  $: note = spark.summary;
-  $: emojis = spark.emojis || [];
-  $: massagedNote = massageUserText(note, emojis, $autoplayGifs);
+  $: note = spark.summaryHTML
+  $: emojis = spark.emojis || []
+  $: massagedNote = massageUserText(note, emojis, $autoplayGifs)
 </script>
 
 <h2 class="sr-only">{intl.description}</h2>

@@ -24,7 +24,7 @@
     )
   })()
 
-  $: content = (post.body || '')
+  $: content = (post.bodyHTML || '')
   $: massagedContent = (
     massageUserText(content, postEmojis, $autoplayGifs)
   )
@@ -106,7 +106,13 @@
       .post-content blockquote,
       .post-content ul,
       .post-content ol) {
-    margin: 0 0 20px;
+    margin: 0 0 10px;
+  }
+
+  :global(
+      .post-content ul,
+      .post-content ol) {
+      white-space: normal;
   }
 
   :global(
@@ -114,7 +120,7 @@
       .post-content blockquote:first-child,
       .post-content ul:first-child,
       .post-content ol:first-child) {
-    margin: 0 0 20px;
+    margin: 0 0 10px;
   }
 
   :global(
@@ -163,7 +169,7 @@
       .post-content blockquote:last-child,
       .post-content ul:last-child,
       .post-content ol:last-child) {
-      margin: 0 0 10px; /* looks better on KaiOS with some spacing here */
+      margin: 0 0 5px; /* looks better on KaiOS with some spacing here */
     }
   }
 

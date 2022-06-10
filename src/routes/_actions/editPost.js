@@ -1,4 +1,4 @@
-import { postHtmlToPlainText } from '../_utils/postHtmlToPlainText'
+import { postBodyToPlainText } from '../_utils/postBodyToPlainText'
 import { importShowComposeDialog } from '../_components/dialog/asyncDialogs/importShowComposeDialog.js'
 import { setComposeData } from '../_store/local'
 import { unwrap } from '../_utils/mapper'
@@ -8,7 +8,7 @@ export async function editPost (post) {
   const dialogPromise = importShowComposeDialog()
 
   setComposeData('dialog', {
-    text: postHtmlToPlainText(post.body, post.mentions),
+    text: postBodyToPlainText(post),
     contentWarningShown: false,
     contentWarning: '',
     postPrivacy: post.visibility,
