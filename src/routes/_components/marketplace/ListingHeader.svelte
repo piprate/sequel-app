@@ -1,6 +1,5 @@
 <script>
   import EntityDisplayName from '../EntityDisplayName.svelte'
-  import CreatedAt from '../CreatedAt.svelte'
   import { removeEmoji } from '../../_utils/removeEmoji'
   import { omitEmojiInDisplayNames } from '../../_store/local'
   import { formatIntl } from '../../_utils/formatIntl'
@@ -29,19 +28,7 @@
 <div class="listing-name">
   <EntityDisplayName entity={listing.object} />
 </div>
-<div class="listing-created">
-  <CreatedAt createdAt={listing.createdAt} flavour="created" />
-</div>
 <style>
-  .listing-created {
-    grid-area: created;
-    color: var(--deemphasized-text-color);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    align-self: center;
-  }
-
   .listing-name {
     grid-area: name;
     font-size: 1.5em;
@@ -69,11 +56,6 @@
   @media (max-width: 767px) {
     .listing-name {
       font-size: 1.3em;
-    }
-    .listing-created {
-      font-size: 1.1em;
-    }
-    .listing-name, .listing-created {
       align-self: flex-start;
     }
   }

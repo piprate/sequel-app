@@ -101,6 +101,7 @@
     color: var(--body-text-color);
     margin-left: 5px;
     font-weight: 600;
+    white-space: nowrap;
   }
 
   @media (max-width: 767px) {

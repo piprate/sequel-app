@@ -10,6 +10,8 @@
   import { onMount } from 'svelte'
   import ListingControls from './ListingControls.svelte'
   import Payments from './Payments.svelte'
+  import SparkRole from '../SparkRole.svelte'
+  import CreatedAt from '../CreatedAt.svelte'
 
   export let listing
   export let ourSpark
@@ -20,6 +22,7 @@
           $underlineLinks && 'underline-links'
   )
   $: profileForListing = formatIntl('intl.listingPage', { listing: listingName })
+  $: displaySeller = !(listing.artistRef && listing.sellerRef && listing.artistRef.id === listing.sellerRef.id)
 
   let listingProfile
 
@@ -35,6 +38,17 @@
     <div class="listing-grid">
       <ListingHeader {listing} />
       <ListingSummary {listing} />
+      <div class="listing-created">
+        <CreatedAt createdAt={listing.createdAt} flavour="created" />
+      </div>
+      <div class="artist-panel">
+        <SparkRole spark={listing.artistRef} roleLabel="Creator" />
+      </div>
+      {#if displaySeller }
+      <div class="seller-panel">
+        <SparkRole spark={listing.sellerRef} roleLabel="Seller" />
+      </div>
+      {/if}
       <ListingDetails {listing} {ourSpark} />
       <ListingControls {listing} {ourSpark} />
       <Payments {listing} />
@@ -50,19 +64,41 @@
 
   .listing-grid {
     display: grid;
-    grid-template-areas: "image"
-                         "name"
-                         "label"
-                         "created"
-                         "details"
-                         "summary"
-                         "controls"
-                         "evergreen";
-    grid-template-rows: min-content;
+    grid-template-areas:
+            "image     image"
+            "name      name"
+            "label     label"
+            "summary   summary"
+            "created   created"
+            "artist    seller"
+            "details   details"
+            "controls  controls"
+            "evergreen evergreen";
+    grid-template-rows: repeat(9, min-content);
     grid-column-gap: 10px;
     grid-row-gap: 5px;
     padding: 20px;
     justify-content: center;
+  }
+
+  .listing-created {
+    grid-area: created;
+    font-size: 1.1em;
+    color: var(--deemphasized-text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-self: center;
+  }
+
+  .artist-panel {
+    grid-area: artist;
+    margin: 5px 5px 0 0;
+  }
+
+  .seller-panel {
+    grid-area: seller;
+    margin: 5px 5px 0 0;
   }
 
   @supports (-webkit-backdrop-filter: blur(1px) saturate(1%)) or (backdrop-filter: blur(1px) saturate(1%)) {
@@ -82,16 +118,22 @@
   @media (max-width: 767px) {
     .listing-grid {
       display: grid;
-      grid-template-areas: "image"
-                           "name"
-                           "label"
-                           "created"
-                           "details"
-                           "summary"
-                           "controls"
-                           "evergreen";
-      grid-template-rows: min-content;
+      grid-template-areas:
+            "image     image"
+            "name      name"
+            "label     label"
+            "summary   summary"
+            "created   created"
+            "artist    seller"
+            "details   details"
+            "controls  controls"
+            "evergreen evergreen";
+      grid-template-rows: repeat(9, min-content);
       padding: 10px;
+    }
+    .listing-created {
+      font-size: 1.0em;
+      align-self: flex-start;
     }
   }
 
@@ -100,14 +142,18 @@
 
   @media (max-width: 240px) {
     .listing-grid {
-      grid-template-areas: "image"
-                           "name"
-                           "label"
-                           "created"
-                           "details"
-                           "summary"
-                           "controls"
-                           "evergreen";
+      grid-template-areas:
+              "image"
+              "name"
+              "label"
+              "created"
+              "summary"
+              "artist"
+              "seller"
+              "details"
+              "controls"
+              "evergreen";
+      grid-template-rows: repeat(10, min-content);
       grid-column-gap: 5px;
       grid-row-gap: 0;
     }
