@@ -4,10 +4,10 @@
   import LazyImage from '../LazyImage.svelte'
   import AutoplayVideo from '../AutoplayVideo.svelte'
   import NFTMediaTag from '../NFTMediaTag.svelte'
-  import { DEFAULT_MEDIA_HEIGHT, DEFAULT_MEDIA_WIDTH, ONE_TRANSPARENT_PIXEL } from '../../_static/media'
+  import { ONE_TRANSPARENT_PIXEL } from '../../_static/media'
   import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js'
   import { mouseover } from '../../_utils/events'
-  import { autoplayGifs, ignoreBlurhash, largeInlineMedia } from '../../_store/local'
+  import { autoplayGifs, ignoreBlurhash } from '../../_store/local'
   import { registerClickDelegate } from '../../_utils/delegate'
   import { convertCssPropertyToDataUrl } from '../../_utils/convertCssPropertyToDataUrl'
   import { formatIntl } from '../../_utils/formatIntl'
@@ -25,20 +25,10 @@
 
   $: focus = meta && meta.focus
   // width/height to show inline
-  $: inlineWidth = (() => {
-    if (!$largeInlineMedia) {
-      return '100%'
-    }
-    return previewWidth || DEFAULT_MEDIA_WIDTH
-  })()
-  $: inlineHeight = (() => {
-    if (!$largeInlineMedia) {
-      return 'auto'
-    }
-    return previewHeight || DEFAULT_MEDIA_HEIGHT
-  })()
-  $: inlineWidthText = $largeInlineMedia ? `${inlineWidth}px` : inlineWidth
-  $: inlineHeightText = $largeInlineMedia ? `${inlineHeight}px` : inlineHeight
+  $: inlineWidth = '100%'
+  $: inlineHeight = 'auto'
+  $: inlineWidthText = inlineWidth
+  $: inlineHeightText = inlineHeight
   $: meta = media.meta
   $: preview = media.thumbnails && media.thumbnails.preview
   $: previewWidth = preview && preview.width
@@ -60,7 +50,7 @@
   $: url = media.url
   $: type = media.type
   $: inlineMediaStyle = (() => {
-    if ((type === 'Audio') || (blurhash && $largeInlineMedia)) {
+    if (type === 'Audio') {
       return ''
     } else {
       return `width: ${inlineWidthText}; height: ${inlineHeightText};`
@@ -95,7 +85,7 @@
 {#if !blurhash && (type === 'Video' || type === 'Audio')}
   <button id={elementId}
           type="button"
-          class="inline-media play-video-button focus-after {$largeInlineMedia ? '' : 'fixed-size'} {type === 'Audio' ? 'play-audio-button' : ''}"
+          class="inline-media play-video-button focus-after fixed-size {type === 'Audio' ? 'play-audio-button' : ''}"
           aria-label={videoOrAudioButtonLabel}
           {tabindex}
           aria-hidden={ariaHidden}
@@ -119,7 +109,7 @@
 {:else}
   <button id={elementId}
           type="button"
-          class="inline-media show-image-button focus-after {$largeInlineMedia ? '' : 'fixed-size'}"
+          class="inline-media show-image-button focus-after fixed-size"
           aria-label={imageButtonAriaLabel}
           title={description}
           use:mouseover="{ (event) => { mouseoverVar = event } }"
@@ -152,6 +142,7 @@
       />
     {:else}
       <LazyImage
+              forceSize=true
               alt={description}
               title={description}
               src={previewUrl}

@@ -102,6 +102,16 @@ export function populateMarketplaceListingMediaURLs (listing, instanceName) {
     content.previewUrl = thumbs && thumbs.preview ? baseUrl + '/preview' : baseUrl
     content.staticUrl = thumbs && thumbs.static ? baseUrl + '/static' : content.previewUrl
   }
+
+  if (listing.artistRef) {
+    populateEntityMediaURLs(listing.artistRef, instanceName, 'spark')
+  }
+  if (listing.sellerRef) {
+    populateEntityMediaURLs(listing.sellerRef, instanceName, 'spark')
+  }
+  if (listing.buyerRef) {
+    populateEntityMediaURLs(listing.buyerRef, instanceName, 'spark')
+  }
 }
 
 export function populateMediaURLsInSingleListing (apiCall, instanceName) {

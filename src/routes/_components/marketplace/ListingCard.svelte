@@ -37,6 +37,9 @@
     <div class="listing-card-name">
       <EntityDisplayName entity={listing.object} />
     </div>
+    <div class="listing-card-artist">
+      by <EntityDisplayName entity={listing.artistRef} />
+    </div>
     <div class="listing-card-stats">
       Price: {priceText}
     </div>
@@ -63,6 +66,7 @@
     grid-template-areas:
       "image"
       "name"
+      "artist"
       "summary"
       "stats"
       "buttons";
@@ -82,6 +86,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 1.2em;
+  }
+  .listing-card-artist {
+    grid-area: artist;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .listing-card-stats {
     grid-area: stats;

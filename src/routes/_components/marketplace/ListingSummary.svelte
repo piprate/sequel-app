@@ -18,7 +18,7 @@
   .listing-summary {
     grid-area: summary;
     padding: 10px 0;
-    font-size: 0.9em;
+    font-size: 1.0em;
     word-wrap: break-word;
     overflow: hidden;
     white-space: pre-wrap;

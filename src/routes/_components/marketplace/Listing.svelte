@@ -50,15 +50,15 @@
 
   .listing-grid {
     display: grid;
-    grid-template-areas: "image      name"
-                         "image      label"
-                         "image      created"
-                         "details    details"
-                         "summary    summary"
-                         "controls   controls"
-                         "evergreen  evergreen";
-    grid-template-columns: min-content auto;
-    grid-template-rows: min-content 1fr;
+    grid-template-areas: "image"
+                         "name"
+                         "label"
+                         "created"
+                         "details"
+                         "summary"
+                         "controls"
+                         "evergreen";
+    grid-template-rows: min-content;
     grid-column-gap: 10px;
     grid-row-gap: 5px;
     padding: 20px;
@@ -82,15 +82,15 @@
   @media (max-width: 767px) {
     .listing-grid {
       display: grid;
-      grid-template-areas: "image      name"
-                           "image      label"
-                           "image      created"
-                           "details    details"
-                           "summary    summary"
-                           "controls   controls"
-                           "evergreen  evergreen";
-      grid-template-columns: min-content minmax(auto, 1fr);
-      grid-template-rows: min-content 1fr;
+      grid-template-areas: "image"
+                           "name"
+                           "label"
+                           "created"
+                           "details"
+                           "summary"
+                           "controls"
+                           "evergreen";
+      grid-template-rows: min-content;
       padding: 10px;
     }
   }
@@ -100,13 +100,14 @@
 
   @media (max-width: 240px) {
     .listing-grid {
-      grid-template-areas: "image        name"
-                           "image        label"
-                           "created      created"
-                           "membership   membership"
-                           "summary      summary"
-                           "evergreen    evergreen";
-      grid-template-columns: min-content 1fr;
+      grid-template-areas: "image"
+                           "name"
+                           "label"
+                           "created"
+                           "details"
+                           "summary"
+                           "controls"
+                           "evergreen";
       grid-column-gap: 5px;
       grid-row-gap: 0;
     }

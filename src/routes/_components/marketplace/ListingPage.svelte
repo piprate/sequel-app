@@ -36,7 +36,7 @@
     {#if $isUserLoggedIn}
         {#if $observedListing}
             {#if !newListing}
-                <DynamicPageBanner title={listingName} {ariaTitle} />
+                <DynamicPageBanner title="" {ariaTitle} />
             {/if}
             <Listing listing={$observedListing} ourSpark={$currentSpark} />
         {:else if notFound}
