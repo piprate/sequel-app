@@ -11,8 +11,16 @@
   import * as fcl from '@onflow/fcl'
   import { updateUserForInstance } from '../../_actions/instances'
   import { saveUser, userOperationError, userOperationInProgress } from '../../_actions/users'
-  import { disconnectFromFlow, getFlowBalance, getFUSDBalance } from '../../_actions/flow'
+  import {
+    disconnectFromFlow,
+    getFlowBalance,
+    getFUSDBalance,
+    getRoyaltyVaultTypes,
+    setupRoyaltyReceiver
+  } from '../../_actions/flow'
   import { goto } from '@sapper/app'
+  import { toast } from '../../_components/toast/toast'
+  import { formatIntl } from '../../_utils/formatIntl'
 
   // suppress warnings
   const intl = {}
@@ -21,6 +29,7 @@
 
   let flowBalance = -1
   let fusdBalance = -1
+  let royaltyReceiverVaults = []
 
   $: newUser = params.newUser
   $: user = ($instanceUsers && $instanceUsers[$currentInstance]) || {}
@@ -28,6 +37,7 @@
   $: flowNetwork = (user && user.flow && user.flow.network) || ''
   $: displayFlowBalance = flowBalance < 0 ? '' : `₣${flowBalance}`
   $: displayFUSDBalance = fusdBalance < 0 ? '' : `$${fusdBalance}`
+  $: royaltyReceivers = royaltyReceiverVaults ? royaltyReceiverVaults.join(', ') : ''
   $: flowAddressMismatch = $flowLoggedInAccount && flowAddress && $flowLoggedInAccount !== flowAddress
   $: nextStepLabel = $flowLoggedInAccount ? 'intl.flowFinish' : 'intl.flowSkipStep'
 
@@ -53,13 +63,37 @@
     await signUpWithFlow()
   }
 
-  async function loadFlowBalance (addr) {
+  async function loadAccountInfo (addr) {
     if (!addr) {
       return
     }
 
     flowBalance = await getFlowBalance(addr)
     fusdBalance = await getFUSDBalance(addr)
+    const vaultTypes = await getRoyaltyVaultTypes(addr)
+    royaltyReceiverVaults = []
+    vaultTypes.forEach((vaultType) => {
+      if (vaultType.typeID.includes('FlowToken')) {
+        royaltyReceiverVaults.push("Flow")
+      }
+      if (vaultType.typeID.includes('FUSD')) {
+        royaltyReceiverVaults.push("FUSD")
+      }
+    })
+  }
+
+  async function executeSetupRoyaltyReceiver() {
+    royaltyReceiverVaults = ['...waiting...']
+    const res = await setupRoyaltyReceiver(flowAddress)
+    if (res.result === 'completed') {
+      await loadAccountInfo(flowAddress)
+      /* no await */
+      toast.say('intl.flowTransactionCompleted')
+    } else if (res.result === 'failed') {
+      /* no await */
+      toast.say('intl.flowTransactionFailed')
+      royaltyReceiverVaults = []
+    }
   }
 
   function nextStep () {
@@ -72,7 +106,7 @@
     }
   }
 
-  $: loadFlowBalance(flowAddress)
+  $: loadAccountInfo(flowAddress)
 
   onMount(async () => {
     if ($isUserLoggedIn) {
@@ -118,6 +152,12 @@
       <div class="acct-field-cell acct-field-value">
         {displayFUSDBalance}
       </div>
+      <div class="acct-field-cell acct-field-name">
+        {intl.royaltyReceivers}
+      </div>
+      <div class="acct-field-cell acct-field-value">
+        {royaltyReceivers}
+      </div>
       <div class="flow-account-border"></div>
     </div>
   {:else}
@@ -131,6 +171,12 @@
     </div>
     <button class="primary flow-setup-button" type="button" on:click={switchFlowAccount}>
       {intl.flowSwitchButton}
+    </button>
+  {/if}
+
+  {#if $flowLoggedInAccount && !royaltyReceiverVaults }
+    <button class="primary flow-setup-button" type="button" on:click={executeSetupRoyaltyReceiver}>
+      {intl.flowSetupRoyaltyReceiver}
     </button>
   {/if}
 

@@ -648,6 +648,7 @@ module.exports = {
   flowNetwork: 'Network',
   flowBalance: 'Balance (Flow)',
   fusdBalance: 'Balance (FUSD)',
+  royaltyReceivers: 'Royalty Receivers',
   flowMismatchWarning: 'WARNING: the Flow account you are using differs from the account recorded in Sequel. Please switch to the account mentioned above.',
   flowSwitchButton: 'Switch account',
   flowSignUpButton: 'Sign Up with Flow',
@@ -655,6 +656,9 @@ module.exports = {
   flowDisconnectButton: 'Disconnect from Flow',
   flowSkipStep: 'Skip this step',
   flowFinish: 'Finish',
+  flowSetupRoyaltyReceiver: 'Add Royalty Receivers',
+  flowTransactionCompleted: 'Transaction completed',
+  flowTransactionFailed: 'Transaction failed',
   // Wellness settings
   wellness: 'Wellness',
   wellnessSettings: 'Wellness settings',

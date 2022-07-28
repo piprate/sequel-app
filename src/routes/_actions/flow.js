@@ -77,6 +77,175 @@ export async function getFUSDBalance (addr) {
   })
 }
 
+export async function getRoyaltyVaultTypes (addr) {
+  return await fcl.query({
+    cadence: `
+import FungibleTokenSwitchboard from 0xFungibleTokenSwitchboard
+import FungibleToken from 0xFungibleToken
+
+pub fun main(account: Address): [Type] {
+    let acct = getAccount(account)
+    // Get a reference to the switchboard conforming to SwitchboardPublic
+    let switchboardRef = acct.getCapability(FungibleTokenSwitchboard.PublicPath)
+        .borrow<&FungibleTokenSwitchboard.Switchboard{FungibleTokenSwitchboard.SwitchboardPublic}>()
+        ?? panic("Could not borrow reference to switchboard")
+
+    return switchboardRef.getVaultTypes()
+}
+      `,
+    args: (arg, t) => [
+      arg(addr, t.Address)
+    ]
+  })
+}
+
+export async function setupRoyaltyReceiver (addr) {
+  try {
+    const txHash = await fcl.send([
+      fcl.transaction(`
+import FungibleTokenSwitchboard from 0xFungibleTokenSwitchboard
+import FungibleToken from 0xFungibleToken
+import FlowToken from 0xFlowToken
+import FUSD from 0xFUSD
+import MetadataViews from 0xMetadataViews
+
+transaction {
+
+    let flowTokenVaultCap: Capability<&{FungibleToken.Receiver}>
+    let fusdTokenVaultCap: Capability<&{FungibleToken.Receiver}>
+    let switchboardRef:  &FungibleTokenSwitchboard.Switchboard
+
+    prepare(acct: AuthAccount) {
+        // Check if the account already has a Switchboard resource
+        if acct.borrow<&FungibleTokenSwitchboard.Switchboard>
+          (from: FungibleTokenSwitchboard.StoragePath) == nil {
+
+            // Create a new Switchboard resource and put it into storage
+            acct.save(
+                <- FungibleTokenSwitchboard.createSwitchboard(),
+                to: FungibleTokenSwitchboard.StoragePath)
+
+            // Create a public capability to the Switchboard exposing the deposit
+            // function through the {FungibleToken.Receiver} interface
+            acct.link<&FungibleTokenSwitchboard.Switchboard{FungibleToken.Receiver}>(
+                FungibleTokenSwitchboard.ReceiverPublicPath,
+                target: FungibleTokenSwitchboard.StoragePath
+            )
+
+            // Create a public capability to the Switchboard exposing both the
+            // deposit function and the getVaultCapabilities function through the
+            // {FungibleTokenSwitchboard.SwitchboardPublic} interface
+            acct.link<&FungibleTokenSwitchboard.Switchboard{FungibleTokenSwitchboard.SwitchboardPublic}>(
+                FungibleTokenSwitchboard.PublicPath,
+                target: FungibleTokenSwitchboard.StoragePath
+            )
+        }
+
+        // Get a reference to the signers switchboard
+        self.switchboardRef = acct.borrow<&FungibleTokenSwitchboard.Switchboard>
+            (from: FungibleTokenSwitchboard.StoragePath)
+            ?? panic("Could not borrow reference to switchboard")
+
+        if acct.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault) == nil {
+            // Create a new flowToken Vault and put it in storage
+            acct.save(<-FlowToken.createEmptyVault(), to: /storage/flowTokenVault)
+
+            // Create a public capability to the Vault that only exposes
+            // the deposit function through the Receiver interface
+            acct.link<&FlowToken.Vault{FungibleToken.Receiver}>(
+                /public/flowTokenReceiver,
+                target: /storage/flowTokenVault
+            )
+
+            // Create a public capability to the Vault that only exposes
+            // the balance field through the Balance interface
+            acct.link<&FlowToken.Vault{FungibleToken.Balance}>(
+                /public/flowTokenBalance,
+                target: /storage/flowTokenVault
+            )
+        }
+
+        self.flowTokenVaultCap =
+            acct.getCapability<&{FungibleToken.Receiver}>(/public/flowTokenReceiver)
+
+        if(acct.borrow<&FUSD.Vault>(from: /storage/fusdVault) == nil) {
+            // Create a new FUSD Vault and put it in storage
+            acct.save(<-FUSD.createEmptyVault(), to: /storage/fusdVault)
+
+            // Create a public capability to the Vault that only exposes
+            // the deposit function through the Receiver interface
+            acct.link<&FUSD.Vault{FungibleToken.Receiver}>(
+                /public/fusdReceiver,
+                target: /storage/fusdVault
+            )
+
+            // Create a public capability to the Vault that only exposes
+            // the balance field through the Balance interface
+            acct.link<&FUSD.Vault{FungibleToken.Balance}>(
+                /public/fusdBalance,
+                target: /storage/fusdVault
+            )
+        }
+
+        self.fusdTokenVaultCap =
+            acct.getCapability<&{FungibleToken.Receiver}>(/public/fusdReceiver)
+    }
+
+    execute {
+      self.switchboardRef.addNewVault(capability: self.flowTokenVaultCap)
+      self.switchboardRef.addNewVault(capability: self.fusdTokenVaultCap)
+    }
+}`),
+      fcl.payer(fcl.currentUser),
+      fcl.proposer(fcl.currentUser),
+      fcl.authorizations([fcl.authz]),
+      fcl.limit(99),
+  ])
+
+    console.log({ txHash })
+
+    let tx = fcl.tx(txHash)
+
+    tx.subscribe(console.log)
+
+    tx.subscribe((txStatus) => {
+      if (txStatus.status === 3) {
+        console.log('tx executed')
+      } else if (txStatus.status === 4) {
+        console.log('tx sealed')
+      }
+    })
+
+    const result = await tx.onceSealed()
+    console.log("TX result", { result })
+
+    if (result.errorMessage) {
+      return {
+        result: 'failed',
+        error: result.errorMessage
+      }
+    } else {
+      return {
+        result: 'completed'
+      }
+    }
+  } catch (e) {
+    if (e === 'Declined: Externally Halted'  // Dev Wallet
+      || (e.message && e.message.includes('User rejected signature')) // Blocto
+    ) {
+      return {
+        result: 'cancelled'
+      }
+    } else {
+      // Other errors
+      return {
+        result: 'failed',
+        error: e
+      }
+    }
+  }
+}
+
 export async function mintOnDemand (listingId, numEditions, minterAddress, statusCallback) {
   const _currentInstance = currentInstance.get()
   const _token = get(accessToken)
