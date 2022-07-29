@@ -174,7 +174,7 @@
     </button>
   {/if}
 
-  {#if $flowLoggedInAccount && !royaltyReceiverVaults }
+  {#if $flowLoggedInAccount && royaltyReceiverVaults.length === 0 }
     <button class="primary flow-setup-button" type="button" on:click={executeSetupRoyaltyReceiver}>
       {intl.flowSetupRoyaltyReceiver}
     </button>

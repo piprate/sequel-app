@@ -2,9 +2,17 @@
   export let listing
   export let numEditions = 1
 
+  function roleName (role) {
+    if (role === 'ClimateAction') {
+      return 'Climate Action'
+    } else {
+      return role
+    }
+  }
+
   $: payments = listing.payments || []
   $: paymentsForDisplay = (payments.map(payment => ({
-    role: payment.role,
+    role: roleName(payment.role),
     receiver: `0x${payment.receiver}`,
     rate: (payment.rate * 100.0).toFixed(2) + '%',
     amount: `${(payment.amount * numEditions).toFixed(2)} ${payment.currency}`

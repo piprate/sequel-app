@@ -88,9 +88,12 @@ pub fun main(account: Address): [Type] {
     // Get a reference to the switchboard conforming to SwitchboardPublic
     let switchboardRef = acct.getCapability(FungibleTokenSwitchboard.PublicPath)
         .borrow<&FungibleTokenSwitchboard.Switchboard{FungibleTokenSwitchboard.SwitchboardPublic}>()
-        ?? panic("Could not borrow reference to switchboard")
 
-    return switchboardRef.getVaultTypes()
+    if switchboardRef == nil {
+      return []
+    }
+
+    return switchboardRef!.getVaultTypes()
 }
       `,
     args: (arg, t) => [
@@ -200,7 +203,7 @@ transaction {
       fcl.proposer(fcl.currentUser),
       fcl.authorizations([fcl.authz]),
       fcl.limit(99),
-  ])
+    ])
 
     console.log({ txHash })
 
@@ -217,7 +220,7 @@ transaction {
     })
 
     const result = await tx.onceSealed()
-    console.log("TX result", { result })
+    console.log('TX result', { result })
 
     if (result.errorMessage) {
       return {
@@ -253,14 +256,14 @@ export async function mintOnDemand (listingId, numEditions, minterAddress, statu
 
   statusCallback('init_mod')
 
-  const modParams = await initialiseMintOnDemand(_currentInstance, _token, listingId, minterAddress, 0, numEditions, asSpark)
-
-  console.log('MOD Params', modParams)
-
-  const serverSigner = serverAuthorization(_currentInstance, _token, listingId, minterAddress, numEditions,
-    asSpark, modParams.adminAddr, modParams.adminKeyIndex, statusCallback)
-
   try {
+    const modParams = await initialiseMintOnDemand(_currentInstance, _token, listingId, minterAddress, 0, numEditions, asSpark)
+
+    console.log('MOD Params', modParams)
+
+    const serverSigner = serverAuthorization(_currentInstance, _token, listingId, minterAddress, numEditions,
+      asSpark, modParams.adminAddr, modParams.adminKeyIndex, statusCallback)
+
     let payer = fcl.authz
     if (modParams.gasPaidByAdmin) {
       payer = serverSigner
