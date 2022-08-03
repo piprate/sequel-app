@@ -26,8 +26,7 @@
   $: flowNetwork = (user && user.flow && user.flow.network) || ''
   $: flowAddressMismatch = $flowLoggedInAccount && flowAddress && $flowLoggedInAccount !== flowAddress
   $: notConnectedToFlow = !flowAddress || flowAddressMismatch || $flowLoggedInAccount !== flowAddress
-  $: primarySale = listing.listingType === 'primary_single' || listing.listingType === 'primary_multi'
-  $: selectEditions = listing.listingType === 'primary_multi'
+  $: primarySale = listing.listingType === 'primary'
   $: secondarySale = listing.listingType === 'secondary'
 
   let errorMessage = ''

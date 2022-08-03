@@ -10,8 +10,8 @@
   let numEditions = 1
   let editionsList = [...new Array(listing.availableEditions)].map((_, i) => i + 1)
 
-  $: primarySale = listing.listingType === 'primary_single' || listing.listingType === 'primary_multi'
-  $: selectEditions = listing.listingType === 'primary_multi'
+  $: primarySale = listing.listingType === 'primary'
+  $: selectEditions = listing.availableEditions > 1
   $: secondarySale = listing.listingType === 'secondary'
 
   function onConfirmClick (e) {
