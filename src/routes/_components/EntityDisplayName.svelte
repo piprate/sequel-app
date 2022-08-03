@@ -1,26 +1,26 @@
 <script>
-  import { emojifyText } from '../_utils/emojifyText';
-  import { autoplayGifs, omitEmojiInDisplayNames } from '../_store/local';
-  import escapeHtml from 'escape-html';
-  import { removeEmoji } from '../_utils/removeEmoji';
+  import { emojifyText } from '../_utils/emojifyText'
+  import { autoplayGifs, omitEmojiInDisplayNames } from '../_store/local'
+  import escapeHtml from 'escape-html'
+  import { removeEmoji } from '../_utils/removeEmoji'
 
-  export let entity;
+  export let entity
 
-  let emojis = [];
+  let emojis = []
 
-  $: entityName = entity.name;
+  $: entityName = entity.name || ''
   $: massagedEntityName = (() => {
-    const entityNameVal = escapeHtml(entityName);
+    const entityNameVal = escapeHtml(entityName)
 
     if ($omitEmojiInDisplayNames) { // display name emoji are annoying to some screenreader users
-      const emojiFreeDisplayName = removeEmoji(entityNameVal, []);
+      const emojiFreeDisplayName = removeEmoji(entityNameVal, [])
       if (emojiFreeDisplayName) {
-        return emojiFreeDisplayName;
+        return emojiFreeDisplayName
       }
     }
 
-    return emojifyText(entityNameVal, emojis, $autoplayGifs);
-  })();
+    return emojifyText(entityNameVal, emojis, $autoplayGifs)
+  })()
 </script>
 
 <span class="entity-display-name">{@html massagedEntityName }</span>

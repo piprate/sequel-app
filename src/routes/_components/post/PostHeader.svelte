@@ -3,6 +3,7 @@
   import SparkDisplayName from '../spark/SparkDisplayName.svelte'
   import SvgIcon from '../SvgIcon.svelte'
   import BubbleDisplayName from '../bubble/BubbleDisplayName.svelte'
+  import EntityDisplayName from '../EntityDisplayName.svelte'
   import { unwrap } from '../../_utils/mapper'
 
   export let author
@@ -28,6 +29,8 @@
       return '#fa-sign-out'
     } else if (notificationType === 'subscriber') {
       return '#fa-user-plus'
+    } else if (notificationType === 'mod_offer') {
+      return '#fa-gift'
     }
     return '#fa-star'
   })()
@@ -42,6 +45,8 @@
       return 'intl.leftHeader'
     } else if (notificationType === 'subscriber') {
       return 'intl.subscribedToYourPosts'
+    } else if (notificationType === 'mod_offer') {
+      return 'intl.offeredNFT'
     } else {
       return ''
     }
@@ -80,6 +85,16 @@
           <BubbleDisplayName bubble={notification.subjectBubble} />
         </a>
         <span class="post-header-action">{intl.bubbleSuffix}</span>
+      {/if}
+      {#if notificationType === 'mod_offer'}
+        <a id={elementSubjectId}
+           href="/marketplace/{notification.subjectListing.id}"
+           sapper:prefetch
+           class="post-header-author"
+        >
+          <EntityDisplayName entity={notification.subjectListing.object} />
+        </a>
+        <span class="post-header-action">{intl.offeredSuffix}</span>
       {/if}
     {/if}
   </div>

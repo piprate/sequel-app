@@ -9,6 +9,8 @@ function getNotificationText (notification, omitEmojiInDisplayNames) {
   const notificationSparkDisplayName = getSparkAccessibleName(notification.actor, omitEmojiInDisplayNames)
   if (notification.type === 'tmm') {
     return formatIntl('intl.sparkTMMedYou', { spark: notificationSparkDisplayName })
+  } else if (notification.type === 'mod_offer') {
+    return formatIntl('intl.sparkOfferedNFT', { spark: notificationSparkDisplayName })
   } else if (notification.type === 'favourite') {
     return formatIntl('intl.sparkFavoritedYou', { spark: notificationSparkDisplayName })
   }

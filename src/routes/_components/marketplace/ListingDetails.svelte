@@ -13,10 +13,10 @@
   $: id = listing.id
   $: price = listing.price || 0
   $: currency = listing.currency || ''
-  $: priceDisplay = `${numberFormat().format(price)} ${currency}`
+  $: priceDisplay = listing.price === 0.0 ? 'intl.free' : `${numberFormat().format(price)} ${currency}`
   $: editionsDisplay = formatIntl('intl.editionsAvailable', {
     available: numberFormat().format(listing.availableEditions),
-    total: numberFormat().format(listing.totalEditions)
+    total: numberFormat().format(listing.object.maxEdition)
   })
   $: soldDisplay = numberFormat().format(listing.totalEditions - listing.availableEditions)
   $: sparkSelected = !!ourSpark

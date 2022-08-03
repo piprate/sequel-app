@@ -12,8 +12,7 @@
   // suppress warnings
   const intl = {};
 
-  $: sparkSelected = !!$currentSparkId
-  $: listingsFetcher = () => $isUserLoggedIn ? getMarketplaceListings($currentInstance, $accessToken) : [];
+  $: listingsFetcher = () => $isUserLoggedIn ? getMarketplaceListings($currentInstance, $accessToken, $currentSparkId) : [];
 </script>
 
 <DynamicPageBanner title="{intl.marketplaceTitle}" icon="#nft-diamond" />

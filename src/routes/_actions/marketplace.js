@@ -1,12 +1,12 @@
 import { database } from '../_database/database'
 import { currentInstance, observedListing } from '../_store/local'
-import { accessToken } from '../_store/instance'
+import { accessToken, currentSparkId } from '../_store/instance'
 import { get } from 'svelte/store'
 import { getListing } from '../_api/marketplace'
 
-async function _updateListing (id, instanceName, accessToken) {
+async function _updateListing (id, instanceName, accessToken, asSpark) {
   const localPromise = database.getListing(instanceName, id)
-  const remotePromise = getListing(instanceName, accessToken, id).then(listing => {
+  const remotePromise = getListing(instanceName, accessToken, id, asSpark).then(listing => {
     /* no await */
     database.setListing(instanceName, listing)
     return listing
@@ -34,9 +34,10 @@ export async function clearListing () {
 export async function updateListing (id) {
   const _currentInstance = currentInstance.get()
   const token = get(accessToken)
-  await _updateListing(id, _currentInstance, token)
+  const asSpark = get(currentSparkId)
+  await _updateListing(id, _currentInstance, token, asSpark)
 }
 
 export async function loadListing (id) {
-  return getListing(currentInstance.get(), get(accessToken), id)
+  return getListing(currentInstance.get(), get(accessToken), id, get(currentSparkId))
 }

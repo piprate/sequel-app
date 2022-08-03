@@ -19,8 +19,8 @@
   })))
 </script>
 
-{#if paymentsForDisplay.length}
-  <div class="payments">
+<div class="payments">
+  {#if paymentsForDisplay.length}
     <div class="evergreen-profile-header">
       <h2>{intl.payments}</h2>
     </div>
@@ -56,8 +56,8 @@
       </div>
     {/each}
     <div class="payments-border"></div>
-  </div>
-{/if}
+  {/if}
+</div>
 <style>
   .payments {
     grid-area: evergreen;
