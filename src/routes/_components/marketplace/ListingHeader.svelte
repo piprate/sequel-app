@@ -1,8 +1,5 @@
 <script>
   import EntityDisplayName from '../EntityDisplayName.svelte'
-  import { removeEmoji } from '../../_utils/removeEmoji'
-  import { omitEmojiInDisplayNames } from '../../_store/local'
-  import { formatIntl } from '../../_utils/formatIntl'
   import Media from '../digitalart/Media.svelte'
 
   export let listing
@@ -11,17 +8,9 @@
 
   const mediaList = [listing.object.content]
   const uuid = 'token'
-
-  $: displayName = listing.object.name
-  $: accessibleName = (() => {
-    return $omitEmojiInDisplayNames
-            ? removeEmoji(displayName, emojis) || displayName
-            : displayName
-  })()
-  $: externalLinkLabel = formatIntl('intl.opensInNewWindow', { label: accessibleName })
 </script>
 
-<h2 class="sr-only">{intl.nameAndSubscriptions}</h2>
+<h2 class="sr-only">{intl.nameAndProperties}</h2>
 <div class="listing-media">
   <Media media={listing.object.content} {uuid} mediaAttachments={mediaList} index={0} showAsSensitive={false} />
 </div>

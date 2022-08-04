@@ -519,7 +519,7 @@ module.exports = {
     other {}
   }`,
   unblock: 'Unblock',
-  nameAndSubscriptions: 'Name and subscriptions',
+  nameAndProperties: 'Name and properties',
   clickToSeeAvatar: 'Click to see avatar',
   opensInNewWindow: '{label} (opens in new window)',
   me: 'Me',

@@ -1,26 +1,19 @@
 <script>
-  import Avatar from '../Avatar.svelte';
-  import WorldDisplayName from './WorldDisplayName.svelte';
-  import CreatedAt from "../CreatedAt.svelte";
-  import { removeEmoji } from '../../_utils/removeEmoji';
-  import { isTinyMobileSize, isVeryTinyMobileSize, omitEmojiInDisplayNames } from '../../_store/local';
-  import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js';
-  import { getImageNativeDimensions } from '../../_utils/getImageNativeDimensions';
-  import { formatIntl } from '../../_utils/formatIntl';
+  import Avatar from '../Avatar.svelte'
+  import WorldDisplayName from './WorldDisplayName.svelte'
+  import CreatedAt from '../CreatedAt.svelte'
+  import { isTinyMobileSize, isVeryTinyMobileSize } from '../../_store/local'
+  import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js'
+  import { getImageNativeDimensions } from '../../_utils/getImageNativeDimensions'
+  import { formatIntl } from '../../_utils/formatIntl'
 
-  export let world;
-  export let relationship;
+  export let world
+  export let relationship
 
-  let emojis = [];
+  let emojis = []
 
-  $: displayName = world.name;
-  $: accessibleName = (() => {
-    return $omitEmojiInDisplayNames
-            ? removeEmoji(displayName, emojis) || displayName
-            : displayName;
-  })();
-  $: avatarSize = $isVeryTinyMobileSize ? 'small' : $isTinyMobileSize ? 'medium' : 'big';
-  $: externalLinkLabel = formatIntl('intl.opensInNewWindow', { label: accessibleName });
+  $: displayName = world.name
+  $: avatarSize = $isVeryTinyMobileSize ? 'small' : $isTinyMobileSize ? 'medium' : 'big'
 
   async function onAvatarClick () {
     if (!world.avatar) {
@@ -31,9 +24,9 @@
     const [showMediaDialog, nativeDimensions] = await Promise.all([
       importShowMediaDialog(),
       getImageNativeDimensions(avatarStatic)
-    ]);
+    ])
     // pretend this is a media attachment so it will work in the media dialog
-    const { width, height } = nativeDimensions;
+    const { width, height } = nativeDimensions
     const mediaAttachments = [
       {
         description: formatIntl('intl.avatarForWorld', { world: displayName }),
@@ -51,12 +44,12 @@
           }
         }
       }
-    ];
-    showMediaDialog(mediaAttachments, /* index */ 0);
+    ]
+    showMediaDialog(mediaAttachments, /* index */ 0)
   }
 </script>
 
-<h2 class="sr-only">{intl.nameAndSubscriptions}</h2>
+<h2 class="sr-only">{intl.nameAndProperties}</h2>
 <div class="world-profile-avatar">
   <button class="world-profile-avatar-button"
           aria-label="{intl.clickToSeeAvatar}"

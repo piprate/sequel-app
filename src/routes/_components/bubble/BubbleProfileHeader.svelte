@@ -1,42 +1,34 @@
 <script>
-  import Avatar from '../Avatar.svelte';
-  import BubbleDisplayName from './BubbleDisplayName.svelte';
-  import Location from "../Location.svelte";
-  import CreatedAt from "../CreatedAt.svelte";
-  import { removeEmoji } from '../../_utils/removeEmoji';
-  import { isTinyMobileSize, isVeryTinyMobileSize, omitEmojiInDisplayNames } from '../../_store/local';
-  import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js';
-  import { getImageNativeDimensions } from '../../_utils/getImageNativeDimensions';
-  import { formatIntl } from '../../_utils/formatIntl';
+  import Avatar from '../Avatar.svelte'
+  import BubbleDisplayName from './BubbleDisplayName.svelte'
+  import Location from '../Location.svelte'
+  import CreatedAt from '../CreatedAt.svelte'
+  import { isTinyMobileSize, isVeryTinyMobileSize } from '../../_store/local'
+  import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js'
+  import { getImageNativeDimensions } from '../../_utils/getImageNativeDimensions'
+  import { formatIntl } from '../../_utils/formatIntl'
 
-  export let bubble;
-  export let relationship;
+  export let bubble
+  export let relationship
 
-  let emojis = [];
+  let emojis = []
 
-  $: displayName = bubble.name;
-  $: accessibleName = (() => {
-    return $omitEmojiInDisplayNames
-            ? removeEmoji(displayName, emojis) || displayName
-            : displayName;
-  })();
-  $: avatarSize = $isVeryTinyMobileSize ? 'small' : $isTinyMobileSize ? 'medium' : 'big';
-  $: externalLinkLabel = formatIntl('intl.opensInNewWindow', { label: accessibleName });
-  $: joined = relationship && (relationship.status === 'active');
-  $: memberType = joined? relationship.memberType : '';
+  $: avatarSize = $isVeryTinyMobileSize ? 'small' : $isTinyMobileSize ? 'medium' : 'big'
+  $: joined = relationship && (relationship.status === 'active')
+  $: memberType = joined ? relationship.memberType : ''
   $: memberTypeLabel = (() => {
-    switch(memberType) {
+    switch (memberType) {
       case 'owner':
-        return 'intl.memberTypeOwner';
+        return 'intl.memberTypeOwner'
       case 'moderator':
-        return 'intl.memberTypeModerator';
+        return 'intl.memberTypeModerator'
       case 'writer':
-        return 'intl.memberTypeMember';
+        return 'intl.memberTypeMember'
       case 'observer':
-        return 'intl.memberTypeReader';
+        return 'intl.memberTypeReader'
     }
-    return '';
-  })();
+    return ''
+  })()
   $: readOnlyLabel = bubble.writerMode === 'none' ? 'intl.readOnly' : ''
   $: inviteOnlyLabel = bubble.membershipMode === 'invite_only' ? 'intl.inviteOnly' : ''
 
@@ -49,9 +41,9 @@
     const [showMediaDialog, nativeDimensions] = await Promise.all([
       importShowMediaDialog(),
       getImageNativeDimensions(avatarStatic)
-    ]);
+    ])
     // pretend this is a media attachment so it will work in the media dialog
-    const { width, height } = nativeDimensions;
+    const { width, height } = nativeDimensions
     const mediaAttachments = [
       {
         description: formatIntl('intl.avatarForBubble', { bubble: bubble.name }),
@@ -69,12 +61,12 @@
           }
         }
       }
-    ];
-    showMediaDialog(mediaAttachments, /* index */ 0);
+    ]
+    showMediaDialog(mediaAttachments, /* index */ 0)
   }
 </script>
 
-<h2 class="sr-only">{intl.nameAndSubscriptions}</h2>
+<h2 class="sr-only">{intl.nameAndProperties}</h2>
 <div class="bubble-profile-avatar">
   <button class="bubble-profile-avatar-button"
           aria-label="{intl.clickToSeeAvatar}"

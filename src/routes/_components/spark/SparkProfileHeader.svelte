@@ -1,31 +1,24 @@
 <script>
-  import Avatar from '../Avatar.svelte';
-  import SparkDisplayName from './SparkDisplayName.svelte';
-  import { removeEmoji } from '../../_utils/removeEmoji';
-  import { currentInstance, isTinyMobileSize, isVeryTinyMobileSize, omitEmojiInDisplayNames } from '../../_store/local';
-  import Label from '../Label.svelte';
-  import Location from "../Location.svelte";
-  import CreatedAt from "../CreatedAt.svelte";
-  import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js';
-  import { getImageNativeDimensions } from '../../_utils/getImageNativeDimensions';
-  import { formatIntl } from '../../_utils/formatIntl';
-  import { fediverseHandle } from "../../_utils/mapper";
+  import Avatar from '../Avatar.svelte'
+  import SparkDisplayName from './SparkDisplayName.svelte'
+  import { currentInstance, isTinyMobileSize, isVeryTinyMobileSize } from '../../_store/local'
+  import Label from '../Label.svelte'
+  import Location from '../Location.svelte'
+  import CreatedAt from '../CreatedAt.svelte'
+  import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js'
+  import { getImageNativeDimensions } from '../../_utils/getImageNativeDimensions'
+  import { formatIntl } from '../../_utils/formatIntl'
+  import { fediverseHandle } from '../../_utils/mapper'
 
-  export let spark;
-  export let relationship;
+  export let spark
+  export let relationship
 
-  $: emojis = spark.emojis || [];
-  $: displayName = spark.name;
-  $: handle = fediverseHandle(spark, $currentInstance);
-  $: accessibleName = (() => {
-    return $omitEmojiInDisplayNames
-            ? removeEmoji(displayName, emojis) || displayName
-            : displayName;
-  })();
-  $: bot = !!spark.bot;
-  $: label = bot ? 'bot' : '';
-  $: avatarSize = $isVeryTinyMobileSize ? 'small' : $isTinyMobileSize ? 'medium' : 'big';
-  $: externalLinkLabel = formatIntl('intl.opensInNewWindow', { label: accessibleName });
+  $: emojis = spark.emojis || []
+  $: displayName = spark.name
+  $: handle = fediverseHandle(spark, $currentInstance)
+  $: bot = !!spark.bot
+  $: label = bot ? 'bot' : ''
+  $: avatarSize = $isVeryTinyMobileSize ? 'small' : $isTinyMobileSize ? 'medium' : 'big'
 
   async function onAvatarClick () {
     if (!spark.avatar) {
@@ -36,9 +29,9 @@
     const [showMediaDialog, nativeDimensions] = await Promise.all([
       importShowMediaDialog(),
       getImageNativeDimensions(avatarStatic)
-    ]);
+    ])
     // pretend this is a media attachment so it will work in the media dialog
-    const { width, height } = nativeDimensions;
+    const { width, height } = nativeDimensions
     const mediaAttachments = [
       {
         description: formatIntl('intl.avatarForSpark', { spark: displayName }),
@@ -56,12 +49,12 @@
           }
         }
       }
-    ];
-    showMediaDialog(mediaAttachments, /* index */ 0);
+    ]
+    showMediaDialog(mediaAttachments, /* index */ 0)
   }
 </script>
 
-<h2 class="sr-only">{intl.nameAndSubscriptions}</h2>
+<h2 class="sr-only">{intl.nameAndProperties}</h2>
 <div class="spark-profile-avatar">
   <button class="spark-profile-avatar-button"
           aria-label="{intl.clickToSeeAvatar}"
