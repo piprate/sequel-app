@@ -1,5 +1,7 @@
 <script>
+  import InfoAside from '../InfoAside.svelte'
   import { importShowBuyTokenDialog } from '../dialog/asyncDialogs/importShowBuyTokenDialog'
+  import { isAuthenticated } from '../../_store/local'
 
   export let listing
   export let ourSpark
@@ -22,8 +24,14 @@
 </script>
 
 <div class="listing-controls">
-    {#if moreToBuy}
-        <button class="button primary text-button" on:click="{onBuyClick}">{buttonLabel}</button>
+    {#if $isAuthenticated}
+        {#if moreToBuy}
+            <button class="button primary text-button" on:click="{onBuyClick}">{buttonLabel}</button>
+        {/if}
+    {:else}
+        <InfoAside className="buy-warning">
+            {intl.logInBeforeBuying}
+        </InfoAside>
     {/if}
 </div>
 
@@ -33,12 +41,17 @@
         display: grid;
         margin: 0 5px;
         align-items: center;
-        grid-template-columns: 1fr 1fr 1fr min-content;
+        grid-template-columns: 1fr 1fr 1fr;
     }
     .text-button {
         margin: 10px 0;
         min-width: 140px;
         display: inline-block;
         text-align: center;
+    }
+    :global(.buy-warning) {
+        margin: 20px 10px 0px 10px;
+        grid-column-start: 1;
+        grid-column-end: 4;
     }
 </style>
