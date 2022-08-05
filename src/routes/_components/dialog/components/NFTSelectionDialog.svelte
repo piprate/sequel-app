@@ -123,13 +123,6 @@
     // cause variable refresh
     selectionHistory = selectionHistory
   }
-
-  onMount(() => {
-    if (flowNetwork === 'mainnet') {
-      // disable Sequel NFT lookup on mainnet
-      rootSelectionTree.folderList[0].notSupported = true
-    }
-  })
 </script>
 
 <ModalDialog
