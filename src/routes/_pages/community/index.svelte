@@ -42,9 +42,19 @@
 
   $: mySequelPinnables = [
     $isAuthenticated && {
+      href: '/assets',
+      label: 'intl.assets',
+      icon: '#fa-bicycle'
+    },
+    $isAuthenticated && {
       href: '/subscriptions',
       label: 'intl.subscriptions',
       icon: '#fa-newspaper-o'
+    },
+    $isAuthenticated && {
+      href: '/studio',
+      label: 'intl.studio',
+      icon: '#fa-paint-brush'
     },
     $isAuthenticated && {
       href: '/bookmarks',

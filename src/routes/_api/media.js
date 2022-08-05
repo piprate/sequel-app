@@ -130,6 +130,34 @@ export function populateMediaURLsInMarketplaceListings (apiCall, instanceName) {
   })
 }
 
+export function populateDigitalArtMediaURLs (digitalArt, instanceName, accessToken) {
+  const baseUrl = `${base(instanceName, accessToken)}/digital-art/${unwrap(digitalArt.id)}/content`
+
+  if (digitalArt.content) {
+    const content = digitalArt.content
+    const thumbs = content.thumbnails
+    content.url = baseUrl
+    content.previewUrl = thumbs && thumbs.preview ? baseUrl + '/preview' : baseUrl
+    content.staticUrl = thumbs && thumbs.static ? baseUrl + '/static' : content.previewUrl
+  }
+}
+
+export function populateDigitalArtTokenMediaURLs (token, instanceName, accessToken) {
+  const baseUrl = `${base(instanceName, accessToken)}/digital-art/${unwrap(token.object.id)}/content`
+
+  if (token.object.content) {
+    const content = token.object.content
+    const thumbs = content.thumbnails
+    content.url = baseUrl
+    content.previewUrl = thumbs && thumbs.preview ? baseUrl + '/preview' : baseUrl
+    content.staticUrl = thumbs && thumbs.static ? baseUrl + '/static' : content.previewUrl
+  }
+
+  if (token.artistRef) {
+    populateEntityMediaURLs(token.artistRef, instanceName, 'spark')
+  }
+}
+
 export function mediaAssetURL (instanceName, media) {
   return `${basename(instanceName)}/media-asset/${media.uploadID}/${unwrapBlob(media.id)}`
 }

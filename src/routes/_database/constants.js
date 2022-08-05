@@ -8,6 +8,7 @@ export const WORLD_RELATIONSHIPS_STORE = 'world_relationships'
 export const BUBBLES_STORE = 'bubbles'
 export const BUBBLE_RELATIONSHIPS_STORE = 'bubble_relationships'
 export const LISTINGS_STORE = 'listings'
+export const DIGITAL_ARTS_STORE = 'digital_arts'
 export const NOTIFICATIONS_STORE = 'notifications-v4'
 export const NOTIFICATION_TIMELINES_STORE = 'notification_timelines-v4'
 export const PINNED_POSTS_STORE = 'pinned_posts'
@@ -23,7 +24,8 @@ export const USERNAME_LOWERCASE = '__sequel_acct_lc'
 
 export const DB_VERSION_INITIAL = 1
 export const DB_VERSION_MARKETPLACE = 2
+export const DB_VERSION_NFT = 3
 
 // Using an object for these so that unit tests can change them
-export const DB_VERSION_CURRENT = { version: 2 }
+export const DB_VERSION_CURRENT = { version: 3 }
 export const CURRENT_TIME = { now: () => Date.now() }

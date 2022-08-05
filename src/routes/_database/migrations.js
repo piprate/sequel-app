@@ -1,6 +1,7 @@
 import {
   DB_VERSION_INITIAL,
   DB_VERSION_MARKETPLACE,
+  DB_VERSION_NFT,
   META_STORE,
   NOTIFICATION_TIMELINES_STORE,
   NOTIFICATIONS_STORE,
@@ -15,6 +16,7 @@ import {
   USERNAME_LOWERCASE,
   WORLDS_STORE,
   LISTINGS_STORE,
+  DIGITAL_ARTS_STORE,
   WORLD_RELATIONSHIPS_STORE,
   BUBBLES_STORE,
   BUBBLE_RELATIONSHIPS_STORE
@@ -93,6 +95,24 @@ function migration1_1 (db, tx, done) {
   done()
 }
 
+function migration3 (db, tx, done) {
+  function createObjectStore (name, init, indexes) {
+    const store = init
+      ? db.createObjectStore(name, init)
+      : db.createObjectStore(name)
+    if (indexes) {
+      Object.keys(indexes).forEach(indexKey => {
+        store.createIndex(indexKey, indexes[indexKey])
+      })
+    }
+  }
+
+  createObjectStore(DIGITAL_ARTS_STORE, { keyPath: 'id' }, {
+    [TIMESTAMP]: TIMESTAMP
+  })
+  done()
+}
+
 export const migrations = [
   {
     version: DB_VERSION_INITIAL,
@@ -101,5 +121,9 @@ export const migrations = [
   {
     version: DB_VERSION_MARKETPLACE,
     migration: migration1_1
+  },
+  {
+    version: DB_VERSION_NFT,
+    migration: migration3
   }
 ]

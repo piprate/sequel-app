@@ -13,7 +13,8 @@ import {
   TIMESTAMP,
   WORLD_RELATIONSHIPS_STORE,
   WORLDS_STORE,
-  LISTINGS_STORE
+  LISTINGS_STORE,
+  DIGITAL_ARTS_STORE
 } from './constants'
 import debounce from 'lodash-es/debounce'
 import { mark, stop } from '../_utils/marks'
@@ -159,6 +160,17 @@ function cleanupListings (listingsStore, cutoff) {
   )
 }
 
+function cleanupDigitalArts (digitalArtsStore, cutoff) {
+  batchedGetAll(
+    () => digitalArtsStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
+    results => {
+      results.forEach(index => {
+        digitalArtsStore.delete(index)
+      })
+    }
+  )
+}
+
 export async function cleanup (instanceName) {
   console.log('cleanup', instanceName)
   mark(`cleanup:${instanceName}`)
@@ -176,7 +188,8 @@ export async function cleanup (instanceName) {
     BUBBLE_RELATIONSHIPS_STORE,
     THREADS_STORE,
     PINNED_POSTS_STORE,
-    LISTINGS_STORE
+    LISTINGS_STORE,
+    DIGITAL_ARTS_STORE
   ]
   await dbPromise(db, storeNames, 'readwrite', (stores) => {
     const [
@@ -192,7 +205,8 @@ export async function cleanup (instanceName) {
       bubbleRelationshipsStore,
       threadsStore,
       pinnedPostsStore,
-      listingsStore
+      listingsStore,
+      digitalArtsStore
     ] = stores
 
     const cutoff = Date.now() - CLEANUP_TIME_AGO
@@ -206,6 +220,7 @@ export async function cleanup (instanceName) {
     cleanupBubbles(bubblesStore, cutoff)
     cleanupBubbleRelationships(bubbleRelationshipsStore, cutoff)
     cleanupListings(listingsStore, cutoff)
+    cleanupDigitalArts(digitalArtsStore, cutoff)
   })
   stop(`cleanup:${instanceName}`)
 }

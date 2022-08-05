@@ -297,6 +297,7 @@ module.exports = {
   postNotLoggedIn: 'A post thread will appear here when logged in.',
   tagNotLoggedIn: 'A hashtag timeline will appear here when logged in.',
   listingNotLoggedIn: 'Marketplace listing will appear here when logged in.',
+  digitalArtNotLoggedIn: 'Digital Art will appear here when logged in.',
   // Notification subpages
   filters: 'Filters',
   all: 'All',
@@ -644,7 +645,7 @@ module.exports = {
   flowSettings: 'Flow settings',
   flowNotLoggedIn: 'Flow configuration will appear here when logged in.',
   flowDescription: `Sequel uses <a rel="noopener" target="_blank" href="https://www.onflow.org/">Flow blockchain</a> to send and receive payments, buy and sell NFTs.
-    Sign up or log in with your Blocto wallet.`,
+    Sign up or log in with your Flow wallet.`,
   flowAddress: 'Address',
   flowNetwork: 'Network',
   flowBalance: 'Balance (Flow)',
@@ -1004,6 +1005,8 @@ module.exports = {
   sparkNotFound: 'Spark not found',
   worldNotFound: 'World not found',
   listingNotFound: 'Listing not found',
+  digitalArtNotFound: 'Digital Art not found',
+  tokenNotFound: 'Token not found',
   accessRestricted: 'Access restricted. You need to be logged in to see this page.',
   invalidExternalRequest: `
     <h2>
@@ -1076,5 +1079,20 @@ module.exports = {
   txSealedStatus: '(6/7) Transaction sealed...',
   confirmSaleStatus: '(7/7) Confirming sale...',
   congratulations: 'Congratulations!',
-  purchaseSuccessful: 'Your purchase has been completed successfully.'
+  purchaseSuccessful: 'Your purchase has been completed successfully.',
+  // Assets pages
+  assetsPageTitle: 'Assets',
+  collectionEmpty: 'Your collection is empty. Visit <a href="/marketplace" sapper:prefetch>Marketplace</a> to buy digital art.',
+  // Token page
+  tokenPageTitle: 'Token',
+  tokenID: 'ID',
+  tokenEdition: 'Edition',
+  tokenType: 'Type',
+  tokenEditions: '#{edition} of {total}',
+  // Studio
+  studio: 'Studio',
+  studioEmpty: 'Your studio is empty. Wait for general release.',
+  digitalArt: 'Digital Art',
+  digitalArtStatus: 'Status',
+  digitalArtEditions: 'Editions',
 }

@@ -428,6 +428,20 @@ export async function readNFTCollection (source, account) {
   return list
 }
 
+export async function readSequelDigitalArtCollection (account) {
+  const _currentInstance = currentInstance.get()
+
+  const col = await getSequelDigitalArtCollection(account)
+
+  return Array.from(Object.entries(col)).map(([id, meta]) => (
+    {
+      id: parseInt(id),
+      name: meta.name,
+      asset: meta.asset,
+      content: populateDigitalArtPreviewURLs({}, _currentInstance, meta.asset)
+    }))
+}
+
 async function getSequelDigitalArtCollection (addr) {
   return await fcl.query({
     cadence: `

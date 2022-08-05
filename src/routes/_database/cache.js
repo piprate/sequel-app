@@ -32,6 +32,10 @@ export const listingsCache = {
   maxSize: 50,
   caches: {}
 }
+export const digitalArtsCache = {
+  maxSize: 50,
+  caches: {}
+}
 export const metaCache = {
   maxSize: 20,
   caches: {}

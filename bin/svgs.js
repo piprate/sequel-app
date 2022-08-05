@@ -69,5 +69,7 @@ module.exports = [
   { id: 'fa-edit', src: 'src/thirdparty/font-awesome-svg-png/white/svg/edit.svg' },
   { id: 'fa-folder-open', src: 'src/thirdparty/font-awesome-svg-png/white/svg/folder-open.svg', inline: true },
   { id: 'fa-newspaper-o', src: 'src/thirdparty/font-awesome-svg-png/white/svg/newspaper-o.svg', inline: true },
-  { id: 'fa-gift', src: 'src/thirdparty/font-awesome-svg-png/white/svg/gift.svg', inline: true }
+  { id: 'fa-gift', src: 'src/thirdparty/font-awesome-svg-png/white/svg/gift.svg', inline: true },
+  { id: 'fa-bicycle', src: 'src/thirdparty/font-awesome-svg-png/white/svg/bicycle.svg', inline: true },
+  { id: 'fa-paint-brush', src: 'src/thirdparty/font-awesome-svg-png/white/svg/paint-brush.svg', inline: true }
 ]

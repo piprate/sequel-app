@@ -23,7 +23,6 @@
 
   $: user = ($instanceUsers && $instanceUsers[$currentInstance]) || {}
   $: flowAddress = (user && user.flow && user.flow.addr) || ''
-  $: flowNetwork = (user && user.flow && user.flow.network) || ''
   $: flowAddressMismatch = $flowLoggedInAccount && flowAddress && $flowLoggedInAccount !== flowAddress
   $: notConnectedToFlow = !flowAddress || flowAddressMismatch || $flowLoggedInAccount !== flowAddress
   $: primarySale = listing.listingType === 'primary'

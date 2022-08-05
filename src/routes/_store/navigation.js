@@ -54,6 +54,20 @@ export const navPages = derived(
         svg: '#nft-diamond',
         label: 'intl.marketplace'
       }
+    } else if ($pinnedPage === '/assets') {
+      pinnedPageObject = {
+        name: 'assets',
+        href: '/assets',
+        svg: '#fa-bicycle',
+        label: 'intl.assets'
+      }
+    } else if ($pinnedPage === '/studio') {
+      pinnedPageObject = {
+        name: 'studio',
+        href: '/studio',
+        svg: '#fa-paint-brush',
+        label: 'intl.studio'
+      }
     } else if ($pinnedPage === '/bookmarks') {
       pinnedPageObject = {
         name: 'bookmarks',
