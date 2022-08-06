@@ -14,7 +14,7 @@ export async function getDigitalArts (instanceName, accessToken, asSpark, limit 
 export async function getDigitalArt (instanceName, accessToken, id, asSpark) {
   const url = `${base(instanceName, accessToken)}/digital-art/${unwrap(id)}`
   return await get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }).then((listing) => {
-    populateDigitalArtMediaURLs(listing, instanceName)
+    populateDigitalArtMediaURLs(listing, instanceName, accessToken)
     return listing
   })
 }
