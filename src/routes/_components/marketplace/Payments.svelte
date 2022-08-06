@@ -1,14 +1,8 @@
 <script>
+  import { roleName } from '../../_utils/evergreen'
+
   export let listing
   export let numEditions = 1
-
-  function roleName (role) {
-    if (role === 'ClimateAction') {
-      return 'Climate Action'
-    } else {
-      return role
-    }
-  }
 
   $: payments = listing.payments || []
   $: paymentsForDisplay = (payments.map(payment => ({
@@ -60,7 +54,7 @@
 </div>
 <style>
   .payments {
-    grid-area: evergreen;
+    grid-area: payments;
     display: grid;
     grid-template-columns: auto max-content 1fr 1fr;
     grid-row-gap: 5px;

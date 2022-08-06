@@ -9,6 +9,7 @@
   import { onMount } from 'svelte'
   import SparkRole from '../SparkRole.svelte'
   import CreatedAt from '../CreatedAt.svelte'
+  import EvergreenProfile from '../marketplace/EvergreenProfile.svelte'
 
   export let token
   export let ourSpark
@@ -44,6 +45,7 @@
         </div>
       {/if}
       <DigitalArtTokenDetails {token} {ourSpark} />
+      <EvergreenProfile profile={token.object.evergreenProfile} />
     </div>
   </div>
 </div>
@@ -63,7 +65,8 @@
             "summary   summary"
             "created   created"
             "artist    artist"
-            "details   details";
+            "details   details"
+            "evergreen evergreen";
     grid-template-rows: repeat(9, min-content);
     grid-column-gap: 10px;
     grid-row-gap: 5px;
@@ -110,7 +113,8 @@
             "summary   summary"
             "created   created"
             "artist    artist"
-            "details   details";
+            "details   details"
+            "evergreen evergreen";
       grid-template-rows: repeat(7, min-content);
       padding: 10px;
     }
@@ -132,7 +136,8 @@
               "created"
               "summary"
               "artist"
-              "details";
+              "details"
+              "evergreen";
       grid-template-rows: repeat(7, min-content);
       grid-column-gap: 5px;
       grid-row-gap: 0;

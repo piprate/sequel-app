@@ -1061,6 +1061,10 @@ module.exports = {
   price: 'Price',
   editions: 'Editions',
   sold: 'Sold',
+  evergreenHeaderRole: 'Role',
+  evergreenHeaderAddress: 'Address',
+  evergreenHeaderPrimary: 'Mint',
+  evergreenHeaderSecondary: 'Trade',
   confirmationNotice: 'You are seconds away from purchasing <strong>{token}</strong>.<br/><br/>' +
     'Please review order details before proceeding to your Flow wallet.',
   modSparkNotSelected: 'You need to select a spark to buy tokens',

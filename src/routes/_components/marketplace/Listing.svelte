@@ -12,6 +12,7 @@
   import Payments from './Payments.svelte'
   import SparkRole from '../SparkRole.svelte'
   import CreatedAt from '../CreatedAt.svelte'
+  import EvergreenProfile from './EvergreenProfile.svelte'
 
   export let listing
   export let ourSpark
@@ -52,6 +53,7 @@
       <ListingDetails {listing} {ourSpark} />
       <ListingControls {listing} {ourSpark} />
       <Payments {listing} />
+      <EvergreenProfile profile={listing.object.evergreenProfile} />
     </div>
   </div>
 </div>
@@ -73,6 +75,7 @@
             "artist    seller"
             "details   details"
             "controls  controls"
+            "payments  payments"
             "evergreen evergreen";
     grid-template-rows: repeat(9, min-content);
     grid-column-gap: 10px;
@@ -127,6 +130,7 @@
             "artist    seller"
             "details   details"
             "controls  controls"
+            "payments  payments"
             "evergreen evergreen";
       grid-template-rows: repeat(9, min-content);
       padding: 10px;
@@ -152,6 +156,7 @@
               "seller"
               "details"
               "controls"
+              "payments"
               "evergreen";
       grid-template-rows: repeat(10, min-content);
       grid-column-gap: 5px;
