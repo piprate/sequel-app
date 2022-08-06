@@ -5,7 +5,7 @@
   export let ourSpark
 
   $: id = digitalArt.id
-  $: status = digitalArt.sealRecord === "" ? "Draft": "Sealed"
+  $: status = !!digitalArt.sealRecord ? "Sealed": "Draft"
   $: editionsDisplay = digitalArt.maxEdition
   $: soldDisplay = 0
   $: sparkSelected = !!ourSpark

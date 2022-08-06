@@ -9,6 +9,7 @@
   import { onMount } from 'svelte'
   import SparkRole from '../SparkRole.svelte'
   import CreatedAt from '../CreatedAt.svelte'
+  import EvergreenProfile from '../marketplace/EvergreenProfile.svelte'
 
   export let digitalArt
   export let ourSpark
@@ -20,6 +21,7 @@
   )
   $: profileForListing = name
   $: displayArtist = false
+  $: isSealed = !!digitalArt.sealRecord
 
   let digitalArtProfile
 
@@ -44,6 +46,9 @@
         </div>
       {/if}
       <DigitalArtDetails {digitalArt} {ourSpark} />
+      {#if isSealed}
+        <EvergreenProfile profile={digitalArt.evergreenProfile} />
+      {/if}
     </div>
   </div>
 </div>
@@ -63,8 +68,9 @@
             "summary   summary"
             "created   created"
             "artist    artist"
-            "details   details";
-    grid-template-rows: repeat(9, min-content);
+            "details   details"
+            "evergreen evergreen";
+    grid-template-rows: repeat(8, min-content);
     grid-column-gap: 10px;
     grid-row-gap: 5px;
     padding: 20px;
@@ -115,8 +121,9 @@
             "summary   summary"
             "created   created"
             "artist    artist"
-            "details   details";
-      grid-template-rows: repeat(7, min-content);
+            "details   details"
+            "evergreen evergreen";
+      grid-template-rows: repeat(8, min-content);
       padding: 10px;
     }
     .digital-art-created {
@@ -137,8 +144,9 @@
               "created"
               "summary"
               "artist"
-              "details";
-      grid-template-rows: repeat(7, min-content);
+              "details"
+              "evergreen";
+      grid-template-rows: repeat(8, min-content);
       grid-column-gap: 5px;
       grid-row-gap: 0;
     }

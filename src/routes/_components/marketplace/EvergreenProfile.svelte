@@ -7,8 +7,8 @@
   $: rolesForDisplay = (roles.map(role => ({
     role: roleName(role.id),
     receiver: `0x${role.addr}`,
-    primaryRate: (role.initialSaleCommission * 100.0).toFixed(2)+"%",
-    secondaryRate: (role.secondaryMarketCommission * 100.0).toFixed(2)+"%",
+    primaryRate: ((role.initialSaleCommission || 0.0) * 100.0).toFixed(2)+"%",
+    secondaryRate: ((role.secondaryMarketCommission || 0.0) * 100.0).toFixed(2)+"%",
   })));
 </script>
 
