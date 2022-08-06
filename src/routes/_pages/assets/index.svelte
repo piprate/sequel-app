@@ -5,7 +5,6 @@
   import FlowConnect from '../../_components/flow/FlowConnect.svelte'
   import {
     currentInstance,
-    flowLoggedInAccount,
     instanceUsers,
     isAuthenticated
   } from '../../_store/local'
@@ -20,9 +19,7 @@
 
   $: user = ($instanceUsers && $instanceUsers[$currentInstance]) || {}
   $: flowAddress = (user && user.flow && user.flow.addr) || ''
-  $: flowNetwork = (user && user.flow && user.flow.network) || ''
-  $: flowAddressMismatch = $flowLoggedInAccount && flowAddress && $flowLoggedInAccount !== flowAddress
-  $: notConnectedToFlow = !flowAddress || flowAddressMismatch || $flowLoggedInAccount !== flowAddress
+  $: notConnectedToFlow = !flowAddress
   $: digitalArtCollectionFetcher = () => readSequelDigitalArtCollection(flowAddress)
 </script>
 
