@@ -31,8 +31,14 @@
 
 <div class="listing-controls">
     {#if $isAuthenticated}
-        {#if moreToBuy}
-            <button class="button primary text-button" on:click="{onBuyClick}">{buttonLabel}</button>
+        {#if sparkSelected}
+            {#if moreToBuy}
+                <button class="button primary text-button" on:click="{onBuyClick}">{buttonLabel}</button>
+            {/if}
+        {:else}
+            <InfoAside className="buy-warning">
+                {intl.modSparkNotSelected}
+            </InfoAside>
         {/if}
     {:else}
         <InfoAside className="buy-warning">

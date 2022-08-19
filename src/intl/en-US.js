@@ -1067,7 +1067,7 @@ module.exports = {
   evergreenHeaderSecondary: 'Trade',
   confirmationNotice: 'You are seconds away from purchasing <strong>{token}</strong>.<br/><br/>' +
     'Please review order details before proceeding to your Flow wallet.',
-  modSparkNotSelected: 'You need to select a spark to buy tokens',
+  modSparkNotSelected: 'You need to select a spark to buy tokens.<br/>Don\'t have a spark? Create <a href="/sparks/new">here</a>.',
   confirmButton: 'Confirm',
   buyTokenTitle: 'Buy Digital Art',
   buyButtonLabel: 'Buy',
