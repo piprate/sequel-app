@@ -1,38 +1,36 @@
 <script>
-  import LoadingPage from './LoadingPage.svelte';
-  import BubbleSearchResult from './search/BubbleSearchResult.svelte';
-  import { toast } from './toast/toast';
-  import { formatIntl } from '../_utils/formatIntl';
-  import { onMount } from "svelte";
+  import LoadingPage from './LoadingPage.svelte'
+  import BubbleSearchResult from './search/BubbleSearchResult.svelte'
+  import { onMount } from 'svelte'
+  import { displayError } from '../_actions/errors'
 
-  export let bubblesFetcher;
-  export let bubbleActions = undefined;
+  export let bubblesFetcher
+  export let bubbleActions = undefined
 
-  let loading = true;
-  let bubbles = [];
+  let loading = true
+  let bubbles = []
 
   function onClickAction (event) {
-    const { action, bubbleId } = event;
-    action.onclick(bubbleId);
+    const { action, bubbleId } = event
+    action.onclick(bubbleId)
   }
 
   async function refreshBubbles () {
-    bubbles = await bubblesFetcher();
-    console.log("BUBBLES", bubbles);
+    bubbles = await bubblesFetcher()
+    console.log('BUBBLES', bubbles)
   }
 
   // TODO: paginate
 
   onMount(async () => {
     try {
-      await refreshBubbles();
+      await refreshBubbles()
     } catch (e) {
-      /* no await */
-      toast.say(formatIntl('intl.error', { error: (e.message || '') }));
+      displayError(e)
     } finally {
-      loading = false;
+      loading = false
     }
-  });
+  })
 </script>
 
 <div class="bubbles-page">

@@ -33,6 +33,7 @@ import { sortItemSummariesForThread } from '../_utils/sortItemSummariesForThread
 import li from 'li'
 import { get } from 'svelte/store'
 import { wrap } from '../_utils/mapper'
+import { displayError } from './errors'
 
 const byId = _ => _.id
 
@@ -168,8 +169,7 @@ async function fetchTimelineItems (instanceName, accessToken, asSpark, timelineN
     } catch (e) {
       console.error(e)
       if (e.knownError) {
-        /* no await */
-        toast.say(e.message)
+        displayError(e)
       } else {
         /* no await */
         toast.say('intl.requestFailed')

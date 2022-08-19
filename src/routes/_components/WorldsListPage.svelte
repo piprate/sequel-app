@@ -1,38 +1,36 @@
 <script>
-  import LoadingPage from './LoadingPage.svelte';
-  import WorldSearchResult from './search/WorldSearchResult.svelte';
-  import { toast } from './toast/toast';
-  import { formatIntl } from '../_utils/formatIntl';
-  import { onMount } from "svelte";
+  import LoadingPage from './LoadingPage.svelte'
+  import WorldSearchResult from './search/WorldSearchResult.svelte'
+  import { onMount } from 'svelte'
+  import { displayError } from '../_actions/errors'
 
-  export let worldsFetcher;
-  export let worldActions = undefined;
+  export let worldsFetcher
+  export let worldActions = undefined
 
-  let loading = true;
-  let worlds = [];
+  let loading = true
+  let worlds = []
 
   function onClickAction (event) {
-    const { action, worldId } = event;
-    action.onclick(worldId);
+    const { action, worldId } = event
+    action.onclick(worldId)
   }
 
   async function refreshWorlds () {
-    worlds = await worldsFetcher();
-    console.log("WORLDS", worlds);
+    worlds = await worldsFetcher()
+    console.log('WORLDS', worlds)
   }
 
   // TODO: paginate
 
   onMount(async () => {
     try {
-      await refreshWorlds();
+      await refreshWorlds()
     } catch (e) {
-      /* no await */
-      toast.say(formatIntl('intl.error', { error: (e.message || '') }));
+      displayError(e)
     } finally {
-      loading = false;
+      loading = false
     }
-  });
+  })
 </script>
 
 <div class="worlds-page">

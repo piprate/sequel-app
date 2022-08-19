@@ -5,6 +5,7 @@
   import { on } from '../_utils/eventBus';
   import { formatIntl } from '../_utils/formatIntl';
   import { onMount } from "svelte";
+  import { displayError } from '../_actions/errors'
 
   export let sparksFetcher;
   export let sparkActions = undefined;
@@ -28,8 +29,7 @@
     try {
       await refreshSparks();
     } catch (e) {
-      /* no await */
-      toast.say(formatIntl('intl.error', { error: (e.message || '') }));
+      displayError(e)
     } finally {
       loading = false;
     }

@@ -1,40 +1,38 @@
 <script>
-  import LoadingPage from './LoadingPage.svelte';
-  import SparkSearchResult from './search/SparkSearchResult.svelte';
-  import { toast } from './toast/toast';
-  import { on } from '../_utils/eventBus';
-  import { formatIntl } from '../_utils/formatIntl';
-  import { onMount } from "svelte";
+  import LoadingPage from './LoadingPage.svelte'
+  import SparkSearchResult from './search/SparkSearchResult.svelte'
+  import { on } from '../_utils/eventBus'
+  import { onMount } from 'svelte'
+  import { displayError } from '../_actions/errors'
 
-  export let memberFetcher;
-  export let memberActions = undefined;
+  export let memberFetcher
+  export let memberActions = undefined
 
-  let loading = true;
-  let members = [];
+  let loading = true
+  let members = []
 
   function onClickAction (event) {
-    const { action, sparkId } = event;
-    action.onclick(sparkId);
+    const { action, sparkId } = event
+    action.onclick(sparkId)
   }
 
   async function refreshSparks () {
-    members = await memberFetcher();
-    console.log("MEMBERS", members);
+    members = await memberFetcher()
+    console.log('MEMBERS', members)
   }
 
   // TODO: paginate
 
   onMount(async () => {
     try {
-      await refreshSparks();
+      await refreshSparks()
     } catch (e) {
-      /* no await */
-      toast.say(formatIntl('intl.error', { error: (e.message || '') }));
+      displayError(e)
     } finally {
-      loading = false;
+      loading = false
     }
-    return on('refreshSparksList', () => refreshSparks());
-  });
+    return on('refreshSparksList', () => refreshSparks())
+  })
 </script>
 
 <div class="sparks-page">

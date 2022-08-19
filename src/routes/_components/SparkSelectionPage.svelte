@@ -17,6 +17,7 @@
   import { setCurrentSpark } from "../_actions/sparks";
   import { getSparkList } from "../_api/sparks";
   import { goto } from '@sapper/app';
+  import { displayError } from '../_actions/errors'
 
   export let sparksFetcher;
 
@@ -55,8 +56,7 @@
     try {
       await refreshSparks();
     } catch (e) {
-      /* no await */
-      toast.say(formatIntl('intl.error', { error: (e.message || '') }));
+      displayError(e)
     } finally {
       loading = false;
     }

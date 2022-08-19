@@ -904,6 +904,7 @@ module.exports = {
   unableToJoinBubble: 'Unable to join bubble: {error}',
   unableToLeaveBubble: 'Unable to leave bubble: {error}',
   accessTokenRevoked: 'The access token was revoked, logged out of {instance}',
+  tokenExpired: 'The access token expired, logged out of {instance}',
   loggedOutOfInstance: 'Logged out of {instance}',
   failedToUploadMedia: 'Failed to upload media: {error}',
   mutedSpark: 'Muted spark',

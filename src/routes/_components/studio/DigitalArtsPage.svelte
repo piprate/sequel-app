@@ -1,9 +1,8 @@
 <script>
   import LoadingPage from '../LoadingPage.svelte'
   import DigitalArtCard from './DigitalArtCard.svelte'
-  import { toast } from '../toast/toast'
-  import { formatIntl } from '../../_utils/formatIntl'
   import { onMount } from 'svelte'
+  import { displayError } from '../../_actions/errors'
 
   export let fetcher
   export let actions = undefined
@@ -27,8 +26,7 @@
     try {
       await refreshListings()
     } catch (e) {
-      /* no await */
-      toast.say(formatIntl('intl.error', { error: (e.message || '') }))
+      displayError(e)
     } finally {
       loading = false
     }

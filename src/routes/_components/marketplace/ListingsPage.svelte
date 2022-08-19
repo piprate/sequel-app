@@ -1,38 +1,36 @@
 <script>
-  import LoadingPage from '../LoadingPage.svelte';
-  import ListingCard from './ListingCard.svelte';
-  import { toast } from '../toast/toast';
-  import { formatIntl } from '../../_utils/formatIntl';
-  import { onMount } from "svelte";
+  import LoadingPage from '../LoadingPage.svelte'
+  import ListingCard from './ListingCard.svelte'
+  import { onMount } from 'svelte'
+  import { displayError } from '../../_actions/errors'
 
-  export let listingsFetcher;
-  export let listingActions = undefined;
+  export let listingsFetcher
+  export let listingActions = undefined
 
-  let loading = true;
-  let listings = [];
+  let loading = true
+  let listings = []
 
   function onClickAction (event) {
-    const { action, listingId } = event;
-    action.onclick(listingId);
+    const { action, listingId } = event
+    action.onclick(listingId)
   }
 
   async function refreshListings () {
-    listings = await listingsFetcher();
-    console.log("LISTINGS", listings);
+    listings = await listingsFetcher()
+    console.log('LISTINGS', listings)
   }
 
   // TODO: paginate
 
   onMount(async () => {
     try {
-      await refreshListings();
+      await refreshListings()
     } catch (e) {
-      /* no await */
-      toast.say(formatIntl('intl.error', { error: (e.message || '') }));
+      displayError(e)
     } finally {
-      loading = false;
+      loading = false
     }
-  });
+  })
 </script>
 
 <div class="listings-page">

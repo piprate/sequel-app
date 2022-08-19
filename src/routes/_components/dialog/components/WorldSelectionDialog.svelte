@@ -1,36 +1,36 @@
 <script>
-  import ModalDialog from './ModalDialog.svelte';
-  import LoadingPage from '../../LoadingPage.svelte';
-  import Avatar from '../../Avatar.svelte';
-  import SvgIcon from '../../SvgIcon.svelte';
-  import RadioGroup from '../../radio/RadioGroup.svelte';
-  import RadioGroupButton from '../../radio/RadioGroupButton.svelte';
-  import WorldDisplayName from '../../world/WorldDisplayName.svelte';
-  import { close } from '../helpers/closeDialog';
-  import { createEventDispatcher, onMount } from 'svelte';
-  import { currentInstance } from "../../../_store/local";
-  import { getWorldList } from "../../../_api/worlds";
-  import { accessToken } from "../../../_store/instance";
-  import { formatIntl } from "../../../_utils/formatIntl";
-  import { toast } from "../../toast/toast";
+  import ModalDialog from './ModalDialog.svelte'
+  import LoadingPage from '../../LoadingPage.svelte'
+  import Avatar from '../../Avatar.svelte'
+  import SvgIcon from '../../SvgIcon.svelte'
+  import RadioGroup from '../../radio/RadioGroup.svelte'
+  import RadioGroupButton from '../../radio/RadioGroupButton.svelte'
+  import WorldDisplayName from '../../world/WorldDisplayName.svelte'
+  import { close } from '../helpers/closeDialog'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import { currentInstance } from '../../../_store/local'
+  import { getWorldList } from '../../../_api/worlds'
+  import { accessToken } from '../../../_store/instance'
+  import { formatIntl } from '../../../_utils/formatIntl'
+  import { displayError } from '../../../_actions/errors'
 
-  export let id;
-  export let label;
-  export let title;
-  export let selectedWorld;
+  export let id
+  export let label
+  export let title
+  export let selectedWorld
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
-  let loading = true;
-  let worlds = [];
+  let loading = true
+  let worlds = []
 
   function onClick (world) {
     if (world.id === '') {
-      dispatch('select', null);
+      dispatch('select', null)
     } else {
-      dispatch('select', world);
+      dispatch('select', world)
     }
-    close(id);
+    close(id)
   }
 
   $: worldStates = worlds.map((world, index) => ({
@@ -41,7 +41,7 @@
     label: formatIntl('intl.selectedWorldLabel', { world: world.name, selected: (selectedWorld === world.id) }),
     switchLabel: formatIntl('intl.switchToNameOfWorld', { world: world.name }),
     data: world
-  }));
+  }))
 
   onMount(async () => {
     try {
@@ -49,14 +49,13 @@
         {
           id: '', // entry for 'Not assigned' option
         }
-      ].concat(await getWorldList($currentInstance, $accessToken));
+      ].concat(await getWorldList($currentInstance, $accessToken))
     } catch (e) {
-      /* no await */
-      toast.say(formatIntl('intl.error', { error: (e.message || '') }));
+      displayError(e)
     } finally {
-      loading = false;
+      loading = false
     }
-  });
+  })
 </script>
 
 <ModalDialog

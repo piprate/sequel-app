@@ -9,9 +9,9 @@
   import { currentInstance } from '../../../_store/local'
   import { accessToken } from '../../../_store/instance'
   import { formatIntl } from '../../../_utils/formatIntl'
-  import { toast } from '../../toast/toast'
   import { getSubscriptionProposal } from '../../../_api/subscription'
   import { getPlanName } from '../../../_actions/spark/subscribe'
+  import { displayError } from '../../../_actions/errors'
 
   export let id
   export let label
@@ -68,8 +68,7 @@
         }
       ])
     } catch (e) {
-      /* no await */
-      toast.say(formatIntl('intl.error', { error: (e.message || '') }))
+      displayError(e)
     } finally {
       loading = false
     }
