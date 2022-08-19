@@ -1,5 +1,6 @@
 <script>
   import InfoAside from '../InfoAside.svelte'
+  import { goto } from '@sapper/app'
   import { importShowBuyTokenDialog } from '../dialog/asyncDialogs/importShowBuyTokenDialog'
   import { isAuthenticated } from '../../_store/local'
 
@@ -15,6 +16,11 @@
     const showDialog = await importShowBuyTokenDialog()
     showDialog(listing, async function (event) {
       console.log('NFT purchased', event.detail)
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          goto('/assets')
+        })
+      })
     }, async function (event) {
       console.log('NFT purchase cancelled')
     }, async function (event) {
