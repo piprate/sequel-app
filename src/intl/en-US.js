@@ -1094,7 +1094,7 @@ module.exports = {
   tokenEdition: 'Edition',
   tokenType: 'Type',
   tokenEditions: '#{edition} of {total}',
-  copyLinkToToken: 'Copy link to token page',
+  copyLinkToToken: 'Share token',
   // Studio
   studio: 'Studio',
   studioEmpty: 'Your studio is empty. Wait for general release.',
