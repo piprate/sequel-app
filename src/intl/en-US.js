@@ -970,6 +970,7 @@ module.exports = {
   worldProfileOptions: 'World profile options',
   bubbleProfileOptions: 'Bubble profile options',
   marketplaceListingOptions: 'Listing options',
+  tokenOptions: 'Token options',
   copyLink: 'Copy link',
   emoji: 'Emoji',
   editMedia: 'Edit media',
@@ -1093,6 +1094,7 @@ module.exports = {
   tokenEdition: 'Edition',
   tokenType: 'Type',
   tokenEditions: '#{edition} of {total}',
+  copyLinkToToken: 'Copy link to token page',
   // Studio
   studio: 'Studio',
   studioEmpty: 'Your studio is empty. Wait for general release.',

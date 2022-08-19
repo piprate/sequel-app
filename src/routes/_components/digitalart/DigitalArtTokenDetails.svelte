@@ -3,6 +3,7 @@
   import { LOCALE } from '../../_static/intl'
   import { formatIntl } from '../../_utils/formatIntl'
   import { thunk } from '../../_utils/thunk'
+  import { importShowDigitalArtTokenOptionsDialog } from '../dialog/asyncDialogs/importShowDigitalArtTokenOptionsDialog'
 
   const numberFormat = thunk(() => new Intl.NumberFormat(LOCALE))
 
@@ -17,8 +18,8 @@
   $: sparkSelected = !!ourSpark
 
   async function onMoreOptionsClick () {
-    // const showOptionsDialog = await importShowMarketplaceListingOptionsDialog()
-    // showOptionsDialog(digitalArt, null, ourSpark)
+    const showOptionsDialog = await importShowDigitalArtTokenOptionsDialog()
+    showOptionsDialog(token, null, ourSpark)
   }
 </script>
 
@@ -48,7 +49,6 @@
       Digital Art
     </span>
   </div>
-  {#if sparkSelected }
   <div class="digital-art-more-options">
     <IconButton
       label="{intl.moreOptions}"
@@ -57,7 +57,6 @@
       on:click="{onMoreOptionsClick}"
     />
   </div>
-  {/if}
 </div>
 <style>
   .digital-art-details {

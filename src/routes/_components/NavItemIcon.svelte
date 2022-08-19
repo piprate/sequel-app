@@ -1,6 +1,6 @@
 <script>
   import SvgIcon from './SvgIcon.svelte';
-  import Avatar from './Avatar.svelte';
+  import NavAvatar from './NavAvatar.svelte';
   import { currentSpark } from "../_store/instance";
 
   export let svg;
@@ -22,7 +22,7 @@
   </div>
 {:else}
   {#if showSparkAvatar}
-    <Avatar entity={$currentSpark} size="navigation" flatMode="true" />
+    <NavAvatar entity={$currentSpark} size="navigation" flatMode="true" />
   {:else}
     <SvgIcon className="nav-link-svg" href={svg} />
   {/if}
