@@ -1,5 +1,6 @@
 <script>
   import SvgIcon from './SvgIcon.svelte'
+  import { goto } from '@sapper/app'
   import { classname } from '../_utils/classname'
 
   export let nft;
@@ -11,12 +12,20 @@
   ))
   $: description = `NFT (source: ${nft.source}, token: ${nft.token})`
 
+  function showToken (e) {
+    if (nft.source === 'sequel') {
+      e.preventDefault()
+      e.stopPropagation()
+      goto(`/tokens/digital-art/${nft.token}`)
+    }
+  }
 </script>
 
 <div class={computedClass}>
     <button class="nft-button"
             aria-label="{description}"
-            title="{description}">
+            title="{description}"
+            on:click={showToken}>
         <SvgIcon className="nft-button-svg" href="#nft-diamond"/>
     </button>
 </div>

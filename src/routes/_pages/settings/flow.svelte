@@ -20,7 +20,6 @@
   } from '../../_actions/flow'
   import { goto } from '@sapper/app'
   import { toast } from '../../_components/toast/toast'
-  import { formatIntl } from '../../_utils/formatIntl'
 
   // suppress warnings
   const intl = {}
