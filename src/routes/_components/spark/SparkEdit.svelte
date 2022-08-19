@@ -84,10 +84,10 @@
             <input type="text" autocapitalize="none" id="name"
                    bind:value='{template.name}' placeholder="{intl.enterSparkName}" required
             >
-            <label for="handle">{intl.sparkHandleColon}</label>
-            <input type="text" autocapitalize="none" spellcheck="false" id="handle"
-                   bind:value='{template.handle}' placeholder="{intl.enterSparkHandle}"
-            >
+<!--            <label for="handle">{intl.sparkHandleColon}</label>-->
+<!--            <input type="text" autocapitalize="none" spellcheck="false" id="handle"-->
+<!--                   bind:value='{template.handle}' placeholder="{intl.enterSparkHandle}"-->
+<!--            >-->
             <label for="world">{intl.homeWorldColon}</label>
             <div class="world-selector">
                 {#if homeWorldName}
