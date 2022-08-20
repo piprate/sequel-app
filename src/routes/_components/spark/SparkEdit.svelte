@@ -55,8 +55,11 @@
 
     console.log('New/updated spark', spark)
 
+    // for new sparks, make current;
+    // for updated sparks, reset to update navigation
+    setCurrentSpark($currentInstance, spark)
+
     if (newSpark) {
-      setCurrentSpark($currentInstance, spark)
       switch ($currentInductionLevel) {
         case 0:
           setInductionLevel(1)
