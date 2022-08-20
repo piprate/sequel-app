@@ -5,6 +5,7 @@
   import BubbleDisplayName from '../bubble/BubbleDisplayName.svelte'
   import EntityDisplayName from '../EntityDisplayName.svelte'
   import { unwrap } from '../../_utils/mapper'
+  import { notificationActionText, notificationIcon } from '../../_static/notifications'
 
   export let author
   export let authorId
@@ -16,41 +17,8 @@
   $: elementId = `post-header-${uuid}`
   $: elementSubjectId = `post-header-subject-${uuid}`
   $: notificationType = notification && notification.type
-  $: icon = (() => {
-    if (timelineType === 'pinned') {
-      return '#fa-thumb-tack'
-    } else if (notificationType === 'tmm') {
-      return '#fa-fire'
-    } else if (notificationType === 'comment') {
-      return '#fa-reply'
-    } else if (notificationType === 'join_bubble') {
-      return '#fa-sign-in'
-    } else if (notificationType === 'leave_bubble') {
-      return '#fa-sign-out'
-    } else if (notificationType === 'subscriber') {
-      return '#fa-user-plus'
-    } else if (notificationType === 'mod_offer') {
-      return '#fa-gift'
-    }
-    return '#fa-star'
-  })()
-  $: actionText = (() => {
-    if (notificationType === 'tmm') {
-      return 'intl.tmmedYou'
-    } else if (notificationType === 'comment') {
-      return 'intl.commented'
-    } else if (notificationType === 'join_bubble') {
-      return 'intl.joinedHeader'
-    } else if (notificationType === 'leave_bubble') {
-      return 'intl.leftHeader'
-    } else if (notificationType === 'subscriber') {
-      return 'intl.subscribedToYourPosts'
-    } else if (notificationType === 'mod_offer') {
-      return 'intl.offeredNFT'
-    } else {
-      return ''
-    }
-  })()
+  $: icon = timelineType === 'pinned' ? '#fa-thumb-tack' : notificationIcon(notificationType)
+  $: actionText = notificationActionText(notificationType)
   $: standaloneHeader = notificationType !== 'tmm'
 </script>
 

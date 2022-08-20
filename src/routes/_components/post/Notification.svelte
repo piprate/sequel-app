@@ -3,13 +3,11 @@
   import PostHeader from './PostHeader.svelte'
   import Shortcut from '../shortcut/Shortcut.svelte'
   import { currentInstance, omitEmojiInDisplayNames, underlineLinks } from '../../_store/local'
-  import { getSparkAccessibleName } from '../../_a11y/getSparkAccessibleName'
   import { goto } from '@sapper/app'
   import { composeNewPostMentioning } from '../../_actions/mention'
   import { classname } from '../../_utils/classname'
   import { createPostOrNotificationUuid } from '../../_utils/createPostOrNotificationUuid'
-  import { formatIntl } from '../../_utils/formatIntl'
-  import { currentSpark } from '../../_store/instance'
+  import { notificationLabel } from '../../_static/notifications'
 
   export let notification
   export let timelineType
@@ -28,12 +26,7 @@
   )
   $: elementId = uuid
   $: shortcutScope = elementId
-  $: ariaLabel = (
-          !post && formatIntl('intl.newSubscriber', {
-            name: getSparkAccessibleName(actor, $omitEmojiInDisplayNames),
-            spark: getSparkAccessibleName($currentSpark, $omitEmojiInDisplayNames),
-          })
-  )
+  $: ariaLabel = !post && notificationLabel(notification, $omitEmojiInDisplayNames)
   $: className = (classname(
           'notification-article',
           'shortcut-list-item',

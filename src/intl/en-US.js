@@ -773,7 +773,6 @@ module.exports = {
     true {audio}
     other {video}
   }: {description}`,
-  newSubscriber: '{spark}, you have a new subscriber, {name}',
   tmmCountsHidden: 'TMM counts hidden',
   tellMeMoredTimes: `TMM {count, plural,
     one {1 time}
@@ -791,6 +790,12 @@ module.exports = {
   pollYouCreatedEnded: 'A poll you created has ended',
   pollYouVotedEnded: 'A poll you voted on has ended',
   tmmed: 'TMMed',
+  labelSubscribedToYourPosts: '{name}, subscribed to your posts',
+  labelTmmedYou: '{name} TMMed your post',
+  labelCommented: 'New comment on your post',
+  labelOfferedNFT: '{name} offered {token} NFT',
+  labelJoinedBubble: '{name} joined {bubble} bubble',
+  labelLeftBubble: '{name} left {bubble} bubble',
   showSensitiveMedia: 'Show sensitive media',
   hideSensitiveMedia: 'Hide sensitive media',
   clickToShowSensitive: 'Sensitive content. Click to show.',
