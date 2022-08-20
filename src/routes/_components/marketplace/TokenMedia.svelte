@@ -35,8 +35,8 @@
     }
   })(size, $isMobileSize)
 
-  $: height = width
-  $: svgStyle = `width: ${width}px; height: ${height}px;`
+  $: height = 'auto'
+  $: svgStyle = `width: ${width}px; height: ${width}px;`
   $: staticSrc = content ? content.staticUrl : ''
   $: src = flatMode ? staticSrc : (content ? content.url : '')
   $: showDefaultIcon = error || !content
