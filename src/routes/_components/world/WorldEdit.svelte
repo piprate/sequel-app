@@ -5,6 +5,7 @@
   import { goto } from '@sapper/app';
   import { unwrap } from "../../_utils/mapper";
   import MediaField from "../../_components/MediaField.svelte";
+  import { bubbleOperationError } from '../../_actions/bubbles'
 
   export let realm;
   export let newWorld;
@@ -32,6 +33,11 @@
     event.stopPropagation();
 
     const world = await saveWorld(realm, worldId, template);
+
+    if ($worldOperationError) {
+      return
+    }
+
     console.log("New/updated world", world);
 
     goto(`/worlds/${unwrap(world.id)}?new`);

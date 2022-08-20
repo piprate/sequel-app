@@ -96,8 +96,6 @@ export async function updateWorldRelationship (worldId) {
 export const worldOperationInProgress = writable(false)
 export const worldOperationError = writable(null)
 
-const GENERIC_ERROR = 'Unexpected error when processing a Sequel operation. Are you in private browsing mode?'
-
 export async function saveWorld (realm, worldId, template) {
   worldOperationInProgress.set(true)
   worldOperationError.set(null)
@@ -141,7 +139,7 @@ export async function saveWorld (realm, worldId, template) {
   } catch (err) {
     console.error(err)
     const error = `${err.message || err.name}. ` +
-      (err.knownError ? '' : (navigator.onLine ? GENERIC_ERROR : 'Are you offline?'))
+      (err.knownError ? '' : (navigator.onLine ? '' : 'Are you offline?'))
     worldOperationError.set(error)
   } finally {
     worldOperationInProgress.set(false)

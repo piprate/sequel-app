@@ -1,30 +1,31 @@
 <script>
-  import FreeTextLayout from '../FreeTextLayout.svelte';
-  import IconButton from '../IconButton.svelte';
-  import InfoAside from '../InfoAside.svelte';
-  import MediaField from "../MediaField.svelte";
-  import { bubbleOperationError, bubbleOperationInProgress, saveBubble } from "../../_actions/bubbles";
-  import { goto } from '@sapper/app';
-  import { unwrap } from "../../_utils/mapper";
+  import FreeTextLayout from '../FreeTextLayout.svelte'
+  import IconButton from '../IconButton.svelte'
+  import InfoAside from '../InfoAside.svelte'
+  import MediaField from '../MediaField.svelte'
+  import { bubbleOperationError, bubbleOperationInProgress, saveBubble } from '../../_actions/bubbles'
+  import { goto } from '@sapper/app'
+  import { unwrap } from '../../_utils/mapper'
   import {
     BUBBLE_FEDERATION_MODE_OPTIONS,
     BUBBLE_MEMBERSHIP_MODE_OPTIONS,
     BUBBLE_OBSERVER_MODE_OPTIONS,
     BUBBLE_WRITER_MODE_OPTIONS
-  } from "../../_static/bubbles";
-  import { importShowOptionSelectionDialog } from "../dialog/asyncDialogs/importShowOptionSelectionDialog";
-  import { importShowWorldSelectionDialog } from "../dialog/asyncDialogs/importShowWorldSelectionDialog";
-  import { formatIntl } from "../../_utils/formatIntl";
+  } from '../../_static/bubbles'
+  import { importShowOptionSelectionDialog } from '../dialog/asyncDialogs/importShowOptionSelectionDialog'
+  import { importShowWorldSelectionDialog } from '../dialog/asyncDialogs/importShowWorldSelectionDialog'
+  import { formatIntl } from '../../_utils/formatIntl'
   import { currentInductionLevel, setInductionLevel } from '../../_store/instance'
+  import { sparkOperationError } from '../../_actions/sparks'
 
-  export let realm;
-  export let newBubble;
-  export let bubbleId = '';
-  export let template = undefined;
-  export let world = undefined;
+  export let realm
+  export let newBubble
+  export let bubbleId = ''
+  export let template = undefined
+  export let world = undefined
 
   // suppress warnings
-  const intl = {};
+  const intl = {}
 
   if (!template) {
     template = {
@@ -37,7 +38,7 @@
       observerMode: 'public',
       writerMode: 'none',
       federationMode: 'disabled',
-    };
+    }
   }
 
   function markSelectedOption (list, key) {
@@ -47,80 +48,85 @@
       icon: option.icon,
       description: option.description,
       selected: key === option.key
-    }));
+    }))
   }
 
-  $: formLabel = newBubble ? 'intl.newBubble' : 'intl.editBubble';
-  $: buttonLabel = newBubble ? 'intl.createBubbleButton' : 'intl.editBubbleButton';
-  $: buttonDisabled = !template.name || $bubbleOperationInProgress;
-  $: membershipModeOptions = markSelectedOption(BUBBLE_MEMBERSHIP_MODE_OPTIONS, template.membershipMode || 'invite_only');
-  $: selectedMembershipMode = membershipModeOptions.find(_ => _.selected);
-  $: membershipModeLabel = formatIntl('intl.membershipModeLabel', { label: selectedMembershipMode.label });
-  $: observerModeOptions = markSelectedOption(BUBBLE_OBSERVER_MODE_OPTIONS, template.observerMode || 'members');
-  $: selectedObserverMode = observerModeOptions.find(_ => _.selected);
-  $: observerModeLabel = formatIntl('intl.observerModeLabel', { label: selectedObserverMode.label });
-  $: writerModeOptions = markSelectedOption(BUBBLE_WRITER_MODE_OPTIONS, template.writerMode || 'none');
-  $: selectedWriterMode = writerModeOptions.find(_ => _.selected);
-  $: writerModeLabel = formatIntl('intl.writerModeLabel', { label: selectedWriterMode.label });
-  $: federationModeOptions = markSelectedOption(BUBBLE_FEDERATION_MODE_OPTIONS, template.federationMode || 'disabled');
-  $: selectedFederationMode = federationModeOptions.find(_ => _.selected);
-  $: federationModeLabel = formatIntl('intl.federationModeLabel', { label: selectedFederationMode.label });
-  $: worldName = world ? world.name : '';
-  $: worldSelectorLabel = template.world ? 'intl.changeWorld' : 'intl.selectWorld';
+  $: formLabel = newBubble ? 'intl.newBubble' : 'intl.editBubble'
+  $: buttonLabel = newBubble ? 'intl.createBubbleButton' : 'intl.editBubbleButton'
+  $: buttonDisabled = !template.name || $bubbleOperationInProgress
+  $: membershipModeOptions = markSelectedOption(BUBBLE_MEMBERSHIP_MODE_OPTIONS, template.membershipMode || 'invite_only')
+  $: selectedMembershipMode = membershipModeOptions.find(_ => _.selected)
+  $: membershipModeLabel = formatIntl('intl.membershipModeLabel', { label: selectedMembershipMode.label })
+  $: observerModeOptions = markSelectedOption(BUBBLE_OBSERVER_MODE_OPTIONS, template.observerMode || 'members')
+  $: selectedObserverMode = observerModeOptions.find(_ => _.selected)
+  $: observerModeLabel = formatIntl('intl.observerModeLabel', { label: selectedObserverMode.label })
+  $: writerModeOptions = markSelectedOption(BUBBLE_WRITER_MODE_OPTIONS, template.writerMode || 'none')
+  $: selectedWriterMode = writerModeOptions.find(_ => _.selected)
+  $: writerModeLabel = formatIntl('intl.writerModeLabel', { label: selectedWriterMode.label })
+  $: federationModeOptions = markSelectedOption(BUBBLE_FEDERATION_MODE_OPTIONS, template.federationMode || 'disabled')
+  $: selectedFederationMode = federationModeOptions.find(_ => _.selected)
+  $: federationModeLabel = formatIntl('intl.federationModeLabel', { label: selectedFederationMode.label })
+  $: worldName = world ? world.name : ''
+  $: worldSelectorLabel = template.world ? 'intl.changeWorld' : 'intl.selectWorld'
 
-  let summaryTextarea;
+  let summaryTextarea
 
   async function onMembershipModeClick () {
-    const showDialog = await importShowOptionSelectionDialog();
+    const showDialog = await importShowOptionSelectionDialog()
     showDialog(membershipModeOptions, function (event) {
-      template.membershipMode = event.detail;
-    }, '', 'intl.membershipModeTitle');
+      template.membershipMode = event.detail
+    }, '', 'intl.membershipModeTitle')
   }
 
   async function onObserverModeClick () {
-    const showDialog = await importShowOptionSelectionDialog();
+    const showDialog = await importShowOptionSelectionDialog()
     showDialog(observerModeOptions, function (event) {
-      template.observerMode = event.detail;
-    }, '', 'intl.observerModeTitle');
+      template.observerMode = event.detail
+    }, '', 'intl.observerModeTitle')
   }
 
   async function onWriterModeClick () {
-    const showDialog = await importShowOptionSelectionDialog();
+    const showDialog = await importShowOptionSelectionDialog()
     showDialog(writerModeOptions, function (event) {
-      template.writerMode = event.detail;
-    }, '', 'intl.writerModeTitle');
+      template.writerMode = event.detail
+    }, '', 'intl.writerModeTitle')
   }
 
   async function onFederationModeClick () {
-    const showDialog = await importShowOptionSelectionDialog();
+    const showDialog = await importShowOptionSelectionDialog()
     showDialog(federationModeOptions, function (event) {
-      template.federationMode = event.detail;
+      template.federationMode = event.detail
       if (template.federationMode === 'disabled') {
-        template.handle = '';
+        template.handle = ''
       }
-    }, '', 'intl.federationModeTitle');
+    }, '', 'intl.federationModeTitle')
   }
 
   async function onWorldSelectorClick () {
-    const showDialog = await importShowWorldSelectionDialog();
+    const showDialog = await importShowWorldSelectionDialog()
     showDialog(template.world, function (event) {
-      world = event.detail;
-      template.world = (world && world.id) || '';
-    }, '', 'intl.worldSelectionTitle');
+      world = event.detail
+      template.world = (world && world.id) || ''
+    }, '', 'intl.worldSelectionTitle')
   }
 
   async function onSubmitBubble (event) {
-    event.preventDefault();
-    event.stopPropagation();
+    event.preventDefault()
+    event.stopPropagation()
 
-    const bubble = await saveBubble(realm, bubbleId, template);
-    console.log("New/updated bubble", bubble);
+    const bubble = await saveBubble(realm, bubbleId, template)
+
+    if ($bubbleOperationError) {
+      return
+    }
+
+    console.log('New/updated bubble', bubble)
 
     if (newBubble && $currentInductionLevel < 3) {
       setInductionLevel(3)
     }
 
-    goto(`/bubbles/${unwrap(bubble.id)}?new`);
+    goto(`/bubbles/${unwrap(bubble.id)}?new`)
   }
 </script>
 

@@ -48,6 +48,11 @@
     event.stopPropagation()
 
     const spark = await saveSpark(realm, sparkId, template)
+
+    if ($sparkOperationError) {
+      return
+    }
+
     console.log('New/updated spark', spark)
 
     if (newSpark) {

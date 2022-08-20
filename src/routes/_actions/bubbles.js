@@ -96,8 +96,6 @@ export async function updateBubbleRelationship (bubbleId) {
 export const bubbleOperationInProgress = writable(false)
 export const bubbleOperationError = writable(null)
 
-const GENERIC_ERROR = 'Unexpected error when processing a Sequel operation. Are you in private browsing mode?'
-
 export async function saveBubble (realm, bubbleId, template) {
   bubbleOperationInProgress.set(true)
   bubbleOperationError.set(null)
@@ -141,7 +139,7 @@ export async function saveBubble (realm, bubbleId, template) {
   } catch (err) {
     console.error(err)
     const error = `${err.message || err.name}. ` +
-      (err.knownError ? '' : (navigator.onLine ? GENERIC_ERROR : 'Are you offline?'))
+      (err.knownError ? '' : (navigator.onLine ? '' : 'Are you offline?'))
     bubbleOperationError.set(error)
   } finally {
     bubbleOperationInProgress.set(false)

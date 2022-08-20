@@ -23,7 +23,7 @@ import { configureFlow } from './flow'
 import { get } from 'svelte/store'
 
 const GENERIC_ERROR = `
-  Something wrong happened when connecting to a Sequel instance.
+  Unexpected error when connecting to a Sequel instance.
   Are you in private browsing mode?`
 
 function createKnownError (message) {
