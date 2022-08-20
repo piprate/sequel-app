@@ -27,6 +27,7 @@
   let focusY = 0
 
   $: type = mediaItem.data.type
+  $: mediaId = mediaItem.data.id
   $: shortName = (
           // sometimes we no longer have the file, e.g. in a delete and redraft situation,
           // so fall back to the description if it was provided
@@ -53,6 +54,19 @@
   }
 
   $: mediaObserver(mediaItem)
+
+  let previousMediaId = mediaItem.data.id
+
+  async function previewObserver (id) {
+    // reload preview if new media has been uploaded
+    if (previousMediaId !== mediaId) {
+      previousMediaId = mediaId
+
+      await loadPreview(mediaItem)
+    }
+  }
+
+  $: previewObserver(mediaId)
 
   function rawTextObserver (rawText) {
     updateMediaInStore(() => {
