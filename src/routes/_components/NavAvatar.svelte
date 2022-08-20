@@ -42,7 +42,7 @@
   $: staticSrc = entity.avatar ? entity.avatar.staticUrl : ''
   $: src = flatMode ? staticSrc : (entity.avatar ? entity.avatar.url : '')
   $: avatarId = entity && entity.avatar && entity.avatar.id
-  $: showDefaultIcon = error || !entity.avatar || refreshAvatar
+  $: showDefaultIcon = error || !entity.avatar
 </script>
 
 <div class="avatar-wrapper">
