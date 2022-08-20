@@ -55,12 +55,14 @@ export function timelineObservers () {
     let _currentInstanceStream = get(currentInstanceStream)
 
     if (!_currentInstanceStream) {
-      _currentInstanceStream = createStream(_currentInstance, _currentTimeline, firstPostId, asSpark)
+      if (_currentTimeline) {
+        _currentInstanceStream = createStream(_currentInstance, _currentTimeline, firstPostId, asSpark)
 
-      currentInstanceStream.set(_currentInstanceStream)
+        currentInstanceStream.set(_currentInstanceStream)
 
-      if (process.env.NODE_ENV !== 'production') {
-        window.currentTimelineStream = _currentInstanceStream
+        if (process.env.NODE_ENV !== 'production') {
+          window.currentTimelineStream = _currentInstanceStream
+        }
       }
     } else {
       _currentInstanceStream.switchTimeline(_currentTimeline, asSpark, firstPostId)

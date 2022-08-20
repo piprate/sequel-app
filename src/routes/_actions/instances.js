@@ -28,6 +28,7 @@ import { database } from '../_database/database'
 import { importVirtualListStore } from '../_utils/asyncModules/importVirtualListStore.js'
 import { formatIntl } from '../_utils/formatIntl'
 import { configureFlow, disconnectFromFlow } from './flow'
+import { displayError } from './errors'
 
 export function changeTheme (instanceName, newTheme) {
   const themes = instanceThemes.get()
@@ -98,12 +99,17 @@ function setStoreUser (instanceName, user) {
 
 export async function updateUserForInstance (instanceName) {
   const accessToken = loggedInInstances.get()[instanceName].access_token
-  await cacheFirstUpdateAfter(
-    () => getUser(instanceName, accessToken).catch(logOutOnUnauthorized(instanceName)),
-    () => database.getUser(instanceName),
-    user => database.setUser(instanceName, user),
-    user => setStoreUser(instanceName, user)
-  )
+  try {
+    await cacheFirstUpdateAfter(
+      () => getUser(instanceName, accessToken).catch(logOutOnUnauthorized(instanceName)),
+      () => database.getUser(instanceName),
+      user => database.setUser(instanceName, user),
+      user => setStoreUser(instanceName, user)
+    )
+  } catch (e) {
+    console.error(e)
+    displayError(e)
+  }
 }
 
 export async function updateInstanceInfo (instanceName) {
