@@ -6,7 +6,7 @@
   import FreeTextLayout from '../../_components/FreeTextLayout.svelte'
   import { currentInstance, isUserLoggedIn } from '../../_store/local'
   import { accessToken, currentSparkId, pinnedPage } from '../../_store/instance'
-  import { getMarketplaceListings } from '../../_api/marketplace'
+  import { getMarketplaceHistory } from '../../_api/marketplace'
   import MarketplaceFilter from '../../_components/marketplace/MarketplaceFilter.svelte'
 
   export let params
@@ -15,14 +15,12 @@
   // suppress warnings
   const intl = {}
 
-  $: listingsFetcher = () => getMarketplaceListings($currentInstance, $accessToken, $currentSparkId)
+  $: listingsFetcher = () => getMarketplaceHistory($currentInstance, $accessToken, $currentSparkId)
 </script>
 
 {#if $isUserLoggedIn }
-    {#if $pinnedPage !== '/markeplace'}
-        <DynamicPageBanner title="{intl.marketplaceTitle}" icon="#nft-diamond" />
-    {/if}
-    <MarketplaceFilter filter="active" />
+    <DynamicPageBanner title="{intl.marketplaceTitle}" icon="#nft-diamond" />
+    <MarketplaceFilter filter="history" />
     <ListingsPage {listingsFetcher}>
         <span slot="is-empty">
             <InfoAside className="empty-marketplace-notice-aside">

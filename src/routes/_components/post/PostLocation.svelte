@@ -27,7 +27,7 @@
     .post-location {
         grid-area: location;
         display: grid;
-        grid-template-columns: minmax(0, max-content) repeat(3, max-content);
+        grid-template-columns: minmax(0, max-content) max-content;
         grid-gap: 20px;
         align-items: center;
         justify-content: left;

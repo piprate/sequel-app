@@ -17,7 +17,8 @@
           :
           ''
   $: price = listing.price || 0
-  $: priceText = `${price} ${listing.currency}`
+  $: priceText = price === 0 ? 'intl.free' : `${price} ${listing.currency}`
+  $: tokenIDText = listing.listingType === 'primary' ? '' : `(#${listing.tokenID})`
 
   function onButtonClick (event, action, listingId) {
     event.preventDefault()
@@ -35,7 +36,7 @@
       <TokenMedia content={listing.object.content} size="wide" isLink=false />
     </div>
     <div class="listing-card-name">
-      <EntityDisplayName entity={listing.object} />
+      <EntityDisplayName entity={listing.object} /> {tokenIDText}
     </div>
     <div class="listing-card-artist">
       by <EntityDisplayName entity={listing.artistRef} />

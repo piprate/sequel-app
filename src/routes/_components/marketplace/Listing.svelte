@@ -13,6 +13,8 @@
   import SparkRole from '../SparkRole.svelte'
   import CreatedAt from '../CreatedAt.svelte'
   import EvergreenProfile from './EvergreenProfile.svelte'
+  import DigitalArtTokenDetails from '../digitalart/DigitalArtTokenDetails.svelte'
+  import ListingPriceBanner from './ListingPriceBanner.svelte'
 
   export let listing
   export let ourSpark
@@ -24,6 +26,14 @@
   )
   $: profileForListing = formatIntl('intl.listingPage', { listing: listingName })
   $: displaySeller = !(listing.artistRef && listing.sellerRef && listing.artistRef.id === listing.sellerRef.id)
+  $: displayBuyer = !!listing.buyerRef
+  $: availableForSale = listing.status === 'active'
+
+  const tokenForDisplay = {
+    id: listing.tokenID,
+    edition: listing.edition,
+    object: listing.object
+  }
 
   let listingProfile
 
@@ -39,8 +49,11 @@
     <div class="listing-grid">
       <ListingHeader {listing} />
       <ListingSummary {listing} />
-      <div class="listing-created">
+      <div class="listing-date listing-created">
         <CreatedAt createdAt={listing.createdAt} flavour="created" />
+      </div>
+      <div class="listing-date listing-sold">
+        <CreatedAt createdAt={listing.lastUpdatedAt} flavour="sold" />
       </div>
       <div class="artist-panel">
         <SparkRole spark={listing.artistRef} roleLabel="Creator" />
@@ -50,9 +63,19 @@
         <SparkRole spark={listing.sellerRef} roleLabel="Seller" />
       </div>
       {/if}
-      <ListingDetails {listing} {ourSpark} />
-      <ListingControls {listing} {ourSpark} />
-      <Payments {listing} />
+      {#if displayBuyer }
+        <div class="buyer-panel">
+          <SparkRole spark={listing.buyerRef} roleLabel="Buyer" />
+        </div>
+      {/if}
+      {#if availableForSale }
+        <ListingDetails {listing} {ourSpark} />
+        <ListingControls {listing} {ourSpark} />
+        <Payments {listing} />
+      {:else}
+        <DigitalArtTokenDetails token={tokenForDisplay} {ourSpark} />
+        <ListingPriceBanner {listing} />
+      {/if}
       <EvergreenProfile profile={listing.object.evergreenProfile} />
     </div>
   </div>
@@ -71,21 +94,21 @@
             "name      name"
             "label     label"
             "summary   summary"
-            "created   created"
+            "created   sold"
             "artist    seller"
+            "buyer     buyer"
             "details   details"
             "controls  controls"
             "payments  payments"
             "evergreen evergreen";
-    grid-template-rows: repeat(9, min-content);
+    grid-template-rows: repeat(11, min-content);
     grid-column-gap: 10px;
     grid-row-gap: 5px;
     padding: 20px;
     justify-content: center;
   }
 
-  .listing-created {
-    grid-area: created;
+  .listing-date {
     font-size: 1.1em;
     color: var(--deemphasized-text-color);
     white-space: nowrap;
@@ -94,14 +117,27 @@
     align-self: center;
   }
 
+  .listing-created {
+    grid-area: created;
+  }
+
+  .listing-sold {
+    grid-area: sold;
+  }
+
   .artist-panel {
     grid-area: artist;
-    margin: 5px 5px 0 0;
+    margin: 5px 5px 5px 0;
   }
 
   .seller-panel {
     grid-area: seller;
-    margin: 5px 5px 0 0;
+    margin: 5px 5px 5px 0;
+  }
+
+  .buyer-panel {
+    grid-area: buyer;
+    margin: 5px 5px 5px 0;
   }
 
   @supports (-webkit-backdrop-filter: blur(1px) saturate(1%)) or (backdrop-filter: blur(1px) saturate(1%)) {
@@ -126,39 +162,39 @@
             "name      name"
             "label     label"
             "summary   summary"
-            "created   created"
+            "created   sold"
             "artist    seller"
+            "buyer     buyer"
             "details   details"
             "controls  controls"
             "payments  payments"
             "evergreen evergreen";
-      grid-template-rows: repeat(9, min-content);
+      grid-template-rows: repeat(11, min-content);
       padding: 10px;
     }
-    .listing-created {
+    .listing-date {
       font-size: 1.0em;
       align-self: flex-start;
     }
   }
 
-  @media (max-width: 320px) {
-  }
-
-  @media (max-width: 240px) {
+  @media (max-width: 400px) {
     .listing-grid {
       grid-template-areas:
               "image"
               "name"
               "label"
-              "created"
               "summary"
+              "created"
+              "sold"
               "artist"
               "seller"
+              "buyer"
               "details"
               "controls"
               "payments"
               "evergreen";
-      grid-template-rows: repeat(10, min-content);
+      grid-template-rows: repeat(13, min-content);
       grid-column-gap: 5px;
       grid-row-gap: 0;
     }

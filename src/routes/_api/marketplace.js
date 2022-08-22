@@ -46,3 +46,11 @@ export async function getMarketplaceListings (instanceName, accessToken, asSpark
     get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }), instanceName
   )
 }
+
+export async function getMarketplaceHistory (instanceName, accessToken, asSpark, limit = 50) {
+  let url = `${base(instanceName, accessToken)}/marketplace-history`
+  url += '?' + paramsString({ limit, st: 'active' })
+  return await populateMediaURLsInMarketplaceListings(
+    get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }), instanceName
+  )
+}

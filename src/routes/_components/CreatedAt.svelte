@@ -1,28 +1,30 @@
 <script>
-  import { classname } from '../_utils/classname';
-  import SvgIcon from './SvgIcon.svelte';
-  import { monthOnlyAbsoluteDateFormatter } from "../_utils/formatters";
-  import { formatIntl } from "../_utils/formatIntl";
+  import { classname } from '../_utils/classname'
+  import SvgIcon from './SvgIcon.svelte'
+  import { monthOnlyAbsoluteDateFormatter } from '../_utils/formatters'
+  import { formatIntl } from '../_utils/formatIntl'
 
-  export let createdAt;
-  export let flavour = 'created';
-  export let className = undefined;
-  export let normalIconColor = false;
+  export let createdAt
+  export let flavour = 'created'
+  export let className = undefined
+  export let normalIconColor = false
   // TODO
   //export let ariaLabel = '';
 
-  $: createdAtDate = createdAt ? monthOnlyAbsoluteDateFormatter().format(new Date(createdAt).getTime()) : '';
+  $: createdAtDate = createdAt ? monthOnlyAbsoluteDateFormatter().format(new Date(createdAt).getTime()) : ''
   $: createdLabel = flavour === 'joined' ?
     formatIntl('intl.joinedIn', { date: createdAtDate }) :
     flavour === 'created' ?
       formatIntl('intl.createdIn', { date: createdAtDate }) :
-      '';
+      flavour === 'sold' ?
+        formatIntl('intl.soldIn', { date: createdAtDate }) :
+        ''
   $: computedClass = (classname(
     'created-at',
     className,
     'created-at-with-icon',
     normalIconColor && 'normal-icon-color'
-  ));
+  ))
 </script>
 
 <div class={computedClass} >
