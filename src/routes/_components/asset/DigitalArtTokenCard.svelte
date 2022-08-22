@@ -86,6 +86,7 @@
     }
     .token-card-name {
       font-size: 1.2em;
+      width: 300px;
     }
     :global(.token-card-buttons .icon-button) {
       margin-right: 10px;

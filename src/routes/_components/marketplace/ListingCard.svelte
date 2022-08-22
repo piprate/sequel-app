@@ -126,6 +126,7 @@
     }
     .listing-card-name {
       font-size: 1.2em;
+      width: 300px;
     }
     :global(.listing-card-buttons .icon-button) {
       margin-right: 10px;

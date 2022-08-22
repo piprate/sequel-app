@@ -105,6 +105,7 @@
     }
     .digital-art-card-name {
       font-size: 1.2em;
+      width: 300px;
     }
     :global(.digital-art-card-buttons .icon-button) {
       margin-right: 10px;
