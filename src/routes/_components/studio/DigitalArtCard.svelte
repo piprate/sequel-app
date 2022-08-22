@@ -76,7 +76,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.2em;
+    font-size: 1.1em;
+    width: 250px;
+    margin-top: 5px;
   }
   .digital-art-card-summary {
     margin-top: 5px;
@@ -99,7 +101,10 @@
       grid-column-gap: 10px;
     }
     .digital-art-card-summary {
-      width: 200px;
+      width: 300px;
+    }
+    .digital-art-card-name {
+      font-size: 1.2em;
     }
     :global(.digital-art-card-buttons .icon-button) {
       margin-right: 10px;

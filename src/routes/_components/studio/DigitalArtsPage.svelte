@@ -74,5 +74,8 @@
         .digital-art-page {
             padding: 20px 10px;
         }
+        .art-grid {
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        }
     }
 </style>

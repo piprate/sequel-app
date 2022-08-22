@@ -66,7 +66,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.2em;
+    font-size: 1.1em;
+    width: 250px;
+    margin-top: 5px;
   }
   .token-card-buttons {
     grid-area: buttons;
@@ -81,6 +83,9 @@
   @media (max-width: 767px) {
     .token-card {
       grid-column-gap: 10px;
+    }
+    .token-card-name {
+      font-size: 1.2em;
     }
     :global(.token-card-buttons .icon-button) {
       margin-right: 10px;

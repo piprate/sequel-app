@@ -28,7 +28,7 @@
       case 'big':
         return isMobileSize ? 160 : 200
       case 'wide':
-        return isMobileSize ? 200 : 250
+        return isMobileSize ? 300 : 250  // larger size for 1-column grid, and smaller - for 2-column grid
       case 'medium':
       default:
         return 64

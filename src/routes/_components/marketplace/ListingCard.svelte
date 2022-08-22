@@ -86,7 +86,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.2em;
+    font-size: 1.1em;
+    width: 250px;
+    margin-top: 5px;
   }
   .listing-card-artist {
     grid-area: artist;
@@ -97,6 +99,7 @@
   .listing-card-stats {
     grid-area: stats;
     color: var(--very-deemphasized-text-color);
+    margin-top: 5px;
   }
   .listing-card-summary {
     margin-top: 5px;
@@ -119,7 +122,10 @@
       grid-column-gap: 10px;
     }
     .listing-card-summary {
-      width: 200px;
+      width: 300px;
+    }
+    .listing-card-name {
+      font-size: 1.2em;
     }
     :global(.listing-card-buttons .icon-button) {
       margin-right: 10px;
