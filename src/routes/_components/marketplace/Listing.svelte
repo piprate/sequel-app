@@ -28,6 +28,7 @@
   $: displaySeller = !(listing.artistRef && listing.sellerRef && listing.artistRef.id === listing.sellerRef.id)
   $: displayBuyer = !!listing.buyerRef
   $: availableForSale = listing.status === 'active'
+  $: sold = listing.status === 'sold' || listing.status === 'sale_announced'
 
   const tokenForDisplay = {
     id: listing.tokenID,
@@ -52,9 +53,11 @@
       <div class="listing-date listing-created">
         <CreatedAt createdAt={listing.createdAt} flavour="created" />
       </div>
-      <div class="listing-date listing-sold">
-        <CreatedAt createdAt={listing.lastUpdatedAt} flavour="sold" />
-      </div>
+      {#if sold }
+        <div class="listing-date listing-sold">
+          <CreatedAt createdAt={listing.lastUpdatedAt} flavour="sold" />
+        </div>
+      {/if}
       <div class="artist-panel">
         <SparkRole spark={listing.artistRef} roleLabel="Creator" />
       </div>
