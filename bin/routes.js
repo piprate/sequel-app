@@ -11,6 +11,7 @@ export const routes = [
   { pattern: /^\/assets\/?$/ },
   { pattern: /^\/marketplace\/?$/ },
   { pattern: /^\/marketplace\/([^/]+?)\/?$/ },
+  { pattern: /^\/marketplace\/sold\/([^/]+?)\/?$/ },
   { pattern: /^\/studio\/digital-art\/?$/ },
   { pattern: /^\/studio\/digital-art\/([^/]+?)\/?$/ },
   { pattern: /^\/tokens\/digital-art\/([^/]+?)\/?$/ },
