@@ -10,7 +10,7 @@
   export let token
   export let ourSpark
 
-  $: id = token.id
+  $: id = token.id || 0
   $: editionsDisplay = formatIntl('intl.tokenEditions', {
     edition: numberFormat().format(token.edition),
     total: numberFormat().format(token.object.maxEdition)

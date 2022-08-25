@@ -10,7 +10,7 @@
 
   const dispatch = createEventDispatcher()
 
-  $: id = token.id
+  $: id = token.id || 0
 
   function onButtonClick (event, action, tokenId) {
     event.preventDefault()

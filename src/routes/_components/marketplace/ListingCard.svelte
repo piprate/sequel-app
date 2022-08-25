@@ -18,7 +18,7 @@
           ''
   $: price = listing.price || 0
   $: priceText = price === 0 ? 'intl.free' : `${price} ${listing.currency}`
-  $: tokenIDText = listing.listingType === 'primary' ? '' : `(#${listing.tokenID})`
+  $: tokenIDText = listing.listingType === 'primary' ? '' : `(#${listing.tokenID || 0})`
 
   function onButtonClick (event, action, listingId) {
     event.preventDefault()
