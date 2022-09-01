@@ -2,7 +2,7 @@
   import Avatar from '../Avatar.svelte'
   import BubbleDisplayName from './BubbleDisplayName.svelte'
   import Location from '../Location.svelte'
-  import CreatedAt from '../CreatedAt.svelte'
+  import Timestamp from '../Timestamp.svelte'
   import { isTinyMobileSize, isVeryTinyMobileSize } from '../../_store/local'
   import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js'
   import { getImageNativeDimensions } from '../../_utils/getImageNativeDimensions'
@@ -81,7 +81,7 @@
   {#if bubble.worldRef }
     <Location world={bubble.worldRef} />
   {/if}
-  <CreatedAt createdAt={bubble.createdAt} className={ bubble.worldRef ? 'with-left-margin' : '' } flavour="created" />
+  <Timestamp value={bubble.createdAt} className={ bubble.worldRef ? 'with-left-margin' : '' } flavour="created" />
 </div>
 <div class="bubble-profile-relationship">
   {#if relationship }

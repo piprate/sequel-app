@@ -33,7 +33,7 @@
 <SearchResult href="/marketplace/{id}">
   <div class="listing-card">
     <div class="listing-card-image">
-      <TokenMedia content={listing.object.content} size="wide" isLink=false />
+      <TokenMedia content={listing.object.content} size="wide" isLink={true} />
     </div>
     <div class="listing-card-name">
       <EntityDisplayName entity={listing.object} /> {tokenIDText}

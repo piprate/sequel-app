@@ -64,6 +64,7 @@ module.exports = [
   { id: 'fa-sign-out', src: 'src/thirdparty/font-awesome-svg-png/white/svg/sign-out.svg' },
   { id: 'fa-map-marker', src: 'src/thirdparty/font-awesome-svg-png/white/svg/map-marker.svg' },
   { id: 'fa-calendar-plus-o', src: 'src/thirdparty/font-awesome-svg-png/white/svg/calendar-plus-o.svg' },
+  { id: 'fa-calendar-minus-o', src: 'src/thirdparty/font-awesome-svg-png/white/svg/calendar-minus-o.svg' },
   { id: 'fa-archive', src: 'src/thirdparty/font-awesome-svg-png/white/svg/archive.svg' },
   { id: 'fa-fire', src: 'src/thirdparty/font-awesome-svg-png/white/svg/fire.svg' },
   { id: 'fa-edit', src: 'src/thirdparty/font-awesome-svg-png/white/svg/edit.svg' },

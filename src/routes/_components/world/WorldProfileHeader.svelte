@@ -1,7 +1,7 @@
 <script>
   import Avatar from '../Avatar.svelte'
   import WorldDisplayName from './WorldDisplayName.svelte'
-  import CreatedAt from '../CreatedAt.svelte'
+  import Timestamp from '../Timestamp.svelte'
   import { isTinyMobileSize, isVeryTinyMobileSize } from '../../_store/local'
   import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js'
   import { getImageNativeDimensions } from '../../_utils/getImageNativeDimensions'
@@ -61,7 +61,7 @@
   <WorldDisplayName {world} />
 </div>
 <div class="world-profile-created">
-  <CreatedAt createdAt={world.createdAt} flavour="created" />
+  <Timestamp value={world.createdAt} flavour="created" />
 </div>
 <div class="world-profile-relationship">
   {#if relationship }

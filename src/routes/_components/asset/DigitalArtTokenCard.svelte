@@ -25,7 +25,7 @@
 <SearchResult href="/tokens/digital-art/{id}">
   <div class="token-card">
     <div class="token-card-image">
-      <TokenMedia content={token.content} size="wide" isLink=false />
+      <TokenMedia content={token.content} size="wide" isLink={true} />
     </div>
     <div class="token-card-name">
       <EntityDisplayName entity={token} /> (#{id})

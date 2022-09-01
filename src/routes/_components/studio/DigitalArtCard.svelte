@@ -31,7 +31,7 @@
 <SearchResult href="/studio/digital-art/{unwrap(id)}">
   <div class="digital-art-card">
     <div class="digital-art-card-image">
-      <TokenMedia content={digitalArt.content} size="wide" isLink=false secure=true />
+      <TokenMedia content={digitalArt.content} size="wide" isLink={true} secure={true} />
     </div>
     <div class="digital-art-card-name">
       <EntityDisplayName entity={digitalArt} />

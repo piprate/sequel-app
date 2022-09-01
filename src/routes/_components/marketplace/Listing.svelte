@@ -11,10 +11,11 @@
   import ListingControls from './ListingControls.svelte'
   import Payments from './Payments.svelte'
   import SparkRole from '../SparkRole.svelte'
-  import CreatedAt from '../CreatedAt.svelte'
+  import Timestamp from '../Timestamp.svelte'
   import EvergreenProfile from './EvergreenProfile.svelte'
   import DigitalArtTokenDetails from '../digitalart/DigitalArtTokenDetails.svelte'
   import ListingPriceBanner from './ListingPriceBanner.svelte'
+  import InfoAside from '../InfoAside.svelte'
 
   export let listing
   export let ourSpark
@@ -27,6 +28,7 @@
   $: profileForListing = formatIntl('intl.listingPage', { listing: listingName })
   $: displaySeller = !(listing.artistRef && listing.sellerRef && listing.artistRef.id === listing.sellerRef.id)
   $: displayBuyer = !!listing.buyerRef
+  $: scheduledForSale = listing.status === 'scheduled' || listing.status === 'draft'
   $: availableForSale = listing.status === 'active'
   $: sold = listing.status === 'sold' || listing.status === 'sale_announced'
 
@@ -51,11 +53,11 @@
       <ListingHeader {listing} />
       <ListingSummary {listing} />
       <div class="listing-date listing-created">
-        <CreatedAt createdAt={listing.createdAt} flavour="created" />
+        <Timestamp value={listing.createdAt} flavour="created" />
       </div>
       {#if sold }
         <div class="listing-date listing-sold">
-          <CreatedAt createdAt={listing.lastUpdatedAt} flavour="sold" />
+          <Timestamp value={listing.lastUpdatedAt} flavour="sold" />
         </div>
       {/if}
       <div class="artist-panel">
@@ -74,6 +76,12 @@
       {#if availableForSale }
         <ListingDetails {listing} {ourSpark} />
         <ListingControls {listing} {ourSpark} />
+        <Payments {listing} />
+      {:else if scheduledForSale}
+        <ListingDetails {listing} {ourSpark} />
+        <InfoAside className="sale-warning">
+          {intl.listingNotActive}
+        </InfoAside>
         <Payments {listing} />
       {:else}
         <DigitalArtTokenDetails token={tokenForDisplay} {ourSpark} />
@@ -141,6 +149,13 @@
   .buyer-panel {
     grid-area: buyer;
     margin: 5px 5px 5px 0;
+  }
+
+  :global(.sale-warning) {
+    grid-area: controls;
+    margin: 20px 10px 0px 10px;
+    grid-column-start: 1;
+    grid-column-end: 4;
   }
 
   @supports (-webkit-backdrop-filter: blur(1px) saturate(1%)) or (backdrop-filter: blur(1px) saturate(1%)) {

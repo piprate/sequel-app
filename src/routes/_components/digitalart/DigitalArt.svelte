@@ -8,7 +8,7 @@
   import { addEmojiTooltips } from '../../_utils/addEmojiTooltips'
   import { onMount } from 'svelte'
   import SparkRole from '../SparkRole.svelte'
-  import CreatedAt from '../CreatedAt.svelte'
+  import Timestamp from '../Timestamp.svelte'
   import EvergreenProfile from '../marketplace/EvergreenProfile.svelte'
 
   export let digitalArt
@@ -38,7 +38,7 @@
       <DigitalArtHeader {digitalArt} />
       <DigitalArtSummary {digitalArt} />
       <div class="digital-art-created">
-        <CreatedAt createdAt={digitalArt.createdAt} flavour="created" />
+        <Timestamp value={digitalArt.createdAt} flavour="created" />
       </div>
       {#if displayArtist }
         <div class="artist-panel">

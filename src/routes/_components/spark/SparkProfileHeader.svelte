@@ -4,7 +4,7 @@
   import { currentInstance, isTinyMobileSize, isVeryTinyMobileSize } from '../../_store/local'
   import Label from '../Label.svelte'
   import Location from '../Location.svelte'
-  import CreatedAt from '../CreatedAt.svelte'
+  import Timestamp from '../Timestamp.svelte'
   import { importShowMediaDialog } from '../dialog/asyncDialogs/importShowMediaDialog.js'
   import { getImageNativeDimensions } from '../../_utils/getImageNativeDimensions'
   import { formatIntl } from '../../_utils/formatIntl'
@@ -75,7 +75,7 @@
   {#if spark.homeWorldRef }
     <Location world={spark.homeWorldRef} />
   {/if}
-  <CreatedAt createdAt={spark.createdAt} className={ spark.homeWorldRef ? 'with-left-margin' : '' } flavour="joined" />
+  <Timestamp value={spark.createdAt} className={ spark.homeWorldRef ? 'with-left-margin' : '' } flavour="joined" />
 </div>
 <div class="spark-profile-relationship">
   {#if relationship && relationship.managed}

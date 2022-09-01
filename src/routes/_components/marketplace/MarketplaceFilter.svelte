@@ -10,6 +10,11 @@
       href: `/marketplace`
     },
     {
+      name: 'releases',
+      label: 'intl.releases',
+      href: `/marketplace/releases`
+    },
+    {
       name: 'history',
       label: 'intl.listingHistory',
       href: `/marketplace/history`
