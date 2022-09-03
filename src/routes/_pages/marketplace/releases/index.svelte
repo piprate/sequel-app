@@ -1,13 +1,13 @@
 <script>
-  import ReleasesPage from '../../_components/marketplace/ReleasesPage.svelte'
-  import DynamicPageBanner from '../../_components/DynamicPageBanner.svelte'
-  import InfoAside from '../../_components/InfoAside.svelte'
-  import HiddenFromSSR from '../../_components/HiddenFromSSR.svelte'
-  import FreeTextLayout from '../../_components/FreeTextLayout.svelte'
-  import MarketplaceFilter from '../../_components/marketplace/MarketplaceFilter.svelte'
-  import { currentInstance, isUserLoggedIn } from '../../_store/local'
-  import { accessToken, currentSparkId } from '../../_store/instance'
-  import { getMarketplaceReleases } from '../../_api/releases'
+  import ReleasesPage from '../../../_components/marketplace/ReleasesPage.svelte'
+  import DynamicPageBanner from '../../../_components/DynamicPageBanner.svelte'
+  import InfoAside from '../../../_components/InfoAside.svelte'
+  import HiddenFromSSR from '../../../_components/HiddenFromSSR.svelte'
+  import FreeTextLayout from '../../../_components/FreeTextLayout.svelte'
+  import MarketplaceFilter from '../../../_components/marketplace/MarketplaceFilter.svelte'
+  import { currentInstance, isUserLoggedIn } from '../../../_store/local'
+  import { accessToken, currentSparkId } from '../../../_store/instance'
+  import { getMarketplaceReleases } from '../../../_api/releases'
 
   export let params
   params = undefined

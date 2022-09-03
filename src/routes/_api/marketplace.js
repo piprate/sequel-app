@@ -1,4 +1,4 @@
-import { auth, base, sequelAuth } from './utils'
+import { base, sequelAuth } from './utils'
 import { DEFAULT_TIMEOUT, get, paramsString, post, WRITE_TIMEOUT } from '../_utils/ajax'
 import { populateMediaURLsInMarketplaceListings, populateMediaURLsInSingleListing } from './media'
 
@@ -41,15 +41,6 @@ export async function confirmMintOnDemand (instanceName, accessToken, id, tokens
 
 export async function getMarketplaceListings (instanceName, accessToken, asSpark, limit = 50) {
   const params = { limit, st: 'active' }
-  let url = `${base(instanceName, accessToken)}/marketplace`
-  url += '?' + paramsString(params)
-  return await populateMediaURLsInMarketplaceListings(
-    get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }), instanceName
-  )
-}
-
-export async function getReleaseListings (instanceName, accessToken, asSpark, release, limit = 50) {
-  const params = { limit, r: release }
   let url = `${base(instanceName, accessToken)}/marketplace`
   url += '?' + paramsString(params)
   return await populateMediaURLsInMarketplaceListings(

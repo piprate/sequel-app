@@ -8,7 +8,7 @@
   import ReleaseCard from '../../../../_components/marketplace/ReleaseCard.svelte'
   import { currentInstance, isUserLoggedIn } from '../../../../_store/local'
   import { accessToken, currentSparkId } from '../../../../_store/instance'
-  import { getReleaseListings } from '../../../../_api/marketplace'
+  import { getReleaseListings } from '../../../../_api/releases'
   import { formatIntl } from '../../../../_utils/formatIntl'
   import { getMarketplaceRelease } from '../../../../_api/releases'
   import { onMount } from 'svelte'
@@ -22,7 +22,7 @@
   let loading = true
   let notFound = false
 
-  $: listingsFetcher = () => getReleaseListings($currentInstance, $accessToken, $currentSparkId, params.id)
+  $: listingsFetcher = () => getReleaseListings($currentInstance, $accessToken, params.id, $currentSparkId)
   $: releaseName = (release && release.name) || ''
   $: ariaTitle = formatIntl('intl.releasePage', { release: releaseName })
 

@@ -24,7 +24,7 @@
     ''
   $: massagedSummary = massageUserText(croppedSummary, emojis, $autoplayGifs)
   $: statusText = release.status
-  $: href = listMode ? `/marketplace/release/${unwrap(id)}` : ''
+  $: href = listMode ? `/marketplace/releases/${unwrap(id)}` : ''
 
   function onButtonClick (event, action, releaseId) {
     event.preventDefault()
