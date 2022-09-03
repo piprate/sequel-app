@@ -1083,6 +1083,7 @@ module.exports = {
   priceInformation: 'Price information',
   realisedPrice: 'Realised price',
   listingNotActive: 'This listing isn\'t active yet. Please come back later.',
+  listingClosed: 'This listing is closed.',
   evergreenHeaderRole: 'Role',
   evergreenHeaderAddress: 'Address',
   evergreenHeaderPrimary: 'Mint',

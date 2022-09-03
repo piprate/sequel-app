@@ -14,8 +14,9 @@
   $: price = listing.price || 0
   $: currency = listing.currency || ''
   $: priceDisplay = listing.price === 0.0 ? 'intl.free' : `${numberFormat().format(price)} ${currency}`
+  $: availableEditions = listing.status === 'active' ? listing.availableEditions : listing.totalEditions
   $: editionsDisplay = formatIntl('intl.editionsAvailable', {
-    available: numberFormat().format(listing.availableEditions),
+    available: numberFormat().format(availableEditions),
     total: numberFormat().format(listing.object.maxEdition)
   })
   $: soldDisplay = numberFormat().format(listing.totalEditions - listing.availableEditions)

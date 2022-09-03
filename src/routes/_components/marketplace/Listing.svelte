@@ -31,6 +31,7 @@
   $: scheduledForSale = listing.status === 'scheduled' || listing.status === 'draft'
   $: availableForSale = listing.status === 'active'
   $: sold = listing.status === 'sold' || listing.status === 'sale_announced'
+  $: primarySale = listing.listingType === 'primary'
 
   const tokenForDisplay = {
     id: listing.tokenID,
@@ -81,6 +82,12 @@
         <ListingDetails {listing} {ourSpark} />
         <InfoAside className="sale-warning">
           {intl.listingNotActive}
+        </InfoAside>
+        <Payments {listing} />
+      {:else if sold && primarySale }
+        <ListingDetails {listing} {ourSpark} />
+        <InfoAside className="sale-warning">
+          {intl.listingClosed}
         </InfoAside>
         <Payments {listing} />
       {:else}
