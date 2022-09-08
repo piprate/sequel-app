@@ -2,8 +2,7 @@
   import ListingsPage from '../../_components/marketplace/ListingsPage.svelte'
   import DynamicPageBanner from '../../_components/DynamicPageBanner.svelte'
   import InfoAside from '../../_components/InfoAside.svelte'
-  import HiddenFromSSR from '../../_components/HiddenFromSSR.svelte'
-  import FreeTextLayout from '../../_components/FreeTextLayout.svelte'
+  import RestrictedPageWarning from '../../_components/RestrictedPageWarning.svelte'
   import { currentInstance, isUserLoggedIn } from '../../_store/local'
   import { accessToken, currentSparkId, pinnedPage } from '../../_store/instance'
   import { getMarketplaceHistory } from '../../_api/marketplace'
@@ -29,13 +28,7 @@
         </span>
     </ListingsPage>
 {:else}
-    <HiddenFromSSR>
-        <FreeTextLayout>
-            <h1>{intl.marketplaceTitle}</h1>
-
-            <p>{intl.marketplaceNotLoggedIn}</p>
-        </FreeTextLayout>
-    </HiddenFromSSR>
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}
 
 <style>

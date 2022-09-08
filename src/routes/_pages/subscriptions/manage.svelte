@@ -30,5 +30,5 @@
 <!--        </span>-->
 <!--    </SparksListPage>-->
 {:else}
-    <RestrictedPageWarning message="{intl.accessRestricted}" />
+    <RestrictedPageWarning />
 {/if}

@@ -22,5 +22,5 @@
     </FreeTextLayout>
     <!--<SparksListPage {sparksFetcher} />-->
 {:else}
-    <RestrictedPageWarning message="{intl.accessRestricted}" />
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}

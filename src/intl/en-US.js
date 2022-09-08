@@ -278,27 +278,6 @@ module.exports = {
   worldNameColon: 'Name:',
   enterWorldSummary: 'Enter summary',
   worldSummaryColon: 'Summary:',
-  // not logged in
-  sparkNotLoggedIn: 'A spark timeline will appear here when logged in.',
-  worldNotLoggedIn: 'A world timeline will appear here when logged in.',
-  bubbleNotLoggedIn: 'A bubble timeline will appear here when logged in.',
-  bookmarksNotLoggedIn: 'Your bookmarks will appear here when logged in.',
-  subscriptionsNotLoggedIn: 'Your subscription timeline will appear here when logged in.',
-  favoritesNotLoggedIn: 'Your favorites will appear here when logged in.',
-  searchNotLoggedIn: 'You can search once logged in to an instance.',
-  communityNotLoggedIn: 'Community options appear here when logged in.',
-  worldsNotLoggedIn: 'Sequel worlds appear here when logged in.',
-  sparksNotLoggedIn: 'Sequel sparks appear here when logged in.',
-  bubblesNotLoggedIn: 'Sequel bubbles appear here when logged in.',
-  marketplaceNotLoggedIn: 'Marketplace listings appear here when logged in.',
-  marketplaceReleasesNotLoggedIn: 'Marketplace releases appear here when logged in.',
-  listNotLoggedIn: 'A list will appear here when logged in.',
-  notificationsNotLoggedIn: 'Your notifications will appear here when logged in.',
-  notificationMentionsNotLoggedIn: 'Your notification mentions will appear here when logged in.',
-  postNotLoggedIn: 'A post thread will appear here when logged in.',
-  tagNotLoggedIn: 'A hashtag timeline will appear here when logged in.',
-  listingNotLoggedIn: 'Marketplace listing will appear here when logged in.',
-  digitalArtNotLoggedIn: 'Digital Art will appear here when logged in.',
   // Notification subpages
   filters: 'Filters',
   all: 'All',
@@ -644,7 +623,6 @@ module.exports = {
   // Flow settings
   flow: 'Flow Blockchain',
   flowSettings: 'Flow settings',
-  flowNotLoggedIn: 'Flow configuration will appear here when logged in.',
   flowDescription: `Sequel uses <a rel="noopener" target="_blank" href="https://www.onflow.org/">Flow blockchain</a> to send and receive payments, buy and sell NFTs.
     Sign up or log in with your Flow wallet.`,
   flowAddress: 'Address',
@@ -1030,6 +1008,10 @@ module.exports = {
     <p>
       ` + oneLiner + `
     </p>
+    <p>
+       Please log in to see the requested Sequel resource.
+    </p>`,
+  loginToAccess: `
     <p>
        Please log in to see the requested Sequel resource.
     </p>`,

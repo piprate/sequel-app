@@ -1,7 +1,7 @@
 <script>
   import { isUserLoggedIn } from '../_store/local'
   import FreeTextLayout from '../_components/FreeTextLayout.svelte'
-  import HiddenFromSSR from '../_components/HiddenFromSSR.svelte'
+  import RestrictedPageWarning from '../_components/RestrictedPageWarning.svelte'
   import Search from '../_components/search/Search.svelte'
   import InfoAside from '../_components/InfoAside.svelte';
 
@@ -20,13 +20,7 @@
     <Search></Search>
   </div>
 {:else}
-  <HiddenFromSSR>
-    <FreeTextLayout>
-      <h1>{intl.search}</h1>
-
-      <p>{intl.searchNotLoggedIn}</p>
-    </FreeTextLayout>
-  </HiddenFromSSR>
+  <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
   <div style="display: none">
     <!-- TODO: this is just a hack so that `sapper export` knows to crawl these files -->
     <!-- Note that these links have to be spread out or else they result in ECONNRESET errors during crawling -->

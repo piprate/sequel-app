@@ -30,5 +30,5 @@
 {#if $isUserLoggedIn }
     <BubblesListPage {bubblesFetcher} />
 {:else}
-    <RestrictedPageWarning message="{intl.worldBubblesNotLoggedIn}" />
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}

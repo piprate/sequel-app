@@ -15,5 +15,5 @@
 {#if $isAuthenticated }
     <BubbleMemberListPage {memberFetcher} />
 {:else}
-    <RestrictedPageWarning message="{intl.bubbleMembersNotLoggedIn}" />
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}

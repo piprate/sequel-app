@@ -3,7 +3,7 @@
   import LoadingPage from '../LoadingPage.svelte'
   import { isUserLoggedIn, observedListing } from '../../_store/local.js'
   import { currentSpark } from '../../_store/instance.js'
-  import HiddenFromSSR from '../HiddenFromSSR.svelte'
+  import RestrictedPageWarning from '../RestrictedPageWarning.svelte'
   import DynamicPageBanner from '../DynamicPageBanner.svelte'
   import { clearListing, updateListing } from '../../_actions/marketplace'
   import Listing from './Listing.svelte'
@@ -45,12 +45,6 @@
             </FreeTextLayout>
         {/if}
     {:else}
-        <HiddenFromSSR>
-            <FreeTextLayout>
-                <h1>{intl.listing}</h1>
-
-                <p>{intl.listingNotLoggedIn}</p>
-            </FreeTextLayout>
-        </HiddenFromSSR>
+        <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
     {/if}
 {/if}

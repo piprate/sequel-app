@@ -1,36 +1,36 @@
 <script>
-  import TimelinePage from '../TimelinePage.svelte';
-  import FreeTextLayout from '../FreeTextLayout.svelte';
+  import TimelinePage from '../TimelinePage.svelte'
+  import FreeTextLayout from '../FreeTextLayout.svelte'
   import LoadingPage from '../LoadingPage.svelte'
-  import { isUserLoggedIn, observedRelationship, observedSpark } from '../../_store/local.js';
-  import { currentSpark } from '../../_store/instance.js';
-  import HiddenFromSSR from '../HiddenFromSSR.svelte';
-  import DynamicPageBanner from '../DynamicPageBanner.svelte';
-  import PinnedStatuses from "../timeline/PinnedStatuses.svelte";
-  import { clearProfileAndRelationship, updateProfileAndRelationship } from '../../_actions/sparks';
-  import SparkProfile from './SparkProfile.svelte';
-  import { formatIntl } from '../../_utils/formatIntl';
-  import { onMount } from "svelte";
+  import { isUserLoggedIn, observedRelationship, observedSpark } from '../../_store/local.js'
+  import { currentSpark } from '../../_store/instance.js'
+  import RestrictedPageWarning from '../RestrictedPageWarning.svelte'
+  import DynamicPageBanner from '../DynamicPageBanner.svelte'
+  import PinnedStatuses from '../timeline/PinnedStatuses.svelte'
+  import { clearProfileAndRelationship, updateProfileAndRelationship } from '../../_actions/sparks'
+  import SparkProfile from './SparkProfile.svelte'
+  import { formatIntl } from '../../_utils/formatIntl'
+  import { onMount } from 'svelte'
 
-  export let sparkId;
-  export let newSpark = false;
-  export let filter;
+  export let sparkId
+  export let newSpark = false
+  export let filter
 
-  $: sparkName = ($observedSpark && ($observedSpark.name || $observedSpark.handle)) || '';
-  $: timeline = `spark/${sparkId}` + (filter ? `/${filter}` : '');
-  $: ariaTitle = formatIntl('intl.profilePageForSpark', { spark: sparkName });
+  $: sparkName = ($observedSpark && ($observedSpark.name || $observedSpark.handle)) || ''
+  $: timeline = `spark/${sparkId}` + (filter ? `/${filter}` : '')
+  $: ariaTitle = formatIntl('intl.profilePageForSpark', { spark: sparkName })
 
-  let loading = true;
-  let notFound = false;
+  let loading = true
+  let notFound = false
 
   onMount(() => {
     if ($isUserLoggedIn) {
-      clearProfileAndRelationship();
-      updateProfileAndRelationship(sparkId);
-      notFound = !!$observedSpark;
+      clearProfileAndRelationship()
+      updateProfileAndRelationship(sparkId)
+      notFound = !!$observedSpark
     }
-    loading = false;
-  });
+    loading = false
+  })
 </script>
 
 {#if loading}
@@ -59,12 +59,6 @@
       <LoadingPage />
     {/if}
   {:else}
-    <HiddenFromSSR>
-      <FreeTextLayout>
-        <h1>{intl.profile}</h1>
-
-        <p>{intl.sparkNotLoggedIn}</p>
-      </FreeTextLayout>
-    </HiddenFromSSR>
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
   {/if}
 {/if}

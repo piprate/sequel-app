@@ -26,7 +26,7 @@
         </span>
     </DigitalArtsPage>
 {:else}
-    <RestrictedPageWarning message="{intl.accessRestricted}" />
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}
 
 <style>

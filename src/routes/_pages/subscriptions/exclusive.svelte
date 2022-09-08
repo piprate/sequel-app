@@ -14,5 +14,5 @@
         <SubscriptionBrowserFilter filter="exclusive" />
     </TimelinePage>
 {:else}
-    <RestrictedPageWarning message="{intl.accessRestricted}" />
+    <RestrictedPageWarning />
 {/if}

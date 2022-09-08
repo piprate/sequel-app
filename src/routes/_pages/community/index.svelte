@@ -1,9 +1,8 @@
 <script>
-  import FreeTextLayout from '../../_components/FreeTextLayout.svelte'
+  import RestrictedPageWarning from '../../_components/RestrictedPageWarning.svelte'
   import { currentUser, lists } from '../../_store/instance.js';
   import { currentInstance, isAuthenticated, isUserLoggedIn } from '../../_store/local.js';
   import { hasSubscriptionRequests, numberOfSubscriptionRequests } from '../../_store/badge.js'
-  import HiddenFromSSR from '../../_components/HiddenFromSSR.svelte'
   import PageList from '../../_components/community/PageList.svelte'
   import PageListItem from '../../_components/community/PageListItem.svelte'
   import RadioGroup from '../../_components/radio/RadioGroup.svelte'
@@ -176,13 +175,7 @@
   </FocusRestoration>
 </div>
 {:else}
-<HiddenFromSSR>
-  <FreeTextLayout>
-    <h1>{intl.community}</h1>
-
-    <p>{intl.communityNotLoggedIn}</p>
-  </FreeTextLayout>
-</HiddenFromSSR>
+  <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 <div style="display: none">
   <!-- TODO: this is just a hack so that `sapper export` knows to crawl these files -->
   <!-- Note that these links have to be spread out or else they result in ECONNRESET errors during crawling -->

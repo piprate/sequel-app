@@ -3,7 +3,7 @@
   import LoadingPage from '../LoadingPage.svelte'
   import { isUserLoggedIn, observedDigitalArt } from '../../_store/local.js'
   import { currentSpark } from '../../_store/instance.js'
-  import HiddenFromSSR from '../HiddenFromSSR.svelte'
+  import RestrictedPageWarning from '../RestrictedPageWarning.svelte'
   import DynamicPageBanner from '../DynamicPageBanner.svelte'
   import { clearDigitalArt, updateDigitalArt } from '../../_actions/digitalArt'
   import DigitalArt from './DigitalArt.svelte'
@@ -44,12 +44,6 @@
             </FreeTextLayout>
         {/if}
     {:else}
-        <HiddenFromSSR>
-            <FreeTextLayout>
-                <h1>{intl.digitalArt}</h1>
-
-                <p>{intl.digitalArtNotLoggedIn}</p>
-            </FreeTextLayout>
-        </HiddenFromSSR>
+        <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
     {/if}
 {/if}

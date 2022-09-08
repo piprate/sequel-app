@@ -12,6 +12,7 @@
   import { formatIntl } from '../../../../_utils/formatIntl'
   import { getMarketplaceRelease } from '../../../../_api/releases'
   import { onMount } from 'svelte'
+  import RestrictedPageWarning from '../../../../_components/RestrictedPageWarning.svelte'
 
   export let params
 
@@ -50,13 +51,7 @@
         </span>
     </ListingsPage>
 {:else}
-    <HiddenFromSSR>
-        <FreeTextLayout>
-            <h1>{intl.release}</h1>
-
-            <p>{intl.marketplaceReleasesNotLoggedIn}</p>
-        </FreeTextLayout>
-    </HiddenFromSSR>
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}
 
 <style>

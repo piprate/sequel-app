@@ -29,7 +29,7 @@
               </span>
         </SparksListPage>
 {:else}
-    <RestrictedPageWarning message="{intl.sparksNotLoggedIn}" />
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}
 
 <style>

@@ -43,7 +43,7 @@
         <BubblesListPage bubblesFetcher={allBubblesFetcher} />
     {/if}
 {:else}
-    <RestrictedPageWarning message="{intl.bubblesNotLoggedIn}" />
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}
 
 <style>

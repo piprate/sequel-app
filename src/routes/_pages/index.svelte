@@ -75,7 +75,7 @@
     <SparkSelectionPage/>
   {/if}
 {:else if loaded}
-  <RestrictedPageWarning showLogo="true" message="{intl.homeDescription}" />
+  <RestrictedPageWarning showLogo={true} message="{intl.homeDescription}" />
 {:else}
   <LoadingPage/>
 {/if}

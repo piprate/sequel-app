@@ -1,23 +1,22 @@
 <script>
-  import WorldsListPage from '../../_components/WorldsListPage.svelte';
-  import WorldBrowserFilter from '../../_components/world/WorldBrowserFilter.svelte';
+  import WorldsListPage from '../../_components/WorldsListPage.svelte'
+  import WorldBrowserFilter from '../../_components/world/WorldBrowserFilter.svelte'
   import InfoAside from '../../_components/InfoAside.svelte'
-  import { currentInstance, isAuthenticated, isUserLoggedIn } from "../../_store/local";
-  import { accessToken, currentSpark, currentSparkId, pinnedPage } from "../../_store/instance";
-  import DynamicPageBanner from "../../_components/DynamicPageBanner.svelte";
-  import HiddenFromSSR from "../../_components/HiddenFromSSR.svelte";
-  import FreeTextLayout from "../../_components/FreeTextLayout.svelte";
-  import { getSparkWorldList } from "../../_api/sparks";
-  import { unwrap } from "../../_utils/mapper";
-  import { getWorldList } from "../../_api/worlds";
+  import { currentInstance, isAuthenticated, isUserLoggedIn } from '../../_store/local'
+  import { accessToken, currentSpark, currentSparkId, pinnedPage } from '../../_store/instance'
+  import DynamicPageBanner from '../../_components/DynamicPageBanner.svelte'
+  import RestrictedPageWarning from '../../_components/RestrictedPageWarning.svelte'
+  import { getSparkWorldList } from '../../_api/sparks'
+  import { unwrap } from '../../_utils/mapper'
+  import { getWorldList } from '../../_api/worlds'
 
   // suppress warnings
-  export let params;
-  params = undefined;
-  const intl = {};
+  export let params
+  params = undefined
+  const intl = {}
 
-  $: myWorldsFetcher = () => $currentSparkId ? getSparkWorldList($currentInstance, $accessToken, unwrap($currentSparkId), true) : [];
-  $: allWorldsFetcher = () => $isUserLoggedIn ? getWorldList($currentInstance, $accessToken) : [];
+  $: myWorldsFetcher = () => $currentSparkId ? getSparkWorldList($currentInstance, $accessToken, unwrap($currentSparkId), true) : []
+  $: allWorldsFetcher = () => $isUserLoggedIn ? getWorldList($currentInstance, $accessToken) : []
 </script>
 
 {#if $isUserLoggedIn }
@@ -50,13 +49,7 @@
         <WorldsListPage worldsFetcher={allWorldsFetcher} />
     {/if}
 {:else}
-    <HiddenFromSSR>
-        <FreeTextLayout>
-            <h1>{intl.worlds}</h1>
-
-            <p>{intl.worldsNotLoggedIn}</p>
-        </FreeTextLayout>
-    </HiddenFromSSR>
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}
 
 <style>

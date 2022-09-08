@@ -37,7 +37,7 @@
         </DigitalArtCollectionPage>
     {/if}
 {:else}
-    <RestrictedPageWarning message="{intl.accessRestricted}" />
+    <RestrictedPageWarning />
 {/if}
 
 <style>

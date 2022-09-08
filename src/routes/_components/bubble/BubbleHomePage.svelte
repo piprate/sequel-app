@@ -4,7 +4,7 @@
   import LoadingPage from '../LoadingPage.svelte'
   import { isUserLoggedIn, observedBubble, observedBubbleRelationship } from '../../_store/local.js'
   import { currentSpark, currentSparkId } from '../../_store/instance.js'
-  import HiddenFromSSR from '../HiddenFromSSR.svelte'
+  import RestrictedPageWarning from '../RestrictedPageWarning.svelte'
   import DynamicPageBanner from '../DynamicPageBanner.svelte'
   import LazyComposeBox from '../compose/LazyComposeBox.svelte'
   import { clearBubbleProfileAndRelationship, updateBubbleProfileAndRelationship } from '../../_actions/bubbles'
@@ -92,13 +92,7 @@
             </FreeTextLayout>
         {/if}
     {:else}
-        <HiddenFromSSR>
-            <FreeTextLayout>
-                <h1>{intl.bubbleProfile}</h1>
-
-                <p>{intl.bubbleNotLoggedIn}</p>
-            </FreeTextLayout>
-        </HiddenFromSSR>
+        <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
     {/if}
 {/if}
 

@@ -4,7 +4,7 @@
   import LoadingPage from '../LoadingPage.svelte'
   import { isUserLoggedIn, observedWorld, observedWorldRelationship } from '../../_store/local.js';
   import { currentSpark } from '../../_store/instance.js';
-  import HiddenFromSSR from '../HiddenFromSSR.svelte';
+  import RestrictedPageWarning from '../RestrictedPageWarning.svelte';
   import DynamicPageBanner from '../DynamicPageBanner.svelte';
   import { clearWorldProfileAndRelationship, updateWorldProfileAndRelationship } from '../../_actions/worlds';
   import WorldProfile from './WorldProfile.svelte';
@@ -53,12 +53,6 @@
             </FreeTextLayout>
         {/if}
     {:else}
-        <HiddenFromSSR>
-            <FreeTextLayout>
-                <h1>{intl.worldProfile}</h1>
-
-                <p>{intl.worldNotLoggedIn}</p>
-            </FreeTextLayout>
-        </HiddenFromSSR>
+        <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
     {/if}
 {/if}

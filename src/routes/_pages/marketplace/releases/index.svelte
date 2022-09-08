@@ -2,8 +2,7 @@
   import ReleasesPage from '../../../_components/marketplace/ReleasesPage.svelte'
   import DynamicPageBanner from '../../../_components/DynamicPageBanner.svelte'
   import InfoAside from '../../../_components/InfoAside.svelte'
-  import HiddenFromSSR from '../../../_components/HiddenFromSSR.svelte'
-  import FreeTextLayout from '../../../_components/FreeTextLayout.svelte'
+  import RestrictedPageWarning from '../../../_components/RestrictedPageWarning.svelte'
   import MarketplaceFilter from '../../../_components/marketplace/MarketplaceFilter.svelte'
   import { currentInstance, isUserLoggedIn } from '../../../_store/local'
   import { accessToken, currentSparkId } from '../../../_store/instance'
@@ -29,13 +28,7 @@
         </span>
     </ReleasesPage>
 {:else}
-    <HiddenFromSSR>
-        <FreeTextLayout>
-            <h1>{intl.releases}</h1>
-
-            <p>{intl.marketplaceReleasesNotLoggedIn}</p>
-        </FreeTextLayout>
-    </HiddenFromSSR>
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}
 
 <style>

@@ -1,15 +1,14 @@
 <script>
-  import Title from '../_components/Title.svelte';
-  import LazyPage from '../_components/LazyPage.svelte';
-  import pageComponent from '../_pages/settings/flow.svelte';
-  import { isUserLoggedIn } from '../_store/local';
-  import HiddenFromSSR from "../_components/HiddenFromSSR.svelte";
-  import FreeTextLayout from "../_components/FreeTextLayout.svelte";
-  import { stores } from '@sapper/app';
+  import Title from '../_components/Title.svelte'
+  import LazyPage from '../_components/LazyPage.svelte'
+  import pageComponent from '../_pages/settings/flow.svelte'
+  import { isUserLoggedIn } from '../_store/local'
+  import RestrictedPageWarning from '../_components/RestrictedPageWarning.svelte'
+  import { stores } from '@sapper/app'
 
-  const { page } = stores();
+  const { page } = stores()
   const params = $page.params
-  params.newUser = $page.query.new === '';
+  params.newUser = $page.query.new === ''
 </script>
 
 <Title name="{intl.connectWithFlow}" settingsPage={true} />
@@ -17,9 +16,5 @@
 {#if $isUserLoggedIn}
   <LazyPage {pageComponent} {params} />
 {:else}
-  <HiddenFromSSR>
-    <FreeTextLayout>
-      <p>{intl.flowNotLoggedIn}</p>
-    </FreeTextLayout>
-  </HiddenFromSSR>
+  <RestrictedPageWarning />
 {/if}

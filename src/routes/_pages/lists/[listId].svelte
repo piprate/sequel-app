@@ -1,9 +1,8 @@
 <script>
   import TimelinePage from '../../_components/TimelinePage.svelte'
-  import FreeTextLayout from '../../_components/FreeTextLayout.svelte'
+  import RestrictedPageWarning from '../../_components/RestrictedPageWarning.svelte'
   import { isUserLoggedIn } from '../../_store/local.js'
   import { pinnedPage, lists } from '../../_store/instance.js'
-  import HiddenFromSSR from '../../_components/HiddenFromSSR.svelte'
   import DynamicPageBanner from '../../_components/DynamicPageBanner.svelte'
 
   export let params;
@@ -19,11 +18,5 @@
     {/if}
   </TimelinePage>
 {:else}
-  <HiddenFromSSR>
-    <FreeTextLayout>
-      <h1>{intl.list}</h1>
-
-      <p>{intl.listNotLoggedIn}</p>
-    </FreeTextLayout>
-  </HiddenFromSSR>
+  <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}

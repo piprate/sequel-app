@@ -14,5 +14,5 @@
         <SubscriptionBrowserFilter filter="timeline" />
     </TimelinePage>
 {:else}
-    <RestrictedPageWarning message="{intl.accessRestricted}" />
+    <RestrictedPageWarning />
 {/if}
