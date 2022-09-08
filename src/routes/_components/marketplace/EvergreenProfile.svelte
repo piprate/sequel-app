@@ -5,7 +5,7 @@
 
   $: roles = profile.roles || [];
   $: rolesForDisplay = (roles.map(role => ({
-    role: roleName(role.id),
+    role: roleName(role.id, role.description),
     receiver: `0x${role.addr}`,
     primaryRate: ((role.initialSaleCommission || 0.0) * 100.0).toFixed(2)+"%",
     secondaryRate: ((role.secondaryMarketCommission || 0.0) * 100.0).toFixed(2)+"%",

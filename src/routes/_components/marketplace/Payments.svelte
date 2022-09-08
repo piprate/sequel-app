@@ -1,12 +1,13 @@
 <script>
-  import { roleName } from '../../_utils/evergreen'
+  import { paymentRoleName } from '../../_utils/evergreen'
 
   export let listing
   export let numEditions = 1
 
   $: payments = listing.payments || []
+  $: profile = listing.object && listing.object.evergreenProfile
   $: paymentsForDisplay = (payments.map(payment => ({
-    role: roleName(payment.role),
+    role: paymentRoleName(payment.role, profile),
     receiver: `0x${payment.receiver}`,
     rate: (payment.rate * 100.0).toFixed(2) + '%',
     amount: `${(payment.amount * numEditions).toFixed(2)} ${payment.currency}`
