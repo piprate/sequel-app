@@ -26,14 +26,8 @@
               class="payments-cell payments-participant-name"
               role="term"
       >
-        {payment.role}
-      </div>
-      <div
-              class="payments-cell payments-value"
-              role="definition"
-              aria-labelledby="payments-participant-{i}"
-      >
-        {payment.receiver}
+        <div class="role-name">{payment.role}</div>
+        <div class="role-address">{payment.receiver}</div>
       </div>
       <div
               class="payments-cell payments-value payments-amount"
@@ -57,20 +51,19 @@
   .payments {
     grid-area: payments;
     display: grid;
-    grid-template-columns: auto max-content 1fr 1fr;
+    grid-template-columns: auto 1fr 1fr;
     grid-row-gap: 5px;
-    align-items: center;
     padding: 20px 0;
   }
 
   .evergreen-profile-header {
-    grid-column: 1 / 5;
+    grid-column: 1 / 4;
   }
 
   .payments-border {
     height: 1px;
     width: 100%;
-    grid-column: 1 / 5;
+    grid-column: 1 / 4;
     background: var(--main-border);
     justify-self: center;
   }
@@ -78,15 +71,12 @@
   .payments-cell {
     word-wrap: break-word;
     overflow: hidden;
-    white-space: pre-wrap;
     text-overflow: ellipsis;
     font-size: 1.1em;
   }
 
   .payments-participant-name {
-    padding: 10px 20px 10px 0;
-    text-transform: uppercase;
-    color: var(--deemphasized-text-color);
+    padding: 0 20px 5px 0;
     position: relative;
     max-width: 300px;
   }
@@ -100,8 +90,16 @@
     border-right: 1px solid var(--main-border);
   }
 
+  .role-name {
+    text-transform: uppercase;
+  }
+
+  .role-address {
+    color: var(--deemphasized-text-color);
+  }
+
   .payments-value {
-    padding: 10px 10px 10px 20px;
+    padding: 0 10px 10px 20px;
   }
 
   .payments-amount {
@@ -120,11 +118,11 @@
       font-size: 0.8em;
     }
     .payments-participant-name {
-      padding: 5px 10px 5px 0;
+      padding: 0 10px 5px 0;
       max-width: 40vw;
     }
     .payments-value {
-      padding: 5px 10px 5px 10px;
+      padding: 0 10px 5px 10px;
     }
   }
 </style>
