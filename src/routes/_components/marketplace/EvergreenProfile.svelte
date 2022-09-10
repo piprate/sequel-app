@@ -70,7 +70,7 @@
   .evergreen-profile-meta {
     grid-area: evergreen;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr;
     grid-row-gap: 5px;
     padding: 20px 0;
   }
@@ -95,7 +95,7 @@
     word-wrap: break-word;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.1em;
+    font-size: 1.0em;
   }
 
   .evergreen-profile-meta-role {
