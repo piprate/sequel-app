@@ -513,7 +513,8 @@ module.exports = {
   bubblesFromSpark: 'Bubbles from {spark}',
   createNewBubble: 'Create new bubble',
   createNewWorld: 'Create new world',
-  selectSparkBeforeCreatingWorld: 'You need to select an active spark before creating new worlds.',
+  selectSparkBeforeCreatingWorld: 'You need to <a href="/switch" sapper:prefetch>select</a> a spark before creating worlds.',
+  selectSparkBeforeCreatingBubble: 'You need to <a href="/switch" sapper:prefetch>select</a> a spark before creating bubbles.',
   fields: 'Fields',
   profilePageForSpark: 'Profile page for {spark}',
   // World home page

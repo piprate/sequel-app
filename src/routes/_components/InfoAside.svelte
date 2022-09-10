@@ -1,10 +1,12 @@
 <script>
   import SvgIcon from './SvgIcon.svelte'
 
-  export let className = '';
+  export let className = ''
+
+  $: selectedClass = className || 'default-style'
 </script>
 
-<aside class="info-aside {className}">
+<aside class="info-aside {selectedClass}">
   <SvgIcon href="#fa-info-circle" className="aside-icon" />
   <span>
     <slot></slot>
@@ -30,6 +32,9 @@
     height: 18px;
     margin: 0 10px 0 5px;
     min-width: 18px;
+  }
+  .default-style {
+    margin: 10px 10px 10px 10px;
   }
 </style>
 
