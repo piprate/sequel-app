@@ -202,7 +202,7 @@ transaction {
       fcl.payer(fcl.currentUser),
       fcl.proposer(fcl.currentUser),
       fcl.authorizations([fcl.authz]),
-      fcl.limit(99),
+      fcl.limit(999),
     ])
 
     console.log({ txHash })
