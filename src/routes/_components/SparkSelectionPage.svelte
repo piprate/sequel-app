@@ -1,43 +1,43 @@
 <script>
-  import LoadingPage from './LoadingPage.svelte';
-  import Avatar from './Avatar.svelte';
-  import SparkDisplayName from './spark/SparkDisplayName.svelte';
-  import SearchResult from './search/SearchResult.svelte';
-  import SvgIcon from './SvgIcon.svelte';
-  import RadioGroup from './radio/RadioGroup.svelte';
-  import RadioGroupButton from './radio/RadioGroupButton.svelte';
+  import LoadingPage from './LoadingPage.svelte'
+  import Avatar from './Avatar.svelte'
+  import SparkDisplayName from './spark/SparkDisplayName.svelte'
+  import SearchResult from './search/SearchResult.svelte'
+  import SvgIcon from './SvgIcon.svelte'
+  import RadioGroup from './radio/RadioGroup.svelte'
+  import RadioGroupButton from './radio/RadioGroupButton.svelte'
   import InfoAside from './InfoAside.svelte'
-  import FreeTextLayout from './FreeTextLayout.svelte';
-  import { toast } from './toast/toast';
-  import { on } from '../_utils/eventBus';
-  import { formatIntl } from '../_utils/formatIntl';
-  import { onMount } from "svelte";
-  import { accessToken, currentSparkId } from "../_store/instance";
-  import { currentInstance, isUserLoggedIn } from "../_store/local";
-  import { setCurrentSpark } from "../_actions/sparks";
-  import { getSparkList } from "../_api/sparks";
-  import { goto } from '@sapper/app';
+  import FreeTextLayout from './FreeTextLayout.svelte'
+  import { toast } from './toast/toast'
+  import { on } from '../_utils/eventBus'
+  import { formatIntl } from '../_utils/formatIntl'
+  import { onMount } from 'svelte'
+  import { accessToken, currentSparkId } from '../_store/instance'
+  import { currentInstance, isUserLoggedIn } from '../_store/local'
+  import { setCurrentSpark } from '../_actions/sparks'
+  import { getSparkList } from '../_api/sparks'
+  import { goto } from '@sapper/app'
   import { displayError } from '../_actions/errors'
 
-  export let sparksFetcher;
+  export let sparksFetcher
 
-  let loading = true;
-  let sparks = [];
+  let loading = true
+  let sparks = []
 
-  $: sparksFetcher = () => getSparkList($currentInstance, $accessToken);
+  $: sparksFetcher = () => getSparkList($currentInstance, $accessToken)
 
   async function refreshSparks () {
-    sparks = await sparksFetcher() || [];
-    console.log("SPARKS", sparks);
+    sparks = await sparksFetcher() || []
+    console.log('SPARKS', sparks)
   }
 
   function onSwitchToThisSpark (e, sparkState) {
-    e.preventDefault();
-    e.stopPropagation();
-    setCurrentSpark($currentInstance, sparkState.data);
+    e.preventDefault()
+    e.stopPropagation()
+    setCurrentSpark($currentInstance, sparkState.data)
     /* no await */
-    toast.say(formatIntl('intl.sparkSelected', { spark: sparkState.name }));
-    goto('/');
+    toast.say(formatIntl('intl.sparkSelected', { spark: sparkState.name }))
+    goto('/')
   }
 
   $: sparkStates = sparks.map((spark, index) => ({
@@ -48,20 +48,20 @@
     label: formatIntl('intl.currentSparkLabel', { spark: spark.name, current: ($currentSparkId === spark.id) }),
     switchLabel: formatIntl('intl.switchToNameOfSpark', { spark: spark.name }),
     data: spark
-  }));
+  }))
 
   // TODO: paginate
 
   onMount(async () => {
     try {
-      await refreshSparks();
+      await refreshSparks()
     } catch (e) {
       displayError(e)
     } finally {
-      loading = false;
+      loading = false
     }
-    return on('refreshSparksList', () => refreshSparks());
-  });
+    return on('refreshSparksList', () => refreshSparks())
+  })
 </script>
 
 {#if $isUserLoggedIn }
