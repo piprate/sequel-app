@@ -1,15 +1,15 @@
 <script>
-  import { isUserLoggedIn } from '../../_store/local.js'
   import RestrictedPageWarning from '../../_components/RestrictedPageWarning.svelte'
   import TimelinePage from '../../_components/TimelinePage.svelte'
   import NotificationFilters from '../../_components/NotificationFilters.svelte'
+  import { isAuthenticated } from '../../_store/local'
 
   // suppress warnings
   export let params
   params = undefined
 </script>
 
-{#if $isUserLoggedIn}
+{#if $isAuthenticated}
   <NotificationFilters filter="" />
   <TimelinePage timeline="notifications" />
 {:else}
