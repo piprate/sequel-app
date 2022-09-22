@@ -7,7 +7,8 @@
     isUserLoggedIn,
     logInToInstanceError,
     logInToInstanceErrorForText,
-    logInToInstanceLoading
+    logInToInstanceLoading,
+    redirectToPage
   } from '../../../_store/local'
   import { onMount } from 'svelte'
 
@@ -34,6 +35,11 @@
   function onSubmitInstance (event) {
     event.preventDefault()
     event.stopPropagation()
+
+    if (!$redirectToPage) {
+      // go to Worlds page, unless we have already set up a redirect
+      $redirectToPage = '/worlds'
+    }
 
     logInToInstance('', '')
   }

@@ -108,8 +108,6 @@ export async function logInToInstance (email, password) {
     if (_redirectToPage) {
       redirectToPage.set('')
       goto(_redirectToPage)
-    } else if (anonymousMode) {
-      goto('/worlds')
     } else {
       goto('/')
     }

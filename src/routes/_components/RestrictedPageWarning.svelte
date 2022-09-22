@@ -14,7 +14,9 @@
   $: panelClass = offerVisitorMode ? '' : 'right-align'
 
   function setRedirect (e) {
-    $redirectToPage = $page.path
+    if ($page.path !== '/') {
+      $redirectToPage = $page.path
+    }
   }
 </script>
 
