@@ -1,10 +1,10 @@
-const oneLiner = 'Sequel is a social platform where everything is for fun and purely fictional.'
+const oneLiner = 'Sequel is a social platform from a parallel universe.'
 
 module.exports = {
   // Home page, basic <title> and <description>
   appName: 'Sequel',
   appDescription: 'An official web client for Sequel.',
-  ogDescription: 'A social platform where everything is for fun and purely fictional',
+  ogDescription: 'A social platform from a parallel universe',
   homeDescription: `
     <p>
       ` + oneLiner + `
@@ -560,7 +560,7 @@ module.exports = {
   </p>
 
   <p>
-    Sequel is a social platform where everything is for fun and purely fictional.
+    Sequel is a social platform from a parallel universe.
   </p>
 
   <h2 id="contact-details">Contact details</h2>
