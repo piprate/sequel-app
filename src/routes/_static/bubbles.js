@@ -52,6 +52,12 @@ export const BUBBLE_WRITER_MODE_OPTIONS = [
     key: 'public',
     icon: '#fa-globe',
     description: 'intl.wmPublicDesc'
+  },
+  {
+    label: 'intl.wmPublicComments',
+    key: 'public_comments',
+    icon: '#fa-reply',
+    description: 'intl.wmPublicCommentsDesc'
   }
 ]
 

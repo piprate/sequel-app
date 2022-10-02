@@ -263,9 +263,11 @@ module.exports = {
   wmNone: 'Owners and moderators',
   wmMembers: 'All Members',
   wmPublic: 'Everyone',
+  wmPublicComments: 'Everyone (comments only)',
   wmNoneDesc: 'Only you can post.',
   wmMembersDesc: 'Only members can post.',
   wmPublicDesc: 'Everyone can post.',
+  wmPublicCommentsDesc: 'Everyone can comment.',
   // bubble federation modes
   fmDisabled: 'Disabled',
   fmEnabled: 'Enabled',

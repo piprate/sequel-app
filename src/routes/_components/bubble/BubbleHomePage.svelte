@@ -25,14 +25,8 @@
   $: ariaTitle = formatIntl('intl.homePageForBubble', { bubble: bubbleName })
   $: hidePage = !(relationship && (relationship.status === 'active'))
   $: canPost = (() => {
-    if ($currentSpark && bubble && relationship) {
-      switch (relationship.memberType) {
-        case 'owner':
-        case 'moderator':
-          return true
-        case 'writer':
-          return bubble.writerMode !== 'none'
-      }
+    if ($currentSpark && relationship) {
+      return relationship.canPost
     }
     return false
   })()

@@ -125,7 +125,7 @@
     })
     const removeListener = on('publishedPost', onPublishedPost)
 
-    canPost(post.bubble, $currentSparkId).then(val => canComment = val)
+    canPost(post.bubble, $currentSparkId, true).then(val => canComment = val)
 
     return () => {
       removeClickDelegates()

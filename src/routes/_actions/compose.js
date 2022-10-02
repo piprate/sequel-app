@@ -23,7 +23,7 @@ import { unwrap, wrap } from '../_utils/mapper'
 
 export const publishingPost = writable(false)
 
-export async function canPost (bubbleId, asSpark) {
+export async function canPost (bubbleId, asSpark, isComment=false) {
   const _currentInstance = currentInstance.get()
   const bubble = await database.getBubble(_currentInstance, bubbleId)
   if (!bubble) {
@@ -38,6 +38,8 @@ export async function canPost (bubbleId, asSpark) {
         return true
       case 'writer':
         return bubble.writerMode !== 'none'
+      default:
+        return isComment && bubble.observerMode === 'public' && bubble.writerMode === 'public_comments'
     }
   }
 
