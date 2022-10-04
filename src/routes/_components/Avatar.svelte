@@ -43,13 +43,15 @@
   $: svgStyle = `width: ${width}px; height: ${height}px;`
   $: staticSrc = entity.avatar ? entity.avatar.staticUrl : ''
   $: src = flatMode ? staticSrc : (entity.avatar ? entity.avatar.url : '')
+  $: entityType = (entity && entity.type) || ""
+  $: defaultIcon = entityType === 'Bubble' ? '#fa-home' : entityType === 'World' ? '#fa-globe' : '#fa-user'
   $: showDefaultIcon = error || !entity.avatar
   $: nftReference = entity.avatar && entity.avatar.partOf
 </script>
 
 <div class="avatar-wrapper">
   {#if showDefaultIcon}
-  <SvgIcon className={computedClass} style={svgStyle} href="#fa-user" />
+  <SvgIcon className={computedClass} style={svgStyle} href="{defaultIcon}" />
   {:else if $autoplayGifs}
     <LazyImage
       ariaHidden="true"
@@ -94,7 +96,7 @@
   }
 
   :global(svg.avatar) {
-    fill: var(--deemphasized-text-color);
+    fill: var(--banner-fill);
   }
 </style>
 
