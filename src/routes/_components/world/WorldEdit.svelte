@@ -5,6 +5,7 @@
   import { goto } from '@sapper/app';
   import { unwrap } from "../../_utils/mapper";
   import MediaField from "../../_components/MediaField.svelte";
+  import ErrorMessage from '../ErrorMessage.svelte'
 
   export let realm;
   export let newWorld;
@@ -50,11 +51,7 @@
     <div class="world-form-box">
         <form on:submit='{onSubmitWorld}' aria-labelledby="new-world-h1">
 
-            {#if $worldOperationError}
-                <div class="form-error form-error-user-error" role="alert">
-                    {intl.errorShort} {@html $worldOperationError}
-                </div>
-            {/if}
+            <ErrorMessage error={$worldOperationError} />
 
             <label for="name">{intl.worldNameColon}</label>
             <input type="text" autocapitalize="none" id="name"
@@ -91,14 +88,6 @@
         border-radius: 4px;
     }
 
-    .form-error {
-        border: 2px solid var(--warn-color);
-        border-radius: 2px;
-        padding: 10px;
-        font-size: 1.3em;
-        margin: 5px;
-        background-color: var(--main-bg);
-    }
     input[type="text"] {
         min-width: 75%;
         max-width: 100%;

@@ -143,9 +143,7 @@ export async function saveWorld (realm, worldId, template) {
     clearComposeData(realm)
   } catch (err) {
     console.error(err)
-    const error = `${err.message || err.name}. ` +
-      (err.knownError ? '' : (navigator.onLine ? '' : 'Are you offline?'))
-    worldOperationError.set(error)
+    worldOperationError.set(err)
   } finally {
     worldOperationInProgress.set(false)
   }

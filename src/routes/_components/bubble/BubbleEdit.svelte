@@ -16,7 +16,7 @@
   import { importShowWorldSelectionDialog } from '../dialog/asyncDialogs/importShowWorldSelectionDialog'
   import { formatIntl } from '../../_utils/formatIntl'
   import { currentInductionLevel, setInductionLevel } from '../../_store/instance'
-  import { sparkOperationError } from '../../_actions/sparks'
+  import ErrorMessage from '../ErrorMessage.svelte'
 
   export let realm
   export let newBubble
@@ -137,11 +137,7 @@
     <div class="bubble-form-box">
         <form on:submit='{onSubmitBubble}' aria-label="{formLabel}">
 
-            {#if $bubbleOperationError}
-                <div class="form-error form-error-user-error" role="alert">
-                    {intl.errorShort} {@html $bubbleOperationError}
-                </div>
-            {/if}
+            <ErrorMessage error={$bubbleOperationError} />
 
             <label for="name">{intl.bubbleNameColon}</label>
             <input type="text" autocapitalize="none" id="name"
@@ -223,14 +219,6 @@
         border-radius: 4px;
     }
 
-    .form-error {
-        border: 2px solid var(--warn-color);
-        border-radius: 2px;
-        padding: 10px;
-        font-size: 1.3em;
-        margin: 5px;
-        background-color: var(--main-bg);
-    }
     input[type="text"] {
         min-width: 75%;
         max-width: 100%;

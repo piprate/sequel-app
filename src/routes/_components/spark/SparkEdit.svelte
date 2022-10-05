@@ -5,9 +5,10 @@
   import { saveSpark, setCurrentSpark, sparkOperationError, sparkOperationInProgress } from '../../_actions/sparks'
   import { goto } from '@sapper/app'
   import { unwrap } from '../../_utils/mapper'
-  import { currentInstance, inductionLevel } from '../../_store/local'
+  import { currentInstance } from '../../_store/local'
   import { importShowWorldSelectionDialog } from '../dialog/asyncDialogs/importShowWorldSelectionDialog'
   import { currentInductionLevel, setInductionLevel } from '../../_store/instance'
+  import ErrorMessage from '../ErrorMessage.svelte'
 
   export let realm
   export let newSpark
@@ -82,11 +83,7 @@
     <div class="spark-form-box">
         <form on:submit='{onSubmitSpark}' aria-labelledby="new-spark-h1">
 
-            {#if $sparkOperationError}
-                <div class="form-error form-error-user-error" role="alert">
-                    {intl.errorShort} {@html $sparkOperationError}
-                </div>
-            {/if}
+            <ErrorMessage error={$sparkOperationError} />
 
             <label for="name">{intl.sparkNameColon}</label>
             <input type="text" autocapitalize="none" id="name"
@@ -134,14 +131,6 @@
         border-radius: 4px;
     }
 
-    .form-error {
-        border: 2px solid var(--warn-color);
-        border-radius: 2px;
-        padding: 10px;
-        font-size: 1.3em;
-        margin: 5px;
-        background-color: var(--main-bg);
-    }
     input[type="text"] {
         min-width: 75%;
         max-width: 100%;

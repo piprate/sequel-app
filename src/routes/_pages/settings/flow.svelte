@@ -1,5 +1,6 @@
 <script>
   import SettingsLayout from '../../_components/settings/SettingsLayout.svelte'
+  import ErrorMessage from '../../_components/ErrorMessage.svelte'
   import {
     currentInstance,
     flowLoggedInAccount,
@@ -47,10 +48,12 @@
       user.flow = {}
     }
 
-    user.flow.addr = out.addr
-    user.flow.network = await fcl.config().get('env', 'unknown')
+    if (user.flow.addr !== out.addr) {
+      user.flow.addr = out.addr
+      user.flow.network = await fcl.config().get('env', 'unknown')
 
-    await saveUser(user)
+      await saveUser(user)
+    }
   }
 
   async function logInWithFlow () {
@@ -119,9 +122,7 @@
   <h1 id="sign-up-h1">{intl.flowSettings}</h1>
 
   {#if $userOperationError}
-    <div class="error-box error-box-user-error" role="alert">
-      {intl.errorShort} {@html $userOperationError}
-    </div>
+    <ErrorMessage error={$userOperationError} />
   {/if}
 
   {#if flowAddress }

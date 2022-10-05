@@ -52,6 +52,7 @@ module.exports = {
       and <a rel="noopener" target="_blank" href="https://sequel.space/home/code-of-conduct/">Code of Conduct</a>.
     </p>
   `,
+  offlineNotice: 'Are you offline?',
   // Manifest
   longAppName: 'Sequel App',
   newPost: 'New post',

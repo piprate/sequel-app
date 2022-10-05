@@ -1,7 +1,20 @@
 <script>
   export let error
 
-  $: errorMessage = error && error.message ? error.message : error
+  function addPeriod (val) {
+    val = val.trim()
+    if (!val.endsWith('.')) {
+      val += "."
+    }
+    return val
+  }
+
+  $: originalErrorMessage = error ? (error.message || error.name || error) : ''
+  $: errorMessage = error ?
+    (error.knownError || navigator.onLine) ?
+      originalErrorMessage :
+      `${addPeriod(originalErrorMessage)} ` + 'intl.offlineNotice'
+    : ''
 </script>
 {#if error}
 <div class="error-box" role="alert">

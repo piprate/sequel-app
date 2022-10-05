@@ -149,9 +149,7 @@ export async function saveSpark (realm, sparkId, template) {
     clearComposeData(realm)
   } catch (err) {
     console.error(err)
-    const error = `${err.message || err.name}. ` +
-      (err.knownError ? '' : (navigator.onLine ? '' : 'Are you offline?'))
-    sparkOperationError.set(error)
+    sparkOperationError.set(err)
   } finally {
     sparkOperationInProgress.set(false)
   }

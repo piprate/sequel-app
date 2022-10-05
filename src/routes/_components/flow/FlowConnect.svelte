@@ -9,6 +9,7 @@
   import * as fcl from '@onflow/fcl'
   import { updateUserForInstance } from '../../_actions/instances'
   import { saveUser, userOperationError, userOperationInProgress } from '../../_actions/users'
+  import ErrorMessage from '../ErrorMessage.svelte'
 
   export let className = ''
 
@@ -26,10 +27,12 @@
       user.flow = {}
     }
 
-    user.flow.addr = out.addr
-    user.flow.network = await fcl.config().get('env', 'unknown')
+    if (user.flow.addr !== out.addr) {
+      user.flow.addr = out.addr
+      user.flow.network = await fcl.config().get('env', 'unknown')
 
-    await saveUser(user)
+      await saveUser(user)
+    }
   }
 
   async function logInWithFlow () {
@@ -50,9 +53,7 @@
 </script>
 
 {#if $userOperationError}
-    <div class="error-box error-box-user-error" role="alert">
-        {intl.errorShort} {@html $userOperationError}
-    </div>
+    <ErrorMessage error={$userOperationError} />
 {/if}
 
 <div class="{className}">

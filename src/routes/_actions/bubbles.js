@@ -143,9 +143,7 @@ export async function saveBubble (realm, bubbleId, template) {
     clearComposeData(realm)
   } catch (err) {
     console.error(err)
-    const error = `${err.message || err.name}. ` +
-      (err.knownError ? '' : (navigator.onLine ? '' : 'Are you offline?'))
-    bubbleOperationError.set(error)
+    bubbleOperationError.set(err)
   } finally {
     bubbleOperationInProgress.set(false)
   }

@@ -24,9 +24,7 @@ export async function saveUser (user) {
     setStoreUser(instanceName, updatedUser)
   } catch (err) {
     console.error(err)
-    const error = `${err.message || err.name}. ` +
-      (err.knownError ? '' : (navigator.onLine ? '' : 'Are you offline?'))
-    userOperationError.set(error)
+    userOperationError.set(err)
   } finally {
     userOperationInProgress.set(false)
   }
