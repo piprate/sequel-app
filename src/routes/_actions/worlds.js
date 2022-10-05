@@ -10,10 +10,11 @@ import {
 import { accessToken, currentSparkId } from '../_store/instance'
 import { prepareMediaItem } from './media'
 import { get, writable } from 'svelte/store'
-import { unwrap } from '../_utils/mapper'
+import { unwrap, wrap } from '../_utils/mapper'
+import { displayError } from './errors'
 
 async function _updateWorld (worldId, instanceName, accessToken) {
-  const localPromise = database.getWorld(instanceName, worldId)
+  const localPromise = database.getWorld(instanceName, wrap(worldId))
   const remotePromise = getWorld(instanceName, accessToken, worldId).then(world => {
     /* no await */
     database.setWorld(instanceName, world)
@@ -30,8 +31,10 @@ async function _updateWorld (worldId, instanceName, accessToken) {
   } catch (e) {
     if (e.status === 404) {
       observedWorld.set(null)
+      console.error(e)
+    } else {
+      throw e
     }
-    console.error(e)
   }
 }
 
@@ -42,7 +45,7 @@ async function _updateWorldRelationship (worldId, instanceName, accessToken, asS
     return
   }
 
-  const localPromise = database.getWorldRelationship(instanceName, worldId)
+  const localPromise = database.getWorldRelationship(instanceName, wrap(worldId))
   const remotePromise = getWorldRelationship(instanceName, accessToken, worldId, asSpark).then(relationship => {
     /* no await */
     database.setWorldRelationship(instanceName, relationship)
@@ -61,8 +64,10 @@ async function _updateWorldRelationship (worldId, instanceName, accessToken, asS
   } catch (e) {
     if (e.status === 404) {
       observedWorldRelationship.set(null)
+      console.error(e)
+    } else {
+      displayError(e)
     }
-    console.error(e)
   }
 }
 

@@ -4,6 +4,7 @@
   import { isUserLoggedIn, observedListing } from '../../_store/local.js'
   import { currentSpark } from '../../_store/instance.js'
   import RestrictedPageWarning from '../RestrictedPageWarning.svelte'
+  import ErrorMessage from '../ErrorMessage.svelte'
   import DynamicPageBanner from '../DynamicPageBanner.svelte'
   import { clearListing, updateListing } from '../../_actions/marketplace'
   import Listing from './Listing.svelte'
@@ -16,35 +17,40 @@
   $: listingName = ($observedListing && $observedListing.object && $observedListing.object.name) || ''
   $: ariaTitle = formatIntl('intl.listingPage', { listing: listingName })
 
-  let loading = true
   let notFound = false
+  let loadError
 
   onMount(async () => {
     if ($isUserLoggedIn) {
-      await clearListing()
-      await updateListing(id)
-      notFound = !!$observedListing
+      try {
+        await clearListing()
+        await updateListing(id)
+        notFound = !$observedListing
+      } catch (err) {
+        console.error(err)
+        loadError = err
+      }
     }
-    loading = false
     console.log("LOADED LISTING", $observedListing)
   })
 </script>
 
-{#if loading}
-    <LoadingPage />
-{:else}
-    {#if $isUserLoggedIn}
-        {#if $observedListing}
-            {#if !newListing}
-                <DynamicPageBanner title="" {ariaTitle} />
-            {/if}
-            <Listing listing={$observedListing} ourSpark={$currentSpark} />
-        {:else if notFound}
-            <FreeTextLayout>
-                <h2>{intl.listingNotFound}</h2>
-            </FreeTextLayout>
+{#if $isUserLoggedIn}
+    {#if $observedListing}
+        {#if !newListing}
+            <DynamicPageBanner title="" {ariaTitle} />
         {/if}
+        <Listing listing={$observedListing} ourSpark={$currentSpark} />
+    {:else if notFound}
+        <FreeTextLayout>
+            <h2>{intl.listingNotFound}</h2>
+        </FreeTextLayout>
+    {:else if loadError}
+        <ErrorMessage error={loadError} />
     {:else}
-        <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+        <LoadingPage />
     {/if}
+{:else}
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}
+

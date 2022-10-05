@@ -1,5 +1,6 @@
 <script>
   import LoadingPage from './LoadingPage.svelte'
+  import ErrorMessage from './ErrorMessage.svelte'
   import Avatar from './Avatar.svelte'
   import SparkDisplayName from './spark/SparkDisplayName.svelte'
   import SearchResult from './search/SearchResult.svelte'
@@ -52,11 +53,14 @@
 
   // TODO: paginate
 
+  let loadError
+
   onMount(async () => {
     try {
       await refreshSparks()
     } catch (e) {
       displayError(e)
+      loadError = 'intl.unableToLoad'
     } finally {
       loading = false
     }
@@ -103,6 +107,8 @@
                     </ul>
                 </RadioGroup>
                 <a class="button primary new-spark-button" sapper:prefetch href="/sparks/new">{intl.createNewSpark}</a>
+            {:else if loadError}
+                <ErrorMessage error={loadError} />
             {:else}
                 <a class="button primary new-spark-button" sapper:prefetch href="/sparks/new">{intl.createFirstSpark}</a>
             {/if}

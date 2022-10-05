@@ -5,6 +5,7 @@
   import { isUserLoggedIn, observedRelationship, observedSpark } from '../../_store/local.js'
   import { currentSpark } from '../../_store/instance.js'
   import RestrictedPageWarning from '../RestrictedPageWarning.svelte'
+  import ErrorMessage from '../ErrorMessage.svelte'
   import DynamicPageBanner from '../DynamicPageBanner.svelte'
   import PinnedStatuses from '../timeline/PinnedStatuses.svelte'
   import { clearProfileAndRelationship, updateProfileAndRelationship } from '../../_actions/sparks'
@@ -20,45 +21,47 @@
   $: timeline = `spark/${sparkId}` + (filter ? `/${filter}` : '')
   $: ariaTitle = formatIntl('intl.profilePageForSpark', { spark: sparkName })
 
-  let loading = true
   let notFound = false
+  let loadError
 
-  onMount(() => {
+  onMount(async () => {
     if ($isUserLoggedIn) {
-      clearProfileAndRelationship()
-      updateProfileAndRelationship(sparkId)
-      notFound = !!$observedSpark
+      try {
+        await clearProfileAndRelationship()
+        await updateProfileAndRelationship(sparkId)
+        notFound = !$observedSpark
+      } catch (e) {
+        console.error(e)
+        loadError = e
+      }
     }
-    loading = false
   })
 </script>
 
-{#if loading}
-  <LoadingPage />
-{:else}
-  {#if $isUserLoggedIn}
-    {#if $observedSpark}
-      {#if !newSpark}
-        <DynamicPageBanner title="" {ariaTitle} />
-      {/if}
-      <TimelinePage {timeline} >
-        <SparkProfile spark={$observedSpark}
-                      relationship={$observedRelationship}
-                      ourSpark={$currentSpark}
-                      {filter}
-        />
-        {#if !filter}
-          <PinnedStatuses {sparkId} />
-        {/if}
-      </TimelinePage>
-    {:else if notFound}
-      <FreeTextLayout>
-        <h2>{intl.sparkNotFound}</h2>
-      </FreeTextLayout>
-    {:else}
-      <LoadingPage />
+{#if $isUserLoggedIn}
+  {#if $observedSpark}
+    {#if !newSpark}
+      <DynamicPageBanner title="" {ariaTitle} />
     {/if}
+    <TimelinePage {timeline} >
+      <SparkProfile spark={$observedSpark}
+                    relationship={$observedRelationship}
+                    ourSpark={$currentSpark}
+                    {filter}
+      />
+      {#if !filter}
+        <PinnedStatuses {sparkId} />
+      {/if}
+    </TimelinePage>
+  {:else if notFound}
+    <FreeTextLayout>
+      <h2>{intl.sparkNotFound}</h2>
+    </FreeTextLayout>
+  {:else if loadError}
+    <ErrorMessage error={loadError} />
   {:else}
-    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+    <LoadingPage />
   {/if}
+{:else}
+  <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}

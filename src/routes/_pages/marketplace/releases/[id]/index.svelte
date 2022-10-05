@@ -2,8 +2,6 @@
   import ListingsPage from '../../../../_components/marketplace/ListingsPage.svelte'
   import DynamicPageBanner from '../../../../_components/DynamicPageBanner.svelte'
   import InfoAside from '../../../../_components/InfoAside.svelte'
-  import HiddenFromSSR from '../../../../_components/HiddenFromSSR.svelte'
-  import FreeTextLayout from '../../../../_components/FreeTextLayout.svelte'
   import MarketplaceFilter from '../../../../_components/marketplace/MarketplaceFilter.svelte'
   import ReleaseCard from '../../../../_components/marketplace/ReleaseCard.svelte'
   import { currentInstance, isUserLoggedIn } from '../../../../_store/local'
@@ -13,6 +11,7 @@
   import { getMarketplaceRelease } from '../../../../_api/releases'
   import { onMount } from 'svelte'
   import RestrictedPageWarning from '../../../../_components/RestrictedPageWarning.svelte'
+  import { displayError } from '../../../../_actions/errors'
 
   export let params
 
@@ -29,8 +28,12 @@
 
   onMount(async () => {
     if ($isUserLoggedIn) {
-      release = await getMarketplaceRelease($currentInstance, $accessToken, params.id, $currentSparkId)
-      notFound = !!release
+      try {
+        release = await getMarketplaceRelease($currentInstance, $accessToken, params.id, $currentSparkId)
+      } catch (e) {
+        displayError(e)
+      }
+      notFound = !release
     }
     loading = false
     console.log("LOADED RELEASE", release)
@@ -42,14 +45,14 @@
     <MarketplaceFilter filter="releases" />
     {#if release}
         <ReleaseCard {release} listMode={false} />
+        <ListingsPage {listingsFetcher}>
+            <span slot="is-empty">
+                <InfoAside className="empty-marketplace-notice-aside">
+                  {intl.releaseEmpty}
+              </InfoAside>
+            </span>
+        </ListingsPage>
     {/if}
-    <ListingsPage {listingsFetcher}>
-        <span slot="is-empty">
-            <InfoAside className="empty-marketplace-notice-aside">
-              {intl.releaseEmpty}
-          </InfoAside>
-        </span>
-    </ListingsPage>
 {:else}
     <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}

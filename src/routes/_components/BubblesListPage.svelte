@@ -1,5 +1,6 @@
 <script>
   import LoadingPage from './LoadingPage.svelte'
+  import ErrorMessage from './ErrorMessage.svelte'
   import BubbleSearchResult from './search/BubbleSearchResult.svelte'
   import { onMount } from 'svelte'
   import { displayError } from '../_actions/errors'
@@ -22,11 +23,15 @@
 
   // TODO: paginate
 
+  let loadError
+
   onMount(async () => {
     try {
       await refreshBubbles()
     } catch (e) {
+      console.error(e)
       displayError(e)
+      loadError = 'intl.unableToLoad'
     } finally {
       loading = false
     }
@@ -48,6 +53,9 @@
       {/each}
     </ul>
     <slot name="footer"></slot>
+  {:else if loadError}
+    <slot name="header"></slot>
+    <ErrorMessage error={loadError} />
   {:else}
     <slot name="is-empty"></slot>
   {/if}

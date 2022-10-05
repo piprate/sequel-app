@@ -50,7 +50,7 @@
   $: tmmKey = `tmm-${uuid}`
   $: replyKey = `reply-${uuid}`
   $: optionsKey = `options-${uuid}`
-  $: commentCount = post.replyCount
+  $: commentCount = post.replyCount || 0
   $: commentCountDigits = Math.min(3, commentCount.toString().length)
   $: commentCountToShow = (commentCount < 100 ? commentCount.toString() : '99+')
   $: replyDisabled = !canComment

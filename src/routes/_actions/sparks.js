@@ -12,7 +12,8 @@ import {
 import { accessToken, currentSparkId } from '../_store/instance'
 import { get, writable } from 'svelte/store'
 import { prepareMediaItem } from './media'
-import { unwrap } from '../_utils/mapper'
+import { unwrap, wrap } from '../_utils/mapper'
+import { displayError } from './errors'
 
 export function setCurrentSpark (instanceName, spark) {
   const _instanceCurrentSparks = instanceCurrentSparks.get()
@@ -21,7 +22,7 @@ export function setCurrentSpark (instanceName, spark) {
 }
 
 async function _updateSpark (sparkId, instanceName, accessToken) {
-  const localPromise = database.getSpark(instanceName, sparkId)
+  const localPromise = database.getSpark(instanceName, wrap(sparkId))
   const remotePromise = getSpark(instanceName, accessToken, sparkId).then(spark => {
     /* no await */
     database.setSpark(instanceName, spark)
@@ -38,8 +39,10 @@ async function _updateSpark (sparkId, instanceName, accessToken) {
   } catch (e) {
     if (e.status === 404) {
       observedSpark.set(null)
+      console.error(e)
+    } else {
+      throw e
     }
-    console.error(e)
   }
 }
 
@@ -50,7 +53,7 @@ async function _updateRelationship (sparkId, instanceName, accessToken, asSpark)
     return
   }
 
-  const localPromise = database.getRelationship(instanceName, sparkId)
+  const localPromise = database.getRelationship(instanceName, wrap(sparkId))
   const remotePromise = getRelationship(instanceName, accessToken, sparkId, asSpark).then(relationship => {
     /* no await */
     database.setRelationship(instanceName, relationship)
@@ -69,8 +72,10 @@ async function _updateRelationship (sparkId, instanceName, accessToken, asSpark)
   } catch (e) {
     if (e.status === 404) {
       observedRelationship.set(null)
+      console.error(e)
+    } else {
+      displayError(e)
     }
-    console.error(e)
   }
 }
 

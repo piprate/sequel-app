@@ -10,14 +10,15 @@ import {
 import { accessToken, currentSparkId } from '../_store/instance'
 import { get, writable } from 'svelte/store'
 import { prepareMediaItem } from './media'
-import { unwrap } from '../_utils/mapper'
+import { unwrap, wrap } from '../_utils/mapper'
+import { displayError } from './errors'
 
 async function _updateBubble (bubbleId, instanceName, accessToken) {
-  const localPromise = database.getBubble(instanceName, bubbleId)
-  const remotePromise = getBubble(instanceName, accessToken, bubbleId).then(world => {
+  const localPromise = database.getBubble(instanceName, wrap(bubbleId))
+  const remotePromise = getBubble(instanceName, accessToken, bubbleId).then(bubble => {
     /* no await */
-    database.setBubble(instanceName, world)
-    return world
+    database.setBubble(instanceName, bubble)
+    return bubble
   })
 
   try {
@@ -30,8 +31,10 @@ async function _updateBubble (bubbleId, instanceName, accessToken) {
   } catch (e) {
     if (e.status === 404) {
       observedBubble.set(null)
+      console.error(e)
+    } else {
+      throw e
     }
-    console.error(e)
   }
 }
 
@@ -42,7 +45,7 @@ async function _updateBubbleRelationship (bubbleId, instanceName, accessToken, a
     return
   }
 
-  const localPromise = database.getBubbleRelationship(instanceName, bubbleId)
+  const localPromise = database.getBubbleRelationship(instanceName, wrap(bubbleId))
   const remotePromise = getBubbleRelationship(instanceName, accessToken, bubbleId, asSpark).then(relationship => {
     /* no await */
     database.setBubbleRelationship(instanceName, relationship)
@@ -56,8 +59,10 @@ async function _updateBubbleRelationship (bubbleId, instanceName, accessToken, a
   } catch (e) {
     if (e.status === 404) {
       observedBubbleRelationship.set(null)
+      console.error(e)
+    } else {
+      displayError(e)
     }
-    console.error(e)
   }
   try {
     observedBubbleRelationship.set((await remotePromise))

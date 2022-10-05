@@ -5,7 +5,6 @@
   import { goto } from '@sapper/app';
   import { unwrap } from "../../_utils/mapper";
   import MediaField from "../../_components/MediaField.svelte";
-  import { bubbleOperationError } from '../../_actions/bubbles'
 
   export let realm;
   export let newWorld;

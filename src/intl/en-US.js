@@ -118,6 +118,7 @@ module.exports = {
   yourWorlds: 'Your worlds',
   noBubblesFound: 'No bubbles found',
   sparkChoiceQuestion: 'Who would you like to be today?',
+  unableToLoad: 'unable to load data from server',
   createFirstSpark: 'Create your first spark',
   firstSparkNotice: `A spark is your imaginary identity. As a spark of your imagination,
   it enables you to be anything you ever wanted to be. You need a spark to interact with most things in Sequel.`,

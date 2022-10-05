@@ -3,7 +3,7 @@
   import LoadingPage from '../LoadingPage.svelte'
   import { currentInstance } from '../../_store/local.js'
   import { currentSpark, currentSparkId } from '../../_store/instance.js'
-  import DynamicPageBanner from '../DynamicPageBanner.svelte'
+  import ErrorMessage from '../ErrorMessage.svelte'
   import DigitalArtToken from './DigitalArtToken.svelte'
   import { onMount } from 'svelte'
   import { getDigitalArtToken } from '../../_api/nft'
@@ -16,8 +16,8 @@
   $: name = (token && token.name) || ''
   $: ariaTitle = name
 
-  let loading = true
   let notFound = false
+  let loadError
 
   let instanceName = $currentInstance || 'sequel.space'
   let production = process.env.NODE_ENV === 'production'
@@ -26,22 +26,29 @@
   }
 
   onMount(async () => {
-    token = await getDigitalArtToken(instanceName, $accessToken, id, $currentSparkId)
-    notFound = !!token
-    loading = false
+    try {
+        token = await getDigitalArtToken(instanceName, $accessToken, id, $currentSparkId)
+    } catch (e) {
+      if (e.status === 404) {
+        notFound = true
+      } else {
+        loadError = e
+      }
+      console.error(e)
+    }
     console.log("LOADED TOKEN", token)
   })
 </script>
 
-{#if loading}
-    <LoadingPage />
+{#if token}
+    <!--        <DynamicPageBanner title="" {ariaTitle} />-->
+    <DigitalArtToken {token} ourSpark={$currentSpark} />
+{:else if notFound}
+    <FreeTextLayout>
+        <h2>{intl.tokenNotFound}</h2>
+    </FreeTextLayout>
+{:else if loadError}
+    <ErrorMessage error={loadError} />
 {:else}
-    {#if token}
-<!--        <DynamicPageBanner title="" {ariaTitle} />-->
-        <DigitalArtToken {token} ourSpark={$currentSpark} />
-    {:else if notFound}
-        <FreeTextLayout>
-            <h2>{intl.tokenNotFound}</h2>
-        </FreeTextLayout>
-    {/if}
+    <LoadingPage />
 {/if}

@@ -5,7 +5,7 @@ import { get } from 'svelte/store'
 import { getListing } from '../_api/marketplace'
 
 async function _updateListing (id, instanceName, accessToken, asSpark) {
-  const localPromise = database.getListing(instanceName, id)
+  const localPromise = database.getListing(instanceName, parseInt(id))
   const remotePromise = getListing(instanceName, accessToken, id, asSpark).then(listing => {
     /* no await */
     database.setListing(instanceName, listing)
@@ -22,8 +22,10 @@ async function _updateListing (id, instanceName, accessToken, asSpark) {
   } catch (e) {
     if (e.status === 404) {
       observedListing.set(null)
+      console.error(e)
+    } else {
+      throw e
     }
-    console.error(e)
   }
 }
 

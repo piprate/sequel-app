@@ -1,11 +1,12 @@
 import { database } from '../_database/database'
-import { currentInstance, observedDigitalArt } from '../_store/local'
+import { currentInstance, observedDigitalArt, observedSpark } from '../_store/local'
 import { accessToken, currentSparkId } from '../_store/instance'
 import { get } from 'svelte/store'
+import { wrap } from '../_utils/mapper'
 import { getDigitalArt } from '../_api/studio'
 
 async function _updateDigitalArt (id, instanceName, accessToken, asSpark) {
-  const localPromise = database.getDigitalArt(instanceName, id)
+  const localPromise = database.getDigitalArt(instanceName, wrap(id))
   const remotePromise = getDigitalArt(instanceName, accessToken, id, asSpark).then(digitalArt => {
     /* no await */
     database.setDigitalArt(instanceName, digitalArt)
@@ -22,8 +23,10 @@ async function _updateDigitalArt (id, instanceName, accessToken, asSpark) {
   } catch (e) {
     if (e.status === 404) {
       observedDigitalArt.set(null)
+      console.error(e)
+    } else {
+      throw e
     }
-    console.error(e)
   }
 }
 

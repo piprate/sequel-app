@@ -5,6 +5,7 @@
   import { isUserLoggedIn, observedBubble, observedBubbleRelationship } from '../../_store/local.js'
   import { currentSpark, currentSparkId } from '../../_store/instance.js'
   import RestrictedPageWarning from '../RestrictedPageWarning.svelte'
+  import ErrorMessage from '../ErrorMessage.svelte'
   import DynamicPageBanner from '../DynamicPageBanner.svelte'
   import LazyComposeBox from '../compose/LazyComposeBox.svelte'
   import { clearBubbleProfileAndRelationship, updateBubbleProfileAndRelationship } from '../../_actions/bubbles'
@@ -36,8 +37,8 @@
   $: showInvitation = showReadWarning || showPostWarning
   $: invitationMessage = showReadWarning ? 'intl.inviteToRead' : 'intl.inviteToPost'
 
-  let loading = true
   let notFound = false
+  let loadError
 
   async function onJoinButtonClick (e) {
     e.stopPropagation()
@@ -45,49 +46,53 @@
     await updateBubbleProfileAndRelationship(bubbleId)
   }
 
-  onMount(() => {
+  onMount(async () => {
     if ($isUserLoggedIn) {
-      clearBubbleProfileAndRelationship()
-      updateBubbleProfileAndRelationship(bubbleId)
-      notFound = !!$observedBubble
+      try {
+          await clearBubbleProfileAndRelationship()
+          await updateBubbleProfileAndRelationship(bubbleId)
+          notFound = !$observedBubble
+      } catch (e) {
+        console.error(e)
+        loadError = e
+      }
     }
-    loading = false
   })
 </script>
 
-{#if loading}
-    <LoadingPage />
-{:else}
-    {#if $isUserLoggedIn}
-        {#if $observedBubble}
-            {#if !newBubble}
-                <DynamicPageBanner title="" {ariaTitle} />
-            {/if}
-            <TimelinePage {timeline} >
-                <BubbleProfile bubble={$observedBubble}
-                              relationship={$observedBubbleRelationship}
-                              ourSpark={$currentSpark}
-                              {filter}
-                />
-                {#if canPost }
-                    <LazyComposeBox realm="home" {bubbleId} asSpark={$currentSparkId} hidden={hidePage}/>
-                {:else if showInvitation }
-                    <InfoAside className="warning-aside">
-                        {invitationMessage} <button type="button"
-                                                                  class="join-cta-button"
-                                                                  aria-label="{formatIntl('intl.joinBubble', { bubble: bubbleName })}"
-                                                                  on:click|preventDefault="{onJoinButtonClick}">{'intl.joinBubbleButton'}</button>
-                    </InfoAside>
-                {/if}
-            </TimelinePage>
-        {:else if notFound}
-            <FreeTextLayout>
-                <h2>{intl.bubbleNotFound}</h2>
-            </FreeTextLayout>
+{#if $isUserLoggedIn}
+    {#if $observedBubble}
+        {#if !newBubble}
+            <DynamicPageBanner title="" {ariaTitle} />
         {/if}
+        <TimelinePage {timeline} >
+            <BubbleProfile bubble={$observedBubble}
+                          relationship={$observedBubbleRelationship}
+                          ourSpark={$currentSpark}
+                          {filter}
+            />
+            {#if canPost }
+                <LazyComposeBox realm="home" {bubbleId} asSpark={$currentSparkId} hidden={hidePage}/>
+            {:else if showInvitation }
+                <InfoAside className="warning-aside">
+                    {invitationMessage} <button type="button"
+                                                              class="join-cta-button"
+                                                              aria-label="{formatIntl('intl.joinBubble', { bubble: bubbleName })}"
+                                                              on:click|preventDefault="{onJoinButtonClick}">{'intl.joinBubbleButton'}</button>
+                </InfoAside>
+            {/if}
+        </TimelinePage>
+    {:else if notFound}
+        <FreeTextLayout>
+            <h2>{intl.bubbleNotFound}</h2>
+        </FreeTextLayout>
+    {:else if loadError}
+        <ErrorMessage error={loadError} />
     {:else}
-        <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+        <LoadingPage />
     {/if}
+{:else}
+    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}
 
 <style>
