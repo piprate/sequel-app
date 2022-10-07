@@ -6,25 +6,27 @@
   import { updateMembership } from '../../../_actions/world/membership'
   import { copyText } from '../../../_actions/copyText'
   import { formatIntl } from '../../../_utils/formatIntl'
-  import { goto } from '@sapper/app';
-  import { unwrap } from "../../../_utils/mapper";
-  import { doDeleteWorld } from "../../../_actions/deleteWorld";
+  import { goto } from '@sapper/app'
+  import { unwrap } from '../../../_utils/mapper'
+  import { doDeleteWorld } from '../../../_actions/deleteWorld'
 
-  export let id;
-  export let label;
-  export let title;
-  export let world;
-  export let relationship;
-  export let ourSpark;
+  export let id
+  export let label
+  export let title
+  export let world
+  export let relationship
+  export let ourSpark
 
-  $: ourSparkId = ourSpark.id;
-  $: joined = relationship && relationship.joined;
-  $: requestedMembership = relationship && relationship.requestedMembership;
-  $: worldId = world && world.id;
-  $: worldName = (world && world.name) || 'unnamed';
-  $: worldOwner = world && world.attributedTo;
-  $: muting = relationship && relationship.muted;
-  $: blocked = relationship && relationship.blocked;
+  const gotoDelay = 100
+
+  $: ourSparkId = ourSpark.id
+  $: joined = relationship && relationship.joined
+  $: requestedMembership = relationship && relationship.requestedMembership
+  $: worldId = world && world.id
+  $: worldName = (world && world.name) || 'unnamed'
+  $: worldOwner = world && world.attributedTo
+  $: muting = relationship && relationship.muted
+  $: blocked = relationship && relationship.blocked
   $: joinLabel = (() => {
     if (typeof joined === 'undefined' || !world) {
       return ''
@@ -32,16 +34,16 @@
     return (joined || requestedMembership)
             ? formatIntl('intl.leaveWorld', { world: worldName })
             : formatIntl('intl.joinWorld', { world: worldName })
-  })();
-  $: joinIcon = joined ? '#fa-sign-out' : requestedMembership ? '#fa-hourglass' : '#fa-sign-in';
+  })()
+  $: joinIcon = joined ? '#fa-sign-out' : requestedMembership ? '#fa-hourglass' : '#fa-sign-in'
   $: blockLabel = (
           blocked
                   ? formatIntl('intl.unblockWorld', { world: worldName })
                   : formatIntl('intl.blockWorld', { world: worldName })
   )
-  $: blockIcon = blocked ? '#fa-unlock' : '#fa-ban';
-  $: archiveLabel = formatIntl('intl.archiveWorld', { world: worldName });
-  $: isOwner = worldOwner === ourSparkId;
+  $: blockIcon = blocked ? '#fa-unlock' : '#fa-ban'
+  $: archiveLabel = formatIntl('intl.archiveWorld', { world: worldName })
+  $: isOwner = worldOwner === ourSparkId
   $: items = [
     isOwner && {
       key: 'edit',
@@ -68,50 +70,50 @@
       label: archiveLabel,
       icon: '#fa-archive'
     }
-  ].filter(Boolean);
+  ].filter(Boolean)
 
-  function onClick(event) {
+  function onClick (event) {
     switch (event.detail.key) {
       case 'join':
-        return onJoinClicked();
+        return onJoinClicked()
       case 'block':
-        return onBlockClicked();
+        return onBlockClicked()
       case 'archive':
-        return onArchiveClicked();
+        return onArchiveClicked()
       case 'copy':
-        return onCopyClicked();
+        return onCopyClicked()
       case 'edit':
-        return onEdit();
+        return onEdit()
     }
   }
 
-  async function onJoinClicked() {
-    close(id);
+  async function onJoinClicked () {
+    close(id)
     await updateMembership(worldId, !joined, ourSparkId, true)
   }
 
-  async function onBlockClicked() {
-    close(id);
+  async function onBlockClicked () {
+    close(id)
     await setWorldBlocked(worldId, !blocked, ourSparkId, true)
   }
 
   async function onArchiveClicked () {
-    close(id);
-    await doDeleteWorld(worldId, ourSparkId);
-    goto('/');
+    close(id)
+    await doDeleteWorld(worldId, ourSparkId)
+    goto('/')
   }
 
-  async function onCopyClicked() {
+  async function onCopyClicked () {
     const url = `${location.origin}${location.pathname}`
-    close(id);
+    close(id)
     await copyText(url)
   }
 
   function onEdit () {
-    close(id);
+    close(id)
     setTimeout(() => {
-      goto(`/worlds/${unwrap(worldId)}/edit`);
-    });
+      goto(`/worlds/${unwrap(worldId)}/edit`)
+    }, gotoDelay)
   }
 </script>
 

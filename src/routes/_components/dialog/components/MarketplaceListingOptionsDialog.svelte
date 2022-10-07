@@ -15,6 +15,8 @@
   export let relationship
   export let ourSpark
 
+  const gotoDelay = 100
+
   $: ourSparkId = ourSpark.id
   $: listingId = listing && listing.id
   $: listingName = (listing && listing.name) || 'unnamed'
@@ -65,7 +67,7 @@
     close(id)
     setTimeout(() => {
       goto(`/marketplace/${listingId}/edit`)
-    })
+    }, gotoDelay)
   }
 </script>
 
