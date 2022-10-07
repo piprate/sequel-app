@@ -104,7 +104,7 @@
   },
   "devDependencies": {
     "standard": "^16.0.3",
-    "svelte": "^3.49.0"
+    "svelte": "^3.50.1"
   },
   "standard": {
     "globals": [
