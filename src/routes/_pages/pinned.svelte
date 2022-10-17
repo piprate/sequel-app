@@ -20,7 +20,7 @@
   onMount(async () => {
     try {
       await updateUserForInstance($currentInstance);
-      posts = await getPinnedPosts($currentInstance, $accessToken, $currentSpark.id);
+      posts = await getPinnedPosts($currentInstance, $accessToken, $currentSpark.id, $currentSpark.id);
     } catch (e) {
       /* no await */ toast.say(formatIntl('intl.error', { error: (e.name || '') + ' ' + (e.message || '') }))
     } finally {

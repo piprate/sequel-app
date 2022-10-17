@@ -10,7 +10,7 @@ export async function updatePinnedPostsForSpark (sparkId, asSpark) {
   const _accessToken = get(accessToken)
 
   await cacheFirstUpdateAfter(
-    () => getPinnedPosts(_currentInstance, _accessToken, sparkId),
+    () => getPinnedPosts(_currentInstance, _accessToken, sparkId, asSpark),
     async () => {
       const _pinnedPosts = await database.getPinnedPosts(_currentInstance, sparkId, asSpark)
       if (!_pinnedPosts || !_pinnedPosts.every(Boolean)) {
