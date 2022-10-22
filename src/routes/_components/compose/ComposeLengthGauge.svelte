@@ -1,13 +1,13 @@
 <script>
   import LengthGauge from '../LengthGauge.svelte'
-  import { maxPostChars } from '../../_store/instance'
+  import { MAX_POST_LENGTH } from '../../_static/posts'
 
-  export let length;
-  export let overLimit;
+  export let length
+  export let overLimit
 </script>
 
 <LengthGauge style="grid-area: gauge; margin: 0 0 5px 5px;"
              {length}
              {overLimit}
-             max={$maxPostChars}
+             max={MAX_POST_LENGTH}
 />

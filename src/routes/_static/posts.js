@@ -43,5 +43,6 @@ export function commentPrivacyOptions (originalPostPrivacy) {
   }
 }
 
-export const LONG_POST_LENGTH = 1024
+export const MAX_POST_LENGTH = 2500
+export const LONG_POST_LENGTH = 1500
 export const LONG_POST_TEXT = 'intl.longPost'

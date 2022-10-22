@@ -49,14 +49,6 @@ export const accessToken = derived(
   $currentInstanceData => $currentInstanceData && $currentInstanceData.access_token
 )
 
-export const maxPostChars = derived(
-  currentInstanceInfo,
-  $currentInstanceInfo => (
-    // unofficial api used in glitch-soc and pleroma
-    ($currentInstanceInfo && $currentInstanceInfo.max_toot_chars) || 500
-  )
-)
-
 function deriveForInstance (computedKey, instanceStore, defaultValue) {
   return derived(
     [instanceStore, currentInstance],

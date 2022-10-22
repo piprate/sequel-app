@@ -10,8 +10,8 @@
   import ComposeFileDrop from './ComposeFileDrop.svelte'
   import ComposeAutosuggest from './ComposeAutosuggest.svelte'
   import { measureText } from '../../_utils/measureText'
-  import { POST_PRIVACY_OPTIONS } from '../../_static/posts'
-  import { currentComposeData, currentSparkId, maxPostChars } from '../../_store/instance'
+  import { MAX_POST_LENGTH, POST_PRIVACY_OPTIONS } from '../../_static/posts'
+  import { currentComposeData, currentSparkId } from '../../_store/instance'
   import { slide } from '../../_transitions/slide'
   import { publishingPost, publishPost, setReplyVisibility } from '../../_actions/compose'
   import { goto } from '@sapper/app'
@@ -64,7 +64,7 @@
   $: length = (
     textLength + (contentWarningShown ? contentWarningLength : 0)
   )
-  $: overLimit = length > $maxPostChars
+  $: overLimit = length > MAX_POST_LENGTH
   $: contentWarningShown = composeData.contentWarningShown
   $: contentWarning = composeData.contentWarning || ''
   $: sensitive = !!composeData.sensitive

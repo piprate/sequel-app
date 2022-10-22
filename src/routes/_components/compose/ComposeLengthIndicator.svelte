@@ -1,14 +1,14 @@
 <script>
   import LengthIndicator from '../LengthIndicator.svelte'
-  import { maxPostChars } from '../../_store/instance'
+  import { MAX_POST_LENGTH } from '../../_static/posts'
 
-  export let length;
-  export let overLimit;
+  export let length
+  export let overLimit
 </script>
 
 <LengthIndicator
         {length}
         {overLimit}
-        max={$maxPostChars}
+        max={MAX_POST_LENGTH}
         style="grid-area: length; justify-self: right; align-self: center;"
 />

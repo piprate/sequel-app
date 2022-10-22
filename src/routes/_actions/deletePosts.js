@@ -1,4 +1,3 @@
-import { getNotificationIdsForPosts } from './posts'
 import isEqual from 'lodash-es/isEqual'
 import { database } from '../_database/database'
 import { scheduleIdleTask } from '../_utils/scheduleIdleTask'
@@ -55,7 +54,7 @@ async function deletePostsAndNotifications (instanceName, postIdsToDelete, notif
 async function doDeletePost (instanceName, postId, asSpark) {
   console.log('deleting postId', postId)
   const postIdsToDelete = Array.from(new Set([postId].filter(Boolean)))
-  const notificationIdsToDelete = Array.from(new Set(await getNotificationIdsForPosts(instanceName, postIdsToDelete)))
+  const notificationIdsToDelete = Array.from(new Set(await database.getNotificationIdsForPosts(instanceName, postIdsToDelete)))
   await deletePostsAndNotifications(instanceName, postIdsToDelete, notificationIdsToDelete, asSpark)
 }
 
