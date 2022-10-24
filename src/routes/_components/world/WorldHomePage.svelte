@@ -5,6 +5,7 @@
   import { isUserLoggedIn, observedWorld, observedWorldRelationship } from '../../_store/local.js'
   import { currentSpark } from '../../_store/instance.js'
   import RestrictedPageWarning from '../RestrictedPageWarning.svelte'
+  import InfoAside from '../InfoAside.svelte'
   import ErrorMessage from '../ErrorMessage.svelte'
   import DynamicPageBanner from '../DynamicPageBanner.svelte'
   import { clearWorldProfileAndRelationship, updateWorldProfileAndRelationship } from '../../_actions/worlds'
@@ -48,6 +49,11 @@
                           ourSpark={$currentSpark}
                           {filter}
             />
+            {#if $observedWorld.postCount }
+                <InfoAside className="post-note">
+                    {intl.postInBubble}
+                </InfoAside>
+            {/if}
         </TimelinePage>
     {:else if notFound}
         <FreeTextLayout>
@@ -61,3 +67,12 @@
 {:else}
     <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
 {/if}
+
+<style>
+    :global(.post-note) {
+        margin: 20px;
+    }
+    :global(.post-note span) {
+        font-size: 0.9em;
+    }
+</style>

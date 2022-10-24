@@ -205,6 +205,7 @@ module.exports = {
   exploreSequelWorlds: 'Explore Sequel worlds',
   worldMembersNotLoggedIn: 'You need to be logged in to see world members.',
   worldBubblesNotLoggedIn: 'You need to be logged in to see the world\'s bubbles.',
+  postInBubble: 'This is a read-only timeline. You may add posts through one of this world\'s bubbles.',
   // sparks page
   yourSparksTitle: 'Your sparks',
   sparkBookmarksTitle: 'Bookmarks',
