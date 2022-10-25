@@ -173,7 +173,7 @@
                 </div>
             </div>
             <InfoAside className="notice-aside">
-                {selectedMembershipMode.description} {selectedObserverMode.description} {selectedWriterMode.description} {'intl.useButtonsAbove'}
+                {selectedMembershipMode.description} {selectedObserverMode.description} {selectedWriterMode.description} {selectedFederationMode.description} {'intl.useButtonsAbove'}
             </InfoAside>
             {#if template.federationMode === 'enabled' }
                 <label for="handle">{intl.bubbleHandleColon}</label>

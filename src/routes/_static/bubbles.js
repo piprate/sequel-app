@@ -65,11 +65,19 @@ export const BUBBLE_FEDERATION_MODE_OPTIONS = [
   {
     label: 'intl.fmDisabled',
     key: 'disabled',
-    icon: '#fa-ban'
+    icon: '#fa-ban',
+    description: 'intl.fmDisabledDesc'
   },
   {
     label: 'intl.fmEnabled',
     key: 'enabled',
-    icon: '#fediverse-logo'
+    icon: '#fediverse-logo',
+    description: 'intl.fmEnabledDesc'
+  },
+  {
+    label: 'intl.fmAlways',
+    key: 'continuous_mirror',
+    icon: '#fa-asterisk',
+    description: 'intl.fmAlwaysDesc'
   }
 ]

@@ -273,7 +273,11 @@ module.exports = {
   wmPublicCommentsDesc: 'Everyone can comment.',
   // bubble federation modes
   fmDisabled: 'Disabled',
+  fmDisabledDesc: 'Federation is disabled.',
   fmEnabled: 'Enabled',
+  fmEnabledDesc: 'Post can be federated.',
+  fmAlways: 'Always',
+  fmAlwaysDesc: 'Posts federated by default.',
   // world edit page
   newWorld: 'New world',
   editWorld: 'Edit world',
