@@ -18,7 +18,7 @@
   import { classname } from '../../_utils/classname'
   import { scheduleIdleTask } from '../../_utils/scheduleIdleTask'
   import { onMount } from 'svelte'
-  import { currentTimeline, observedBubbleRelationship } from '../../_store/local'
+  import { currentTimeline, observedBubble, observedBubbleRelationship } from '../../_store/local'
   import { unwrap } from '../../_utils/mapper'
 
   export let realm
@@ -54,11 +54,13 @@
   $: text = composeData.text || ''
   $: media = composeData.media || []
   $: inReplyToId = composeData.inReplyToId  // delete-and-redraft replies, using standard id
-  $: postPrivacy = POST_PRIVACY_OPTIONS.find(_ => _.key === postPrivacyKey)
-  $: defaultPostPrivacyKey = (
+  $: federationMode = $observedBubble.federationMode
+  $: defaultVisibility = (
     ($observedBubbleRelationship && $observedBubbleRelationship.defaultVisibility) || 'private'
   )
+  $: defaultPostPrivacyKey = federationMode === 'continuous_mirror' ? 'fediverse' : defaultVisibility
   $: postPrivacyKey = composeData.postPrivacy || defaultPostPrivacyKey
+  $: postPrivacy = POST_PRIVACY_OPTIONS.find(_ => _.key === postPrivacyKey)
   $: textLength = measureText(text)
   $: contentWarningLength = measureText(contentWarning)
   $: length = (

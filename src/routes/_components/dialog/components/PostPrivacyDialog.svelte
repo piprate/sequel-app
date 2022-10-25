@@ -1,41 +1,51 @@
 <script>
   import ModalDialog from './ModalDialog.svelte'
-  import { currentComposeData } from '../../../_store/instance';
-  import { commentPrivacyOptions, POST_PRIVACY_OPTIONS, POST_PRIVACY_OPTIONS_PRIVATE } from '../../../_static/posts'
+  import { currentComposeData } from '../../../_store/instance'
+  import {
+    commentPrivacyOptions,
+    POST_PRIVACY_OPTIONS,
+    postPrivacyOptions
+  } from '../../../_static/posts'
   import { setPostPrivacy } from '../../../_actions/postPrivacy'
   import GenericDialogList from './GenericDialogList.svelte'
   import { close } from '../helpers/closeDialog'
-  import { observedBubbleRelationship } from "../../../_store/local";
+  import { observedBubble, observedBubbleRelationship } from '../../../_store/local'
+  import { onMount } from 'svelte'
 
-  export let id;
-  export let label;
-  export let title;
-  export let realm;
+  export let id
+  export let label
+  export let title
+  export let realm
 
-  $: composeData = $currentComposeData[realm] || {};
+  $: composeData = $currentComposeData[realm] || {}
   $: isComment = !!composeData.inReplyToId
-  $: defaultVisibility = ($observedBubbleRelationship && $observedBubbleRelationship.defaultVisibility) || 'private';
-  $: originalPostPrivacyKey = composeData.originalPostPrivacy || defaultVisibility;
-  $: postPrivacyKey = composeData.postPrivacy || defaultVisibility;
-  $: postPrivacy = POST_PRIVACY_OPTIONS.find(_ => _.key === postPrivacyKey);
-  $: postPrivacyOptions = isComment ?
+  $: federationMode = $observedBubble.federationMode
+  $: defaultVisibility = ($observedBubbleRelationship && $observedBubbleRelationship.defaultVisibility) || 'private'
+  $: defaultPostPrivacy = federationMode === 'continuous_mirror' ? 'fediverse' : defaultVisibility
+  $: originalPostPrivacyKey = composeData.originalPostPrivacy || defaultPostPrivacy
+  $: postPrivacyKey = composeData.postPrivacy || defaultPostPrivacy
+  $: postPrivacy = POST_PRIVACY_OPTIONS.find(_ => _.key === postPrivacyKey)
+  $: postPrivacyOptionsList = isComment ?
           commentPrivacyOptions(originalPostPrivacyKey) :
-          defaultVisibility === 'private' ?
-                  POST_PRIVACY_OPTIONS_PRIVATE:
-                  POST_PRIVACY_OPTIONS;
+          postPrivacyOptions(defaultVisibility, federationMode)
   $: items = (() => {
-    return postPrivacyOptions.map(option => ({
+    return postPrivacyOptionsList.map(option => ({
       key: option.key,
       label: option.label,
       icon: option.icon,
       selected: postPrivacy.key === option.key
     }))
-  })();
+  })()
 
-  function onClick(event) {
-    setPostPrivacy(realm, event.detail.key);
-    close(id);
+  function onClick (event) {
+    setPostPrivacy(realm, event.detail.key)
+    close(id)
   }
+
+  onMount(() => {
+    console.log("defaultPostPrivacy = ", defaultPostPrivacy)
+    console.log("postPrivacyKey = ", postPrivacyKey)
+  })
 </script>
 
 <ModalDialog
