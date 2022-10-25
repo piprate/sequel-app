@@ -996,6 +996,8 @@ module.exports = {
   memberTypeReader: 'Reader',
   readOnly: 'Read Only',
   inviteOnly: 'Invite Only',
+  federationEnabled: 'Federated',
+  federationAlways: 'Federated+',
   featureNotImplemented: 'Feature not implemented. Please come back later.',
   bubbleNotFound: 'Bubble not found',
   sparkNotFound: 'Spark not found',

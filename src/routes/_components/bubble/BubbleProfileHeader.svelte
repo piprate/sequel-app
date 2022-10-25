@@ -31,6 +31,8 @@
   })()
   $: readOnlyLabel = bubble.writerMode === 'none' ? 'intl.readOnly' : ''
   $: inviteOnlyLabel = bubble.membershipMode === 'invite_only' ? 'intl.inviteOnly' : ''
+  $: federationLabel = bubble.federationMode === 'enabled' ? 'intl.federationEnabled' :
+          bubble.federationMode === 'continuous_mirror' ? 'intl.federationAlways' : ''
 
   async function onAvatarClick () {
     if (!bubble.avatar) {
@@ -96,6 +98,9 @@
     {/if}
     {#if inviteOnlyLabel}
       <span class="bubble-profile-relationship-span">{inviteOnlyLabel}</span>
+    {/if}
+    {#if federationLabel}
+      <span class="bubble-profile-relationship-span">{federationLabel}</span>
     {/if}
     {#if relationship.blocked}
       <span class="bubble-profile-relationship-span">{intl.blocked}</span>
