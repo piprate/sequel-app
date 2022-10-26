@@ -49,7 +49,7 @@
     'compose-box-fade-in',
     hidden && 'hidden'
   )
-  $: showSticky = realm === 'home' // FIXME
+  $: showSticky = realm !== 'dialog'
   $: composeData = $currentComposeData[realm] || {}
   $: text = composeData.text || ''
   $: media = composeData.media || []
@@ -92,7 +92,7 @@
   }
 
   function doPublishPostAfterDelay () {
-    const inReplyTo = inReplyToId || ((realm === 'home' || realm === 'dialog') ? null : realm)
+    const inReplyTo = inReplyToId
 
     if (overLimit || (!text && !media.length)) {
       return // do nothing if invalid

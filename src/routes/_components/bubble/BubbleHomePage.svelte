@@ -3,11 +3,10 @@
   import FreeTextLayout from '../FreeTextLayout.svelte'
   import LoadingPage from '../LoadingPage.svelte'
   import { isUserLoggedIn, observedBubble, observedBubbleRelationship } from '../../_store/local.js'
-  import { currentSpark, currentSparkId } from '../../_store/instance.js'
+  import { currentSpark } from '../../_store/instance.js'
   import RestrictedPageWarning from '../RestrictedPageWarning.svelte'
   import ErrorMessage from '../ErrorMessage.svelte'
   import DynamicPageBanner from '../DynamicPageBanner.svelte'
-  import LazyComposeBox from '../compose/LazyComposeBox.svelte'
   import { clearBubbleProfileAndRelationship, updateBubbleProfileAndRelationship } from '../../_actions/bubbles'
   import BubbleProfile from './BubbleProfile.svelte'
   import { formatIntl } from '../../_utils/formatIntl'
@@ -31,6 +30,7 @@
     }
     return false
   })()
+  $: showCompose = canPost && !hidePage
   $: canJoin = bubble && relationship && relationship.status !== 'active' && bubble.membershipMode !== 'invite_only'
   $: showReadWarning = canJoin && bubble.observerMode === 'members'
   $: showPostWarning = canJoin && !canPost && bubble.writerMode !== 'none'
@@ -65,15 +65,13 @@
         {#if !newBubble}
             <DynamicPageBanner title="" {ariaTitle} />
         {/if}
-        <TimelinePage {timeline} >
+        <TimelinePage {timeline} {bubbleId} {showCompose}>
             <BubbleProfile bubble={$observedBubble}
                           relationship={$observedBubbleRelationship}
                           ourSpark={$currentSpark}
                           {filter}
             />
-            {#if canPost }
-                <LazyComposeBox realm="home" {bubbleId} asSpark={$currentSparkId} hidden={hidePage}/>
-            {:else if showInvitation }
+            {#if showInvitation }
                 <InfoAside className="warning-aside">
                     {invitationMessage} <button type="button"
                                                               class="join-cta-button"
