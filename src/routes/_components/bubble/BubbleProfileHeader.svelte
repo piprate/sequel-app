@@ -122,7 +122,7 @@
   .bubble-profile-relationship-span {
     background: rgba(30, 30, 30, 0.2);
     border-radius: 4px;
-    padding: 3px 5px;
+    padding: 3px 8px 3px 0;
     white-space: nowrap;
   }
   .bubble-profile-avatar {

@@ -71,11 +71,11 @@
 
   .bubble-profile-grid {
     display: grid;
-    grid-template-areas: "avatar     name        label       relationship  membership"
-                         "avatar     username    username    username      membership"
-                         "avatar     properties  properties  properties    membership"
-                         "summary    summary     summary     summary       summary"
-                         "details    details     details     details       details";
+    grid-template-areas: "avatar     name         name         label         membership"
+                         "avatar     relationship relationship relationship  membership"
+                         "avatar     properties   properties   properties    membership"
+                         "summary    summary      summary      summary       summary"
+                         "details    details      details      details       details";
     grid-template-columns: min-content auto 1fr 1fr min-content;
     grid-column-gap: 10px;
     grid-row-gap: 5px;
@@ -106,7 +106,6 @@
       display: grid;
       grid-template-areas: "avatar      name          membership"
                            "avatar      label         membership"
-                           "avatar      username      membership"
                            "avatar      relationship  membership"
                            "summary     summary       summary"
                            "properties  properties    properties"
@@ -130,7 +129,6 @@
     .bubble-profile-grid {
       grid-template-areas: "avatar       name"
                            "avatar       label"
-                           "username     username"
                            "relationship relationship"
                            "membership   membership"
                            "summary      summary"
