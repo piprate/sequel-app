@@ -60,12 +60,18 @@
         return `Posts: #${timelineValue} hashtag`
       case 'post':
         return 'Posts: thread'
+      case 'bubble':
+        return 'Posts: bubble timeline'
       case 'spark':
         return 'Posts: spark timeline'
+      case 'world':
+        return 'Posts: world timeline'
       case 'list':
         return 'Posts: list'
       case 'notifications':
         return `Notifications on ${$currentInstance}`
+      default:
+        return 'unknown timeline type'
     }
   })()
   $: timelineType = $currentTimelineType
