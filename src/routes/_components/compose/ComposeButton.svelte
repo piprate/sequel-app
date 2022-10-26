@@ -31,7 +31,7 @@
 </div>
 <style>
   .compose-box-button-halo {
-    border-radius: 2px;
+    border-radius: 12px;
     margin: 5px 15px 15px 5px;
     pointer-events: auto;
   }
