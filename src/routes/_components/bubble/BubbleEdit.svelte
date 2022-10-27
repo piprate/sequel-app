@@ -175,12 +175,12 @@
             <InfoAside className="notice-aside">
                 {selectedMembershipMode.description} {selectedObserverMode.description} {selectedWriterMode.description} {selectedFederationMode.description} {'intl.useButtonsAbove'}
             </InfoAside>
-            {#if template.federationMode === 'enabled' }
-                <label for="handle">{intl.bubbleHandleColon}</label>
-                <input type="text" autocapitalize="none" spellcheck="false" id="handle"
-                       bind:value='{template.handle}' placeholder="{intl.enterBubbleHandle}"
-                >
-            {/if}
+            <!--{#if template.federationMode === 'enabled' }-->
+            <!--    <label for="handle">{intl.bubbleHandleColon}</label>-->
+            <!--    <input type="text" autocapitalize="none" spellcheck="false" id="handle"-->
+            <!--           bind:value='{template.handle}' placeholder="{intl.enterBubbleHandle}"-->
+            <!--    >-->
+            <!--{/if}-->
             <label for="world">{intl.bubbleWorldColon}</label>
             <div class="world-selector">
                 {#if worldName}
