@@ -71,8 +71,8 @@
 
   .bubble-profile-grid {
     display: grid;
-    grid-template-areas: "avatar     name         name         label         membership"
-                         "avatar     relationship relationship relationship  membership"
+    grid-template-areas: "avatar     name         name         relationship  membership"
+                         "avatar     attributes   attributes   attributes    membership"
                          "avatar     properties   properties   properties    membership"
                          "summary    summary      summary      summary       summary"
                          "details    details      details      details       details";
@@ -105,8 +105,8 @@
     .bubble-profile-grid {
       display: grid;
       grid-template-areas: "avatar      name          membership"
-                           "avatar      label         membership"
                            "avatar      relationship  membership"
+                           "avatar      attributes    membership"
                            "summary     summary       summary"
                            "properties  properties    properties"
                            "details     details       details";
@@ -130,6 +130,7 @@
       grid-template-areas: "avatar       name"
                            "avatar       label"
                            "relationship relationship"
+                           "attributes   attributes"
                            "membership   membership"
                            "summary      summary"
                            "properties   properties"

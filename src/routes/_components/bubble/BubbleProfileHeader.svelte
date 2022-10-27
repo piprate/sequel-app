@@ -88,26 +88,28 @@
 <div class="bubble-profile-relationship">
   {#if relationship }
     {#if relationship.managed && memberType !== 'owner' }
-      <span class="bubble-profile-relationship-span">{intl.managed}</span>
+      <span class="bubble-sticker">{intl.managed}</span>
     {/if}
     {#if memberTypeLabel}
-      <span class="bubble-profile-relationship-span">{memberTypeLabel}</span>
-    {/if}
-    {#if readOnlyLabel}
-      <span class="bubble-profile-relationship-span">{readOnlyLabel}</span>
-    {/if}
-    {#if inviteOnlyLabel}
-      <span class="bubble-profile-relationship-span">{inviteOnlyLabel}</span>
-    {/if}
-    {#if federationLabel}
-      <span class="bubble-profile-relationship-span">{federationLabel}</span>
+      <span class="bubble-sticker">{memberTypeLabel}</span>
     {/if}
     {#if relationship.blocked}
-      <span class="bubble-profile-relationship-span">{intl.blocked}</span>
+      <span class="bubble-sticker">{intl.blocked}</span>
     {/if}
     {#if relationship.muted}
-      <span class="bubble-profile-relationship-span">{intl.muted}</span>
+      <span class="bubble-sticker">{intl.muted}</span>
     {/if}
+  {/if}
+</div>
+<div class="bubble-attributes">
+  {#if readOnlyLabel}
+    <span class="bubble-sticker">{readOnlyLabel}</span>
+  {/if}
+  {#if inviteOnlyLabel}
+    <span class="bubble-sticker">{inviteOnlyLabel}</span>
+  {/if}
+  {#if federationLabel}
+    <span class="bubble-sticker">{federationLabel}</span>
   {/if}
 </div>
 <style>
@@ -115,14 +117,22 @@
     grid-area: relationship;
     align-self: center;
     text-transform: uppercase;
+    color: var(--body-text-color);
+    font-size: 0.8em;
+    white-space: nowrap;
+  }
+  .bubble-attributes {
+    grid-area: attributes;
+    align-self: center;
+    text-transform: uppercase;
     color: var(--deemphasized-text-color);
     font-size: 0.8em;
     white-space: nowrap;
   }
-  .bubble-profile-relationship-span {
+  .bubble-sticker {
     background: rgba(30, 30, 30, 0.2);
     border-radius: 4px;
-    padding: 3px 8px 3px 0;
+    padding: 3px 5px;
     white-space: nowrap;
   }
   .bubble-profile-avatar {
