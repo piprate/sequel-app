@@ -56,14 +56,14 @@
 >
   <SparkDisplayName {spark} />
 </a>
-{#if handle }
-<span class="compose-box-handle {loaded ? 'loaded' : 'not-loaded'}"
-      aria-busy={!loaded}
-      aria-live="off"
->
-  {handle}
-</span>
-{/if}
+<!--{#if handle }-->
+<!--<span class="compose-box-handle {loaded ? 'loaded' : 'not-loaded'}"-->
+<!--      aria-busy={!loaded}-->
+<!--      aria-live="off"-->
+<!--&gt;-->
+<!--  {handle}-->
+<!--</span>-->
+<!--{/if}-->
 <style>
   .compose-box-avatar {
     grid-area: avatar;
