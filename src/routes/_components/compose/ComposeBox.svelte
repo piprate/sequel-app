@@ -52,6 +52,7 @@
   $: showSticky = realm !== 'dialog'
   $: composeData = $currentComposeData[realm] || {}
   $: text = composeData.text || ''
+  $: textFormat = composeData.postInputFormat || 'txt'
   $: media = composeData.media || []
   $: inReplyToId = composeData.inReplyToId  // delete-and-redraft replies, using standard id
   $: federationMode = $observedBubble.federationMode
@@ -103,7 +104,7 @@
     }
 
     /* no await */
-    publishPost(realm, bubbleId, asSpark, text, composeData.originalPostId, inReplyTo, media, postPrivacyKey, inReplyToUuid)
+    publishPost(realm, bubbleId, asSpark, text, composeData.originalPostId, inReplyTo, media, postPrivacyKey, inReplyToUuid, textFormat)
 
     if (inReplyTo && ($currentTimeline !== `post/${unwrap(inReplyTo)}`)) {
       // we published a comment. Navigate to the comment's ancestor to display the conversation

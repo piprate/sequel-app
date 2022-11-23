@@ -61,7 +61,7 @@ export async function insertHandleForReply (postId) {
   }
 }
 
-export async function publishPost (realm, bubbleId, asSpark, text, originalPostId, inReplyToId, media, visibility, inReplyToUuid) {
+export async function publishPost (realm, bubbleId, asSpark, text, originalPostId, inReplyToId, media, visibility, inReplyToUuid, textFormat) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
 
@@ -81,7 +81,7 @@ export async function publishPost (realm, bubbleId, asSpark, text, originalPostI
 
   publishingPost.set(true)
   try {
-    const post = await sendPost(_currentInstance, _accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, mediaToSend, visibility)
+    const post = await sendPost(_currentInstance, _accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, mediaToSend, visibility, textFormat)
     if (originalPostId) {
       updateEditedPost(_currentInstance, post, asSpark)
     } else {

@@ -3,12 +3,14 @@
   import { currentInstance } from '../../_store/local'
   import { importShowEmojiDialog } from '../dialog/asyncDialogs/importShowEmojiDialog'
   import { importShowPostPrivacyDialog } from '../dialog/asyncDialogs/importShowPostPrivacyDialog'
+  import { importShowPostInputFormatDialog } from '../dialog/asyncDialogs/importShowPostInputFormatDialog'
   import { doMediaUpload, doTokenMediaUpload, uploadingMedia } from '../../_actions/media'
   import { toggleContentWarningShown } from '../../_actions/contentWarnings'
   import { mediaAccept } from '../../_static/media'
   import { updateCustomEmojiForInstance } from '../../_actions/emoji'
   import { formatIntl } from '../../_utils/formatIntl'
   import { importShowNFTSelectionDialog } from '../dialog/asyncDialogs/importShowNFTSelectionDialog'
+  import { currentComposeData } from '../../_store/instance'
 
   export let realm
   export let postPrivacy
@@ -22,6 +24,8 @@
   $: postPrivacyLabel = formatIntl('intl.postPrivacyLabel', { label: postPrivacy.label })
   $: uploadInProgress = $uploadingMedia === realm
   $: hasOriginalToken = !!(media.data && media.data.partOf)
+  $: composeData = $currentComposeData[realm] || {}
+  $: currentInputFormat = composeData.postInputFormat || "txt"
 
   async function onEmojiClick () {
     const [showEmojiDialog] = await Promise.all([
@@ -57,6 +61,11 @@
     showPostPrivacyDialog(realm)
   }
 
+  async function onPostInputFormatClick () {
+    const showPostInputFormatDialog = await importShowPostInputFormatDialog()
+    showPostInputFormatDialog(realm)
+  }
+
   function onContentWarningClick () {
     toggleContentWarningShown(realm)
   }
@@ -73,10 +82,10 @@
     <IconButton
             className="compose-toolbar-button"
             svgClassName={uploadInProgress ? 'spin' : ''}
-    label="{intl.addMedia}"
-    href={uploadInProgress ? '#fa-spinner' : '#fa-camera'}
-    on:click="{onMediaClick}"
-    disabled={$uploadingMedia || (media.length === 4)}
+            label="{intl.addMedia}"
+            href={uploadInProgress ? '#fa-spinner' : '#fa-camera'}
+            on:click="{onMediaClick}"
+            disabled={$uploadingMedia || (media.length === 4)}
     />
     {#if enableNFT}
       <IconButton
@@ -103,7 +112,16 @@
 <!--            pressable={true}-->
 <!--            pressed={contentWarningShown}-->
 <!--    />-->
+    <button 
+            class="compose-toolbar-button input-format" 
+            aria-label="{intl.postInputFormat}"
+            title="{intl.postInputFormat}"
+            on:click="{onPostInputFormatClick}"
+    >
+      {currentInputFormat}
+    </button>
   </div>
+  
   <input bind:this={input}
          on:change="{onFileChange}"
          style="display: none;"
@@ -111,6 +129,7 @@
          multiple
          accept={mediaAccept} >
 </div>
+
 <style>
   .compose-box-toolbar {
     grid-area: toolbar;
@@ -119,6 +138,13 @@
   .compose-box-toolbar-items {
     display: flex;
     align-items: center;
+  }
+  .compose-toolbar-button.input-format {
+    padding: 3px 6px;
+    font-size: 1em;
+    border-radius: 2px;
+    border: 1px solid var(--button-primary-border);
+    text-transform: uppercase;
   }
 
   @media (max-width: 320px) {
