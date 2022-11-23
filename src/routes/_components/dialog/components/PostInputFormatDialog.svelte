@@ -18,7 +18,8 @@
     $: items = POST_INPUT_FORMATS.map(option => ({
         key: option.key,
         label: option.label,
-        selected: postInputFormatKey === option.key
+        selected: postInputFormatKey === option.key,
+        icon: option.icon
     }))
 
     function onClick(event) {

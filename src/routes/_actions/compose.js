@@ -61,7 +61,7 @@ export async function insertHandleForReply (postId) {
   }
 }
 
-export async function publishPost (realm, bubbleId, asSpark, text, originalPostId, inReplyToId, media, visibility, inReplyToUuid, textFormat) {
+export async function publishPost (realm, bubbleId, asSpark, text, originalPostId, inReplyToId, media, visibility, inReplyToUuid, textFormatKey) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
 
@@ -81,7 +81,7 @@ export async function publishPost (realm, bubbleId, asSpark, text, originalPostI
 
   publishingPost.set(true)
   try {
-    const post = await sendPost(_currentInstance, _accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, mediaToSend, visibility, textFormat)
+    const post = await sendPost(_currentInstance, _accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, mediaToSend, visibility, textFormatKey)
     if (originalPostId) {
       updateEditedPost(_currentInstance, post, asSpark)
     } else {
@@ -89,6 +89,7 @@ export async function publishPost (realm, bubbleId, asSpark, text, originalPostI
       addPostOrNotification(_currentInstance, insertionTimeline, post, asSpark)
     }
     clearComposeData(realm)
+    setComposeData(realm, { postInputFormat: textFormatKey })
     emit('publishedPost', realm, inReplyToUuid)
     scheduleIdleTask(() => {
       media.forEach(mediaItem => database.deleteCachedMediaFile(mediaItem.data.id)) // clean up media cache
