@@ -3,6 +3,7 @@
   import { currentInstance } from '../../_store/local'
   import { importShowEmojiDialog } from '../dialog/asyncDialogs/importShowEmojiDialog'
   import { importShowPostPrivacyDialog } from '../dialog/asyncDialogs/importShowPostPrivacyDialog'
+  import { importShowPostInputFormatDialog } from '../dialog/asyncDialogs/importShowPostInputFormatDialog'
   import { doMediaUpload, doTokenMediaUpload, uploadingMedia } from '../../_actions/media'
   import { toggleContentWarningShown } from '../../_actions/contentWarnings'
   import { mediaAccept } from '../../_static/media'
@@ -15,6 +16,7 @@
   export let media
   export let contentWarningShown
   export let enableNFT = false
+  export let textFormat
   contentWarningShown = false
 
   let input
@@ -57,6 +59,11 @@
     showPostPrivacyDialog(realm)
   }
 
+  async function onPostInputFormatClick () {
+    const showPostInputFormatDialog = await importShowPostInputFormatDialog()
+    showPostInputFormatDialog(realm)
+  }
+
   function onContentWarningClick () {
     toggleContentWarningShown(realm)
   }
@@ -73,10 +80,10 @@
     <IconButton
             className="compose-toolbar-button"
             svgClassName={uploadInProgress ? 'spin' : ''}
-    label="{intl.addMedia}"
-    href={uploadInProgress ? '#fa-spinner' : '#fa-camera'}
-    on:click="{onMediaClick}"
-    disabled={$uploadingMedia || (media.length === 4)}
+            label="{intl.addMedia}"
+            href={uploadInProgress ? '#fa-spinner' : '#fa-camera'}
+            on:click="{onMediaClick}"
+            disabled={$uploadingMedia || (media.length === 4)}
     />
     {#if enableNFT}
       <IconButton
@@ -103,7 +110,14 @@
 <!--            pressable={true}-->
 <!--            pressed={contentWarningShown}-->
 <!--    />-->
+    <IconButton
+            className="compose-toolbar-button"
+            label="{intl.postInputFormat}"
+            href={textFormat.icon}
+            on:click="{onPostInputFormatClick}"
+    />
   </div>
+  
   <input bind:this={input}
          on:change="{onFileChange}"
          style="display: none;"
@@ -111,6 +125,7 @@
          multiple
          accept={mediaAccept} >
 </div>
+
 <style>
   .compose-box-toolbar {
     grid-area: toolbar;
@@ -120,7 +135,7 @@
     display: flex;
     align-items: center;
   }
-
+  
   @media (max-width: 320px) {
     :global(button.icon-button.compose-toolbar-button) {
       padding-left: 5px;

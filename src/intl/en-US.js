@@ -989,6 +989,7 @@ module.exports = {
   selectPlanFromList: 'Select subscription plan',
   planList: 'Subscription plans',
   subscribeLater: `I'll subscribe later`,
+  postInputFormat: 'Select Input Format',
   // Bubble member types
   memberTypeOwner: 'Owner',
   memberTypeModerator: 'Moderator',

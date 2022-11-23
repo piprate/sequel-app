@@ -10,7 +10,7 @@
   import ComposeFileDrop from './ComposeFileDrop.svelte'
   import ComposeAutosuggest from './ComposeAutosuggest.svelte'
   import { measureText } from '../../_utils/measureText'
-  import { MAX_POST_LENGTH, POST_PRIVACY_OPTIONS } from '../../_static/posts'
+  import { MAX_POST_LENGTH, POST_INPUT_FORMATS, POST_PRIVACY_OPTIONS } from '../../_static/posts'
   import { currentComposeData, currentSparkId } from '../../_store/instance'
   import { slide } from '../../_transitions/slide'
   import { publishingPost, publishPost, setReplyVisibility } from '../../_actions/compose'
@@ -52,6 +52,8 @@
   $: showSticky = realm !== 'dialog'
   $: composeData = $currentComposeData[realm] || {}
   $: text = composeData.text || ''
+  $: textFormatKey = composeData.postInputFormat || 'txt'
+  $: textFormat = POST_INPUT_FORMATS.find(_ => _.key === textFormatKey)
   $: media = composeData.media || []
   $: inReplyToId = composeData.inReplyToId  // delete-and-redraft replies, using standard id
   $: federationMode = $observedBubble.federationMode
@@ -103,7 +105,7 @@
     }
 
     /* no await */
-    publishPost(realm, bubbleId, asSpark, text, composeData.originalPostId, inReplyTo, media, postPrivacyKey, inReplyToUuid)
+    publishPost(realm, bubbleId, asSpark, text, composeData.originalPostId, inReplyTo, media, postPrivacyKey, inReplyToUuid, textFormatKey)
 
     if (inReplyTo && ($currentTimeline !== `post/${unwrap(inReplyTo)}`)) {
       // we published a comment. Navigate to the comment's ancestor to display the conversation
@@ -145,7 +147,7 @@
     <ComposeInput {realm} {text} {autoFocus} on:publishAction="{doPublishPost}" />
     <ComposeLengthGauge {length} {overLimit} />
     <ComposeAutosuggest {realm} {dialogId} />
-    <ComposeToolbar {realm} {postPrivacy} {media} {contentWarningShown} enableNFT=true />
+    <ComposeToolbar {realm} {postPrivacy} {media} {contentWarningShown} enableNFT=true {textFormat} />
     <ComposeLengthIndicator {length} {overLimit} />
     <ComposeMedia {realm} {media} />
 <!--    <ComposeMediaSensitive {realm} {media} {sensitive} {contentWarning} {contentWarningShown} />-->
