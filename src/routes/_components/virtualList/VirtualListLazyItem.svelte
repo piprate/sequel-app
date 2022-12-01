@@ -4,6 +4,7 @@
   import { scheduleIdleTask } from '../../_utils/scheduleIdleTask'
   import { createPriorityQueue } from '../../_utils/createPriorityQueue'
   import { isMobile } from '../../_utils/userAgent/isMobile'
+  import { on } from '../../_utils/eventBus'
   import { reduceMotion } from '../../_store/local'
   import { onMount } from "svelte";
 
@@ -24,7 +25,7 @@
 
   let props = undefined;
 
-  onMount(() => {
+  function refetch() {
     if (makeProps) {
       // TODO: I would use async/await here, but Firefox 68 for Android has a bug where
       // these don't resolve in the proper order unless I use promises
@@ -47,6 +48,11 @@
         }
       })
     }
+  }
+
+  onMount(() => {
+    refetch();
+    return on('postUpdated', refetch);
   });
 </script>
 
