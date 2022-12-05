@@ -37,7 +37,7 @@ import { displayError } from './errors'
 
 const byId = _ => _.id
 
-async function storeFreshTimelineItemsInDatabase (instanceName, timelineName, items, asSpark) {
+export async function storeFreshTimelineItemsInDatabase (instanceName, timelineName, items, asSpark) {
   await database.insertTimelineItems(instanceName, timelineName, items, asSpark)
   if (timelineName.startsWith('post/')) {
     // For post threads, we want to be sure to update the favorite/reblog counts even if
