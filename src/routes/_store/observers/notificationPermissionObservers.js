@@ -1,9 +1,10 @@
+import { inNode } from '../../_utils/browserOrNode'
 import { transientStore } from '../base'
 
 export let notificationPermission
 
 export function notificationPermissionObservers () {
-  if (!process.browser || !navigator.permissions || !navigator.permissions.query) {
+  if (inNode() || !navigator.permissions || !navigator.permissions.query) {
     return
   }
 

@@ -37,7 +37,7 @@
       {#if notificationType !== 'comment'}
       <a id={elementId}
          href="/sparks/{unwrap(authorId)}"
-         sapper:prefetch
+         data-sveltekit-preload-data
          class="post-header-author"
       >
         <SparkDisplayName spark={author} />
@@ -47,7 +47,7 @@
       {#if notificationType === 'join_bubble' || notificationType === 'leave_bubble' }
         <a id={elementSubjectId}
            href="/bubbles/{unwrap(notification.subjectBubble.id)}"
-           sapper:prefetch
+           data-sveltekit-preload-data
            class="post-header-author"
         >
           <BubbleDisplayName bubble={notification.subjectBubble} />
@@ -57,7 +57,7 @@
       {#if notificationType === 'mod_offer'}
         <a id={elementSubjectId}
            href="/marketplace/{notification.subjectListing.id}"
-           sapper:prefetch
+           data-sveltekit-preload-data
            class="post-header-author"
         >
           <EntityDisplayName entity={notification.subjectListing.object} />

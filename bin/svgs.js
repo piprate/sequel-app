@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   { id: 'sequel-logo', src: 'src/static/sequel.svg', inline: true },
   { id: 'fediverse-logo', src: 'src/static/fediverse.svg', inline: true },
   { id: 'nft-diamond', src: 'src/static/nft.svg', inline: true },

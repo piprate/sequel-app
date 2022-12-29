@@ -1,12 +1,13 @@
 import LoadingMask from '../_components/LoadingMask.svelte'
+import { inBrowser } from './browserOrNode'
 
 let loadingMask
 
-if (process.browser) {
+if (inBrowser()) {
   loadingMask = new LoadingMask({
     target: document.querySelector('#loading-mask')
   })
-  if (process.env.NODE_ENV !== 'production') {
+  if (!import.meta.env.PROD) {
     window.loadingMask = loadingMask // for debugging
   }
 } else {

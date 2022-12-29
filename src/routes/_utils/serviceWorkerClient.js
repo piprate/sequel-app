@@ -15,14 +15,14 @@ function onUpdateFound (registration) {
     if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
       snackbar.announce('intl.updateAvailable', 'intl.reload', async () => {
         await skipWaiting()
-        document.location.reload(true)
+        document.location.reload()
       })
     }
   })
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js').then(registration => {
+  navigator.serviceWorker.register('/service-worker.js', { type: 'module' }).then(registration => {
     registration.addEventListener('updatefound', () => onUpdateFound(registration))
   })
 }

@@ -1,9 +1,10 @@
 import { safeLocalStorage as LS } from '../_utils/safeLocalStorage'
 import { safeParse } from '../_utils/safeParse'
 import { writable } from 'svelte/store'
+import { inBrowser } from '../_utils/browserOrNode'
 
 export function persistentStore (key, initialValue) {
-  if (process.browser) {
+  if (inBrowser()) {
     const val = LS.getItem(`store_${key}`)
     if (val) {
       initialValue = safeParse(val)
@@ -31,7 +32,7 @@ export function persistentStore (key, initialValue) {
       return state[k]
     },
     set: (val) => {
-      if (process.browser) {
+      if (inBrowser()) {
         LS.setItem(`store_${key}`, JSON.stringify(val))
       }
       set(val)
@@ -41,7 +42,7 @@ export function persistentStore (key, initialValue) {
       update((state) => {
         state[k] = val
 
-        if (process.browser) {
+        if (inBrowser()) {
           LS.setItem(`store_${key}`, JSON.stringify(state))
         }
 
@@ -49,7 +50,7 @@ export function persistentStore (key, initialValue) {
       })
     },
     update: (val) => {
-      if (process.browser) {
+      if (inBrowser()) {
         LS.setItem(`store_${key}`, JSON.stringify(val))
       }
       return update(val)

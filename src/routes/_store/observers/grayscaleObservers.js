@@ -1,9 +1,10 @@
+import { inBrowser, inNode } from '../../_utils/browserOrNode'
 import { switchToTheme } from '../../_utils/themeEngine'
 
-const style = process.browser && document.getElementById('theGrayscaleStyle')
+const style = inBrowser() && document.getElementById('theGrayscaleStyle')
 
 export function grayscaleObservers (enableGrayscale, instanceThemes, currentInstance) {
-  if (!process.browser) {
+  if (inNode()) {
     return
   }
 

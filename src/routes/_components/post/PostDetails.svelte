@@ -77,7 +77,7 @@
     {/if}
   {/if}
   <a class="post-tmms post-tmms"
-     sapper:prefetch
+     data-sveltekit-preload-data
      href="/posts/{unwrap(postId)}/tmm"
      aria-label={tmmsLabel}>
     <SvgIcon className="post-tmms-svg" href="#fa-fire" />

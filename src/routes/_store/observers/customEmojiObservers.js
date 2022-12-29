@@ -3,9 +3,10 @@ import { currentCustomEmoji } from '../instance'
 import * as emojiDatabase from '../../_utils/emojiDatabase'
 import { convertCustomEmojiToEmojiPickerFormat } from '../../_utils/convertCustomEmojiToEmojiPickerFormat'
 import { get } from 'svelte/store'
+import { inNode } from '../../_utils/browserOrNode'
 
 export function customEmojiObservers () {
-  if (!process.browser) {
+  if (inNode()) {
     return
   }
 

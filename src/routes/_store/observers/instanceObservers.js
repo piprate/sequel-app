@@ -10,6 +10,7 @@ import { get } from 'svelte/store'
 import { updateSubRequestCountIfLockedUser } from '../../_actions/subscriptionRequests'
 import { setupFiltersForInstance } from '../../_actions/filters'
 import { currentInstance, currentInstanceStream, loggedInInstances } from '../local'
+import { inNode } from '../../_utils/browserOrNode'
 
 async function refreshInstanceDataAndStream (instanceName, accessToken) {
   mark(`refreshInstanceDataAndStream-${instanceName}`)
@@ -38,7 +39,7 @@ async function doRefreshInstanceDataAndStream (instanceName, accessToken) {
 async function refreshInstanceData (instanceName, accessToken) {
   const criticalPromises = [updateInstanceInfo(instanceName)]
 
-// these are all low-priority
+  // these are all low-priority
   scheduleIdleTask(() => setupCustomEmojiForInstance(instanceName))
   scheduleIdleTask(() => setupListsForInstance(instanceName))
   scheduleIdleTask(() => setupFiltersForInstance(instanceName))
@@ -63,7 +64,7 @@ function stream (instanceName) {
 
     currentInstanceStream.set(_currentInstanceStream)
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (!import.meta.env.PROD) {
       window.currentTimelineStream = _currentInstanceStream
     }
   } else {
@@ -73,7 +74,7 @@ function stream (instanceName) {
 
 export function instanceObservers () {
   currentInstance.subscribe(_currentInstance => {
-    if (!process.browser) {
+    if (inNode()) {
       return
     }
 
@@ -82,7 +83,7 @@ export function instanceObservers () {
     if (_currentInstanceStream) {
       _currentInstanceStream.close()
       currentInstanceStream.set(null)
-      if (process.env.NODE_ENV !== 'production') {
+      if (!import.meta.env.PROD) {
         window.currentInstanceStream = null
       }
     }

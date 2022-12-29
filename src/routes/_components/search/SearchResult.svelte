@@ -4,7 +4,7 @@
 
 <li class="search-result">
   {#if href}
-    <a {href} class="search-result-anchor" sapper:prefetch>
+    <a {href} class="search-result-anchor" data-sveltekit-preload-data>
       <slot></slot>
     </a>
   {:else}

@@ -1,4 +1,4 @@
-import emojiRegex from 'emoji-regex/es2015/text'
-import { thunk } from './thunk'
+import emojiRegex from 'emoji-regex';
+import { thunk } from './thunk';
 
-export const getEmojiRegex = thunk(emojiRegex)
+export const getEmojiRegex = thunk(emojiRegex);

@@ -1,6 +1,6 @@
 <script>
   import InfoAside from '../InfoAside.svelte'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { importShowBuyTokenDialog } from '../dialog/asyncDialogs/importShowBuyTokenDialog'
   import { isAuthenticated } from '../../_store/local'
 

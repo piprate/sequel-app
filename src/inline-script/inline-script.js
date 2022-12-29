@@ -10,7 +10,7 @@ import { storeLite } from '../routes/_store/storeLite'
 import { isIOSPre12Point2 } from '../routes/_utils/userAgent/isIOSPre12Point2'
 import { isMac } from '../routes/_utils/userAgent/isMac'
 
-window.__themeColors = process.env.THEME_COLORS
+window.__themeColors = import.meta.env?.THEME_COLORS
 
 const {
   currentInstance,

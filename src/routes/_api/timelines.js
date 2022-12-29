@@ -11,10 +11,10 @@ export async function getTimeline (instanceName, accessToken, asSpark, timeline,
   const params = {}
 
   if (timeline.startsWith('tag/')) {
-    let parts = timeline.split('/')
+    const parts = timeline.split('/')
     url += `${parts[0]}/${encodeURIComponent(parts[1])}/timeline`
   } else if (timeline.startsWith('spark/') || timeline.startsWith('world/') || timeline.startsWith('bubble/')) {
-    let parts = timeline.split('/')
+    const parts = timeline.split('/')
     url += `${parts[0]}/${parts[1]}/timeline`
     if (timeline.endsWith('media')) {
       params.only_media = true

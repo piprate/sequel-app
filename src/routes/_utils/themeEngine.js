@@ -1,5 +1,7 @@
-const prefersDarkTheme = process.browser && matchMedia('(prefers-color-scheme: dark)').matches
-const meta = process.browser && document.getElementById('theThemeColor')
+import { inBrowser } from "./browserOrNode"
+
+const prefersDarkTheme = inBrowser() && matchMedia('(prefers-color-scheme: dark)').matches
+const meta = inBrowser() && document.getElementById('theThemeColor')
 
 export const INLINE_THEME = 'default' // theme that does not require external CSS
 export const DEFAULT_LIGHT_THEME = 'sequel-light' // theme that is shown by default

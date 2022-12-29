@@ -48,7 +48,7 @@
       //this.onClick = this.onClick.bind(this)
       node.addEventListener('click', onClick)
     }
-    if (process.env.NODE_ENV !== 'production') {
+    if (!import.meta.env.PROD) {
       if (pressable && ((!pressedLabel || !label) || pressedLabel === label)) {
         throw new Error('pressable buttons should have a label and a pressedLabel different from each other')
       }

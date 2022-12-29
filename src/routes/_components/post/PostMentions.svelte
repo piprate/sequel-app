@@ -17,7 +17,7 @@
         {/if}
         <a id="post-mention-link-{uuid}-{mention.id}"
            href="/sparks/{mention.id}"
-           sapper:prefetch
+           data-sveltekit-preload-data
            title="@{mention.acct}"
         >
           @{mention.username}

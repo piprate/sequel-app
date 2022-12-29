@@ -22,7 +22,7 @@
          aria-current={tab.name === currentTabName}
          class="focus-fix"
          href={tab.href}
-         sapper:prefetch>
+         data-sveltekit-preload-data>
         {tab.label}
       </a>
     </li>

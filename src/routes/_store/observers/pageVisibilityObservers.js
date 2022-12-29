@@ -1,5 +1,7 @@
+import { inNode } from "../../_utils/browserOrNode"
+
 export function pageVisibilityObservers (pageVisibilityHidden) {
-  if (!process.browser) {
+  if (inNode()) {
     return
   }
 

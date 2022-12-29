@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . /app
 
 # Install Sequel App
-RUN npm --production install && \
+RUN npm install && \
     npm run build && \
     npm cache clean --force && \
     rm -rf ./src ./docs ./tests ./bin
@@ -15,6 +15,4 @@ RUN npm --production install && \
 # Expose port 3005
 EXPOSE 3005
 
-# Setting run-command, using explicit `node` command
-# rather than `yarn` or `npm` to use less memory
-CMD PORT=3005 node server.js
+CMD PORT=3005 node dist/index.js

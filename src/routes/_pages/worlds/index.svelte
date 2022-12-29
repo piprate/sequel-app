@@ -29,7 +29,7 @@
             <span slot="is-empty">
                 {#if $currentSpark }
                     <div class="new-world-button">
-                        <a class="button primary" sapper:prefetch href="/worlds/new">{intl.createNewWorld}</a>
+                        <a class="button primary" data-sveltekit-preload-data href="/worlds/new">{intl.createNewWorld}</a>
                     </div>
                    <InfoAside className="new-entity-notice-aside">
                         {intl.worldCreationNotice}

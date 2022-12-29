@@ -3,7 +3,7 @@ import { DEFAULT_TIMEOUT, get, paramsString } from '../_utils/ajax'
 import { populateMediaURLsInMarketplaceListings } from './media'
 
 export async function getMarketplaceReleases (instanceName, accessToken, asSpark, limit = 50) {
-  let url = `${base(instanceName, accessToken)}/marketplace-releases`
+  const url = `${base(instanceName, accessToken)}/marketplace-releases`
   return await get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT })
 }
 
@@ -13,7 +13,7 @@ export async function getMarketplaceRelease (instanceName, accessToken, id, asSp
 }
 
 export async function getReleaseListings (instanceName, accessToken, id, asSpark, limit = 50) {
-  let url = `${base(instanceName, accessToken)}/marketplace-release/${id}/listings`
+  const url = `${base(instanceName, accessToken)}/marketplace-release/${id}/listings`
   return await populateMediaURLsInMarketplaceListings(
     get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }), instanceName
   )

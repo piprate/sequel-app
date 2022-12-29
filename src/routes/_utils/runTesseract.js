@@ -14,7 +14,7 @@ const steps = [
   { status: 'recognizing text', proportion: 0.55 }
 ]
 
-if (process.env.NODE_ENV !== 'production') {
+if (!import.meta.env.PROD) {
   if (steps.map(_ => _.proportion).reduce((a, b) => a + b, 0) !== 1) {
     console.error('Steps do not add up to 1! You should probably fix this.')
   }

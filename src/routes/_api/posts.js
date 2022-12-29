@@ -34,7 +34,7 @@ export async function sendPost (instanceName, accessToken, bubbleId, asSpark, te
     }
   }
 
-  return method(url, body, sequelAuth(accessToken, asSpark), { timeout: WRITE_TIMEOUT }).then( (post) => {
+  return method(url, body, sequelAuth(accessToken, asSpark), { timeout: WRITE_TIMEOUT }).then((post) => {
     populatePostMediaURLs(post, instanceName, accessToken)
     return post
   })
@@ -42,7 +42,7 @@ export async function sendPost (instanceName, accessToken, bubbleId, asSpark, te
 
 export async function getPostContext (instanceName, accessToken, postId) {
   const url = `${base(instanceName, accessToken)}/post/${postId}/context`
-  return get(url, auth(accessToken), { timeout: DEFAULT_TIMEOUT }).then( (ctx) => {
+  return get(url, auth(accessToken), { timeout: DEFAULT_TIMEOUT }).then((ctx) => {
     for (const post of ctx.ancestors) {
       populatePostMediaURLs(post, instanceName, accessToken)
     }
@@ -55,7 +55,7 @@ export async function getPostContext (instanceName, accessToken, postId) {
 
 export async function getPost (instanceName, accessToken, postId, asSpark) {
   const url = `${base(instanceName, accessToken)}/post/${postId}`
-  return get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }).then( (post) => {
+  return get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }).then((post) => {
     populatePostMediaURLs(post, instanceName, accessToken)
     return post
   })

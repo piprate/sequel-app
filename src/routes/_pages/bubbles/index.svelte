@@ -27,13 +27,13 @@
         <BubbleBrowserFilter filter="my_stuff" />
         <BubblesListPage bubblesFetcher={myBubblesFetcher} >
              <span slot="is-empty">
-                <a class="button primary new-entity-button" sapper:prefetch href="/bubbles/new">{intl.createNewBubble}</a>
+                <a class="button primary new-entity-button" data-sveltekit-preload-data href="/bubbles/new">{intl.createNewBubble}</a>
                 <InfoAside className="new-entity-notice-aside">
                     {intl.firstBubbleNotice}
                 </InfoAside>
               </span>
             <span slot="footer">
-                <a class="button primary new-entity-button" sapper:prefetch href="/bubbles/new">{intl.createNewBubble}</a>
+                <a class="button primary new-entity-button" data-sveltekit-preload-data href="/bubbles/new">{intl.createNewBubble}</a>
               </span>
         </BubblesListPage>
     {:else}

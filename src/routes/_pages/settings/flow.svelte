@@ -19,7 +19,7 @@
     getRoyaltyVaultTypes,
     setupRoyaltyReceiver
   } from '../../_actions/flow'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { toast } from '../../_components/toast/toast'
 
   // suppress warnings

@@ -17,13 +17,14 @@
   import { reportPostOrSpark } from '../../../_actions/report'
   import { formatIntl } from '../../../_utils/formatIntl'
   import { unwrap } from '../../../_utils/mapper'
+  import { inBrowser } from '../../../_utils/browserOrNode';
 
   export let id
   export let label
   export let title
   export let post
 
-  const supportsWebShare = process.browser && typeof navigator.share === 'function'
+  const supportsWebShare = inBrowser() && typeof navigator.share === 'function'
 
   $: relationship = $observedRelationship
   $: author = $observedSpark

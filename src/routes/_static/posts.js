@@ -26,21 +26,21 @@ export const POST_PRIVACY_OPTIONS = [
 ]
 
 export const POST_INPUT_FORMATS = [
-  { 
-    key: 'txt', 
+  {
+    key: 'txt',
     label: 'Plain Text',
     icon: '#fa-text'
   },
-  { 
-    key: 'md', 
+  {
+    key: 'md',
     label: 'Markdown',
     icon: '#fa-markdown'
   },
-  { 
-    key: 'gmi', 
+  {
+    key: 'gmi',
     label: 'GemText',
     icon: '#fa-gemtext'
-  },
+  }
 ]
 
 export const POST_PRIVACY_OPTIONS_PRIVATE = [

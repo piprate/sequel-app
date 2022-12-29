@@ -3,8 +3,9 @@
   import { throttleTimer } from '../_utils/throttleTimer'
   import { formatIntl } from '../_utils/formatIntl'
   import {onMount} from "svelte";
+  import { inBrowser } from '../_utils/browserOrNode';
 
-  const updateDisplayedLength = process.browser && throttleTimer(requestAnimationFrame)
+  const updateDisplayedLength = inBrowser() && throttleTimer(requestAnimationFrame)
 
   export let length;
   export let overLimit;

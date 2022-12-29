@@ -1,6 +1,6 @@
 import { currentPage } from '../_store/navigation'
 import { focusSearchInput } from '../_store/local'
-import { goto } from '@sapper/app'
+import { goto } from '$app/navigation'
 import { emit } from '../_utils/eventBus'
 
 // Go to the search page, and also focus the search input. For accessibility

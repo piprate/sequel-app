@@ -1,5 +1,5 @@
 import { getInstanceInfo } from '../_api/instance'
-import { goto } from '@sapper/app'
+import { goto } from '$app/navigation'
 import { DEFAULT_THEME, switchToTheme } from '../_utils/themeEngine'
 import {
   currentInstance,

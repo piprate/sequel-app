@@ -11,7 +11,7 @@
     <div class="avatar">
         <a id="link-avatar-{roleLabel}"
            href="/sparks/{unwrap(spark.id)}"
-           sapper:prefetch
+           data-sveltekit-preload-data
         >
             <Avatar entity={spark} size="small" isLink=true />
         </a>
@@ -19,7 +19,7 @@
     <span class="role-label">{roleLabel}</span>
     <a id="link-name-{roleLabel}"
        href="/sparks/{unwrap(spark.id)}"
-       sapper:prefetch
+       data-sveltekit-preload-data
        class="spark-link"
     >
         <EntityDisplayName entity={spark} />

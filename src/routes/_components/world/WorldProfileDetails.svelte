@@ -42,7 +42,7 @@
   <a class="world-profile-details-item"
      href='/worlds/{worldId}/members'
      aria-label={membersLabel}
-     sapper:prefetch
+     data-sveltekit-preload-data
   >
     <span class="world-profile-details-item-title">
       {intl.members}
@@ -54,7 +54,7 @@
   <a class="world-profile-details-item"
      href='/worlds/{worldId}/bubbles'
      aria-label={bubblesLabel}
-     sapper:prefetch
+     data-sveltekit-preload-data
   >
     <span class="world-profile-details-item-title">
       {intl.bubbles}

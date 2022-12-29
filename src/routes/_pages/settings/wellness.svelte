@@ -90,7 +90,7 @@
 
   <InfoAside className="wellness-aside">
     {intl.filterNotificationsPre}
-    <a sapper:prefetch href="/settings/instances{$currentInstance ? '/' + $currentInstance : ''}">{intl.filterNotificationsText}</a>.
+    <a data-sveltekit-preload-data href="/settings/instances{$currentInstance ? '/' + $currentInstance : ''}">{intl.filterNotificationsText}</a>.
     {intl.filterNotificationsPost}
   </InfoAside>
 

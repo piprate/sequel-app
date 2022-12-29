@@ -2,9 +2,10 @@ import { currentInstance, flowLoggedInAccount, isUserLoggedIn } from '../local'
 import { get } from 'svelte/store'
 import * as fcl from '@onflow/fcl'
 import { configureFlow } from '../../_actions/flow'
+import { inNode } from '../../_utils/browserOrNode'
 
 export async function flowObservers () {
-  if (!process.browser) {
+  if (inNode()) {
     return
   }
 

@@ -3,12 +3,13 @@
   import { PAGE_HISTORY_SIZE } from '../_static/pages'
   import { QuickLRU } from '../_thirdparty/quick-lru/quick-lru'
   import { tryToFocusElement } from '../_utils/tryToFocusElement'
+  import { inBrowser } from '../_utils/browserOrNode'
 
   export let realm;
 
   const cache = new QuickLRU({ maxSize: PAGE_HISTORY_SIZE })
 
-  if (process.browser) {
+  if (inBrowser()) {
     window.__focusRestorationCache = cache
   }
 
@@ -33,13 +34,13 @@
 
   function setupPushState () {
     setInCache({ ignoreBlurEvents: false })
-    if (process.browser) {
+    if (inBrowser()) {
       window.addEventListener('pushState', onPushState)
     }
   }
 
   function teardownPushState () {
-    if (process.browser) {
+    if (inBrowser()) {
       window.removeEventListener('pushState', onPushState);
     }
   }
@@ -77,7 +78,7 @@
   onMount(() => {
     setupPushState();
     restoreFocus();
-    if (process.env.NODE_ENV !== 'production') {
+    if (!import.meta.env.PROD) {
       if (!realm) {
         throw new Error('FocusRestoration needs a realm')
       }

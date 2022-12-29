@@ -1,4 +1,4 @@
-import BlurhashWorker from '../_workers/blurhash'
+import BlurhashWorker from '../_workers/blurhash?worker'
 import PromiseWorker from 'promise-worker'
 import { BLURHASH_RESOLUTION as RESOLUTION } from '../_static/blurhash'
 import { QuickLRU } from '../_thirdparty/quick-lru/quick-lru'

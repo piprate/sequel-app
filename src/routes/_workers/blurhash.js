@@ -24,7 +24,7 @@ registerPromiseWorker(async (encoded) => {
     const blob = await OFFSCREEN_CANVAS.convertToBlob()
     const decoded = URL.createObjectURL(blob)
     return { decoded, imageData: null }
-  } else {
-    return { imageData, decoded: null }
   }
+
+  return { imageData, decoded: null }
 })

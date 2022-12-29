@@ -2,11 +2,12 @@
 // for KaiOS devices.
 
 import { importArrowKeyNavigation } from '../../_utils/asyncModules/importArrowKeyNavigation.js'
+import { inNode } from '../../_utils/browserOrNode.js'
 
 let arrowKeyNav
 
 export function leftRightFocusObservers (leftRightChangesFocus) {
-  if (!process.browser) {
+  if (inNode()) {
     return
   }
 

@@ -24,6 +24,7 @@ import { getKnownInstances } from './knownInstances'
 import noop from 'lodash-es/noop'
 import { CLEANUP_DELAY, CLEANUP_TIME_AGO } from '../_static/database'
 import { scheduleIdleTask } from '../_utils/scheduleIdleTask'
+import { inBrowser } from '../_utils/browserOrNode'
 
 const BATCH_SIZE = 20
 
@@ -238,4 +239,4 @@ async function scheduledCleanup () {
 }
 
 // we have unit tests that test indexedDB; we don't want this thing to run forever
-export const scheduleCleanup = process.browser ? debounce(scheduledCleanup, CLEANUP_DELAY) : noop
+export const scheduleCleanup = inBrowser() ? debounce(scheduledCleanup, CLEANUP_DELAY) : noop

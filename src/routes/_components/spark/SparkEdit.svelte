@@ -3,7 +3,7 @@
   import InfoAside from '../InfoAside.svelte'
   import MediaField from '../MediaField.svelte'
   import { saveSpark, setCurrentSpark, sparkOperationError, sparkOperationInProgress } from '../../_actions/sparks'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { unwrap } from '../../_utils/mapper'
   import { currentInstance } from '../../_store/local'
   import { importShowWorldSelectionDialog } from '../dialog/asyncDialogs/importShowWorldSelectionDialog'

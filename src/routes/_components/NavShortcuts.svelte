@@ -1,6 +1,6 @@
 <script>
   import Shortcut from './shortcut/Shortcut.svelte'
-  import { goto } from '@sapper/app';
+  import { goto } from '$app/navigation';
   import { importShowShortcutHelpDialog } from './dialog/asyncDialogs/importShowShortcutHelpDialog'
   import { importShowComposeDialog } from './dialog/asyncDialogs/importShowComposeDialog'
   import { leftRightChangesFocus } from '../_store/local'

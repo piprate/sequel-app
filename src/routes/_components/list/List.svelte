@@ -58,7 +58,7 @@
   onMount(() => {
     listStore.setCurrentRealm(realm);
 
-    // if (process.env.NODE_ENV !== 'production') {
+    // if (!import.meta.env.PROD) {
     //   this.observe('safeItems', safeItems => {
     //     if (new Set(safeItems).size !== safeItems.length) {
     //       console.error('list of items is not unique:', safeItems)

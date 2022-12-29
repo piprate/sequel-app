@@ -35,8 +35,8 @@
   {#if $currentSpark}
     <FreeTextLayout>
       <h1>{formatIntl('intl.homePageGreeting', {spark: $currentSpark.name}) }</h1>
-      <h3>{intl.feelingDifferent} <a sapper:prefetch href="/switch">{intl.switchAction}</a>.</h3>
-      <a class="button primary profile-button" sapper:prefetch href="/sparks/{currentSparkId}">{intl.profileButton}</a>
+      <h3>{intl.feelingDifferent} <a data-sveltekit-preload-data href="/switch">{intl.switchAction}</a>.</h3>
+      <a class="button primary profile-button" data-sveltekit-preload-data href="/sparks/{currentSparkId}">{intl.profileButton}</a>
       {#if showInductionNotice}
         <div class="induction-notice">
           {intl.inductionLevelOneNotice}
@@ -47,13 +47,13 @@
            <h2>{intl.yourBubbles}</h2>
         </span>
         <span slot="is-empty">
-          <a class="button primary new-entity-button" sapper:prefetch href="/bubbles/new">{intl.createNewBubble}</a>
+          <a class="button primary new-entity-button" data-sveltekit-preload-data href="/bubbles/new">{intl.createNewBubble}</a>
           <InfoAside className="new-entity-notice-aside">
               {intl.firstBubbleNotice}
           </InfoAside>
         </span>
         <span slot="footer">
-          <a class="button primary new-entity-button" sapper:prefetch href="/bubbles/new">{intl.createNewBubble}</a>
+          <a class="button primary new-entity-button" data-sveltekit-preload-data href="/bubbles/new">{intl.createNewBubble}</a>
         </span>
       </BubblesListPage>
       <WorldsListPage {worldsFetcher} >
@@ -61,13 +61,13 @@
            <h2>{intl.yourWorlds}</h2>
         </span>
         <span slot="is-empty">
-           <a class="button primary new-entity-button" sapper:prefetch href="/worlds/new">{intl.createNewWorld}</a>
+           <a class="button primary new-entity-button" data-sveltekit-preload-data href="/worlds/new">{intl.createNewWorld}</a>
           <InfoAside className="new-entity-notice-aside">
               {intl.firstWorldNotice}
           </InfoAside>
         </span>
         <span slot="footer">
-           <a class="button primary new-entity-button" sapper:prefetch href="/worlds/new">{intl.createNewWorld}</a>
+           <a class="button primary new-entity-button" data-sveltekit-preload-data href="/worlds/new">{intl.createNewWorld}</a>
         </span>
       </WorldsListPage>
     </FreeTextLayout>

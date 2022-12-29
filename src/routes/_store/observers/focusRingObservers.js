@@ -1,7 +1,8 @@
+import { inNode } from '../../_utils/browserOrNode'
 import { supportsFocusVisible } from '../../_utils/supportsFocusVisible'
 
 export function focusRingObservers (alwaysShowFocusRing) {
-  if (!process.browser) {
+  if (inNode()) {
     return
   }
 

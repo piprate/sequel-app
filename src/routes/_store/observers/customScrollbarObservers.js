@@ -1,10 +1,11 @@
+import { inBrowser, inNode } from '../../_utils/browserOrNode'
 import { disableCustomScrollbars } from '../local'
 
-const theScrollbarStyle = process.browser && document.getElementById('theScrollbarStyle')
+const theScrollbarStyle = inBrowser() && document.getElementById('theScrollbarStyle')
 
 export function customScrollbarObservers () {
   disableCustomScrollbars.subscribe(_disableCustomScrollbars => {
-    if (!process.browser) {
+    if (inNode()) {
       return
     }
 

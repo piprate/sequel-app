@@ -17,7 +17,7 @@
   import { currentInstance, isUserLoggedIn } from '../_store/local'
   import { setCurrentSpark } from '../_actions/sparks'
   import { getSparkList } from '../_api/sparks'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { displayError } from '../_actions/errors'
 
   export let sparksFetcher
@@ -106,11 +106,11 @@
                         {/each}
                     </ul>
                 </RadioGroup>
-                <a class="button primary new-spark-button" sapper:prefetch href="/sparks/new">{intl.createNewSpark}</a>
+                <a class="button primary new-spark-button" data-sveltekit-preload-data href="/sparks/new">{intl.createNewSpark}</a>
             {:else if loadError}
                 <ErrorMessage error={loadError} />
             {:else}
-                <a class="button primary new-spark-button" sapper:prefetch href="/sparks/new">{intl.createFirstSpark}</a>
+                <a class="button primary new-spark-button" data-sveltekit-preload-data href="/sparks/new">{intl.createFirstSpark}</a>
             {/if}
             <InfoAside className="spark-notice-aside">
                 {intl.firstSparkNotice}

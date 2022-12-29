@@ -9,6 +9,7 @@
     popShortcutScope
   } from '../../../_utils/shortcuts'
   import {createEventDispatcher, onMount} from "svelte";
+  import { inNode } from '../../../_utils/browserOrNode';
 
   const dispatch = createEventDispatcher();
 
@@ -22,7 +23,7 @@
   export let clickHeaderToClose = false;
 
   // don't animate if we're showing a modal dialog on top of another modal dialog. it looks ugly
-  let shouldAnimate = !process.browser || document.getElementsByClassName('modal-dialog').length < 2;
+  let shouldAnimate = inNode() || document.getElementsByClassName('modal-dialog').length < 2;
   let fadedIn = false;
 
   let statePopped;

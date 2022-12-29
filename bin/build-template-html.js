@@ -1,15 +1,21 @@
 import chokidar from 'chokidar'
 import fs from 'fs'
 import path from 'path'
+import debounce from 'lodash-es/debounce.js'
 import { promisify } from 'util'
-import { buildSass } from './build-sass'
-import { buildInlineScript } from './build-inline-script'
-import { buildSvg } from './build-svg'
 import { performance } from 'perf_hooks'
-import debounce from 'lodash-es/debounce'
-import applyIntl from '../webpack/svelte-intl-loader'
-import { LOCALE } from '../src/routes/_static/intl'
-import { getLangDir } from 'rtl-detect'
+import rltDetect from 'rtl-detect'
+import { buildSass } from './build-sass.js'
+import { buildInlineScript } from './build-inline-script.js'
+import { buildSvg } from './build-svg.js'
+import applyIntl from '../svelte-intl-loader.js'
+import { LOCALE } from '../src/routes/_static/intl.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const { getLangDir } = rltDetect
 
 const writeFile = promisify(fs.writeFile)
 const LOCALE_DIRECTION = getLangDir(LOCALE)
@@ -37,7 +43,7 @@ const builders = [
 const partials = buildPartials()
 
 function buildPartials () {
-  const rawTemplate = fs.readFileSync(path.resolve(__dirname, '../src/build/template.html'), 'utf8')
+  const rawTemplate = fs.readFileSync(path.resolve(__dirname, '../src/build/app.html'), 'utf8')
 
   const partials = [rawTemplate]
 
@@ -94,7 +100,7 @@ async function buildAll () {
   html = applyIntl(html)
     .replace('{process.env.LOCALE}', LOCALE)
     .replace('{process.env.LOCALE_DIRECTION}', LOCALE_DIRECTION)
-  await writeFile(path.resolve(__dirname, '../src/template.html'), html, 'utf8')
+  await writeFile(path.resolve(__dirname, '../src/app.html'), html, 'utf8')
   const end = performance.now()
   console.log(`Built template.html in ${(end - start).toFixed(2)}ms`)
 }

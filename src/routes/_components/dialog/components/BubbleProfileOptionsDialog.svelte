@@ -6,7 +6,7 @@
   import { updateMembership } from '../../../_actions/bubble/membership'
   import { copyText } from '../../../_actions/copyText'
   import { formatIntl } from '../../../_utils/formatIntl'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { unwrap } from '../../../_utils/mapper'
   import { doDeleteBubble } from '../../../_actions/deleteBubble'
   import { setBubbleBookmarked } from '../../../_actions/bubble/bookmark'

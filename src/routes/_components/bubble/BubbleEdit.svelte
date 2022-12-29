@@ -4,7 +4,7 @@
   import InfoAside from '../InfoAside.svelte'
   import MediaField from '../MediaField.svelte'
   import { bubbleOperationError, bubbleOperationInProgress, saveBubble } from '../../_actions/bubbles'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { unwrap } from '../../_utils/mapper'
   import {
     BUBBLE_FEDERATION_MODE_OPTIONS,

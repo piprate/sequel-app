@@ -1,14 +1,15 @@
 import debounce from 'lodash-es/debounce'
+import { inBrowser } from './browserOrNode'
 
 const DEBOUNCE_DELAY = 700
 
 const listeners = new Set()
 
-if (process.browser) {
+if (inBrowser()) {
   window.__resizeListeners = listeners
 }
 
-if (process.browser) {
+if (inBrowser()) {
   window.addEventListener('resize', debounce(() => {
     console.log('resize')
     listeners.forEach(listener => listener())

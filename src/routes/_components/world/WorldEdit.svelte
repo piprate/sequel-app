@@ -2,7 +2,7 @@
   import FreeTextLayout from '../../_components/FreeTextLayout.svelte';
   import InfoAside from '../../_components/InfoAside.svelte';
   import { saveWorld, worldOperationError, worldOperationInProgress } from "../../_actions/worlds";
-  import { goto } from '@sapper/app';
+  import { goto } from '$app/navigation';
   import { unwrap } from "../../_utils/mapper";
   import MediaField from "../../_components/MediaField.svelte";
   import ErrorMessage from '../ErrorMessage.svelte'

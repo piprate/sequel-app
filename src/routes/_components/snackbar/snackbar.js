@@ -10,7 +10,7 @@ const lazySnackbar = {
         snackbar = new Snackbar({
           target: document.querySelector('#theSnackbar')
         })
-        if (process.env.NODE_ENV !== 'production') {
+        if (!import.meta.env.PROD) {
           window.snackbar = snackbar // for debugging
         }
       }

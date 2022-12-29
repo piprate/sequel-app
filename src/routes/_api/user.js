@@ -14,6 +14,6 @@ export function updateUser (instanceName, accessToken, user) {
 export function enrollUser (instanceName, accessToken, secondLevelRecoveryCode) {
   const url = `${basename(instanceName)}/enroll`
   return post(url, {
-    slrc: secondLevelRecoveryCode,
+    slrc: secondLevelRecoveryCode
   }, auth(accessToken), { timeout: WRITE_TIMEOUT })
 }

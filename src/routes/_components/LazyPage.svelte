@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { inNode } from '../_utils/browserOrNode';
   import { doubleRAF } from '../_utils/doubleRAF'
   // On the very first page load, avoid doing a "reveal" because
   // it leads to a flash between when the SSR is shown, the two frame we hide it,
@@ -12,7 +13,7 @@
   export let pageComponent;
   export let params = undefined;
 
-  let revealed = !process.browser || firstTime;
+  let revealed = inNode() || firstTime;
 
   onMount(() => {
     firstTime = false

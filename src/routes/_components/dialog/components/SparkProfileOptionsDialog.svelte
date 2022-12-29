@@ -10,7 +10,7 @@
   import { toggleMute } from '../../../_actions/toggleMute'
   import { reportPostOrSpark } from '../../../_actions/report'
   import { formatIntl } from '../../../_utils/formatIntl'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { unwrap } from '../../../_utils/mapper'
   import { doDeleteSpark } from '../../../_actions/deleteSpark'
   import { setSparkBookmarked } from '../../../_actions/spark/bookmark'

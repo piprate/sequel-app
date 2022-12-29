@@ -22,7 +22,7 @@
   let password = ''
   let registrationCode = ''
 
-  let production = process.env.NODE_ENV === 'production'
+  let production = import.meta.env.PROD
 
   if (!production) {
     $instanceNameInSearch = 'localhost'

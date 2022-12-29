@@ -1,64 +1,64 @@
 // Forked from https://github.com/sindresorhus/quick-lru/blob/16d15d470a8eb87c2a7dd5b80892d9b74f1acd3c/index.js
 // Adds the ability to listen for 'evict' events using an EventEmitter, also removes some unused code
 
-import { EventEmitter } from 'events-light'
+import EventsLight from 'events-light';
 
-export class QuickLRU extends EventEmitter {
-  constructor (options = {}) {
-    super()
+export class QuickLRU extends EventsLight.EventEmitter {
+  constructor(options = {}) {
+    super();
     if (!(options.maxSize && options.maxSize > 0)) {
-      throw new TypeError('`maxSize` must be a number greater than 0')
+      throw new TypeError("`maxSize` must be a number greater than 0");
     }
 
-    this.maxSize = options.maxSize
-    this.cache = new Map()
-    this.oldCache = new Map()
-    this._size = 0
+    this.maxSize = options.maxSize;
+    this.cache = new Map();
+    this.oldCache = new Map();
+    this._size = 0;
   }
 
-  _set (key, value) {
-    this.cache.set(key, value)
-    this._size++
+  _set(key, value) {
+    this.cache.set(key, value);
+    this._size++;
 
     if (this._size >= this.maxSize) {
-      this._size = 0
-      if (this.listenerCount('evict')) {
+      this._size = 0;
+      if (this.listenerCount("evict")) {
         for (const key of this.oldCache.keys()) {
           if (!this.cache.has(key)) {
-            this.emit('evict', this.oldCache.get(key), key)
+            this.emit("evict", this.oldCache.get(key), key);
           }
         }
       }
-      this.oldCache = this.cache
-      this.cache = new Map()
+      this.oldCache = this.cache;
+      this.cache = new Map();
     }
   }
 
-  get (key) {
+  get(key) {
     if (this.cache.has(key)) {
-      return this.cache.get(key)
+      return this.cache.get(key);
     }
 
     if (this.oldCache.has(key)) {
-      const value = this.oldCache.get(key)
-      this.oldCache.delete(key)
-      this._set(key, value)
-      return value
+      const value = this.oldCache.get(key);
+      this.oldCache.delete(key);
+      this._set(key, value);
+      return value;
     }
   }
 
-  set (key, value) {
+  set(key, value) {
     if (this.cache.has(key)) {
-      this.cache.set(key, value)
+      this.cache.set(key, value);
     } else {
-      this._set(key, value)
+      this._set(key, value);
     }
 
-    return this
+    return this;
   }
 
-  has (key) {
-    return this.cache.has(key) || this.oldCache.has(key)
+  has(key) {
+    return this.cache.has(key) || this.oldCache.has(key);
   }
 
   // unused
@@ -72,30 +72,30 @@ export class QuickLRU extends EventEmitter {
   //   }
   // }
 
-  delete (key) {
-    const deleted = this.cache.delete(key)
+  delete(key) {
+    const deleted = this.cache.delete(key);
     if (deleted) {
-      this._size--
+      this._size--;
     }
 
-    return this.oldCache.delete(key) || deleted
+    return this.oldCache.delete(key) || deleted;
   }
 
-  clear () {
-    this.cache.clear()
-    this.oldCache.clear()
-    this._size = 0
+  clear() {
+    this.cache.clear();
+    this.oldCache.clear();
+    this._size = 0;
   }
 
-  getAllKeys () {
-    const set = new Set()
+  getAllKeys() {
+    const set = new Set();
     for (const key of this.cache.keys()) {
-      set.add(key)
+      set.add(key);
     }
     for (const key of this.oldCache.keys()) {
-      set.add(key)
+      set.add(key);
     }
-    return set
+    return set;
   }
 
   // unused

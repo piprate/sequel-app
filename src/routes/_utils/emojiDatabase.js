@@ -1,6 +1,7 @@
 import Database from 'emoji-picker-element/database'
 import { lifecycle } from './lifecycle'
 import { emojiPickerDataSource, emojiPickerLocale } from '../_static/emojiPickerIntl'
+import { inBrowser } from './browserOrNode'
 
 let database
 
@@ -53,7 +54,7 @@ export async function findBySearchQuery (query) {
   return emojis.map(emoji => applySkinToneToEmoji(emoji, skinTone))
 }
 
-if (process.browser) {
+if (inBrowser()) {
   lifecycle.addEventListener('statechange', event => {
     if (event.newState === 'frozen' && database) { // page is frozen, close IDB connections
       console.log('closed emoji DB')

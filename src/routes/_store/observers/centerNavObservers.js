@@ -1,10 +1,11 @@
+import { inBrowser, inNode } from '../../_utils/browserOrNode'
 import { centerNav } from '../local'
 
-const centerNavStyle = process.browser && document.getElementById('theCenterNavStyle')
+const centerNavStyle = inBrowser() && document.getElementById('theCenterNavStyle')
 
 export function centerNavObservers () {
   centerNav.subscribe(_centerNav => {
-    if (!process.browser) {
+    if (inNode()) {
       return
     }
 

@@ -1,6 +1,7 @@
 // Forked from https://github.com/jakearchibald/idb-keyval/commit/ea7d507
 // Adds a function for closing the database, ala https://github.com/jakearchibald/idb-keyval/pull/65
 // Also hooks it into the lifecycle frozen event
+import { inBrowser } from '../../_utils/browserOrNode'
 import { lifecycle } from '../../_utils/lifecycle'
 
 class Store {
@@ -104,7 +105,7 @@ function close () {
   return store._close()
 }
 
-if (process.browser) {
+if (inBrowser()) {
   lifecycle.addEventListener('statechange', async event => {
     if (event.newState === 'frozen') { // page is frozen, close IDB connections
       await close()

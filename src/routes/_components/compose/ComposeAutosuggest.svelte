@@ -9,8 +9,9 @@
   import { get } from '../../_utils/lodash-lite'
   import { registerResizeListener, unregisterResizeListener } from '../../_utils/resize'
   import {onMount} from "svelte";
+  import { inBrowser } from '../../_utils/browserOrNode';
 
-  const updatePosition = process.browser && throttleTimer(requestAnimationFrame)
+  const updatePosition = inBrowser() && throttleTimer(requestAnimationFrame)
 
   export let realm;
   //export let text;

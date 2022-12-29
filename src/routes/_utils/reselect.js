@@ -5,8 +5,9 @@
 
 import isEqual from 'lodash-es/isEqual'
 import { derived } from 'svelte/store'
+import { inBrowser } from './browserOrNode'
 
-if (process.browser && process.env.NODE_ENV !== 'production') {
+if (inBrowser() && !import.meta.env.PROD) {
   window.reselectStats = {}
 }
 
@@ -18,7 +19,7 @@ export function reselect (rawValue, reselectKey) {
   const reselectCount = derived(
     rawValue,
     $rawValue => {
-      if (process.browser && process.env.NODE_ENV !== 'production') {
+      if (inBrowser() && !import.meta.env.PROD) {
         window.reselectStats[reselectKey] = window.reselectStats[reselectKey] || {
           numInputChanges: 0,
           numOutputChanges: 0
@@ -36,7 +37,7 @@ export function reselect (rawValue, reselectKey) {
   return derived(
     reselectCount,
     $reselectCount => {
-      if (process.browser && process.env.NODE_ENV !== 'production') {
+      if (inBrowser() && !import.meta.env.PROD) {
         window.reselectStats[reselectKey].numOutputChanges++
       }
       prevValue = nextValue

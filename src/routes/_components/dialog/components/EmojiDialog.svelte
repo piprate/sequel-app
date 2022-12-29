@@ -11,7 +11,7 @@
   import { convertCustomEmojiToEmojiPickerFormat } from '../../../_utils/convertCustomEmojiToEmojiPickerFormat'
   import { supportsFocusVisible } from '../../../_utils/supportsFocusVisible'
   import { importFocusVisible } from '../../../_utils/polyfills/asyncPolyfills'
-  import { emojiPickerI18n, emojiPickerDataSource, emojiPickerLocale } from '../../../_static/emojiPickerIntl'
+  import { getEmojiPickerI18n, emojiPickerDataSource, emojiPickerLocale } from '../../../_static/emojiPickerIntl'
   import { onMount } from "svelte";
 
   export let id;
@@ -40,6 +40,8 @@
 
   onMount(async () => {
     picker.customEmoji = customEmoji
+    const emojiPickerI18n = await getEmojiPickerI18n()
+
     if (emojiPickerI18n) {
       picker.i18n = emojiPickerI18n
     }

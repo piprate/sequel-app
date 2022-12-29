@@ -1,3 +1,4 @@
+import { inBrowser } from './browserOrNode'
 import { lifecycle } from './lifecycle'
 
 /**
@@ -32,7 +33,7 @@ export function scheduleInterval (callback, delay, runOnActive) {
     startPolling()
   }
 
-  if (process.browser) {
+  if (inBrowser()) {
     startPolling()
 
     lifecycle.addEventListener('statechange', e => {

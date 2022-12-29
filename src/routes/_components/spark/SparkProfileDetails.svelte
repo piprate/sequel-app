@@ -47,7 +47,7 @@
   <a class="spark-profile-details-item"
      href='/sparks/{sparkId}/subscribers'
      aria-label={subscribersLabel}
-     sapper:prefetch
+     data-sveltekit-preload-data
   >
     <span class="spark-profile-details-item-title">
       {intl.subscribers}
@@ -59,7 +59,7 @@
   <a class="spark-profile-details-item"
      href='/sparks/{sparkId}/bubbles'
      aria-label={bubblesLabel}
-     sapper:prefetch
+     data-sveltekit-preload-data
   >
     <span class="spark-profile-details-item-title">
       {intl.bubbles}

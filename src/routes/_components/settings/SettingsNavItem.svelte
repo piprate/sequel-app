@@ -18,7 +18,7 @@
 <a class="settings-nav-item {className}"
    id="settings-nav-item-{href}"
    aria-label={ariaLabel}
-   sapper:prefetch
+   data-sveltekit-preload-data
    {href} >
   {label}
 </a>

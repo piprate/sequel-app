@@ -20,7 +20,7 @@
 
 <a id={elementId}
    class="post-sidebar size-{size}"
-   sapper:prefetch
+   data-sveltekit-preload-data
    href="/sparks/{unwrap(postAuthorId)}"
    aria-hidden="true"
    tabindex="-1"

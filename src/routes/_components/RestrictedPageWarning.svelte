@@ -2,14 +2,13 @@
   import FreeTextLayout from './FreeTextLayout.svelte'
   import HiddenFromSSR from './HiddenFromSSR.svelte'
   import SvgIcon from './SvgIcon.svelte'
-  import { stores } from '@sapper/app'
+  import { page } from '$app/stores'
   import { redirectToPage } from '../_store/local'
 
   export let message = 'intl.accessRestricted'
   export let showLogo = false
   export let offerVisitorMode = false
 
-  const { page } = stores()
 
   $: panelClass = offerVisitorMode ? '' : 'right-align'
 
@@ -34,10 +33,10 @@
                 {@html message}
             </div>
             <div class={panelClass}>
-                <a class="button primary action-button" sapper:prefetch href="/settings/instances/register" on:click="{setRedirect}">{intl.signUp}</a>
-                <a class="button primary action-button" sapper:prefetch href="/settings/instances/add" on:click="{setRedirect}">{intl.logIn}</a>
+                <a class="button primary action-button" data-sveltekit-preload-data href="/settings/instances/register" on:click="{setRedirect}">{intl.signUp}</a>
+                <a class="button primary action-button" data-sveltekit-preload-data href="/settings/instances/add" on:click="{setRedirect}">{intl.logIn}</a>
                 {#if offerVisitorMode }
-                    <span class="visitor-invite">or <a sapper:prefetch href="/settings/instances/visit" on:click="{setRedirect}">{'intl.continueAsVisitorLink'}</a></span>
+                    <span class="visitor-invite">or <a data-sveltekit-preload-data href="/settings/instances/visit" on:click="{setRedirect}">{'intl.continueAsVisitorLink'}</a></span>
                 {/if}
             </div>
         </div>

@@ -5,30 +5,20 @@
 import path from 'path'
 import fs from 'fs'
 import { promisify } from 'util'
-import { routes } from './routes'
-import cloneDeep from 'lodash-es/cloneDeep'
-import inlineScriptChecksum from '../src/inline-script/checksum'
-import { sapperInlineScriptChecksums } from '../src/server/sapperInlineScriptChecksums'
+import { routes } from './routes.js'
+import cloneDeep from 'lodash-es/cloneDeep.js'
+import { fileURLToPath } from 'url'
 
 const writeFile = promisify(fs.writeFile)
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const JSON_TEMPLATE = {
   version: 2,
   env: {
     NODE_ENV: 'production'
   },
-  github: {
-    silent: true
-  },
-  builds: [
-    {
-      src: 'package.json',
-      use: '@now/static-build',
-      config: {
-        distDir: '__sapper__/export'
-      }
-    }
-  ],
   routes: [
     {
       src: '^/service-worker\\.js$',
@@ -58,24 +48,18 @@ const JSON_TEMPLATE = {
   ]
 }
 
-const SCRIPT_CHECKSUMS = [inlineScriptChecksum]
-  .concat(sapperInlineScriptChecksums)
-  .map(_ => `'sha256-${_}'`)
-  .join(' ')
-
 const PERMISSIONS_POLICY = 'sync-xhr=(),document-domain=()'
 
 const HTML_HEADERS = {
   'cache-control': 'public,max-age=3600',
   'content-security-policy': [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-eval' ${SCRIPT_CHECKSUMS}`,
     "worker-src 'self'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' * data: blob:",
     "media-src 'self' *",
     "connect-src 'self' * data: blob: *.blocto.app *.onflow.org *.portto.io *.portto.com",
-    "frame-src https://fcl-discovery.onflow.org https://*.blocto.app",
+    'frame-src https://fcl-discovery.onflow.org https://*.blocto.app',
     "frame-ancestors 'none'",
     "object-src 'none'",
     "manifest-src 'self'",

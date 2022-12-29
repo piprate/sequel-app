@@ -1,9 +1,10 @@
 import { online } from '../_store/local'
+import { inBrowser } from './browserOrNode'
 import { emit } from './eventBus'
 
 // Force online/offline state. Needed for integration tests.
 // It would be nice not to actually ship this in production, but *shrug*
-if (process.browser) {
+if (inBrowser()) {
   const globalFetch = window.fetch
 
   window.__forceOnline = onlineVal => {

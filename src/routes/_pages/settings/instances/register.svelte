@@ -1,7 +1,7 @@
 <script>
   import SettingsLayout from '../../../_components/settings/SettingsLayout.svelte'
   import FreeTextLayout from '../../../_components/FreeTextLayout.svelte'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { registerInInstance } from '../../../_actions/addInstance'
   import { testHasIndexedDB, testHasLocalStorage } from '../../../_utils/testStorage'
   import { validate } from 'email-validator'
@@ -30,7 +30,7 @@
   let password = ''
   let registrationCode = ''
 
-  let production = process.env.NODE_ENV === 'production'
+  let production = import.meta.env.PROD
   let askForRegistrationCode = production && false
 
   let page = 'sign_up'
@@ -151,7 +151,7 @@
         <button class="primary inline-button" type="submit" id="submitButton" disabled={buttonDisabled}>
           {intl.signUp}
         </button>
-        <span class="register-option">or <a sapper:prefetch href="/settings/instances/visit">{'intl.continueAsVisitorLink'}</a></span>
+        <span class="register-option">or <a data-sveltekit-preload-data href="/settings/instances/visit">{'intl.continueAsVisitorLink'}</a></span>
 
         <div class="legal-notice">
           {intl.signUpLegalNotice}

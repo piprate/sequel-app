@@ -3,32 +3,32 @@ import parse from 'format-message-parse'
 import { getSparkAccessibleName } from '../_a11y/getSparkAccessibleName'
 
 const NOTIFICATION_TYPES = {
-  'tmm': {
+  tmm: {
     icon: '#fa-fire',
     actionText: 'intl.tmmedYou',
     label: parse('intl.labelTmmedYou')
   },
-  'comment': {
+  comment: {
     icon: '#fa-reply',
     actionText: 'intl.commented',
     label: parse('intl.labelCommented')
   },
-  'join_bubble': {
+  join_bubble: {
     icon: '#fa-sign-in',
     actionText: 'intl.joinedHeader',
     label: parse('intl.labelJoinedBubble')
   },
-  'leave_bubble': {
+  leave_bubble: {
     icon: '#fa-sign-out',
     actionText: 'intl.leftHeader',
     label: parse('intl.labelLeftBubble')
   },
-  'subscriber': {
+  subscriber: {
     icon: '#fa-user-plus',
     actionText: 'intl.subscribedToYourPosts',
     label: parse('intl.labelSubscribedToYourPosts')
   },
-  'mod_offer': {
+  mod_offer: {
     icon: '#fa-gift',
     actionText: 'intl.offeredNFT',
     label: parse('intl.labelOfferedNFT')

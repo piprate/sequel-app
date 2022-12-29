@@ -1,10 +1,10 @@
+import EventsLight from 'events-light'
 import { WebSocketClient } from '../../_thirdparty/websocket/websocket'
 import { lifecycle } from '../../_utils/lifecycle'
-import { EventEmitter } from 'events-light'
 import { eventBus } from '../../_utils/eventBus'
 import { safeParse } from '../../_utils/safeParse'
 
-export class TimelineStream extends EventEmitter {
+export class TimelineStream extends EventsLight.EventEmitter {
   constructor (streamingApi, accessToken, timeline, asSpark) {
     super()
     this._streamingApi = streamingApi
@@ -59,9 +59,9 @@ export class TimelineStream extends EventEmitter {
       return
     }
     this._ws.send(JSON.stringify({
-      'type': 'subscribe',
-      'timeline': this._timeline,
-      'asSpark': this._asSpark
+      type: 'subscribe',
+      timeline: this._timeline,
+      asSpark: this._asSpark
     }))
   }
 
@@ -71,7 +71,7 @@ export class TimelineStream extends EventEmitter {
       return
     }
     this._ws.send(JSON.stringify({
-      'type': 'unsubscribe',
+      type: 'unsubscribe'
     }))
   }
 
@@ -81,8 +81,8 @@ export class TimelineStream extends EventEmitter {
       return
     }
     this._ws.send(JSON.stringify({
-      'type': 'switchSpark',
-      'asSpark': this._asSpark
+      type: 'switchSpark',
+      asSpark: this._asSpark
     }))
   }
 
@@ -98,7 +98,7 @@ export class TimelineStream extends EventEmitter {
   }
 
   _setupWebSocket () {
-    const url = this._streamingApi //getStreamUrl(this._streamingApi, this._accessToken, this._timeline)
+    const url = this._streamingApi // getStreamUrl(this._streamingApi, this._accessToken, this._timeline)
     const ws = new WebSocketClient(url, 'sequel')
 
     ws.onopen = () => {
@@ -111,9 +111,9 @@ export class TimelineStream extends EventEmitter {
         this.emit('reconnect', this._timeline, this._asSpark)
       }
       this._ws.send(JSON.stringify({
-        'type': 'authenticate',
-        'token': this._accessToken,
-        'asSpark': this._asSpark
+        type: 'authenticate',
+        token: this._accessToken,
+        asSpark: this._asSpark
       }))
       if (this._timeline) {
         this._sendSubscribeMessage()

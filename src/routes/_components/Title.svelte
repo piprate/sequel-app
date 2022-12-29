@@ -1,7 +1,7 @@
 <script>
   import { hasNotifications, numberOfNotifications } from '../_store/badge'
   import { currentInstance, isUserLoggedIn } from "../_store/local";
-  import { formatIntl } from '../_utils/formatIntl'
+  import { formatIntl } from '../_utils/formatIntl';
 
   export let name;
   export let settingsPage = false;

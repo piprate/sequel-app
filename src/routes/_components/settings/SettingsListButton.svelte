@@ -16,7 +16,7 @@
   <a {href}
      id="{controlId}"
      on:click="{() => dispatch('click')}"
-     sapper:prefetch
+     data-sveltekit-preload-data
      aria-label={ariaLabel || label}
      class="settings-list-button focus-fix {className ? className : ''}"
   >

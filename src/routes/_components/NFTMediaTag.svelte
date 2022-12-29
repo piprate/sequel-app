@@ -1,6 +1,6 @@
 <script>
   import SvgIcon from './SvgIcon.svelte'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { classname } from '../_utils/classname'
 
   export let nft;

@@ -25,7 +25,7 @@
     spoilersShown,
     underlineLinks
   } from '../../_store/local'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { registerClickDelegate } from '../../_utils/delegate'
   import { classname } from '../../_utils/classname'
   import { checkDomAncestors } from '../../_utils/checkDomAncestors'

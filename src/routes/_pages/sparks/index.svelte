@@ -19,13 +19,13 @@
         <SparkBrowserFilter filter="my_stuff" />
         <SparksListPage {sparksFetcher} >
              <span slot="is-empty">
-                <a class="button primary new-entity-button" sapper:prefetch href="/sparks/new">{intl.createNewSpark}</a>
+                <a class="button primary new-entity-button" data-sveltekit-preload-data href="/sparks/new">{intl.createNewSpark}</a>
                 <InfoAside className="new-entity-notice-aside">
                     {intl.firstSparkNotice}
                 </InfoAside>
               </span>
             <span slot="footer">
-                <a class="button primary new-entity-button" sapper:prefetch href="/sparks/new">{intl.createNewSpark}</a>
+                <a class="button primary new-entity-button" data-sveltekit-preload-data href="/sparks/new">{intl.createNewSpark}</a>
               </span>
         </SparksListPage>
 {:else}

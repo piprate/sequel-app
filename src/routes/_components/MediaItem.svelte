@@ -12,9 +12,10 @@
   import { onMount } from 'svelte'
   import { loadSecureMedia } from '../_api/media'
   import { accessToken } from '../_store/instance'
+  import { inBrowser } from '../_utils/browserOrNode';
 
   const updateMediaInStore = throttleTimer(scheduleIdleTask)
-  const resizeTextarea = process.browser && throttleTimer(requestAnimationFrame)
+  const resizeTextarea = inBrowser() && throttleTimer(requestAnimationFrame)
 
   export let realm
   export let mediaItem

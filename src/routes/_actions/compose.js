@@ -23,7 +23,7 @@ import { unwrap, wrap } from '../_utils/mapper'
 
 export const publishingPost = writable(false)
 
-export async function canPost (bubbleId, asSpark, isComment=false) {
+export async function canPost (bubbleId, asSpark, isComment = false) {
   const _currentInstance = currentInstance.get()
   const bubble = await database.getBubble(_currentInstance, bubbleId)
   if (!bubble) {

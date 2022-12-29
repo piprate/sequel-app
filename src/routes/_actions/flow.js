@@ -7,17 +7,17 @@ import { confirmMintOnDemand, getMintOnDemandSignature, initialiseMintOnDemand }
 import * as types from '@onflow/types'
 
 export function configureFlow (instanceName) {
-  const instanceData = loggedInInstances.get()[instanceName]
+  const instanceData = loggedInInstances.get()?.[instanceName]
 
   const cfg = fcl.config()
-    .put('env', instanceData.flowEnv)
-    .put('accessNode.api', instanceData.flowAccessNodeURI)
-    .put('discovery.wallet', instanceData.flowDiscoveryWalletURI)
-    .put('app.detail.title', instanceData.flowAppTitle)
-    .put('app.detail.icon', instanceData.flowAppLogoURI)
+    .put('env', instanceData?.flowEnv)
+    .put('accessNode.api', instanceData?.flowAccessNodeURI)
+    .put('discovery.wallet', instanceData?.flowDiscoveryWalletURI)
+    .put('app.detail.title', instanceData?.flowAppTitle)
+    .put('app.detail.icon', instanceData?.flowAppLogoURI)
     .put('fcl.warning.suppress.redir', true)  // this warning will be removed in future versions. Revisit.
 
-  if (instanceData.flowAddresses) {
+  if (instanceData?.flowAddresses) {
     for (const [alias, addr] of Object.entries(instanceData.flowAddresses)) {
       console.log('Setting Flow alias', alias, addr)
       cfg.put(alias, addr)
@@ -202,12 +202,12 @@ transaction {
       fcl.payer(fcl.currentUser),
       fcl.proposer(fcl.currentUser),
       fcl.authorizations([fcl.authz]),
-      fcl.limit(999),
+      fcl.limit(999)
     ])
 
     console.log({ txHash })
 
-    let tx = fcl.tx(txHash)
+    const tx = fcl.tx(txHash)
 
     tx.subscribe(console.log)
 
@@ -233,8 +233,8 @@ transaction {
       }
     }
   } catch (e) {
-    if (e === 'Declined: Externally Halted'  // Dev Wallet
-      || (e.message && e.message.includes('User rejected signature')) // Blocto
+    if (e === 'Declined: Externally Halted' || // Dev Wallet
+      (e.message && e.message.includes('User rejected signature')) // Blocto
     ) {
       return {
         result: 'cancelled'
@@ -277,17 +277,17 @@ export async function mintOnDemand (listingId, numEditions, minterAddress, statu
         fcl.arg(modParams.asset, types.String),
         fcl.arg(String(numEditions), types.UInt64),
         fcl.arg(modParams.unitPrice, types.UFix64),
-        fcl.arg(String(listingId), types.UInt64),
+        fcl.arg(String(listingId), types.UInt64)
       ]),
       fcl.payer(payer),
       fcl.proposer(fcl.authz),
       fcl.authorizations([fcl.authz, serverSigner]),
-      fcl.limit(modParams.gasLimit),
+      fcl.limit(modParams.gasLimit)
     ])
 
     console.log({ txHash })
 
-    let tx = fcl.tx(txHash)
+    const tx = fcl.tx(txHash)
 
     statusCallback('wait_seal')
 
@@ -310,8 +310,8 @@ export async function mintOnDemand (listingId, numEditions, minterAddress, statu
 
     await confirmMintOnDemand(_currentInstance, _token, listingId, tokens, asSpark)
   } catch (e) {
-    if (e === 'Declined: Externally Halted'  // Dev Wallet
-      || (e.message && e.message.includes('User rejected signature')) // Blocto
+    if (e === 'Declined: Externally Halted' || // Dev Wallet
+      (e.message && e.message.includes('User rejected signature')) // Blocto
     ) {
       return {
         result: 'cancelled'
@@ -331,7 +331,7 @@ export async function mintOnDemand (listingId, numEditions, minterAddress, statu
 }
 
 function extractMintedTokens (result) {
-  let tokens = []
+  const tokens = []
 
   result.events.forEach((event) => {
     if (event.type.endsWith('DigitalArt.Minted')) {
@@ -375,9 +375,9 @@ const serverAuthorization = (instanceName, accessToken, id, buyerAddress, numEdi
       return {
         addr: fcl.withPrefix(sequelAdminAddress), // needs to be the same as the account.addr but this time with a prefix, eventually they will both be with a prefix
         keyId: Number(sequelAdminKeyID), // needs to be the same as account.keyId, once again make sure its a number and not a string
-        signature, // this needs to be a hex string of the signature, where signable.message is the hex value that needs to be signed
+        signature // this needs to be a hex string of the signature, where signable.message is the hex value that needs to be signed
       }
-    },
+    }
   }
 }
 

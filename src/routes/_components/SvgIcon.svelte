@@ -1,4 +1,5 @@
 <script>
+  import svgs from '../../svgs'
   import { animate as animateFn } from '../_utils/animate'
   import { reduceMotion } from '../_store/local'
 
@@ -7,9 +8,9 @@
   export let style = ''
   export let ariaLabel = ''
 
-  const inlineSvgs = new Set(process.env.INLINE_SVGS)
+  const inlineSvgs = new Set(svgs.filter(svg=>svg.inline))
 
-  $: inline = inlineSvgs.has(href)
+  $: inline = [...inlineSvgs].find(svg => href.includes(svg.id))?.inline
 
   let svg
 

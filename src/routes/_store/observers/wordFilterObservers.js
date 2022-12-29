@@ -14,9 +14,10 @@ import { database } from '../../_database/database'
 import { mark, stop } from '../../_utils/marks'
 import { get } from 'svelte/store'
 import { currentSparkId } from '../instance'
+import { inNode } from '../../_utils/browserOrNode'
 
 export function wordFilterObservers () {
-  if (!process.browser) {
+  if (inNode()) {
     return
   }
   on('wordFiltersChanged', instanceName => {

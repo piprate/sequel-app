@@ -7,11 +7,11 @@
   import { doubleRAF } from '../_utils/doubleRAF'
   import { scrollToTop } from '../_utils/scrollToTop'
   import { normalizePageName } from '../_utils/normalizePageName'
-  import { formatIntl } from '../_utils/formatIntl'
   import { reduceMotion } from '../_store/local'
   import { navPages } from '../_store/navigation'
   import { numberOfNotifications, hasNotifications, numberOfSubscriptionRequests, hasSubscriptionRequests } from '../_store/badge'
   import { currentPage } from "../_store/navigation";
+  import { formatIntl } from '../_utils/formatIntl';
 
   export let segment;
   export let name;
@@ -32,6 +32,7 @@
       count
     })
   })(name, label, selected);
+
 
   $: showBadge = (name === 'notifications' && $hasNotifications) || (name === 'community' && $hasSubscriptionRequests);
 
@@ -123,7 +124,7 @@
    aria-label={ariaLabel}
    aria-current={selected}
    on:click={onClick}
-   sapper:prefetch
+   data-sveltekit-preload-data
    {href} >
   <div class="nav-icon-and-label">
     <NavItemIcon {showBadge} {badgeNumber} {svg} />

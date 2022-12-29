@@ -1,3 +1,4 @@
+import { inBrowser } from './browserOrNode'
 import { isChrome } from './userAgent/isChrome'
 
 // via https://github.com/tootsuite/mastodon/blob/f59ed3a4fafab776b4eeb92f805dfe1fecc17ee3/app/javascript/mastodon/scroll.js
@@ -62,7 +63,7 @@ function testSupportsSmoothScroll () {
   return supports
 }
 
-export const hasNativeSmoothScroll = process.browser && testSupportsSmoothScroll()
+export const hasNativeSmoothScroll = inBrowser() && testSupportsSmoothScroll()
 
 export function smoothScroll (node, topOrLeft, horizontal, preferFast, reduceMotion) {
   if (reduceMotion) {

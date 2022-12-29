@@ -66,7 +66,7 @@ export async function doTokenMediaUpload (realm, field, nft, calculateBlurhash, 
       account: nft.account,
       asset: nft.asset || '',
       blurhash: calculateBlurhash,
-      profile: mediaProfile,
+      profile: mediaProfile
     }
     const response = await uploadTokenMedia(_currentInstance, _accessToken, form)
 

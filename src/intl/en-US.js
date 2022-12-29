@@ -1,6 +1,6 @@
 const oneLiner = 'Sequel is a social platform from a parallel universe.'
 
-module.exports = {
+const intl = {
   // Home page, basic <title> and <description>
   appName: 'Sequel',
   appDescription: 'An official web client for Sequel.',
@@ -15,8 +15,8 @@ module.exports = {
   slogan: 'Only Fiction',
   signUp: 'Sign Up',
   copy: 'Copy',
-  betaNotice: `Sequel is in private beta mode. Please contact us to get a registration code.`,
-  betaNoticeNoCode: `Sequel is in beta mode. Early adopters will acquire superpowers and receive enormous gratitude from the Sequel team.`,
+  betaNotice: 'Sequel is in private beta mode. Please contact us to get a registration code.',
+  betaNoticeNoCode: 'Sequel is in beta mode. Early adopters will acquire superpowers and receive enormous gratitude from the Sequel team.',
   signUpLegalNotice: `
       By signing up you agree to our <a rel="noopener" target="_blank" href="https://sequel.space/home/code-of-conduct/">Code of Conduct</a>
       and <a rel="noopener" target="_blank" href="https://sequel.space/home/application-privacy-policy/">Privacy Policy</a>,
@@ -127,12 +127,12 @@ module.exports = {
     You are free to be your new self.`,
   firstBubbleNotice: `A bubble is a virtual place to hang out. The bubble is also a story, an on-demand microblog,
     a one-in-a-lifetime event. Create a personal bubble or share it with other sparks.
-    <a href="/bubbles/explore" sapper:prefetch>Explore</a> other bubbles.`,
+    <a href="/bubbles/explore" data-sveltekit-preload-data>Explore</a> other bubbles.`,
   newBubbleNotice: 'A bubble is a virtual place to hang out. Choose your permissions carefully.',
   firstWorldNotice: `Are you brave enough? Sequel worlds are loosely defined themes that group sparks and
     bubbles together. You may have worlds for Gotham City, an alien planet, slacklining or healthy food.
     Each world may have a set of rules defined by its guardians to keep it in order.
-    <a href="/worlds/explore" sapper:prefetch>Explore</a> existing worlds.`,
+    <a href="/worlds/explore" data-sveltekit-preload-data>Explore</a> existing worlds.`,
   worldCreationNotice: `Sequel worlds are loosely defined themes that group sparks and
     bubbles together. You may have worlds for Gotham City, an alien planet, slacklining or healthy food.
     Each world may have a set of rules defined by its guardians to keep it in order.`,
@@ -141,7 +141,7 @@ module.exports = {
     into worlds, use bubbles instead.`,
 
   inductionLevelOneNotice: `Welcome to Sequel! Congratulations on creating your first spark. Now you can
-    explore Sequel <a href="/worlds" sapper:prefetch>worlds</a> and <a href="/bubbles" sapper:prefetch>bubbles</a>.
+    explore Sequel <a href="/worlds" data-sveltekit-preload-data>worlds</a> and <a href="/bubbles" data-sveltekit-preload-data>bubbles</a>.
     Write your first post by either joining an existing bubble or creating your own one.`,
 
   createNewSpark: 'Create new spark',
@@ -522,8 +522,8 @@ module.exports = {
   bubblesFromSpark: 'Bubbles from {spark}',
   createNewBubble: 'Create new bubble',
   createNewWorld: 'Create new world',
-  selectSparkBeforeCreatingWorld: 'You need to <a href="/switch" sapper:prefetch>select</a> a spark before creating worlds.',
-  selectSparkBeforeCreatingBubble: 'You need to <a href="/switch" sapper:prefetch>select</a> a spark before creating bubbles.',
+  selectSparkBeforeCreatingWorld: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating worlds.',
+  selectSparkBeforeCreatingBubble: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating bubbles.',
   fields: 'Fields',
   profilePageForSpark: 'Profile page for {spark}',
   // World home page
@@ -988,7 +988,7 @@ module.exports = {
   switchToNameOfPlan: 'Switch to {plan}',
   selectPlanFromList: 'Select subscription plan',
   planList: 'Subscription plans',
-  subscribeLater: `I'll subscribe later`,
+  subscribeLater: 'I\'ll subscribe later',
   postInputFormat: 'Select Input Format',
   // Bubble member types
   memberTypeOwner: 'Owner',
@@ -1104,7 +1104,7 @@ module.exports = {
   purchaseSuccessful: 'Your purchase has been completed successfully.',
   // Assets pages
   assetsPageTitle: 'Assets',
-  collectionEmpty: 'Your collection is empty. Visit <a href="/marketplace" sapper:prefetch>Marketplace</a> to buy digital art.',
+  collectionEmpty: 'Your collection is empty. Visit <a href="/marketplace" data-sveltekit-preload-data>Marketplace</a> to buy digital art.',
   // Token page
   tokenPageTitle: 'Token',
   tokenID: 'ID',
@@ -1117,5 +1117,7 @@ module.exports = {
   studioEmpty: 'Your studio is empty. Wait for general release.',
   digitalArt: 'Digital Art',
   digitalArtStatus: 'Status',
-  digitalArtEditions: 'Editions',
+  digitalArtEditions: 'Editions'
 }
+
+export default intl

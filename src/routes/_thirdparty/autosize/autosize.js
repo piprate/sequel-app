@@ -7,8 +7,9 @@ import { mark, stop } from '../../_utils/marks'
 import debounce from 'lodash-es/debounce'
 import { getScrollContainer } from '../../_utils/scrollContainer'
 import { throttleTimer } from '../../_utils/throttleTimer'
+import { inBrowser } from '../../_utils/browserOrNode'
 
-const doUpdate = process.browser && throttleTimer(requestAnimationFrame)
+const doUpdate = inBrowser() && throttleTimer(requestAnimationFrame)
 
 const map = new Map()
 

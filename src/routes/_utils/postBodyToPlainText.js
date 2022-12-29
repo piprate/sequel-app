@@ -1,6 +1,7 @@
+import { inBrowser } from './browserOrNode'
 import { mark, stop } from './marks'
 
-const domParser = process.browser && new DOMParser()
+const domParser = inBrowser() && new DOMParser()
 
 // paragraphs should be separated by double newlines
 // single <br/>s should become single newlines
@@ -24,7 +25,7 @@ export function postBodyToPlainText (post) {
   if (post.bodyFormat === 'txt') {
     return body
   }
-  let html = post.bodyHTML
+  const html = post.bodyHTML
   if (!html) {
     return ''
   }

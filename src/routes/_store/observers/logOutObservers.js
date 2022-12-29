@@ -1,7 +1,8 @@
 import { onUserIsLoggedOut } from '../../_actions/onUserIsLoggedOut'
+import { inNode } from '../../_utils/browserOrNode'
 
 export function logOutObservers (isUserLoggedIn) {
-  if (!process.browser) {
+  if (inNode()) {
     return
   }
   isUserLoggedIn.subscribe(loggedIn => {

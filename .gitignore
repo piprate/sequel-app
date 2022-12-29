@@ -1,9 +1,6 @@
 .DS_Store
 /node_modules/
-/src/node_modules/@sapper/
 yarn-error.log
-/__sapper__/
-/src/template.html
 /static/*.css
 /static/icons.svg
 /static/inline-script.js.map
@@ -14,3 +11,7 @@ yarn-error.log
 
 # Intellij IDEA
 .idea/
+.svelte-kit
+.vercel
+.env.local
+dist

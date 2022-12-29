@@ -8,8 +8,8 @@ import { accessToken } from '../../_store/instance'
 import { importShowSubscriptionOptionsDialog } from '../../_components/dialog/asyncDialogs/importShowSubscriptionOptionsDialog'
 
 const planNames = {
-  'CommunityPlan': 'intl.communityPlanName',
-  'StandardPlan': 'intl.standardPlanName'
+  CommunityPlan: 'intl.communityPlanName',
+  StandardPlan: 'intl.standardPlanName'
 }
 
 export function getPlanName (planType) {

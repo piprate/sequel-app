@@ -27,7 +27,7 @@
 </script>
 
 <li class="page-list-item">
-  <a {href} sapper:prefetch id="page-list-item-{href}">
+  <a {href} data-sveltekit-preload-data id="page-list-item-{href}">
     <SvgIcon className="page-list-item-svg" href={icon} />
     <span aria-label={ariaLabel}>
       {label}

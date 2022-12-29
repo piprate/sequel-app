@@ -3,9 +3,9 @@ import { currentInstance, currentInstanceStream, currentTimeline } from '../loca
 import { get } from 'svelte/store'
 import { accessToken, currentSpark, currentSparkId } from '../instance'
 import { getFirstTimelineItemId } from '../timeline'
+import { inBrowser, inNode } from '../../_utils/browserOrNode'
 
 export function timelineObservers () {
-
   function shouldObserveTimeline (timeline) {
     return timeline &&
       (
@@ -18,7 +18,7 @@ export function timelineObservers () {
   }
 
   currentTimeline.subscribe(async (_currentTimeline) => {
-    if (!process.browser) {
+    if (inNode()) {
       return
     }
 
@@ -60,7 +60,7 @@ export function timelineObservers () {
 
         currentInstanceStream.set(_currentInstanceStream)
 
-        if (process.env.NODE_ENV !== 'production') {
+        if (!import.meta.env.PROD) {
           window.currentTimelineStream = _currentInstanceStream
         }
       }
@@ -70,7 +70,7 @@ export function timelineObservers () {
   })
 
   currentSpark.subscribe(async (_currentSpark) => {
-    if (!process.browser) {
+    if (inBrowser()) {
       return
     }
 
@@ -99,7 +99,7 @@ export function timelineObservers () {
 
       currentInstanceStream.set(_currentInstanceStream)
 
-      if (process.env.NODE_ENV !== 'production') {
+      if (!import.meta.env.PROD) {
         window.currentTimelineStream = _currentInstanceStream
       }
     } else {

@@ -32,7 +32,7 @@
         <span slot="is-empty">
             {#if self }
                 <div class="new-bubble-button">
-                    <a class="button primary" sapper:prefetch href="/bubbles/new">{intl.createNewBubble}</a>
+                    <a class="button primary" data-sveltekit-preload-data href="/bubbles/new">{intl.createNewBubble}</a>
                 </div>
             {/if}
         </span>

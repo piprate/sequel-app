@@ -2,6 +2,7 @@ import { mark, stop } from '../../_utils/marks'
 import { deriveFromRealmStore, realmStore } from '../../_utils/RealmStore'
 import { reselect } from '../../_utils/reselect'
 import { derived } from 'svelte/store'
+import { inBrowser } from '../../_utils/browserOrNode'
 
 const RENDER_BUFFER_FACTOR = 2.5
 
@@ -36,7 +37,7 @@ export const itemHeights = deriveFromRealmStore(virtualListStore, 'itemHeights',
 export const rawVisibleItems = derived(
   [items, scrollTop, itemHeights, offsetHeight, showHeader, headerHeight, listOffset],
   ([$items, $scrollTop, $itemHeights, $offsetHeight, $showHeader, $headerHeight, $listOffset]) => {
-    if (process.browser && process.env.NODE_ENV !== 'production') {
+    if (inBrowser() && !import.meta.env.PROD) {
       window.rawVisibleItemsComputed = (window.rawVisibleItemsComputed || 0) + 1
     }
     mark('compute visibleItems')
@@ -120,10 +121,10 @@ export const allVisibleItemsHaveHeight = derived(
   }
 )
 
-// if (process.browser) {
+// if (typeof window !== "undefined") {
 //   window.__virtualListStore = virtualListStore // for debugging
 //
-//   if (process.env.NODE_ENV !== 'production') { // for extra debugging
+//   if (!import.meta.env.PROD) { // for extra debugging
 //     virtualListStore.on('state', ({ changed }) => {
 //       if (changed.visibleItems) {
 //         window.visibleItemsChangedCount = (window.visibleItemsChangedCount || 0) + 1

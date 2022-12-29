@@ -3,6 +3,14 @@ import { isKaiOS } from '../_utils/userAgent/isKaiOS'
 import { persistentStore, transientStore } from './base'
 import { get } from '../_utils/lodash-lite'
 import { setupObservers } from './observers/observers'
+import { themes } from '../_static/themes'
+import { inBrowser } from '../_utils/browserOrNode'
+
+const themeColors = themes.map(_ => ([_.name, _.color]))
+
+if(inBrowser()) [
+  window.__themeColors = Object.fromEntries(themeColors)
+]
 
 // persisted state
 
@@ -12,7 +20,7 @@ export const composeData = persistentStore('composeData', {})
 export const currentInstance = persistentStore('currentInstance', null)
 // we disable scrollbars by default on iOS
 export const disableCustomScrollbars = persistentStore('disableCustomScrollbars',
-  process.browser && /iP(?:hone|ad|od)/.test(navigator.userAgent))
+  inBrowser() && /iP(?:hone|ad|od)/.test(navigator.userAgent))
 export const disableSubscriberCounts = persistentStore('disableSubscriberCounts', false)
 export const disableHotkeys = persistentStore('disableHotkeys', false)
 export const disableInfiniteScroll = persistentStore('disableInfiniteScroll', false)
@@ -36,7 +44,7 @@ export const neverMarkMediaAsSensitive = persistentStore('neverMarkMediaAsSensit
 export const omitEmojiInDisplayNames = persistentStore('omitEmojiInDisplayNames', undefined)
 export const pinnedPages = persistentStore('pinnedPages', {})
 export const pushSubscriptions = persistentStore('pushSubscriptions', {})
-export const reduceMotion = persistentStore('reduceMotion', !process.browser ||
+export const reduceMotion = persistentStore('reduceMotion', !inBrowser() ||
   matchMedia('(prefers-reduced-motion: reduce)').matches)
 export const underlineLinks = persistentStore('underlineLinks', false)
 export const centerNav = persistentStore('centerNav', false)
@@ -126,10 +134,10 @@ export const instanceLists = transientStore({})
 export const logInToInstanceError = transientStore(null)
 export const logInToInstanceErrorForText = transientStore('')
 export const logInToInstanceLoading = transientStore(false)
-export const online = transientStore(!process.browser || navigator.onLine)
+export const online = transientStore(!inBrowser() || navigator.onLine)
 export const pinnedPosts = transientStore({})
 export const polls = transientStore({})
-export const pushNotificationsSupport = transientStore(process.browser &&
+export const pushNotificationsSupport = transientStore(inBrowser() &&
   ('serviceWorker' in navigator &&
     'PushManager' in window &&
     'getKey' in window.PushSubscription.prototype))

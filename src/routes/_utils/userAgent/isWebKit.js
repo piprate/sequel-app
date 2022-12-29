@@ -1,3 +1,4 @@
+import { inBrowser } from '../browserOrNode'
 import { thunk } from '../thunk'
 
-export const isWebKit = thunk(() => process.browser && typeof webkitIndexedDB !== 'undefined')
+export const isWebKit = thunk(() => inBrowser() && typeof webkitIndexedDB !== 'undefined')

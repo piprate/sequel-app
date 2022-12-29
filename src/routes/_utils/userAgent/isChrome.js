@@ -1,3 +1,4 @@
+import { inBrowser } from '../browserOrNode'
 import { thunk } from '../thunk'
 
-export const isChrome = thunk(() => process.browser && /Chrome/.test(navigator.userAgent))
+export const isChrome = thunk(() => inBrowser() && /Chrome/.test(navigator.userAgent))

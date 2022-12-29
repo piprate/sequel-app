@@ -1,3 +1,4 @@
+import { inNode } from '../../_utils/browserOrNode'
 import { registerResizeListener } from '../../_utils/resize'
 import { transientStore } from '../base'
 
@@ -7,7 +8,7 @@ export const isTinyMobileSize = transientStore(false)
 export const isVeryTinyMobileSize = transientStore(false)
 
 export function resizeObservers () {
-  if (!process.browser) {
+  if (inNode()) {
     return
   }
 

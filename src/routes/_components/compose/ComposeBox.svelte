@@ -14,7 +14,7 @@
   import { currentComposeData, currentSparkId } from '../../_store/instance'
   import { slide } from '../../_transitions/slide'
   import { publishingPost, publishPost, setReplyVisibility } from '../../_actions/compose'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { classname } from '../../_utils/classname'
   import { scheduleIdleTask } from '../../_utils/scheduleIdleTask'
   import { onMount } from 'svelte'

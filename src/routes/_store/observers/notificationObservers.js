@@ -1,12 +1,13 @@
 import { setFavicon } from '../../_utils/setFavicon'
 import { runMediumPriorityTask } from '../../_utils/runMediumPriorityTask'
 import { hasNotifications } from '../badge'
+import { inNode } from '../../_utils/browserOrNode'
 
 let currentFaviconHasNotifications = false
 
 export function notificationObservers () {
   hasNotifications.subscribe(_hasNotifications => {
-    if (!process.browser) {
+    if (inNode()) {
       return
     }
     runMediumPriorityTask(() => {

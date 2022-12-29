@@ -1,9 +1,10 @@
+import { inNode } from '../../_utils/browserOrNode'
 import { transientStore } from '../base'
 
 export const isUserTouching = transientStore(false)
 
 export function touchObservers () {
-  if (!process.browser) {
+  if (inNode()) {
     return
   }
 

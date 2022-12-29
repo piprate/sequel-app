@@ -3,11 +3,15 @@ import fs from 'fs'
 import { promisify } from 'util'
 import path from 'path'
 import { rollup } from 'rollup'
-import { terser } from 'rollup-plugin-terser'
+import { terser } from '@wwa/rollup-plugin-terser'
 import replace from '@rollup/plugin-replace'
-import fromPairs from 'lodash-es/fromPairs'
-import { themes } from '../src/routes/_static/themes'
-import terserOptions from './terserOptions'
+import fromPairs from 'lodash-es/fromPairs.js'
+import { themes } from '../src/routes/_static/themes.js'
+import terserOptions from './terserOptions.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const writeFile = promisify(fs.writeFile)
 
@@ -42,7 +46,7 @@ export async function buildInlineScript () {
   const checksum = crypto.createHash('sha256').update(fullCode, 'utf8').digest('base64')
 
   await writeFile(path.resolve(__dirname, '../src/inline-script/checksum.js'),
-    `module.exports = ${JSON.stringify(checksum)}`, 'utf8')
+    `export default ${JSON.stringify(checksum)}`, 'utf8')
   await writeFile(path.resolve(__dirname, '../static/inline-script.js.map'),
     map.toString(), 'utf8')
 

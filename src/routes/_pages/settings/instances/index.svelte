@@ -61,15 +61,15 @@
       </SettingsList>
     </RadioGroup>
     <p>
-      <a sapper:prefetch href="/settings/instances/add" id="log-in-link-1">{intl.addAnotherInstance}</a>
+      <a data-sveltekit-preload-data href="/settings/instances/add" id="log-in-link-1">{intl.addAnotherInstance}</a>
     </p>
   {:else}
     <p>{intl.youreNotLoggedIn}</p>
     <p>
       {intl.logInToAnInstancePre}
-      <a sapper:prefetch href="/settings/instances/register" id="log-in-link-2">{intl.signUpToAnInstanceText}</a>
+      <a data-sveltekit-preload-data href="/settings/instances/register" id="log-in-link-2">{intl.signUpToAnInstanceText}</a>
       {intl.logInToAnInstanceOr}
-      <a sapper:prefetch href="/settings/instances/add" id="log-in-link-3">{intl.logInToAnInstanceText}</a>
+      <a data-sveltekit-preload-data href="/settings/instances/add" id="log-in-link-3">{intl.logInToAnInstanceText}</a>
       {intl.logInToAnInstancePost}
     </p>
   {/if}

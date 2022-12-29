@@ -5,6 +5,7 @@ import { clearAllCaches } from './cache'
 import { lifecycle } from '../_utils/lifecycle'
 import { scheduleIdleTask } from '../_utils/scheduleIdleTask'
 import { del } from '../_thirdparty/idb-keyval/idb-keyval'
+import { inBrowser } from '../_utils/browserOrNode'
 
 const openReqs = {}
 const databaseCache = {}
@@ -92,7 +93,7 @@ export function closeDatabase (instanceName) {
   clearAllCaches(instanceName)
 }
 
-if (process.browser) {
+if (inBrowser()) {
   lifecycle.addEventListener('statechange', event => {
     if (event.newState === 'frozen') { // page is frozen, close IDB connections
       Object.keys(openReqs).forEach(instanceName => {

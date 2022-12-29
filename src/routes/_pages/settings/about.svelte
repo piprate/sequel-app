@@ -3,7 +3,7 @@
 
   export const params = undefined;
 
-  const version = process.env.SEQUEL_APP_VERSION
+  const version = import.meta.env?.SEQUEL_APP_VERSION
 </script>
 
 <SettingsLayout page='settings/about' label="{intl.aboutApp}">

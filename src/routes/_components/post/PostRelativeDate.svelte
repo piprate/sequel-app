@@ -24,7 +24,7 @@
 <a id={elementId}
    class="post-relative-date {isPostInNotification ? 'post-in-notification' : '' }"
    href="/posts/{unwrap(postId)}"
-   sapper:prefetch
+   data-sveltekit-preload-data
    {tabindex}
 >
   <time datetime={createdAtDate} title={absoluteFormattedDate}

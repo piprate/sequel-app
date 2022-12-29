@@ -3,7 +3,7 @@
   import PostHeader from './PostHeader.svelte'
   import Shortcut from '../shortcut/Shortcut.svelte'
   import { currentInstance, omitEmojiInDisplayNames, underlineLinks } from '../../_store/local'
-  import { goto } from '@sapper/app'
+  import { goto } from '$app/navigation'
   import { composeNewPostMentioning } from '../../_actions/mention'
   import { classname } from '../../_utils/classname'
   import { createPostOrNotificationUuid } from '../../_utils/createPostOrNotificationUuid'

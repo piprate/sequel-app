@@ -13,7 +13,7 @@
 
 <a id={elementId}
    class="post-author-name {isPostInNotification ? 'post-in-notification' : '' } {isPostInOwnThread ? 'post-in-own-thread' : ''}"
-   sapper:prefetch
+   data-sveltekit-preload-data
    href="/sparks/{unwrap(postAuthorId)}"
    title="{'@' + postAuthor.acct}"
 >

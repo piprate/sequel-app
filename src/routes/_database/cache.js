@@ -1,4 +1,5 @@
 import { QuickLRU } from '../_thirdparty/quick-lru/quick-lru'
+import { inBrowser } from '../_utils/browserOrNode'
 
 export const postsCache = {
   maxSize: 100,
@@ -45,7 +46,7 @@ export const notificationsCache = {
   caches: {}
 }
 
-if (process.browser && process.env.NODE_ENV !== 'production') {
+if (inBrowser() && !import.meta.env.PROD) {
   (typeof self !== 'undefined' ? self : window).cacheStats = {
     posts: postsCache,
     sparks: sparksCache,
@@ -87,7 +88,7 @@ export function getInCache (cache, instanceName, key) {
 export function hasInCache (cache, instanceName, key) {
   const instanceCache = getOrCreateInstanceCache(cache, instanceName)
   const res = instanceCache.has(key)
-  if (process.env.NODE_ENV !== 'production') {
+  if (!import.meta.env.PROD) {
     if (res) {
       cache.hits = (cache.hits || 0) + 1
     } else {

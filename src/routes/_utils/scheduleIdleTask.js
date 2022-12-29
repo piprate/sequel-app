@@ -3,6 +3,7 @@
 // for a good breakdown of the concepts behind this.
 
 import Queue from 'tiny-queue'
+import { inBrowser } from './browserOrNode';
 import { mark, stop } from './marks'
 
 const taskQueue = new Queue()
@@ -16,7 +17,7 @@ function getRIC () {
 }
 
 function getIsInputPending () {
-  return process.browser && navigator.scheduling && navigator.scheduling.isInputPending
+  return inBrowser() && navigator.scheduling && navigator.scheduling.isInputPending
     ? () => navigator.scheduling.isInputPending()
     : () => false // just assume input is not pending on browsers that don't support this
 }

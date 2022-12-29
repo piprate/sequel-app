@@ -2,15 +2,15 @@
 // stopping at an element that returns true for the given stopFunc. Returns
 // false if none match
 export function checkDomAncestors (node, checkFunc, stopFunc) {
-  let thisNode = node
-  while (thisNode) {
-    if (stopFunc(thisNode)) {
+  let thinNode = node
+  while (thinNode) {
+    if (stopFunc(thinNode)) {
       break
     }
-    if (checkFunc(thisNode)) {
+    if (checkFunc(thinNode)) {
       return true
     }
-    thisNode = thisNode.parentElement
+    thinNode = thinNode.parentElement
   }
   return false
 }

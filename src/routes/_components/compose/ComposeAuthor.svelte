@@ -5,7 +5,7 @@
   import SparkDisplayName from '../spark/SparkDisplayName.svelte';
   import { ONE_TRANSPARENT_PIXEL } from '../../_static/media';
   import { emit } from '../../_utils/eventBus';
-  import { goto } from '@sapper/app';
+  import { goto } from '$app/navigation';
   import { unwrap } from "../../_utils/mapper";
 
   export let realm;
@@ -38,7 +38,7 @@
 </script>
 
 <a {href}
-   sapper:prefetch
+   data-sveltekit-preload-data
    class="compose-box-avatar {loaded ? 'loaded' : 'not-loaded'}"
    aria-hidden="true"
    tabindex="-1"
@@ -51,7 +51,7 @@
    {href}
    aria-busy={!loaded}
    aria-live="off"
-   sapper:prefetch
+   data-sveltekit-preload-data
    on:click="{onClick}"
 >
   <SparkDisplayName {spark} />

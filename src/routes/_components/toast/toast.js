@@ -10,7 +10,7 @@ const lazyToast = {
         toast = new Toast({
           target: document.querySelector('#theToast')
         })
-        if (process.env.NODE_ENV !== 'production') {
+        if (!import.meta.env.PROD) {
           window.toast = toast // for debugging
         }
       }

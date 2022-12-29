@@ -41,7 +41,7 @@
   <a class="bubble-profile-details-item"
      href='/bubbles/{bubbleId}/members'
      aria-label={membersLabel}
-     sapper:prefetch
+     data-sveltekit-preload-data
   >
     <span class="bubble-profile-details-item-title">
       {intl.members}

@@ -1,8 +1,9 @@
 import EventEmitter from 'events-light'
+import { inBrowser } from './browserOrNode'
 
 export const eventBus = new EventEmitter()
 
-if (process.browser) {
+if (inBrowser()) {
   window.__eventBus = eventBus
 }
 

@@ -1,8 +1,10 @@
 // Delegate certain events to the global document for perf purposes.
 
+import { inBrowser } from "./browserOrNode"
+
 const callbacks = {}
 
-if (process.browser) {
+if (inBrowser()) {
   window.__delegateCallbacks = callbacks
 }
 
@@ -29,7 +31,7 @@ function onEvent (e) {
       }
     }
     const res = callbacks[key](e) // callback returns true to indicate it has handled the action
-    if (process.env.NODE_ENV !== 'production' && typeof res !== 'boolean') {
+    if (!import.meta.env.PROD && typeof res !== 'boolean') {
       console.warn(`Callback returned a non-boolean response: "${key}". This should never happen.`)
     }
     if (res) {
@@ -53,7 +55,7 @@ export function registerClickDelegate (key, callback) {
   return registerClickDelegates({ [key]: callback })
 }
 
-if (process.browser) {
+if (inBrowser()) {
   document.addEventListener('click', onEvent)
   document.addEventListener('keydown', onEvent)
 }
