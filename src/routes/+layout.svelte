@@ -15,8 +15,11 @@
 	import InformationalFooter from './_components/InformationalFooter.svelte'
 	import { isUserLoggedIn} from './_store/local'
 	import { currentPage } from './_store/navigation'
-  	import { inBrowser } from './_utils/browserOrNode';
-	
+  	import { onMount } from 'svelte';
+	import { pwaInfo } from 'virtual:pwa-info'
+	import { useRegisterSW } from 'virtual:pwa-register/svelte'
+  	import { snackbar } from './_components/snackbar/snackbar';
+
 	export let segment = 'home';
 
 	$: infiniteScrollPage = $isUserLoggedIn && segment && !segment.startsWith('settings');
@@ -25,10 +28,18 @@
 		segment = segment || 'home';
 		currentPage.set(segment)
 	}
-	
-	if(inBrowser()) {
-		import('./_utils/serviceWorkerClient')
-	}
+
+	onMount(async () => {
+		useRegisterSW({
+			onRegisteredSW(_, registration) {
+				registration.addEventListener("updatefound", () => {
+					snackbar.announce("{intl.updateAvailable}", "{intl.reload}", () => registration.update());
+				});
+			}
+		});
+  	})
+  
+  $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 </script>
 
 <style>
@@ -39,6 +50,7 @@
 </style>
 
 <svelte:head>
+	{@html webManifest}
 	<meta property="og:title" content="{intl.appName}" />
 	<meta property="og:type" content="website" />
 	<meta property="og:description" content="{intl.ogDescription}"/>

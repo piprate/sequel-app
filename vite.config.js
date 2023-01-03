@@ -1,6 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import intlLoader from './intl-plugin';
+import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import { version } from './package.json';
+import intlLoader from './intl-plugin';
 
 /** @type {import('vite').UserConfig} */
 const config = {
@@ -12,7 +13,15 @@ const config = {
       stream: 'stream-browserify'
     }
   },
-  plugins: [intlLoader(), sveltekit()]
+  plugins: [
+    intlLoader(),
+    sveltekit(),
+    SvelteKitPWA({
+      outDir: 'dist',
+      filename: 'service-worker.js',
+      workbox: { sourcemap: true }
+    })
+  ]
 };
 
 export default config;

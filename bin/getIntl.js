@@ -11,7 +11,7 @@ const {default: defaultIntl} = await import(path.join(__dirname, '../src/intl', 
 
 export function warningOrError(message) {
   // avoid crashing the whole server on `yarn dev`
-  if (import.meta.env.PROD) {
+  if (process.env.NODE_ENV === 'production') {
     throw new Error(message);
   }
   return '(Placeholder intl string)';

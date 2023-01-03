@@ -95,6 +95,7 @@
     "@sveltejs/adapter-static": "^1.0.0",
     "@sveltejs/adapter-vercel": "^1.0.0",
     "@sveltejs/kit": "^1.0.0",
+    "@vite-pwa/sveltekit": "^0.1.1",
     "@wwa/rollup-plugin-terser": "^1.0.1",
     "standard": "^16.0.3",
     "stream-browserify": "^3.0.0",

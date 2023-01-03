@@ -41,7 +41,7 @@
      aria-live="assertive"
      aria-atomic="true"
      aria-hidden={!shown}
-     aria-label="{intl.alert}}"
+     aria-label="{intl.alert}"
 >
   <div class="snackbar-container">
     <span class="text">

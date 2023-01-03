@@ -2,6 +2,7 @@ import svelteIntlLoader from './svelte-intl-loader'
 
 const fileRegex = /\.(js|html|svelte)$/
 
+/** @type {() => import('vite').PluginOption} */
 export default function intlLoader () {
   return {
     name: 'intl-loader',

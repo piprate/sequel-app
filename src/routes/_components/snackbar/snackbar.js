@@ -1,5 +1,8 @@
 import { importSnackbar } from '../../_utils/asyncModules/importSnackbar.js'
 
+/** 
+ * @type {InstanceType<Awaited<ReturnType<importSnackbar>>>}
+ */
 let snackbar
 
 const lazySnackbar = {
