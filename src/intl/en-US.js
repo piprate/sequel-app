@@ -603,7 +603,13 @@ const intl = {
 
   <p>
     Icons provided by <a rel="noopener" target="_blank" href="http://fontawesome.io/">Font Awesome</a>.
-  </p>`,
+  </p>
+  <style>
+    li {
+      font-size: 1.3em;
+    }
+  </style>
+  `,
   // Settings
   settings: 'Settings',
   general: 'General',

@@ -3,7 +3,7 @@
 
   export const params = undefined;
 
-  const version = import.meta.env?.SEQUEL_APP_VERSION
+  const version = import.meta.env.SEQUEL_APP_VERSION
 </script>
 
 <SettingsLayout page='settings/about' label="{intl.aboutApp}">
@@ -15,9 +15,3 @@
     {@html intl.aboutAppDescription}
   </div>
 </SettingsLayout>
-
-<style>
-  :global(li) {
-    font-size: 1.3em;
-  }
-</style>
