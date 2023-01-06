@@ -6,8 +6,8 @@ import { optimize } from 'svgo'
 import $ from 'cheerio'
 import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)

@@ -12,8 +12,8 @@ import applyIntl from '../svelte-intl-loader.js'
 import { LOCALE } from '../src/routes/_static/intl.js'
 import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const { getLangDir } = rltDetect
 

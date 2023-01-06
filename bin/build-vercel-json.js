@@ -11,8 +11,8 @@ import { fileURLToPath } from 'url'
 
 const writeFile = promisify(fs.writeFile)
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const JSON_TEMPLATE = {
   version: 2,

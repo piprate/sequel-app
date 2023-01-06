@@ -1,4 +1,4 @@
-export default  {
+export default {
   ecma: 8,
   mangle: true,
   compress: {

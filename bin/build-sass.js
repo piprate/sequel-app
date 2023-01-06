@@ -6,9 +6,8 @@ import cssDedoupe from 'css-dedoupe'
 import TextEncoding from 'text-encoding'
 import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const writeFile = promisify(fs.writeFile)
 const readdir = promisify(fs.readdir)
