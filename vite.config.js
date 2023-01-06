@@ -18,8 +18,17 @@ const config = {
     sveltekit(),
     SvelteKitPWA({
       outDir: 'dist',
+      srcDir: './src',
+      scope: '/',
+      base: '/',
       filename: 'service-worker.js',
-      workbox: { sourcemap: true }
+      workbox: {
+        sourcemap: true,
+        globDirectory: 'dist',
+      },
+      kit: {
+        outDir: 'dist'
+      }
     })
   ]
 };

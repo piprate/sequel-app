@@ -16,6 +16,7 @@
     "build-steps": "run-s before-build vite-export build-vercel-json",
     "vite-build": "vite build",
     "vite-preview": "vite preview",
+    "start": "cross-env PORT=3005 node dist/index.js",
     "build-template-html": "node ./bin/build-template-html.js",
     "build-template-html-watch": "node ./bin/build-template-html.js --watch",
     "build-assets": "node ./bin/build-assets.js",

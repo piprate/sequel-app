@@ -46,4 +46,6 @@ export function scheduleInterval (callback, delay, runOnActive) {
       }
     })
   }
+
+  return interval
 }
