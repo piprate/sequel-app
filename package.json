@@ -1,7 +1,7 @@
 {
   "name": "sequel-app",
   "description": "A web app for Sequel",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "type": "module",
   "scripts": {
     "sample-build": "cross-env NODE_ENV=production webpack",
