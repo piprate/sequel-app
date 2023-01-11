@@ -9,7 +9,7 @@ const intlFormat = thunk(() => new Intl.RelativeTimeFormat(LOCALE))
 function formatRelativeTime (number, index) {
   if (index === 0) {
     if (import.meta.env.MODE === 'test') {
-      return require('../../../intl/en-US').default.justNow // only used in mocha tests
+      return 'just now'
     }
     return 'intl.justNow'
   }

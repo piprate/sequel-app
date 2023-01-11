@@ -10,6 +10,6 @@ export function focusRingObservers (alwaysShowFocusRing) {
   const style = document.getElementById(styleId)
 
   alwaysShowFocusRing.subscribe(_alwaysShowFocusRing => {
-    style.setAttribute('media', _alwaysShowFocusRing ? 'only x' : 'all') // disable or enable the style
+    style?.setAttribute('media', _alwaysShowFocusRing ? 'only x' : 'all') // disable or enable the style
   })
 }

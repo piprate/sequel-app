@@ -1,4 +1,4 @@
-import { inBrowser } from "./browserOrNode"
+import { inBrowser } from './browserOrNode'
 
 const prefersDarkTheme = inBrowser() && matchMedia('(prefers-color-scheme: dark)').matches
 const meta = inBrowser() && document.getElementById('theThemeColor')
@@ -41,7 +41,7 @@ export function switchToTheme (themeName = DEFAULT_THEME, enableGrayscale) {
     themeName = prefersDarkTheme ? 'dark-grayscale' : 'grayscale'
   }
   const themeColor = window.__themeColors[themeName]
-  meta.content = themeColor || window.__themeColors[DEFAULT_THEME]
+  if (meta) { meta.content = themeColor || window.__themeColors[DEFAULT_THEME] }
   if (themeName !== INLINE_THEME) {
     loadCSS(`/theme-${themeName}.css`)
   } else {
