@@ -3,6 +3,8 @@
   import SparkSearchResult from './SparkSearchResult.svelte'
   import HashtagSearchResult from './HashtagSearchResult.svelte'
   import PostSearchResult from './PostSearchResult.svelte'
+  import BubbleSearchResult from './BubbleSearchResult.svelte';
+  import WorldSearchResult from './WorldSearchResult.svelte';
 </script>
 
 <ul class="search-results">
@@ -11,6 +13,12 @@
   {/each}
   {#each $searchResults.sparks as spark}
     <SparkSearchResult {spark} />
+  {/each}
+  {#each $searchResults.bubbles as bubble}
+    <BubbleSearchResult {bubble} />
+  {/each}
+  {#each $searchResults.worlds as world}
+    <WorldSearchResult {world} />
   {/each}
   {#each $searchResults.posts as post, index}
     <PostSearchResult {post} {index} length={$searchResults.posts.length}/>

@@ -1,9 +1,7 @@
 <script>
   import { isUserLoggedIn } from '../_store/local'
-  import FreeTextLayout from '../_components/FreeTextLayout.svelte'
   import RestrictedPageWarning from '../_components/RestrictedPageWarning.svelte'
   import Search from '../_components/search/Search.svelte'
-  import InfoAside from '../_components/InfoAside.svelte';
 
   // suppress warnings
   export let params;
@@ -11,11 +9,6 @@
 </script>
 
 {#if $isUserLoggedIn}
-  <FreeTextLayout>
-    <InfoAside className="new-entity-notice-aside">
-      {intl.featureNotImplemented}
-    </InfoAside>
-  </FreeTextLayout>
   <div class="search-page">
     <Search></Search>
   </div>

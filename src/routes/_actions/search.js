@@ -4,6 +4,7 @@ import { formatIntl } from '../_utils/formatIntl'
 import { currentInstance, queryInSearch, searchLoading, searchResults, searchResultsForQuery } from '../_store/local'
 import { get } from 'svelte/store'
 import { accessToken } from '../_store/instance'
+import { populateEntityMediaURLs, populatePostMediaURLs } from '../_api/media'
 
 export async function doSearch () {
   const _currentInstance = currentInstance.get()
@@ -12,6 +13,12 @@ export async function doSearch () {
   searchLoading.set(true)
   try {
     const results = await search(_currentInstance, _accessToken, _queryInSearch)
+
+    results.posts.forEach((entity) => populatePostMediaURLs(entity, _currentInstance, _accessToken))
+    results.sparks.forEach((entity) => populateEntityMediaURLs(entity, _currentInstance, 'spark'))
+    results.bubbles.forEach((entity) => populateEntityMediaURLs(entity, _currentInstance, 'bubble'))
+    results.worlds.forEach((entity) => populateEntityMediaURLs(entity, _currentInstance, 'world'))
+
     const newQueryInSearch = queryInSearch.get() // avoid race conditions
     if (newQueryInSearch === _queryInSearch) {
       searchResultsForQuery.set(_queryInSearch)
