@@ -8,9 +8,9 @@ import { inBrowser } from '../_utils/browserOrNode'
 
 const themeColors = themes.map(_ => ([_.name, _.color]))
 
-if(inBrowser()) [
+if (inBrowser()) {
   window.__themeColors = Object.fromEntries(themeColors)
-]
+}
 
 // persisted state
 

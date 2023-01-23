@@ -2,13 +2,16 @@
   import Title from '../../_components/Title.svelte'
   import LazyPage from '../../_components/LazyPage.svelte'
   import pageComponent from '../../_pages/worlds/[worldId]/index.svelte'
-  import { page } from '$app/stores';
+  import { page } from '$app/stores'
+  import { observedWorld } from '../../../routes/_store/local'
 
- 
   const params = $page.params
-  params.newWorld = $page.url.searchParams.get('new') === '';
+  params.newWorld = $page.url.searchParams.get('new') === ''
+  
+  $: worldName = $observedWorld?.name || 'intl.worldProfile'
+
 </script>
 
-<Title name="{intl.worldProfile}" />
+<Title name={worldName} />
 
 <LazyPage {pageComponent} {params} />
