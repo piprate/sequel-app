@@ -6,6 +6,8 @@ FROM node:alpine
 WORKDIR /app
 COPY . /app
 
+ENV NODE_OPTIONS="--max-old-space-size=8192"
+
 # Install Sequel App
 RUN npm install && \
     npm run build && \
