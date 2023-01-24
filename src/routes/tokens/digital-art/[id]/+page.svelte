@@ -3,7 +3,7 @@
   import LazyPage from '../../../_components/LazyPage.svelte'
   import pageComponent from '../../../_pages/tokens/digital-art/[id]/index.svelte'
   import { page } from '$app/stores'
-  import { observedDigitalArt } from '../../../../routes/_store/local'
+  import { observedDigitalArt } from '../../../_store/local'
 
   $: tokenName = $observedDigitalArt?.name || 'intl.tokenPageTitle'
 

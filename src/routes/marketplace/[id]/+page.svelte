@@ -3,7 +3,7 @@
   import LazyPage from '../../_components/LazyPage.svelte'
   import pageComponent from '../../_pages/marketplace/[id]/index.svelte'
   import { page } from '$app/stores'
-  import { observedListing } from '../../../routes/_store/local'
+  import { observedListing } from '../../_store/local'
 
   const params = $page.params
 
