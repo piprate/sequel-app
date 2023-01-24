@@ -7,18 +7,19 @@ import { accessToken, currentSparkId } from '../_store/instance'
 import { confirmMintOnDemand, getMintOnDemandSignature, initialiseMintOnDemand } from '../_api/marketplace'
 import * as types from '@onflow/types'
 
-let flowConfigured = false
-
-export function configureFlow (instanceName) {
+export async function configureFlow (instanceName) {
   const instanceData = loggedInInstances.get()[instanceName]
-  fcl.config().get('accessNode.api').then(() => {
-    flowConfigured = true
-  })
 
-  if (flowConfigured) return
+  let currentAccessNodeAPI = await fcl.config().get('accessNode.api', 'not configured')
+  const newAccessNodeAPI = instanceData?.flowAccessNodeURI
+
+  if (currentAccessNodeAPI === newAccessNodeAPI) {
+    // already configured
+    return
+  }
 
   const cfg = fcl.config()
-    .put('accessNode.api', instanceData?.flowAccessNodeURI)
+    .put('accessNode.api', newAccessNodeAPI)
     .put('flow.network', instanceData?.flowEnv)
     .put('sdk.transport', transportGRPC)
     .put('discovery.wallet', instanceData.flowDiscoveryWalletURI)
