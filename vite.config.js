@@ -1,8 +1,10 @@
 import { sveltekit } from '@sveltejs/kit/vite'
 import { SvelteKitPWA } from '@vite-pwa/sveltekit'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { version } from './package.json'
 import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
+import inject from '@rollup/plugin-inject'
 import intlLoader from './intl-plugin'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -19,11 +21,6 @@ const config = {
       provider: 'istanbul'
     },
     setupFiles: [resolve(__dirname, 'src/tests/setup.js')]
-  },
-  resolve: {
-    alias: {
-      stream: 'stream-browserify'
-    }
   },
   plugins: [
     intlLoader(),
@@ -42,7 +39,13 @@ const config = {
         outDir: 'dist'
       }
     })
-  ]
+    // Don't polyfill packages when in test mode because vitest requires node packages to run tests
+  ].concat(process.env.NODE_ENV === 'test' ? [] : [nodePolyfills()]),
+  build: {
+    rollupOptions: {
+      plugins: [inject({ Buffer: ['buffer', 'Buffer'] })]
+    }
+  }
 }
 
 export default config

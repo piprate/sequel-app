@@ -13,6 +13,7 @@
   import { updateUserForInstance } from '../../_actions/instances'
   import { saveUser, userOperationError, userOperationInProgress } from '../../_actions/users'
   import {
+  configureFlow,
     disconnectFromFlow,
     getFlowBalance,
     getFUSDBalance,
@@ -70,6 +71,8 @@
       return
     }
 
+    configureFlow($currentInstance)
+
     flowBalance = await getFlowBalance(addr)
     fusdBalance = await getFUSDBalance(addr)
     const vaultTypes = await getRoyaltyVaultTypes(addr)
@@ -108,7 +111,10 @@
     }
   }
 
-  $: loadAccountInfo(flowAddress)
+  $: {
+    if(flowAddress)
+    loadAccountInfo(flowAddress)
+  }
 
   onMount(async () => {
     if ($isUserLoggedIn) {

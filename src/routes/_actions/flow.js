@@ -1,4 +1,5 @@
 import * as fcl from '@onflow/fcl'
+import { send as transportGRPC } from '@onflow/transport-grpc'
 import { currentInstance, loggedInInstances } from '../_store/local'
 import { populateDigitalArtPreviewURLs, populateExternalNFTPreviewURLs } from '../_api/nft'
 import { get } from 'svelte/store'
@@ -6,16 +7,24 @@ import { accessToken, currentSparkId } from '../_store/instance'
 import { confirmMintOnDemand, getMintOnDemandSignature, initialiseMintOnDemand } from '../_api/marketplace'
 import * as types from '@onflow/types'
 
+let flowConfigured = false
+
 export function configureFlow (instanceName) {
-  const instanceData = loggedInInstances.get()?.[instanceName]
+  const instanceData = loggedInInstances.get()[instanceName]
+  fcl.config().get('accessNode.api').then(() => {
+    flowConfigured = true
+  })
+
+  if (flowConfigured) return
 
   const cfg = fcl.config()
-    .put('env', instanceData?.flowEnv)
     .put('accessNode.api', instanceData?.flowAccessNodeURI)
-    .put('discovery.wallet', instanceData?.flowDiscoveryWalletURI)
-    .put('app.detail.title', instanceData?.flowAppTitle)
-    .put('app.detail.icon', instanceData?.flowAppLogoURI)
-    .put('fcl.warning.suppress.redir', true)  // this warning will be removed in future versions. Revisit.
+    .put('flow.network', instanceData?.flowEnv)
+    .put('sdk.transport', transportGRPC)
+    .put('discovery.wallet', instanceData.flowDiscoveryWalletURI)
+    .put('app.detail.title', instanceData.flowAppTitle)
+    .put('app.detail.icon', instanceData.flowAppLogoURI)
+    .put('fcl.warning.suppress.redir', true) // this warning will be removed in future versions. Revisit.
 
   if (instanceData?.flowAddresses) {
     for (const [alias, addr] of Object.entries(instanceData.flowAddresses)) {
@@ -407,8 +416,8 @@ export async function readNFTCollection (source, account) {
       {
         token: parseInt(id),
         name: meta.name,
-        source: source,
-        account: account,
+        source,
+        account,
         asset: meta.asset,
         avatar: populateDigitalArtPreviewURLs({}, _currentInstance, meta.asset)
       }))
@@ -417,8 +426,8 @@ export async function readNFTCollection (source, account) {
       {
         token: parseInt(id),
         name,
-        source: source,
-        account: account,
+        source,
+        account,
         avatar: populateExternalNFTPreviewURLs({}, _currentInstance, _accessToken, source, account, id)
       }))
   }
