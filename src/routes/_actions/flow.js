@@ -21,7 +21,6 @@ export async function configureFlow (instanceName) {
   const cfg = fcl.config()
     .put('accessNode.api', newAccessNodeAPI)
     .put('flow.network', instanceData?.flowEnv)
-    .put('sdk.transport', transportGRPC)
     .put('discovery.wallet', instanceData.flowDiscoveryWalletURI)
     .put('app.detail.title', instanceData.flowAppTitle)
     .put('app.detail.icon', instanceData.flowAppLogoURI)
