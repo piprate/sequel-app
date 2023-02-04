@@ -1,4 +1,3 @@
-import { database } from '../_database/database'
 import { currentInstance } from '../_store/local'
 import { accessToken } from '../_store/instance'
 import {
@@ -14,41 +13,64 @@ import uniqBy from 'lodash-es/uniqBy'
 import { scheduleIdleTask } from '../_utils/scheduleIdleTask'
 import { RequestThrottler } from '../_utils/RequestThrottler'
 import { get } from 'svelte/store'
+import { dbPromise, getDatabase } from '../_database/databaseLifecycle'
+import { ENTITY_STORE, NAME_LOWERCASE } from '../_database/constants'
+import { createNamePrefixKeyRange } from '../_database/keys'
+import { populateEntityMediaURLs } from '../_api/media'
 
 const DATABASE_SEARCH_RESULTS_LIMIT = 30
 
-function byUsername (a, b) {
-  const usernameA = a.acct.toLowerCase()
-  const usernameB = b.acct.toLowerCase()
+function sortByName (a, b) {
+  const nameA = a.name?.toLowerCase()
+  const nameB = b.name?.toLowerCase()
 
-  return usernameA < usernameB ? -1 : usernameA === usernameB ? 0 : 1
+  return nameA < nameB ? -1 : nameA === nameB ? 0 : 1
 }
 
-function bySparkId (a) {
+function sortById (a) {
   return a.id
 }
 
-export function doSparkSearch (searchText) {
+export async function searchEntitiesByName (instanceName, namePrefix, limit) {
+  limit = limit || 20
+  const db = await getDatabase(instanceName)
+  return dbPromise(db, ENTITY_STORE, 'readonly', (store, callback) => {
+    const keyRange = createNamePrefixKeyRange(namePrefix.toLowerCase())
+    store.index(NAME_LOWERCASE).getAll(keyRange, limit).onsuccess = e => {
+      callback(e.target.result)
+    }
+  })
+}
+
+export function doEntitySearch (searchText) {
   let canceled = false
   let localResults
   let remoteResults
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
-  const requestThrottler = new RequestThrottler(doSearchSparksRemotely)
+  const requestThrottler = new RequestThrottler(doSearchEntitiesRemotely)
 
-  async function searchSparksLocally () {
-    localResults = await database.searchSparksByUsername(
+  async function searchEntitiesLocally () {
+    localResults = await searchEntitiesByName(
       _currentInstance, searchText.substring(1), DATABASE_SEARCH_RESULTS_LIMIT)
   }
 
-  async function searchSparksRemotely () {
+  async function searchEntitiesRemotely () {
     remoteResults = await requestThrottler.request()
   }
 
-  async function doSearchSparksRemotely (signal) {
-    return (await search(
+  async function doSearchEntitiesRemotely (signal) {
+    const results = (await search(
       _currentInstance, _accessToken, searchText, false, SEARCH_RESULTS_LIMIT, false, signal
-    )).sparks
+    ))
+
+    delete results.posts
+
+    results.sparks?.forEach((entity) => populateEntityMediaURLs(entity, _currentInstance, 'spark'))
+    results.bubbles?.forEach((entity) => populateEntityMediaURLs(entity, _currentInstance, 'bubble'))
+    results.worlds?.forEach((entity) => populateEntityMediaURLs(entity, _currentInstance, 'world'))
+
+    return Object.values(results).flat().filter(Boolean)
   }
 
   function mergeAndTruncateResults () {
@@ -56,15 +78,15 @@ export function doSparkSearch (searchText) {
     // because the user has seen their content before. Otherwise, sort by username.
     let results = (localResults || [])
       .slice()
-      .sort(byUsername)
+      .sort(sortByName)
       .slice(0, SEARCH_RESULTS_LIMIT)
 
     if (results.length < SEARCH_RESULTS_LIMIT) {
       const topRemoteResults = (remoteResults || [])
-        .sort(byUsername)
+        .sort(sortByName)
         .slice(0, SEARCH_RESULTS_LIMIT - results.length)
       results = concat(results, topRemoteResults)
-      results = uniqBy(results, bySparkId)
+      results = uniqBy(results, sortById)
     }
 
     return results
@@ -89,8 +111,8 @@ export function doSparkSearch (searchText) {
       return
     }
     // run the two searches in parallel
-    searchSparksLocally().then(onNewResults).catch(onError)
-    searchSparksRemotely().then(onNewResults).catch(onError)
+    searchEntitiesLocally().then(onNewResults).catch(onError)
+    searchEntitiesRemotely().then(onNewResults).catch(onError)
   })
 
   return {

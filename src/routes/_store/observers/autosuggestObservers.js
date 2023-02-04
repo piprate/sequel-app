@@ -1,5 +1,4 @@
 import { doEmojiSearch } from '../../_actions/autosuggestEmojiSearch'
-import { doSparkSearch } from '../../_actions/autosuggestSparkSearch'
 import { doHashtagSearch } from '../../_actions/autosuggestHashtagSearch'
 import {
   autosuggestSearchText,
@@ -11,6 +10,7 @@ import {
   setForCurrentAutosuggest
 } from '../autosuggest'
 import { get } from 'svelte/store'
+import { doEntitySearch } from '../../_actions/autoSuggestEntitySearch'
 
 function resetAutosuggest () {
   setForCurrentAutosuggest(rootAutosuggestSelected, 0)
@@ -39,8 +39,8 @@ export function autosuggestObservers () {
       lastSearch = doEmojiSearch(_autosuggestSearchText)
     } else if (_autosuggestSearchText.startsWith('#')) { // hashtag
       lastSearch = doHashtagSearch(_autosuggestSearchText)
-    } else { // spark
-      lastSearch = doSparkSearch(_autosuggestSearchText)
+    } else {
+      lastSearch = doEntitySearch(_autosuggestSearchText)
     }
   })
 }

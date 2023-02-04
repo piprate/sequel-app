@@ -3,7 +3,7 @@ import { DEFAULT_TIMEOUT, get, post, put, WRITE_TIMEOUT } from '../_utils/ajax'
 import { unwrap } from '../_utils/mapper'
 import { populatePostMediaURLs } from './media'
 
-export async function sendPost (instanceName, accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, media, visibility, textFormatKey) {
+export async function sendPost (instanceName, accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, media, visibility, textFormatKey, mentions) {
   let url = `${basename(instanceName)}/bubble/${bubbleId}/post`
   let method = post
 
@@ -23,7 +23,8 @@ export async function sendPost (instanceName, accessToken, bubbleId, asSpark, te
     inReplyTo: inReplyToId,
     visibility: visibility,
     federated: federated,
-    media: media
+    media: media,
+    mentions
   }
 
   for (const key of Object.keys(body)) {

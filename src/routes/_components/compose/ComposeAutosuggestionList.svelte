@@ -49,9 +49,11 @@
           <span class="compose-autosuggest-list-display-name">
               <SparkDisplayName spark={item} />
           </span>
+          {#if item.handle}
           <span class="compose-autosuggest-list-username">
-              {'@' + item.acct}
+            {'@' + item.handle}
           </span>
+          {/if}
           {:else if type === 'hashtag'}
           <SvgIcon
                   href="#fa-hashtag"

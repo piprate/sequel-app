@@ -7,7 +7,7 @@ import {
   POST_ID,
   SPARK_ID,
   TIMESTAMP,
-  USERNAME_LOWERCASE,
+  NAME_LOWERCASE,
   WORLD_ID
 } from './constants'
 
@@ -57,9 +57,9 @@ export function cloneForStorage (obj) {
       case 'subjectPost':
         res[POST_ID] = value.id
         break
-      case 'acct': // TODO
+      case 'name': // TODO
         res[key] = value
-        res[USERNAME_LOWERCASE] = value.toLowerCase()
+        res[NAME_LOWERCASE] = value.toLowerCase()
         break
       default:
         res[key] = value

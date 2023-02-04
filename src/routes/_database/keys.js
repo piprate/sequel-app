@@ -56,3 +56,10 @@ export function createSparkUsernamePrefixKeyRange (sparkUsernamePrefix) {
     sparkUsernamePrefix + '\uffff'
   )
 }
+
+export function createNamePrefixKeyRange (namePrefix) {
+  return IDBKeyRange.bound(
+    namePrefix,
+    namePrefix + '\uffff'
+  )
+}

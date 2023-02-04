@@ -13,13 +13,15 @@ import {
   SPARKS_STORE,
   THREADS_STORE,
   TIMESTAMP,
-  USERNAME_LOWERCASE,
+  NAME_LOWERCASE,
   WORLDS_STORE,
   LISTINGS_STORE,
   DIGITAL_ARTS_STORE,
   WORLD_RELATIONSHIPS_STORE,
   BUBBLES_STORE,
-  BUBBLE_RELATIONSHIPS_STORE
+  BUBBLE_RELATIONSHIPS_STORE,
+  DB_VERSION_ENTITY,
+  ENTITY_STORE
 } from './constants'
 
 function initialMigration (db, tx, done) {
@@ -50,7 +52,7 @@ function initialMigration (db, tx, done) {
   })
   createObjectStore(SPARKS_STORE, { keyPath: 'id' }, {
     [TIMESTAMP]: TIMESTAMP,
-    [USERNAME_LOWERCASE]: USERNAME_LOWERCASE
+    [NAME_LOWERCASE]: NAME_LOWERCASE
   })
   createObjectStore(RELATIONSHIPS_STORE, { keyPath: 'id' }, {
     [TIMESTAMP]: TIMESTAMP
@@ -113,6 +115,25 @@ function migration3 (db, tx, done) {
   done()
 }
 
+function entityMigration (db, tx, done) {
+  function createObjectStore (name, init, indexes) {
+    const store = init
+      ? db.createObjectStore(name, init)
+      : db.createObjectStore(name)
+    if (indexes) {
+      Object.keys(indexes).forEach(indexKey => {
+        store.createIndex(indexKey, indexes[indexKey])
+      })
+    }
+  }
+
+  createObjectStore(ENTITY_STORE, { keyPath: 'id' }, {
+    [TIMESTAMP]: TIMESTAMP,
+    [NAME_LOWERCASE]: NAME_LOWERCASE
+  })
+  done()
+}
+
 export const migrations = [
   {
     version: DB_VERSION_INITIAL,
@@ -125,5 +146,9 @@ export const migrations = [
   {
     version: DB_VERSION_NFT,
     migration: migration3
+  },
+  {
+    version: DB_VERSION_ENTITY,
+    migration: entityMigration
   }
 ]

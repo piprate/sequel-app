@@ -15,7 +15,7 @@ export function createAutosuggestAccessibleLabel (
     displayName = $omitEmojiInDisplayNames
       ? removeEmoji(displayName, emojis) || displayName
       : displayName
-    label = `${displayName} @${selected.acct}`
+    label = displayName
   }
   return label
 }

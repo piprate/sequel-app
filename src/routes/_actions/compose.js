@@ -46,22 +46,7 @@ export async function canPost (bubbleId, asSpark, isComment = false) {
   return false
 }
 
-export async function insertHandleForReply (postId) {
-  const _currentInstance = currentInstance.get()
-  const _currentSparkId = get(currentSparkId)
-  const originalPost = await database.getPost(_currentInstance, postId, _currentSparkId)
-  let sparks = [originalPost.authorRef].concat(originalPost.mentions || [])
-    .filter(spark => spark.id !== _currentSparkId)
-  // Pleroma includes account in mentions as well, so make uniq
-  sparks = uniqBy(sparks, _ => _.id)
-  if (!getComposeData(postId, 'text') && sparks.length) {
-    setComposeData(postId, {
-      text: sparks.map(spark => `@${spark.acct} `).join('')
-    })
-  }
-}
-
-export async function publishPost (realm, bubbleId, asSpark, text, originalPostId, inReplyToId, media, visibility, inReplyToUuid, textFormatKey) {
+export async function publishPost (realm, bubbleId, asSpark, text, originalPostId, inReplyToId, media, visibility, inReplyToUuid, textFormatKey, mentions) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
 
@@ -81,7 +66,7 @@ export async function publishPost (realm, bubbleId, asSpark, text, originalPostI
 
   publishingPost.set(true)
   try {
-    const post = await sendPost(_currentInstance, _accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, mediaToSend, visibility, textFormatKey)
+    const post = await sendPost(_currentInstance, _accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, mediaToSend, visibility, textFormatKey, mentions)
     if (originalPostId) {
       updateEditedPost(_currentInstance, post, asSpark)
       emit('postUpdated')

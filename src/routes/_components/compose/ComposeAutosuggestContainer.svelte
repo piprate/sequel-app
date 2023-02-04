@@ -1,5 +1,5 @@
 <script>
-  import { currentInstance } from '../../_store/local'
+  import { composeData, currentInstance } from '../../_store/local'
   import {
     rootAutosuggestSearchResults,
     rootAutosuggestSelected,
@@ -11,19 +11,17 @@
   } from '../../_store/autosuggest'
   import ComposeAutosuggestionList from './ComposeAutosuggestionList.svelte'
   import { get } from '../../_utils/lodash-lite'
-  import { selectAutosuggestItem } from '../../_actions/autosuggest'
+  import { selectAutosuggestItem, updateMentions } from '../../_actions/autosuggest'
   import { once } from '../../_utils/once'
-  import { createEventDispatcher, onMount } from "svelte";
+  import { onMount } from "svelte";
   import { emit } from "../../_utils/eventBus";
-
-  const dispatch = createEventDispatcher();
 
   export let realm;
   export let left;
   export let top = 0;
 
   let shown = false;
-
+  $: mentions = get($composeData, [$currentInstance, realm, 'mentions'], [])
   $: realmComposeFocused = get($rootComposeFocused, [$currentInstance, realm], false);
   $: realmAutosuggestSearchResults = get($rootAutosuggestSearchResults, [$currentInstance, realm], []);
   $: realmAutosuggestType = get($rootAutosuggestType, [$currentInstance, realm]);
@@ -35,6 +33,13 @@
     setForCurrentAutosuggest(rootAutosuggestSelecting, true);
     emit('autosuggestItemSelected');
     selectAutosuggestItem(event.detail);
+
+    const item = event.detail
+
+    updateMentions(item, realm)
+
+    const composeInput = document.getElementById(`the-compose-box-input-${realm}`)
+    composeInput?.focus()
   }
 
   let _promiseChain;

@@ -20,6 +20,7 @@
   import { onMount } from 'svelte'
   import { currentTimeline, observedBubble, observedBubbleRelationship } from '../../_store/local'
   import { unwrap } from '../../_utils/mapper'
+  import ComposeMentions from './ComposeMentions.svelte';
 
   export let realm
   export let bubbleId
@@ -55,6 +56,7 @@
   $: textFormatKey = composeData.postInputFormat || 'txt'
   $: textFormat = POST_INPUT_FORMATS.find(_ => _.key === textFormatKey)
   $: media = composeData.media || []
+  $: mentions = composeData.mentions || []
   $: inReplyToId = composeData.inReplyToId  // delete-and-redraft replies, using standard id
   $: federationMode = $observedBubble.federationMode
   $: defaultVisibility = (
@@ -105,7 +107,7 @@
     }
 
     /* no await */
-    publishPost(realm, bubbleId, asSpark, text, composeData.originalPostId, inReplyTo, media, postPrivacyKey, inReplyToUuid, textFormatKey)
+    publishPost(realm, bubbleId, asSpark, text, composeData.originalPostId, inReplyTo, media, postPrivacyKey, inReplyToUuid, textFormatKey, mentions)
 
     if (inReplyTo && ($currentTimeline !== `post/${unwrap(inReplyTo)}`)) {
       // we published a comment. Navigate to the comment's ancestor to display the conversation
@@ -147,18 +149,19 @@
     <ComposeInput {realm} {text} {autoFocus} on:publishAction="{doPublishPost}" />
     <ComposeLengthGauge {length} {overLimit} />
     <ComposeAutosuggest {realm} {dialogId} />
+    <ComposeMentions {realm} />
     <ComposeToolbar {realm} {postPrivacy} {media} {contentWarningShown} enableNFT=true {textFormat} />
     <ComposeLengthIndicator {length} {overLimit} />
     <ComposeMedia {realm} {media} />
-<!--    <ComposeMediaSensitive {realm} {media} {sensitive} {contentWarning} {contentWarningShown} />-->
+    <!--    <ComposeMediaSensitive {realm} {media} {sensitive} {contentWarning} {contentWarningShown} />-->
   </div>
 </ComposeFileDrop>
 <ComposeStickyButton {showSticky}
-                     {overLimit}
-                     {hideAndFadeIn}
-                     on:publishAction="{doPublishPost}" />
+{overLimit}
+{hideAndFadeIn}
+on:publishAction="{doPublishPost}" />
 {#if !hideBottomBorder}
-  <div class="compose-box-border-bottom {hideAndFadeIn}"></div>
+<div class="compose-box-border-bottom {hideAndFadeIn}"></div>
 {/if}
 
 <style>
@@ -173,6 +176,7 @@
       "avatar input       input       input"
       "avatar gauge       gauge       gauge"
       "avatar autosuggest autosuggest autosuggest"
+      "avatar mentions    mentions    mentions"
       "avatar toolbar     toolbar     length"
       "avatar media       media       media"
       "avatar sensitive   sensitive   sensitive";

@@ -213,11 +213,11 @@
   {#if spoilerText}
     <PostSpoiler {uuid} {isPostInNotification} {isPostInOwnThread} {spoilerShown} {enableShortcuts} {shortcutScope} {spoilerText} {postEmojis} on:recalculateHeight />
   {/if}
-  {#if !showContent}
-    <PostMentions {uuid} {post} {isPostInOwnThread} />
-  {/if}
   {#if content && (showContent || preloadHiddenContent)}
     <PostContent {uuid} {post} {isPostInOwnThread} {isPostInNotification} {postEmojis} shown={showContent}/>
+    {#if post.mentions}
+      <PostMentions {post} />
+    {/if}
   {/if}
   {#if showMedia }
     <PostMediaAttachments {uuid} {enableShortcuts} {shortcutScope} {post} on:recalculateHeight />
@@ -255,8 +255,8 @@
         "sidebar author-name  author-handle relative-date"
         "sidebar spoiler      spoiler       spoiler"
         "sidebar spoiler-btn  spoiler-btn   spoiler-btn"
-        "sidebar mentions     mentions      mentions"
         "sidebar content      content       content"
+        "sidebar mentions     mentions      mentions"
         "sidebar card         card          card"
         "sidebar media-grp    media-grp     media-grp"
         "sidebar poll         poll          poll"
@@ -286,8 +286,8 @@
       "sidebar     author-handle"
       "spoiler     spoiler"
       "spoiler-btn spoiler-btn"
-      "mentions    mentions"
       "content     content"
+      "mentions    mentions"
       "card        card"
       "media-grp   media-grp"
       "media       media"

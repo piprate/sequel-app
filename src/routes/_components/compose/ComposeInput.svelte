@@ -18,8 +18,8 @@
   import { mark, stop } from '../../_utils/marks'
   import { selectionChange } from '../../_utils/events'
   import {
-    clickSelectedAutosuggestionUsername,
-    clickSelectedAutosuggestionEmoji, clickSelectedAutosuggestionHashtag
+    clickSelectedAutosuggestionName,
+    clickSelectedAutosuggestionEmoji, clickSelectedAutosuggestionHashtag, updateMentions
   } from '../../_actions/autosuggest'
   import { get } from '../../_utils/lodash-lite'
   import { on } from '../../_utils/eventBus'
@@ -38,13 +38,22 @@
 
   let rawText = '';
   let textarea;
+  let selectedItem
 
   $: realmComposeFocused = get($rootComposeFocused, [$currentInstance, realm], false);
   $: autosuggestShownForThisInput = !!($autosuggestShown && realmComposeFocused);
-  $: realmAutosuggestSelected = get($autosuggestSelected, [$currentInstance, realm], 0);
+  $: realmAutosuggestSelected = $autosuggestSelected
   $: activeDescendant = (
           autosuggestShownForThisInput ? `compose-autosuggest-active-item-${realm}-${realmAutosuggestSelected}` : undefined
   );
+  $: {
+      const suggestions = $autosuggestSearchResults
+
+      if (suggestions.length) {
+        selectedItem = suggestions[$autosuggestSelected]
+      }
+    }
+
 
   let firstTime = true;
 
@@ -209,12 +218,15 @@
       /* autosuggestSelecting prevents a flash of searched content */
       setForCurrentAutosuggest(rootAutosuggestSelecting, true);
       if ($autosuggestType === 'spark') {
-        await clickSelectedAutosuggestionUsername(realm)
+        await clickSelectedAutosuggestionName(realm)
       } else if ($autosuggestType === 'hashtag') {
         await clickSelectedAutosuggestionHashtag(realm)
       } else { // emoji
         await clickSelectedAutosuggestionEmoji(realm)
       }
+
+      updateMentions(selectedItem, realm)
+
       setForCurrentAutosuggest(rootAutosuggestSelecting, false);
     }
 
