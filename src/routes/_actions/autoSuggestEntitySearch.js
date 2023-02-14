@@ -14,7 +14,7 @@ import { scheduleIdleTask } from '../_utils/scheduleIdleTask'
 import { RequestThrottler } from '../_utils/RequestThrottler'
 import { get } from 'svelte/store'
 import { dbPromise, getDatabase } from '../_database/databaseLifecycle'
-import { ENTITY_STORE, NAME_LOWERCASE } from '../_database/constants'
+import { BUBBLES_STORE, SPARKS_STORE, TIMESTAMP, WORLDS_STORE } from '../_database/constants'
 import { createNamePrefixKeyRange } from '../_database/keys'
 import { populateEntityMediaURLs } from '../_api/media'
 
@@ -34,12 +34,12 @@ function sortById (a) {
 export async function searchEntitiesByName (instanceName, namePrefix, limit) {
   limit = limit || 20
   const db = await getDatabase(instanceName)
-  return dbPromise(db, ENTITY_STORE, 'readonly', (store, callback) => {
+  return Promise.all([WORLDS_STORE, BUBBLES_STORE, SPARKS_STORE].map(entityStore => dbPromise(db, entityStore, 'readonly', (store, callback) => {
     const keyRange = createNamePrefixKeyRange(namePrefix.toLowerCase())
-    store.index(NAME_LOWERCASE).getAll(keyRange, limit).onsuccess = e => {
+    store.index(TIMESTAMP).getAll(keyRange, limit).onsuccess = e => {
       callback(e.target.result)
     }
-  })
+  })))
 }
 
 export function doEntitySearch (searchText) {
@@ -53,6 +53,7 @@ export function doEntitySearch (searchText) {
   async function searchEntitiesLocally () {
     localResults = await searchEntitiesByName(
       _currentInstance, searchText.substring(1), DATABASE_SEARCH_RESULTS_LIMIT)
+    localResults = localResults.flat()
   }
 
   async function searchEntitiesRemotely () {

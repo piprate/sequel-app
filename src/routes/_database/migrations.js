@@ -21,7 +21,7 @@ import {
   BUBBLES_STORE,
   BUBBLE_RELATIONSHIPS_STORE,
   DB_VERSION_ENTITY,
-  ENTITY_STORE
+  DB_VERSION_NAME_INDEX
 } from './constants'
 
 function initialMigration (db, tx, done) {
@@ -134,6 +134,13 @@ function entityMigration (db, tx, done) {
   done()
 }
 
+function nameIndexMigration (db, tx, done) {
+  tx.objectStore(BUBBLES_STORE).createIndex(NAME_LOWERCASE, NAME_LOWERCASE)
+  tx.objectStore(WORLDS_STORE).createIndex(NAME_LOWERCASE, NAME_LOWERCASE)
+
+  done()
+}
+
 export const migrations = [
   {
     version: DB_VERSION_INITIAL,
@@ -150,5 +157,9 @@ export const migrations = [
   {
     version: DB_VERSION_ENTITY,
     migration: entityMigration
+  },
+  {
+    version: DB_VERSION_NAME_INDEX,
+    migration: nameIndexMigration
   }
 ]

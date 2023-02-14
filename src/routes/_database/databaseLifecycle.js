@@ -1,4 +1,4 @@
-import { DB_VERSION_CURRENT } from './constants'
+import { BUBBLES_STORE, DB_VERSION_CURRENT } from './constants'
 import { addKnownInstance, deleteKnownInstance } from './knownInstances'
 import { migrations } from './migrations'
 import { clearAllCaches } from './cache'
