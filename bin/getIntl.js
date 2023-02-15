@@ -6,8 +6,9 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const { default: intl } = await import(path.join(__dirname, '../src/intl', LOCALE + '.js'))
-const { default: defaultIntl } = await import(path.join(__dirname, '../src/intl', DEFAULT_LOCALE + '.js'))
+const { default: intl } = await import(`file:///${(path.join(__dirname, '../src/intl', LOCALE + '.js'))}`)
+const { default: defaultIntl } = await import(`file:///${path.join(__dirname, '../src/intl', DEFAULT_LOCALE + '.js')}`)
+
 
 export function warningOrError (message) {
   // avoid crashing the whole server on `yarn dev`
