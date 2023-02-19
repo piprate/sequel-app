@@ -1136,7 +1136,10 @@ const intl = {
   digitalArtStatus: 'Status',
   digitalArtEditions: 'Editions',
   offerDigitalArt: 'Offer Digital Art',
-  offerAvailable: '{digitalArt} is available now'
+  offerAvailable: '{digitalArt} is available now',
+  selectSparkFromList: 'Select spark',
+  sparkList: 'Sparks',
+  selectSparkName: 'Select {spark}'
 }
 
 export default intl

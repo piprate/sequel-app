@@ -34,8 +34,7 @@
         index,
         name: spark.name,
         selected: (selectedSpark === spark.id),
-        label: formatIntl('intl.selectedSparkLabel', { spark: spark.name, selected: (selectedSpark === spark.id) }),
-        switchLabel: formatIntl('intl.switchToNameOfSpark', { spark: spark.name }),
+        switchLabel: formatIntl('intl.selectSparkName', { spark: spark.name }),
         data: spark
     }))
 
@@ -81,7 +80,6 @@
                       index={spark.index}
                       on:click={() => onClick(spark)}>
                       <div class="search-sparks-spark">
-                        {#if spark.id}
                         <div class="search-sparks-spark-avatar">
                           <Avatar entity={spark.data} size="small" />
                         </div>
@@ -96,14 +94,11 @@
                             spark.data.summary.length > 250 ?
                             spark.data.summary.substring(0, 250) + "..." : spark.data.summary
                             : ''}
-                  </div>
-                  {:else}
-                  <div class="spark-not-assigned">{intl.sparkNotAssigned}</div>
-                  {/if}
-                  <div class="spark-selector-button-wrapper">
-                    <SvgIcon className="spark-selector-button-svg {spark.selected ? '' : 'hidden'}"
-                    href="#fa-check" />
-                  </div>
+                        </div>
+                        <div class="spark-selector-button-wrapper">
+                            <SvgIcon className="spark-selector-button-svg {spark.selected ? '' : 'hidden'}"
+                            href="#fa-check" />
+                        </div>
                 </div>
               </RadioGroupButton>
             </li>

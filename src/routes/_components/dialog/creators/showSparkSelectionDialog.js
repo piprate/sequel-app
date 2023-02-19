@@ -1,9 +1,9 @@
 import SparkSelectionDialog from '../components/SparkSelectionDialog.svelte'
 import { showDialog } from './showDialog'
 
-export default function showSparkSelectionDialog (selectedWorld, onSelect, label, title, realm) {
+export default function showSparkSelectionDialog (selectedSpark, onSelect, label, title, realm) {
   return showDialog(SparkSelectionDialog, {
-    selectedWorld,
+    selectedSpark,
     label,
     title,
     realm
