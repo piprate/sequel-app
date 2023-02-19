@@ -2,6 +2,7 @@
   import { roleName } from '../../_utils/evergreen'
 
   export let profile;
+  export let title = 'intl.evergreenProfile'
 
   $: roles = profile.roles || [];
   $: rolesForDisplay = (roles.map(role => ({
@@ -15,7 +16,7 @@
 {#if rolesForDisplay.length}
   <div class="evergreen-profile-meta">
     <div class="evergreen-profile-header">
-      <h2>{intl.evergreenProfile}</h2>
+      <h2>{title}</h2>
     </div>
     <div
             id="evergreen-profile-meta-role-head"

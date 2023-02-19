@@ -34,10 +34,10 @@
 </script>
 
 <div class="digital-art-page">
+  <slot name="header"></slot>
     {#if loading}
         <LoadingPage />
     {:else if artList && artList.length}
-        <slot name="header"></slot>
         <ul class="digital-art-results art-grid">
             {#each artList as digitalArt}
                 <DigitalArtCard
@@ -47,10 +47,10 @@
                 />
             {/each}
         </ul>
-        <slot name="footer"></slot>
     {:else}
         <slot name="is-empty"></slot>
     {/if}
+    <slot name="footer"></slot>
 </div>
 <style>
     .digital-art-page {

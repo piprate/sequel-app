@@ -1,9 +1,9 @@
 import { database } from '../_database/database'
-import { currentInstance, observedDigitalArt, observedSpark } from '../_store/local'
+import { clearComposeData, currentInstance, observedDigitalArt } from '../_store/local'
 import { accessToken, currentSparkId } from '../_store/instance'
-import { get } from 'svelte/store'
+import { get, writable } from 'svelte/store'
 import { wrap } from '../_utils/mapper'
-import { getDigitalArt } from '../_api/studio'
+import { getDigitalArt, newDigitalArt } from '../_api/studio'
 
 async function _updateDigitalArt (id, instanceName, accessToken, asSpark) {
   const localPromise = database.getDigitalArt(instanceName, wrap(id))
@@ -32,6 +32,50 @@ async function _updateDigitalArt (id, instanceName, accessToken, asSpark) {
 
 export async function clearDigitalArt () {
   observedDigitalArt.set(null)
+}
+
+export const digitalArtOperationInProgress = writable(false)
+export const digitalArtOperationError = writable(null)
+
+export async function saveDigitalArt (realm, digitalArtId, submission) {
+  digitalArtOperationInProgress.set(true)
+  digitalArtOperationError.set(null)
+
+  let spark
+
+  try {
+    submission.name = submission.name.trim()
+
+    if (!submission.name) {
+      throw new Error('Name is required')
+    }
+
+    if (submission.name.length >= 120) {
+      throw new Error('Name needs to be less than 120 characters long')
+    }
+
+    if (submission.maxEdition < 0 || submission.maxEdition > 100) {
+      throw new Error('Max Editions should be in the range of 0 to 100')
+    }
+
+    if (!submission.content) {
+      throw new Error('Image is required')
+    }
+
+    const asSpark = get(currentSparkId)
+
+    if (!digitalArtId) {
+      spark = await newDigitalArt(currentInstance.get(), get(accessToken), submission, asSpark)
+    }
+
+    clearComposeData(realm)
+  } catch (err) {
+    digitalArtOperationError.set(err)
+  } finally {
+    digitalArtOperationInProgress.set(false)
+  }
+
+  return spark
 }
 
 export async function updateDigitalArt (id) {

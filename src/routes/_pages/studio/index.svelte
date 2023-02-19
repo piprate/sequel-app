@@ -19,11 +19,9 @@
 {#if $isAuthenticated }
     <DynamicPageBanner title="{intl.studio}" icon="#fa-paint-brush" />
     <DigitalArtsPage {fetcher}>
-        <span slot="is-empty">
-            <InfoAside className="empty-studio-notice-aside">
-              {intl.studioEmpty}
-          </InfoAside>
-        </span>
+        <div slot="header" class="header">
+            <a class="button primary new-entity-button" data-sveltekit-preload-data href="/studio/digital-art/new">{intl.createNewDigitalArt}</a>
+        </div>
     </DigitalArtsPage>
 {:else}
     <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
@@ -32,5 +30,12 @@
 <style>
     :global(.empty-studio-notice-aside) {
         margin: 10px 10px 0 0;
+    }
+
+    .header a.primary {
+        display: block;
+        text-align: center;
+        width: fit-content;
+        margin-bottom: 1.5rem;
     }
 </style>

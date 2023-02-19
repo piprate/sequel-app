@@ -287,6 +287,15 @@ const intl = {
   worldNameColon: 'Name:',
   enterWorldSummary: 'Enter summary',
   worldSummaryColon: 'Summary:',
+  // studio edit page
+  newDigitalArt: 'New Digital Art',
+  enterDigitalArtName: 'Enter DigitalArt Name',
+  DigitalArtNameColon: 'Name:',
+  enterDigitalArtDescription: 'Enter description',
+  DigitalArtDescriptionColon: 'Description (optional):',
+  DigitalArtImageColon: 'Image:',
+  DigitalArtMaxEditionsColon: 'Max Editions:',
+  enterDigitalArtMaxEditions: 'Enter max editions',
   // Notification subpages
   filters: 'Filters',
   all: 'All',
@@ -427,6 +436,7 @@ const intl = {
   copyLinkToSpark: 'Copy link to spark',
   copiedToClipboard: 'Copied to clipboard',
   addSparkBookmark: 'Bookmark {spark}',
+  searchSpark: 'Search Spark',
   // World options
   joinWorld: 'Join {world}',
   leaveWorld: 'Leave {world}',
@@ -522,6 +532,7 @@ const intl = {
   bubblesFromSpark: 'Bubbles from {spark}',
   createNewBubble: 'Create new bubble',
   createNewWorld: 'Create new world',
+  createNewDigitalArt: 'Create new digital art',
   selectSparkBeforeCreatingWorld: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating worlds.',
   selectSparkBeforeCreatingBubble: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating bubbles.',
   fields: 'Fields',
@@ -1123,7 +1134,9 @@ const intl = {
   studioEmpty: 'Your studio is empty. Wait for general release.',
   digitalArt: 'Digital Art',
   digitalArtStatus: 'Status',
-  digitalArtEditions: 'Editions'
+  digitalArtEditions: 'Editions',
+  offerDigitalArt: 'Offer Digital Art',
+  offerAvailable: '{digitalArt} is available now'
 }
 
 export default intl

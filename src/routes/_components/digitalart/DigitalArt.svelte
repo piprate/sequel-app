@@ -10,6 +10,7 @@
   import SparkRole from '../SparkRole.svelte'
   import Timestamp from '../Timestamp.svelte'
   import EvergreenProfile from '../marketplace/EvergreenProfile.svelte'
+  import DigitalArtOffer from './DigitalArtOffer.svelte';
 
   export let digitalArt
   export let ourSpark
@@ -46,6 +47,7 @@
         </div>
       {/if}
       <DigitalArtDetails {digitalArt} {ourSpark} />
+      <DigitalArtOffer {digitalArt} />
       {#if isSealed}
         <EvergreenProfile profile={digitalArt.evergreenProfile} />
       {/if}
@@ -69,6 +71,7 @@
             "created   created"
             "artist    artist"
             "details   details"
+            "offer     offer"   
             "evergreen evergreen";
     grid-template-rows: repeat(8, min-content);
     grid-column-gap: 10px;
