@@ -9,9 +9,11 @@
   }
 </script>
 
-<div class="offer">
-    <button class="primary" on:click={openModal} disabled={!!digitalArt.sealRecord}>OFFER</button>
-</div>
+{#if !digitalArt.sealRecord}
+  <div class="offer">
+    <button class="primary" on:click={openModal}>OFFER</button>
+  </div>
+{/if}
   
 <style>
     .offer {

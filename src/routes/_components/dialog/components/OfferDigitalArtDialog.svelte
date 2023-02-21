@@ -114,12 +114,6 @@
     )
   }
 
-  const preventNoReleaseSelect = (event) => {
-    if (event.target.value === '') {
-        payload.release = payload.release
-    }
-  }
-
   const finalise = async () => {
     try {
       loading = true
@@ -159,7 +153,7 @@
         id="unit-price-input"
         name="unitPrice"
         step="0.01"
-        min="0.01"
+        min="0"
         pattern="^[+-]?\d+(\.\d+)?$"
         bind:value={payload.unitPrice}
       />
@@ -185,10 +179,10 @@
     </div>
     <div id="release" class="field">
       <label for="release-input">Release</label>
-      <select name="release" id="release-input" bind:value={payload.release} on:input={preventNoReleaseSelect}>
-        <option value="" disabled>No Release</option>
-        {#each releases as release}
-          <option value={release}>{release.name}</option>
+      <select name="release" id="release-input" bind:value={payload.release}>
+        <option value>No Release</option>
+        {#each releases as {id, name}}
+          <option value={id}>{name}</option>
         {/each}
       </select>
     </div>
