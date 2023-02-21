@@ -5,11 +5,9 @@
   import { page } from '$app/stores'
   import { observedListing } from '../../_store/local'
 
-  const params = $page.params
-
   $: marketplaceName = $observedListing?.object.name || 'intl.listing'
 </script>
 
 <Title name={marketplaceName} />
 
-<LazyPage {pageComponent} {params} />
+<LazyPage {pageComponent} params={$page.params} />

@@ -4,6 +4,6 @@
   export let params;
 </script>
 
-{#key params.index}
+{#key params.id}
     <ListingPage id={params.id} />
 {/key}

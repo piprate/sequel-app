@@ -3,11 +3,8 @@
   import LazyPage from '../../../_components/LazyPage.svelte'
   import pageComponent from '../../../_pages/marketplace/releases/[id]/index.svelte'
   import { page } from '$app/stores'
-
-  
-  const params = $page.params
 </script>
 
 <Title name="{intl.release}" />
 
-<LazyPage {pageComponent} {params} />
+<LazyPage {pageComponent} params={$page.params} />

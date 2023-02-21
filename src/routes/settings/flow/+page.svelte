@@ -6,9 +6,9 @@
   import RestrictedPageWarning from '../../_components/RestrictedPageWarning.svelte'
   import { page } from '$app/stores'
 
-  
-  const params = $page.params
-  params.newUser = $page.url.searchParams.get('new') === ''
+  $: params = {
+    newUser: $page.url.searchParams.get('new') === ''
+  }
 </script>
 
 <Title name="{intl.connectWithFlow}" settingsPage={true} />

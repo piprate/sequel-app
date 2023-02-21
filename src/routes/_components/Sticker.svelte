@@ -1,21 +1,23 @@
 <script>
-    import { createEventDispatcher } from 'svelte'
-    import SvgIcon from './SvgIcon.svelte';
+  import { createEventDispatcher } from 'svelte'
+  import SvgIcon from './SvgIcon.svelte'
 
-    export let name
-    export let href = undefined
-    export let iconHref = undefined
+  export let name
+  export let href = undefined
+  export let iconHref = undefined
 
-    const dispatch = createEventDispatcher()
+  const dispatch = createEventDispatcher()
 
-    const removeMention = (event) => {
+  const onClick = (event) => {
+    if (!href) {
       dispatch('click', {
         name: event.currentTarget.dataset.name
       })
     }
+  }
 </script>
 
-<svelte:element this={href ? 'a' : 'button'} href={href} data-name={name} class="sticker" on:click={removeMention}>
+<svelte:element this={href ? 'a' : 'button'} {href} data-name={name} class="sticker" on:click={onClick}>
     {#if iconHref}
         <SvgIcon className="icon-button-svg small-icon" href={iconHref} />
     {/if}

@@ -5,9 +5,10 @@
   import { page } from '$app/stores'
   import { observedBubble } from '../../_store/local'
 
-  const params = $page.params
-  params.newBubble = $page.url.searchParams.get('new') === ''
-
+  $: params = {
+    bubbleId: $page.params.bubbleId,
+    newBubble: $page.url.searchParams.get('new') === ''
+  }
   $: bubbleName = $observedBubble?.name || 'intl.bubbleProfile'
 </script>
 

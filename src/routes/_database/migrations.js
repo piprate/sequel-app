@@ -21,7 +21,8 @@ import {
   BUBBLES_STORE,
   BUBBLE_RELATIONSHIPS_STORE,
   DB_VERSION_ENTITY,
-  DB_VERSION_NAME_INDEX
+  DB_VERSION_NAME_INDEX,
+  ENTITY_STORE
 } from './constants'
 
 function initialMigration (db, tx, done) {

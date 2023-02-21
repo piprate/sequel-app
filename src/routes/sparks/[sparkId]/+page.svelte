@@ -5,9 +5,10 @@
   import { page } from '$app/stores'
   import { observedSpark } from '../../_store/local'
 
-  const params = $page.params
-  params.newSpark = $page.url.searchParams.get('new') === ''
-
+  $: params = {
+    sparkId: $page.params.sparkId,
+    newSpark: $page.url.searchParams.get('new') === ''
+  }
   $: sparkName = $observedSpark?.name || 'intl.profile'
 </script>
 

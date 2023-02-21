@@ -5,9 +5,10 @@
   import { page } from '$app/stores'
   import { observedWorld } from '../../_store/local'
 
-  const params = $page.params
-  params.newWorld = $page.url.searchParams.get('new') === ''
-  
+  $: params = {
+    worldId: $page.params.worldId,
+    newWorld: $page.url.searchParams.get('new') === ''
+  }
   $: worldName = $observedWorld?.name || 'intl.worldProfile'
 
 </script>
