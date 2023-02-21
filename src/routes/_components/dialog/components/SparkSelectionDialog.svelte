@@ -63,8 +63,7 @@
 >
     <form on:submit|preventDefault|stopPropagation={onSubmit}>
       <div id='search-spark'>
-        <label for="search-input">Search Spark</label>
-        <input type="search" name="spark" id="search-input" bind:value={$queryInSearch} on:focus={onFocus}>
+        <input type="search" name="spark" id="search-input" aria-labelledby={`modal-${id}-title`} bind:value={$queryInSearch} on:focus={onFocus}>
       </div>
     </form>
     {#if sparks && sparks.length}

@@ -131,7 +131,7 @@
   <div class="modal-dialog-document" role="document" style="background: {background || '#000'};">
     <div class="modal-dialog-header" on:click="{onClickHeader}">
       {#if title}
-        <h1 class="modal-dialog-title">{title}</h1>
+        <h1 id={`modal-${id}-title`} class="modal-dialog-title">{title}</h1>
       {/if}
       <div class="close-dialog-button-wrapper">
         <button class="close-dialog-button focus-fix"
