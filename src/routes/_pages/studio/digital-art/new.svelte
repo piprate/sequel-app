@@ -11,10 +11,10 @@
   </script>
   <DynamicPageBanner title="{intl.newDigitalArt}" />
   {#if $currentSpark}
-      <DigitalArtEdit realm="new_digital_art" newBubble={true} />
+      <DigitalArtEdit realm="new_digital_art" />
   {:else}
       <InfoAside>
-          {intl.selectSparkBeforeCreatingBubble}
+          {intl.selectSparkBeforeCreatingDigitalArt}
       </InfoAside>
   {/if}
   

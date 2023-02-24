@@ -1,11 +1,13 @@
 <script>
   import DigitalArtsPage from '../../_components/studio/DigitalArtsPage.svelte'
   import DynamicPageBanner from '../../_components/DynamicPageBanner.svelte'
-  import InfoAside from '../../_components/InfoAside.svelte'
   import RestrictedPageWarning from '../../_components/RestrictedPageWarning.svelte'
-  import { currentInstance, isAuthenticated } from '../../_store/local'
+  import { currentInstance, isAuthenticated, observedRelationship } from '../../_store/local'
   import { accessToken, currentSparkId } from '../../_store/instance'
   import { getDigitalArts } from '../../_api/studio'
+  import { unwrap } from '../../_utils/mapper';
+  import { onMount } from 'svelte';
+  import { updateProfileAndRelationship } from '../../_actions/sparks';
 
   export let params
   params = undefined
@@ -13,14 +15,21 @@
   // suppress warnings
   const intl = {}
 
-  $: fetcher = () => getDigitalArts($currentInstance, $accessToken, $currentSparkId)
+  onMount(async () => {
+      await updateProfileAndRelationship(unwrap($currentSparkId))
+    })
+    
+    $: fetcher = () => getDigitalArts($currentInstance, $accessToken, $currentSparkId)
+    $: isTokenCreator = $observedRelationship?.tokenCreator
 </script>
 
 {#if $isAuthenticated }
     <DynamicPageBanner title="{intl.studio}" icon="#fa-paint-brush" />
     <DigitalArtsPage {fetcher}>
         <div slot="header" class="header">
-            <a class="button primary new-entity-button" data-sveltekit-preload-data href="/studio/digital-art/new">{intl.createNewDigitalArt}</a>
+            {#if isTokenCreator}
+                <a class="button primary new-entity-button" data-sveltekit-preload-data href="/studio/digital-art/new">{intl.createNewDigitalArt}</a>
+            {/if}
         </div>
     </DigitalArtsPage>
 {:else}

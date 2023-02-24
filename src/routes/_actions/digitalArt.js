@@ -3,7 +3,7 @@ import { clearComposeData, currentInstance, observedDigitalArt } from '../_store
 import { accessToken, currentSparkId } from '../_store/instance'
 import { get, writable } from 'svelte/store'
 import { wrap } from '../_utils/mapper'
-import { getDigitalArt, newDigitalArt } from '../_api/studio'
+import { editDigitalArt, getDigitalArt, newDigitalArt } from '../_api/studio'
 
 async function _updateDigitalArt (id, instanceName, accessToken, asSpark) {
   const localPromise = database.getDigitalArt(instanceName, wrap(id))
@@ -66,6 +66,8 @@ export async function saveDigitalArt (realm, digitalArtId, submission) {
 
     if (!digitalArtId) {
       spark = await newDigitalArt(currentInstance.get(), get(accessToken), submission, asSpark)
+    } else {
+      spark = await editDigitalArt(digitalArtId, currentInstance.get(), get(accessToken), submission, asSpark)
     }
 
     clearComposeData(realm)

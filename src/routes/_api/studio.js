@@ -1,5 +1,5 @@
 import { base, basename, sequelAuth } from './utils'
-import { DEFAULT_TIMEOUT, get, paramsString, post, WRITE_TIMEOUT } from '../_utils/ajax'
+import { DEFAULT_TIMEOUT, get, paramsString, post, put, WRITE_TIMEOUT } from '../_utils/ajax'
 import { populateDigitalArtMediaURLs } from './media'
 import { unwrap } from '../_utils/mapper'
 
@@ -22,6 +22,13 @@ export async function getDigitalArt (instanceName, accessToken, id, asSpark) {
 export async function newDigitalArt (instanceName, accessToken, data, asSpark) {
   const url = `${basename(instanceName)}/digital-art`
   const result = await post(url, data, sequelAuth(accessToken, asSpark), { timeout: WRITE_TIMEOUT })
+
+  return populateDigitalArtMediaURLs(result, instanceName, accessToken)
+}
+
+export async function editDigitalArt (digitalArtId, instanceName, accessToken, data, asSpark) {
+  const url = `${basename(instanceName)}/digital-art/${digitalArtId}`
+  const result = await put(url, data, sequelAuth(accessToken, asSpark), { timeout: WRITE_TIMEOUT })
 
   return populateDigitalArtMediaURLs(result, instanceName, accessToken)
 }

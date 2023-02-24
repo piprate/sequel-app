@@ -532,9 +532,11 @@ const intl = {
   bubblesFromSpark: 'Bubbles from {spark}',
   createNewBubble: 'Create new bubble',
   createNewWorld: 'Create new world',
+  editDigitalArt: 'Edit digital art',
   createNewDigitalArt: 'Create new digital art',
   selectSparkBeforeCreatingWorld: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating worlds.',
   selectSparkBeforeCreatingBubble: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating bubbles.',
+  selectSparkBeforeCreatingDigitalArt: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating digital arts.',
   fields: 'Fields',
   profilePageForSpark: 'Profile page for {spark}',
   // World home page
@@ -982,6 +984,7 @@ const intl = {
   worldProfileOptions: 'World profile options',
   bubbleProfileOptions: 'Bubble profile options',
   marketplaceListingOptions: 'Listing options',
+  digitalArtOptions: 'Digital art options',
   tokenOptions: 'Token options',
   copyLink: 'Copy link',
   emoji: 'Emoji',
@@ -1137,6 +1140,8 @@ const intl = {
   digitalArtEditions: 'Editions',
   offerDigitalArt: 'Offer Digital Art',
   offerAvailable: '{digitalArt} is available now',
+  createButton: 'Create',
+  editButton: 'Save Changes',
   selectSparkFromList: 'Select spark',
   sparkList: 'Sparks',
   selectSparkName: 'Select {spark}'

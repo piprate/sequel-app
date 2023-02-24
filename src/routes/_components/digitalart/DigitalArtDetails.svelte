@@ -1,4 +1,5 @@
 <script>
+  import { importShowDigitalArtOptionsDialog } from '../dialog/asyncDialogs/importShowDigitalArtOptionsDialog';
   import IconButton from '../IconButton.svelte'
 
   export let digitalArt
@@ -11,8 +12,8 @@
   $: sparkSelected = !!ourSpark
 
   async function onMoreOptionsClick () {
-    // const showOptionsDialog = await importShowMarketplaceListingOptionsDialog()
-    // showOptionsDialog(digitalArt, null, ourSpark)
+    const showOptionsDialog = await importShowDigitalArtOptionsDialog()
+    showOptionsDialog(digitalArt, ourSpark)
   }
 </script>
 
@@ -42,7 +43,7 @@
       {soldDisplay}
     </span>
   </div>
-  {#if sparkSelected }
+  {#if sparkSelected}
   <div class="digital-art-more-options">
     <IconButton
       label="{intl.moreOptions}"

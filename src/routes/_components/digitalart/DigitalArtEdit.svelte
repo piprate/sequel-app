@@ -1,33 +1,56 @@
 <script>
     import FreeTextLayout from '../FreeTextLayout.svelte'
     import MediaField from '../MediaField.svelte'
-    import { digitalArtOperationError, digitalArtOperationInProgress, saveDigitalArt } from '../../_actions/digitalArt'
+    import { clearDigitalArt, digitalArtOperationError, digitalArtOperationInProgress, loadDigitalArt, saveDigitalArt, updateDigitalArt } from '../../_actions/digitalArt'
     import { goto } from '$app/navigation'
     import ErrorMessage from '../ErrorMessage.svelte'
     import { composeData, currentInstance, setComposeData } from '../../_store/local'
     import { get } from '../../_utils/lodash-lite'
+    import { onMount } from 'svelte';
+    import { updateMedia } from '../../_actions/media';
 
     export let realm
-    export let newBubble
     export let digitalArtId = ''
-    export let payload
+    let payload = {}
+    let digitalArt
 
+    $: newDigitalArt = !digitalArtId
+    
     // suppress warnings
     const intl = {}
 
-    if (!payload) {
-      payload = {
-        name: '',
-        type: 'DigitalArt',
-        description: '',
-        maxEdition: 1,
-        content: null
-      }
-    }
+    onMount(async () => {
+        if (digitalArtId) {
 
-    $: formLabel = newBubble ? 'intl.newBubble' : 'intl.editBubble'
-    $: buttonLabel = newBubble ? 'intl.createBubbleButton' : 'intl.editBubbleButton'
-    $: buttonDisabled = !payload.name || $digitalArtOperationInProgress
+            digitalArt = await loadDigitalArt(digitalArtId)
+
+            payload = {
+                name: digitalArt?.name || '',
+                type: 'DigitalArt',
+                description: digitalArt?.description || '',
+                maxEdition: digitalArt?.maxEdition || 1,
+                content: digitalArt?.content || null 
+            }
+
+            if(digitalArt.content) {
+                updateMedia(digitalArt?.content, '', 'image', realm, $currentInstance)
+            }
+        }
+    })
+
+    $: formLabel = newDigitalArt ? 'intl.newDigitalArt' : 'intl.editDigitalArt'
+    $: buttonLabel = newDigitalArt ? 'intl.createButton' : 'intl.editButton'
+    $: buttonDisabled = !payload?.name || $digitalArtOperationInProgress
+    
+    $: {
+        if (digitalArtId) {
+            try {
+                clearDigitalArt().then(()=> updateDigitalArt(digitalArtId))
+            } catch (e) {
+                console.error(e)
+            }
+        }
+    }
     
     async function onSubmit (event) {
       event.preventDefault()
@@ -41,7 +64,7 @@
         return
       }
 
-      goto('/studio')
+      goto(newDigitalArt ? '/studio' : `/studio/digital-art/${digitalArtId}`)
     }
 </script>
   
@@ -53,7 +76,7 @@
   
               <label for="name">{intl.DigitalArtNameColon}</label>
               <input type="text" autocapitalize="none" id="name"
-                     bind:value='{payload.name}' placeholder="{intl.enterDigitalArtName}" required
+                     bind:value={payload.name} placeholder="{intl.enterDigitalArtName}" required
               >
   
               <label for="description">{intl.DigitalArtDescriptionColon}</label>
