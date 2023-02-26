@@ -202,45 +202,34 @@
       {/if}
     </div>
     {#if payload.roleMapping}
-      <div id="role-mapping" class="field">
-        <label for="role-mapping-input">Role Mapping</label>
-        <table>
-          <thead>
-            <tr>
-              <th scope='col' colspan="0">Role</th>
-              <th scope='col' colspan="2" id="role-address-heading">Address</th>
-              <th scope='col' colspan="1" id="description-heading">Description</th>
-            </tr>
-          </thead>
-          <tbody>
+      <fieldset id="role-mapping" class="field">
+        <legend>Role Mapping</legend>
             {#each Object.entries(payload.roleMapping) as [id, role]}
-              <tr>
-                <th scope='row' colspan="0">{id}</th>
-                <td colspan="2">
-                  <div>
+              <div class="role">
+                <p>{id}</p>
+                  <div class="field">
+                    <label for="address-input">Address</label>
                     <input
-                      type="text"
+                    type="text"
                       id="address-input"
                       aria-labelledby="role-address-heading"
                       bind:value={payload.roleMapping[id].addr}
-                    />
-                  </div>
-                </td>
-                <td colspan="1">
+                      />
+                    </div>
+                  <div class="field">
+                    <label for="address-input">Description</label>
                     <textarea
                       id="description-input"
                       aria-labelledby="role-description-heading"
                       minlength="1"
                       maxlength="120"
-                      rows="1"
+                      rows="4"
                       bind:value={payload.roleMapping[id].description}
                     />
-                </td>
-              </tr>
+                </div>
+              </div>
             {/each}
-          </tbody>
-        </table>
-      </div>
+      </fieldset>
     {/if}
     <div id="exclusivity-scope" class="field">
       <label for="exclusivity-scope-input">Audience</label>
@@ -315,29 +304,44 @@
     gap: 1rem
   }
 
-  #role-mapping table {
+  #role-mapping {
     margin: 1rem 0;
+    display: block;
+    background-color: #ffffff08;
+    border: 1px solid var(--form-border);
+    
 
-    th,td {
+    legend {
+      font-size: 1.127rem;
+      margin: 1rem 0;
+    }
+    
+    label {
+      font-size: 0.875rem;
+    }
+
+    input, textarea {
+      font-size: 0.875rem;
+    }
+
+    textarea {
       border: 1px solid var(--input-border);
     }
 
-    th {
-      text-align: left;
-      font-size: 1.05rem;
-    }
+    .role {
 
-    th[scope='row'] {
-      padding: 0.25rem 1rem;
-    }
-    
-    td {  
-      input,textarea {
-        width: 100%;
-        min-height: 35px;
+      p {
+        margin-bottom: 1rem;
+      }
+      
+      &:not(:first-of-type) {
+        margin-top: 1rem;
+      }
+      
+      &:not(:last-of-type) {
+        border-bottom: 1px solid var(--form-border);
+        margin-bottom: 1rem;
       }
     }
-
-    border-collapse: collapse;
   }
 </style>
