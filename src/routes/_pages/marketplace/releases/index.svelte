@@ -21,6 +21,11 @@
     <DynamicPageBanner title="{intl.marketplaceTitle}" icon="#nft-diamond" />
     <MarketplaceFilter filter="releases" />
     <ReleasesPage {releasesFetcher}>
+        <div slot="header" class="releases-header">
+            <a href='/marketplace/releases/new' class="button primary">
+                Create new Release
+            </a>
+        </div>
         <span slot="is-empty">
             <InfoAside className="empty-releases-notice-aside">
               {intl.releasesEmpty}
@@ -34,5 +39,9 @@
 <style>
     :global(.empty-releases-notice-aside) {
         margin: 10px 10px 0 0;
+    }
+
+    .releases-header {
+        margin-bottom: 1.5rem;
     }
 </style>

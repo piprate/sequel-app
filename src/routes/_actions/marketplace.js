@@ -1,8 +1,9 @@
 import { database } from '../_database/database'
-import { currentInstance, observedListing } from '../_store/local'
+import { clearComposeData, currentInstance, observedListing } from '../_store/local'
 import { accessToken, currentSparkId } from '../_store/instance'
 import { get } from 'svelte/store'
 import { getListing } from '../_api/marketplace'
+import { newRelease } from '../_api/releases'
 
 async function _updateListing (id, instanceName, accessToken, asSpark) {
   const localPromise = database.getListing(instanceName, parseInt(id))
@@ -42,4 +43,27 @@ export async function updateListing (id) {
 
 export async function loadListing (id) {
   return getListing(currentInstance.get(), get(accessToken), id, get(currentSparkId))
+}
+
+export async function saveRelease (realm, releaseId, submission) {
+  let release
+
+  submission.name = submission.name.trim()
+  submission.startTime = new Date(submission.startTime).toISOString()
+  submission.endTime = new Date(submission.endTime).toISOString()
+
+  if (!submission.name) {
+    throw new Error('Name is required')
+  }
+  
+  const asSpark = get(currentSparkId)
+  submission.seller = asSpark
+
+  if (!releaseId) {
+    release = await newRelease(currentInstance.get(), get(accessToken), submission, asSpark)
+  }
+
+  clearComposeData(realm)
+
+  return release
 }

@@ -18,7 +18,7 @@
 </script>
 
 {#if $isUserLoggedIn }
-    {#if $pinnedPage !== '/markeplace'}
+    {#if $pinnedPage !== '/marketplace'}
         <DynamicPageBanner title="{intl.marketplaceTitle}" icon="#nft-diamond" />
     {/if}
     <MarketplaceFilter filter="active" />

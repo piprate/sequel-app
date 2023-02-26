@@ -34,10 +34,10 @@
 </script>
 
 <div class="releases-page">
+  <slot name="header"></slot>
     {#if loading}
         <LoadingPage />
     {:else if releases && releases.length}
-        <slot name="header"></slot>
         <ul class="releases-results release-grid">
             {#each releases as release}
                 <ReleaseCard
