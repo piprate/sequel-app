@@ -538,6 +538,7 @@ const intl = {
   createNewDigitalArt: 'Create new digital art',
   selectSparkBeforeCreatingWorld: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating worlds.',
   selectSparkBeforeCreatingBubble: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating bubbles.',
+  selectSparkBeforeCreatingRelease: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating release.',
   selectSparkBeforeCreatingDigitalArt: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating digital arts.',
   selectSparkBeforeCreatingRelease: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating release.',
   fields: 'Fields',

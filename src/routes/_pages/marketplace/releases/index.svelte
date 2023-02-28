@@ -4,9 +4,12 @@
   import InfoAside from '../../../_components/InfoAside.svelte'
   import RestrictedPageWarning from '../../../_components/RestrictedPageWarning.svelte'
   import MarketplaceFilter from '../../../_components/marketplace/MarketplaceFilter.svelte'
-  import { currentInstance, isUserLoggedIn } from '../../../_store/local'
+  import { currentInstance, isUserLoggedIn, observedRelationship } from '../../../_store/local'
   import { accessToken, currentSparkId } from '../../../_store/instance'
   import { getMarketplaceReleases } from '../../../_api/releases'
+  import { onMount } from 'svelte';
+  import { updateProfileAndRelationship } from '../../../_actions/sparks';
+  import { unwrap } from '../../../_utils/mapper';
 
   export let params
   params = undefined
@@ -14,7 +17,13 @@
   // suppress warnings
   const intl = {}
 
-  $: releasesFetcher = () => getMarketplaceReleases($currentInstance, $accessToken, $currentSparkId)
+  
+  onMount(async () => {
+      await updateProfileAndRelationship(unwrap($currentSparkId))
+    })
+    
+    $: releasesFetcher = () => getMarketplaceReleases($currentInstance, $accessToken, $currentSparkId)
+    $: isTokenCreator = $observedRelationship?.tokenCreator
 </script>
 
 {#if $isUserLoggedIn }
@@ -22,9 +31,11 @@
     <MarketplaceFilter filter="releases" />
     <ReleasesPage {releasesFetcher}>
         <div slot="header" class="releases-header">
-            <a href='/marketplace/releases/new' class="button primary">
-                Create new Release
-            </a>
+            {#if isTokenCreator}
+                <a href='/marketplace/releases/new' class="button primary">
+                    Create new Release
+                </a>
+            {/if}
         </div>
         <span slot="is-empty">
             <InfoAside className="empty-releases-notice-aside">
