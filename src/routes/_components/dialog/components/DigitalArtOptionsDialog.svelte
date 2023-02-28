@@ -16,7 +16,6 @@
 
   const gotoDelay = 100
 
-  
   onMount(async () => {
       await updateProfileAndRelationship(unwrap(ourSpark.id))
     })
@@ -48,5 +47,22 @@
   shrinkWidthToFit={true}
   background="var(--main-bg)"
 >
-  <GenericDialogList selectable={false} {items} on:click="{onEdit}"/>
+  {#if items.length}
+    <GenericDialogList selectable={false} {items} on:click="{onEdit}"/>
+  {:else}
+    <div class="no-options">
+      {intl.menuUnavailable}
+    </div>
+  {/if}
 </ModalDialog>
+
+<style>
+  .no-options {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.2em;
+    text-align: center;
+    margin: 20px;
+  }
+</style>

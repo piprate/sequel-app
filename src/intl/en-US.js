@@ -1157,7 +1157,8 @@ const intl = {
   editButton: 'Save Changes',
   selectSparkFromList: 'Select spark',
   sparkList: 'Sparks',
-  selectSparkName: 'Select {spark}'
+  selectSparkName: 'Select {spark}',
+  menuUnavailable: 'No menu options available'
 }
 
 export default intl
