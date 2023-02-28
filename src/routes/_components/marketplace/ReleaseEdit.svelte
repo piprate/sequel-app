@@ -1,58 +1,54 @@
 <script>
-    import FreeTextLayout from '../FreeTextLayout.svelte'
-    import MediaField from '../MediaField.svelte'
-    import { saveRelease } from '../../_actions/marketplace'
-    import { goto } from '$app/navigation'
-    import ErrorMessage from '../ErrorMessage.svelte'
-    import { composeData, currentInstance, setComposeData } from '../../_store/local'
-    import { get } from '../../_utils/lodash-lite'
-  import { onMount } from 'svelte';
-  import { currentSparkId } from '../../_store/instance';
-  import { unwrap } from '../../_utils/mapper';
+  import FreeTextLayout from '../FreeTextLayout.svelte'
+  import { saveRelease } from '../../_actions/marketplace'
+  import { goto } from '$app/navigation'
+  import ErrorMessage from '../ErrorMessage.svelte'
+  import { setComposeData } from '../../_store/local'
+  import { unwrap } from '../../_utils/mapper'
 
-    export let realm
-    export let releaseId = ''
-    $: newRelease = !releaseId
+  export let realm
+  export let releaseId = ''
+  $: newRelease = !releaseId
 
-    // suppress warnings
-    const intl = {}
+  // suppress warnings
+  const intl = {}
 
-    let payload = {
-        endTime: "",
-        name: "",
-        seller: "",
-        startTime: "",
-        status: "draft",
-        summary: "",
-        summaryFormat: "txt",
-        type: "MarketplaceRelease"
+  let payload = {
+    endTime: '',
+    name: '',
+    seller: '',
+    startTime: '',
+    status: 'draft',
+    summary: '',
+    summaryFormat: 'txt',
+    type: 'MarketplaceRelease'
+  }
+
+  let submitting = false
+  let error = false
+
+  function selectStatus (event) {
+    console.log(event.target.value)
+    payload.status = event.target.value
+  }
+
+  $: formLabel = newRelease ? 'intl.newRelease' : 'intl.editRelease'
+  $: buttonLabel = newRelease ? 'intl.create' : 'intl.edit'
+  $: buttonDisabled = !payload.name || submitting
+
+  async function onSubmit (event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    try {
+      const release = await saveRelease(realm, releaseId, payload)
+      setComposeData(realm, {})
+
+      goto(`/marketplace/releases/${unwrap(release.id)}`)
+    } catch (err) {
+      error = err
     }
-
-    let submitting = false
-    let error = false
-
-    function selectStatus (event) {
-        console.log(event.target.value)
-        payload.status = event.target.value
-    }
-
-    $: formLabel = newRelease ? 'intl.newRelease' : 'intl.editRelease'
-    $: buttonLabel = newRelease ? 'intl.create' : 'intl.edit'
-    $: buttonDisabled = !payload.name || submitting
-
-    async function onSubmit (event) {
-      event.preventDefault()
-      event.stopPropagation()
-
-      try {
-        const release = await saveRelease(realm, releaseId, payload)
-        setComposeData(realm, {})
-        
-        goto(`/marketplace/releases/${unwrap(release.id)}`)
-      } catch (err) {
-        error = err
-      }
-    }
+  }
 </script>
   
   <FreeTextLayout>
