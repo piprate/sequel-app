@@ -534,7 +534,7 @@ const intl = {
   createNewBubble: 'Create new bubble',
   createNewWorld: 'Create new world',
   editDigitalArt: 'Edit digital art',
-  createNewDigitalArt: 'Create new digital art',
+  createNewDigitalArt: 'New Digital Art',
   selectSparkBeforeCreatingWorld: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating worlds.',
   selectSparkBeforeCreatingBubble: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating bubbles.',
   selectSparkBeforeCreatingDigitalArt: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating digital arts.',

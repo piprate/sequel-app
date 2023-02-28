@@ -33,7 +33,7 @@
         <div slot="header" class="releases-header">
             {#if isTokenCreator}
                 <a href='/marketplace/releases/new' class="button primary">
-                    Create new Release
+                    {intl.newRelease}
                 </a>
             {/if}
         </div>

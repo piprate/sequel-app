@@ -4,7 +4,7 @@
     import pageComponent from '../../../_pages/marketplace/releases/new.svelte'
   </script>
   
-  <Title name="{intl.marketplace}" />
+  <Title name="{intl.newRelease}" />
   
     <LazyPage {pageComponent} />
   
