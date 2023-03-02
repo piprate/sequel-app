@@ -298,6 +298,7 @@ const intl = {
   DigitalArtImageColon: 'Image:',
   DigitalArtMaxEditionsColon: 'Max Editions:',
   enterDigitalArtMaxEditions: 'Enter max editions',
+  addDigitalArtImage: 'Upload digital art image',
   // Notification subpages
   filters: 'Filters',
   all: 'All',

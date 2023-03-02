@@ -1,11 +1,10 @@
 <script>
   import IconButton from './IconButton.svelte'
   import MediaItem from './MediaItem.svelte'
-  import { doMediaUpload, doTokenMediaUpload, updateMedia, uploadingMedia } from '../_actions/media'
+  import { doMediaUpload, doTokenMediaUpload, uploadingMedia } from '../_actions/media'
   import { mediaAccept } from '../_static/media'
   import { currentComposeData } from '../_store/instance'
   import { importShowNFTSelectionDialog } from './dialog/asyncDialogs/importShowNFTSelectionDialog'
-  import { currentInstance } from '../_store/local';
 
   export let realm
   export let field

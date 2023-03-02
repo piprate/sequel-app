@@ -7,7 +7,7 @@
     import { composeData, currentInstance, setComposeData } from '../../_store/local'
     import { get } from '../../_utils/lodash-lite'
     import { onMount } from 'svelte';
-    import { updateMedia } from '../../_actions/media';
+    import { setComposeImage } from '../../_actions/media'
 
     export let realm
     export let digitalArtId = ''
@@ -33,7 +33,7 @@
             }
 
             if(digitalArt.content) {
-                updateMedia(digitalArt?.content, '', 'image', realm, $currentInstance)
+                setComposeImage(realm, digitalArt, 'content')
             }
         }
     })
@@ -56,9 +56,7 @@
       event.preventDefault()
       event.stopPropagation()
 
-      payload.content = get(composeData.get(), [$currentInstance, realm, 'image', 'data'], {})
       await saveDigitalArt(realm, digitalArtId, payload)
-      setComposeData(realm, {})
 
       if ($digitalArtOperationError) {
         return
@@ -90,7 +88,7 @@
                      bind:value={payload.maxEdition} placeholder="{intl.enterDigitalArtMaxEditions}" required
               >
               <label for="image">{intl.DigitalArtImageColon}</label>
-              <MediaField {realm} field="image" elementId="image" buttonLabel="{intl.addAvatarImage}" mediaProfile="public_asset" />
+              <MediaField {realm} field="content" elementId="image" buttonLabel="{intl.addDigitalArtImage}" mediaProfile="public_asset" />
   
               <button class="primary" type="submit" id="submitButton" disabled={buttonDisabled}>
                   {buttonLabel}

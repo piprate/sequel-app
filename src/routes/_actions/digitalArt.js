@@ -1,9 +1,10 @@
 import { database } from '../_database/database'
-import { clearComposeData, currentInstance, observedDigitalArt } from '../_store/local'
+import { clearComposeData, currentInstance, getComposeData, observedDigitalArt } from '../_store/local'
 import { accessToken, currentSparkId } from '../_store/instance'
 import { get, writable } from 'svelte/store'
 import { wrap } from '../_utils/mapper'
 import { editDigitalArt, getDigitalArt, newDigitalArt } from '../_api/studio'
+import { prepareMediaItem } from './media.js'
 
 async function _updateDigitalArt (id, instanceName, accessToken, asSpark) {
   const localPromise = database.getDigitalArt(instanceName, wrap(id))
@@ -41,7 +42,7 @@ export async function saveDigitalArt (realm, digitalArtId, submission) {
   digitalArtOperationInProgress.set(true)
   digitalArtOperationError.set(null)
 
-  let spark
+  let digitalArt
 
   try {
     submission.name = submission.name.trim()
@@ -58,16 +59,20 @@ export async function saveDigitalArt (realm, digitalArtId, submission) {
       throw new Error('Max Editions should be in the range of 0 to 100')
     }
 
-    if (!submission.content) {
+    const content = getComposeData(realm, 'content')
+    if (content) {
+      prepareMediaItem(content)
+      submission.content = content.data
+    } else {
       throw new Error('Image is required')
     }
 
     const asSpark = get(currentSparkId)
 
     if (!digitalArtId) {
-      spark = await newDigitalArt(currentInstance.get(), get(accessToken), submission, asSpark)
+      digitalArt = await newDigitalArt(currentInstance.get(), get(accessToken), submission, asSpark)
     } else {
-      spark = await editDigitalArt(digitalArtId, currentInstance.get(), get(accessToken), submission, asSpark)
+      digitalArt = await editDigitalArt(digitalArtId, currentInstance.get(), get(accessToken), submission, asSpark)
     }
 
     clearComposeData(realm)
@@ -77,7 +82,7 @@ export async function saveDigitalArt (realm, digitalArtId, submission) {
     digitalArtOperationInProgress.set(false)
   }
 
-  return spark
+  return digitalArt
 }
 
 export async function updateDigitalArt (id) {

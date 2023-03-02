@@ -9,45 +9,43 @@ import { accessToken } from '../_store/instance'
 
 export const uploadingMedia = writable('')
 
-export function updateMedia(data, filename, field, realm, currentInstance) {
-  const mediaObj = {
-    data,
-    file: { name: filename },
-    url: data.url,
-    previewUrl: data.previewUrl,
-    description: '',
-    focusX: 0,
-    focusY: 0
-  }
-
-  let obj
-  if (field) {
-    obj = {
-      [field]: mediaObj
-    }
-  } else {
-    // if (composeMedia.length === 4) {
-    //   throw new Error('Only 4 media max are allowed');
-    // }
-
-    const composeMedia = getComposeData(realm, 'media') || []
-    composeMedia.push(mediaObj)
-    obj = {
-      media: composeMedia
-    }
-  }
-
-  setComposeData(realm, obj)
-}
-
 export async function doMediaUpload (realm, field, file, calculateBlurhash, mediaProfile) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   uploadingMedia.set(realm + field)
   try {
     const response = await uploadMedia(_currentInstance, _accessToken, file, calculateBlurhash, mediaProfile)
+
     await database.setCachedMediaFile(response.id, file)
-    updateMedia(response, file.name, field, realm, _currentInstance)
+
+    const mediaObj = {
+      data: response,
+      file: { name: file.name },
+      url: mediaAssetURL(_currentInstance, response),
+      previewUrl: mediaAssetPreviewURL(_currentInstance, response),
+      description: '',
+      focusX: 0,
+      focusY: 0
+    }
+
+    let obj
+    if (field) {
+      obj = {
+        [field]: mediaObj
+      }
+    } else {
+      // if (composeMedia.length === 4) {
+      //   throw new Error('Only 4 media max are allowed');
+      // }
+
+      const composeMedia = getComposeData(realm, 'media') || []
+      composeMedia.push(mediaObj)
+      obj = {
+        media: composeMedia
+      }
+    }
+
+    setComposeData(realm, obj)
   } catch (e) {
     console.error(e)
     /* no await */
