@@ -22,7 +22,7 @@ export async function editPost (post) {
     })),
     inReplyToId: post.inReplyTo,
     originalPostId: post.id,
-    mentions: post.mentions,
+    mentions: post.mentions || [],
     // // note that for polls there is no real way to preserve the original expiry
     // poll: post.poll && {
     //   multiple: !!post.poll.multiple,
