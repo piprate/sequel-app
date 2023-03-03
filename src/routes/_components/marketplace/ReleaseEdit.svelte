@@ -55,7 +55,7 @@
       <div class="release-form-box">
           <form on:submit={onSubmit} aria-label="{formLabel}">
   
-              <!-- <ErrorMessage error={$releaseOperationError} /> -->
+              <ErrorMessage error={error} />
   
               <label for="name">{intl.releaseNameColon}</label>
               <input type="text" autocapitalize="none" id="name"
