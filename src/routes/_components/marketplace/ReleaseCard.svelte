@@ -5,8 +5,12 @@
   import { createEventDispatcher } from 'svelte'
   import { unwrap } from '../../_utils/mapper'
   import { massageUserText } from '../../_utils/massageUserText'
-  import { autoplayGifs } from '../../_store/local'
+  import { autoplayGifs, isUserLoggedIn, observedRelationship } from '../../_store/local'
   import Timestamp from '../Timestamp.svelte'
+  import { importShowAnnounceDialog } from '../dialog/asyncDialogs/importshowConfirmAnnounceDialog';
+  import { currentSparkId } from '../../_store/instance';
+  import { onMount } from 'svelte';
+  import { updateRelationship } from '../../_actions/sparks';
 
   export let release
   export let actions = undefined
@@ -25,6 +29,9 @@
   $: massagedSummary = massageUserText(croppedSummary, emojis, $autoplayGifs)
   $: statusText = release.status
   $: href = listMode ? `/marketplace/releases/${unwrap(id)}` : ''
+  $: isOwner = $currentSparkId === release.seller
+  $: isTokenCreator = $observedRelationship?.tokenCreator
+  $: showAnnounceButton = !listMode && isOwner && isTokenCreator && release.status === 'draft'
 
   function onButtonClick (event, action, releaseId) {
     event.preventDefault()
@@ -34,12 +41,26 @@
       releaseId
     })
   }
+
+  async function announce(event) {
+    const showAnnounceDialog = await importShowAnnounceDialog()
+    showAnnounceDialog(id)
+  }
+
+  onMount(() => {
+    if($isUserLoggedIn) {
+        updateRelationship(unwrap($currentSparkId))
+    }
+  })
 </script>
 
 <SearchResult {href}>
     <div class="release-card">
         <div class="release-card-name">
             <EntityDisplayName entity={release} />
+            {#if showAnnounceButton}
+                <IconButton label='announce' href='#fa-bullhorn' on:click={announce} />
+            {/if}
         </div>
         <div class="release-card-artist">
             by <EntityDisplayName entity={release.sellerRef} />
@@ -96,6 +117,9 @@
         text-overflow: ellipsis;
         font-size: 1.5em;
         margin-top: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
     .release-card-artist {
         grid-area: artist;

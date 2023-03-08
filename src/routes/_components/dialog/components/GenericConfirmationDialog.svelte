@@ -1,43 +1,40 @@
 <script>
   import ModalDialog from './ModalDialog.svelte'
   import { close } from '../helpers/closeDialog'
-  import { on } from '../../../_utils/eventBus'
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
+  import LoadingSpinner from '../../LoadingSpinner.svelte';
 
   export let id;
+  export let parentDialogId = undefined;
   export let label;
   export let title;
   export let positiveText = undefined;
   export let negativeText = undefined;
   export let confirmationButtonDisabled;
+  export let isConfirming = false
   let className = '';
   let positiveResult;
 
   const dispatch = createEventDispatcher();
 
+  function closeDialog () {
+    close(id)
+    if (parentDialogId) close(parentDialogId)
+  }
+
   function onPositive() {
+    dispatch('positive')
     positiveResult = true;
-    close(id);
   }
 
   function onNegative() {
-    close(id);
+    dispatch('negative')
+    closeDialog();
   }
 
-  function onDestroyDialog(thisId) {
-    if (thisId !== id) {
-      return
-    }
-    if (positiveResult) {
-      dispatch('positive')
-    } else {
-      dispatch('negative')
-    }
+  $: if (positiveResult && !isConfirming) {
+    closeDialog()
   }
-
-  onMount(() => {
-    return on('destroyDialog', onDestroyDialog);
-  });
 </script>
 
 <ModalDialog
@@ -52,7 +49,11 @@
     <slot></slot>
     <div class="confirmation-dialog-form-flex">
       <button type="button" disabled={confirmationButtonDisabled} on:click="{onPositive}">
-        {positiveText || 'OK'}
+        {#if isConfirming}
+          <LoadingSpinner size={20} />
+        {:else} 
+          {positiveText || 'OK'}
+        {/if}
       </button>
       <button type="button" on:click="{onNegative}">
         {negativeText || 'Cancel'}
@@ -61,6 +62,10 @@
   </form>
 </ModalDialog>
 <style>
+  .confirmation-dialog-form {
+    max-width: 75ch;
+  }
+
   .confirmation-dialog-form-flex {
     display: grid;
     grid-template-columns: 1fr 1fr;

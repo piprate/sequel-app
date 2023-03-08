@@ -1,9 +1,10 @@
 import { database } from '../_database/database'
-import { clearComposeData, currentInstance, observedListing } from '../_store/local'
+import { clearComposeData, currentInstance, observedListing, observedRelease } from '../_store/local'
 import { accessToken, currentSparkId } from '../_store/instance'
 import { get } from 'svelte/store'
+import { cancel, getMarketplaceRelease, newRelease } from '../_api/releases'
+import { unwrap } from '../_utils/mapper'
 import { getListing, withdrawMarketplaceListing } from '../_api/marketplace'
-import { newRelease } from '../_api/releases'
 import { goto } from '$app/navigation'
 
 async function _updateListing (id, instanceName, accessToken, asSpark) {
@@ -46,6 +47,14 @@ export async function loadListing (id) {
   return getListing(currentInstance.get(), get(accessToken), id, get(currentSparkId))
 }
 
+export async function updateRelease(id, newRelease = undefined) {
+  if (newRelease) observedRelease.set(newRelease)
+  else {
+    const release = await getMarketplaceRelease(currentInstance.get(), get(accessToken), unwrap(id), get(currentSparkId))
+    if (release) observedRelease.set(release)
+  }
+}
+
 export async function saveRelease (realm, releaseId, payload) {
   let release
 
@@ -67,6 +76,13 @@ export async function saveRelease (realm, releaseId, payload) {
   }
 
   clearComposeData(realm)
+
+  return release
+}
+
+export async function cancelRelease (releaseId) {
+  await cancel(currentInstance.get(), get(accessToken), releaseId, get(currentSparkId))
+  const release = await updateRelease(releaseId)
 
   return release
 }

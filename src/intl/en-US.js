@@ -66,6 +66,7 @@ const intl = {
   close: 'Close',
   error: 'Error: {error}',
   errorShort: 'Error:',
+  total: 'Total',
   // Relative timestamps
   justNow: 'just now',
   // Navigation, page titles
@@ -987,6 +988,12 @@ const intl = {
   worldProfileOptions: 'World profile options',
   bubbleProfileOptions: 'Bubble profile options',
   marketplaceListingOptions: 'Listing options',
+  marketplaceReleaseOptions: 'Release options',
+  activate: 'Activate',
+  activateContent: 'Are you sure you want to activate this release? Once activated, the tokens in this release will be available for sale.',
+  announce: 'Announce',
+  announceContent: 'Are you sure you want this release to be announced to the general public? Once announced, everyone will be able to see the enclosed tokens, but won\'t be able to purchase it.',
+  confirmCancel: 'Are you sure you want to cancel this release?',
   digitalArtOptions: 'Digital art options',
   tokenOptions: 'Token options',
   copyLink: 'Copy link',
@@ -1015,6 +1022,8 @@ const intl = {
   planList: 'Subscription plans',
   subscribeLater: 'I\'ll subscribe later',
   postInputFormat: 'Select Input Format',
+  yes: 'Yes',
+  no: 'No',
   // Bubble member types
   memberTypeOwner: 'Owner',
   memberTypeModerator: 'Moderator',
@@ -1080,6 +1089,7 @@ const intl = {
   marketplaceHistory: 'Sold Listings',
   releases: 'Releases',
   release: 'Marketplace Release',
+  releaseListings: 'Listings',
   marketplaceTitle: 'Sequel Marketplace',
   activeListings: 'Active',
   listingHistory: 'Sold',
