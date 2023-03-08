@@ -45,12 +45,14 @@ export async function loadListing (id) {
   return getListing(currentInstance.get(), get(accessToken), id, get(currentSparkId))
 }
 
-export async function saveRelease (realm, releaseId, submission) {
+export async function saveRelease (realm, releaseId, payload) {
   let release
 
+  const submission = { ...payload }
+
   submission.name = submission.name.trim()
-  submission.startTime = new Date(submission.startTime).toISOString()
-  submission.endTime = new Date(submission.endTime).toISOString()
+  submission.startTime = submission.startTime ? new Date(submission.startTime).toISOString() : undefined
+  submission.endTime = submission.endTime ? new Date(submission.endTime).toISOString() : undefined
 
   if (!submission.name) {
     throw new Error('Name is required')

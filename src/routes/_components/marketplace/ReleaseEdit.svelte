@@ -5,6 +5,7 @@
   import ErrorMessage from '../ErrorMessage.svelte'
   import { setComposeData } from '../../_store/local'
   import { unwrap } from '../../_utils/mapper'
+  import LoadingSpinner from '../LoadingSpinner.svelte';
 
   export let realm
   export let releaseId = ''
@@ -25,10 +26,9 @@
   }
 
   let submitting = false
-  let error = false
+  let error
 
   function selectStatus (event) {
-    console.log(event.target.value)
     payload.status = event.target.value
   }
 
@@ -41,12 +41,15 @@
     event.stopPropagation()
 
     try {
+      submitting = true
       const release = await saveRelease(realm, releaseId, payload)
       setComposeData(realm, {})
 
       goto(`/marketplace/releases/${unwrap(release.id)}`)
     } catch (err) {
       error = err
+    } finally {
+      submitting = false
     }
   }
 </script>
@@ -89,7 +92,11 @@
                     {intl.cancel}
                 </a>
                 <button class="primary" type="submit" id="submitButton" disabled={buttonDisabled}>
-                    {buttonLabel}
+                    {#if submitting}
+                      <LoadingSpinner size={20} maskStyle />
+                    {:else}
+                      {buttonLabel}
+                    {/if}
                 </button>
             </div>
           </form>
