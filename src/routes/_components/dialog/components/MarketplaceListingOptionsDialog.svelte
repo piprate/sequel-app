@@ -7,6 +7,7 @@
   import { goto } from '$app/navigation'
   import { unwrap } from '../../../_utils/mapper'
   import { doDeleteWorld } from '../../../_actions/deleteWorld'
+  import { importShowWithdrawDialog } from '../asyncDialogs/importShowWithdrawDialog';
 
   export let id
   export let label
@@ -53,8 +54,8 @@
   }
 
   async function onWithdrawClicked () {
-    close(id)
-    goto('/')
+    const showWithdrawDialog = await importShowWithdrawDialog()
+    showWithdrawDialog(listingId, id)
   }
 
   async function onCopyClicked () {

@@ -2,8 +2,9 @@ import { database } from '../_database/database'
 import { clearComposeData, currentInstance, observedListing } from '../_store/local'
 import { accessToken, currentSparkId } from '../_store/instance'
 import { get } from 'svelte/store'
-import { getListing } from '../_api/marketplace'
+import { getListing, withdrawMarketplaceListing } from '../_api/marketplace'
 import { newRelease } from '../_api/releases'
+import { goto } from '$app/navigation'
 
 async function _updateListing (id, instanceName, accessToken, asSpark) {
   const localPromise = database.getListing(instanceName, parseInt(id))
@@ -68,4 +69,10 @@ export async function saveRelease (realm, releaseId, payload) {
   clearComposeData(realm)
 
   return release
+}
+
+export async function withdrawListing (listingId) {
+  const listing = await withdrawMarketplaceListing(currentInstance.get(), get(accessToken), listingId, get(currentSparkId))
+  await updateListing(listing.id)
+  goto('/marketplace')
 }

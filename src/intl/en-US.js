@@ -996,6 +996,8 @@ const intl = {
   postOptions: 'Post options',
   confirm: 'Confirm',
   closeDialog: 'Close dialog',
+  yes: 'Yes',
+  no: 'No',
   postPrivacy: 'Post privacy',
   selectedWorldLabel: `{world} {selected, select,
     true {(selected world)}
@@ -1121,6 +1123,7 @@ const intl = {
     'Please review order details before proceeding to your Flow wallet.',
   modSparkNotSelected: 'You need to select a spark to buy tokens.<br/>Don\'t have a spark? Create <a href="/sparks/new">here</a>.',
   confirmButton: 'Confirm',
+  confirmWithdraw: 'Are you sure you want to withdraw the listing?',
   buyTokenTitle: 'Buy Digital Art',
   buyButtonLabel: 'Buy',
   claimButtonLabel: 'Claim',

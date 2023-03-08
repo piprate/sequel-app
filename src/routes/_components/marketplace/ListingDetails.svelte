@@ -4,6 +4,10 @@
   import { LOCALE } from '../../_static/intl'
   import { formatIntl } from '../../_utils/formatIntl'
   import { thunk } from '../../_utils/thunk'
+  import { observedRelationship } from '../../_store/local';
+  import { onMount } from 'svelte';
+  import { updateRelationship } from '../../_actions/sparks';
+  import { unwrap } from '../../_utils/mapper';
 
   const numberFormat = thunk(() => new Intl.NumberFormat(LOCALE))
 
@@ -22,9 +26,13 @@
   $: soldDisplay = numberFormat().format(listing.totalEditions - listing.availableEditions)
   $: sparkSelected = !!ourSpark
 
+  onMount(() => {
+    updateRelationship(unwrap(ourSpark.id))
+  })
+
   async function onMoreOptionsClick () {
     const showOptionsDialog = await importShowMarketplaceListingOptionsDialog()
-    showOptionsDialog(listing, null, ourSpark)
+    showOptionsDialog(listing, $observedRelationship, ourSpark)
   }
 </script>
 

@@ -1,6 +1,7 @@
 import { base, sequelAuth } from './utils'
 import { DEFAULT_TIMEOUT, get, paramsString, post, WRITE_TIMEOUT } from '../_utils/ajax'
 import { populateMediaURLsInMarketplaceListings, populateMediaURLsInSingleListing } from './media'
+import { unwrap } from '../_utils/mapper'
 
 export function getListing (instanceName, accessToken, id, asSpark) {
   const url = `${base(instanceName, accessToken)}/marketplace/${id}`
@@ -52,5 +53,13 @@ export async function getMarketplaceHistory (instanceName, accessToken, asSpark,
   const url = `${base(instanceName, accessToken)}/marketplace-history`
   return await populateMediaURLsInMarketplaceListings(
     get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }), instanceName
+    )
+  }
+  
+export async function withdrawMarketplaceListing (instanceName, accessToken, id, asSpark, limit = 50) {
+  const url = `${base(instanceName, accessToken)}/marketplace/${id}/withdraw`
+  
+  return populateMediaURLsInSingleListing(
+    post(url, null, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }), instanceName
   )
 }
