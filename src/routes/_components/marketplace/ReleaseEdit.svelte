@@ -1,11 +1,12 @@
 <script>
   import FreeTextLayout from '../FreeTextLayout.svelte'
-  import { saveRelease } from '../../_actions/marketplace'
+  import { saveRelease, updateRelease } from '../../_actions/marketplace'
   import { goto } from '$app/navigation'
   import ErrorMessage from '../ErrorMessage.svelte'
-  import { setComposeData } from '../../_store/local'
+  import { onMount } from 'svelte'
+  import { isUserLoggedIn, setComposeData } from '../../_store/local'
   import { unwrap } from '../../_utils/mapper'
-  import LoadingSpinner from '../LoadingSpinner.svelte';
+  import LoadingSpinner from '../LoadingSpinner.svelte'
 
   export let realm
   export let releaseId = ''
@@ -25,6 +26,28 @@
     type: 'MarketplaceRelease'
   }
 
+  onMount(async () => {
+    const makeDateEditable = (date) => {
+      if (!date) {
+        return undefined
+      }
+
+      const dateParts = new Date(date).toISOString().split(':')
+      dateParts.pop()
+  
+      return dateParts.join(':')
+    }
+
+    if (!newRelease) {
+      if ($isUserLoggedIn) {
+        const release = await updateRelease(releaseId)
+        payload = { ...release }
+        payload.startTime = makeDateEditable(payload.startTime)
+        payload.endTime = makeDateEditable(payload.endTime)
+      }
+    }
+  })
+  
   let submitting = false
   let error
 
@@ -33,7 +56,7 @@
   }
 
   $: formLabel = newRelease ? 'intl.newRelease' : 'intl.editRelease'
-  $: buttonLabel = newRelease ? 'intl.create' : 'intl.edit'
+  $: buttonLabel = newRelease ? 'intl.create' : 'intl.update'
   $: buttonDisabled = !payload.name || submitting
 
   async function onSubmit (event) {
@@ -44,7 +67,7 @@
       submitting = true
       const release = await saveRelease(realm, releaseId, payload)
       setComposeData(realm, {})
-
+  
       goto(`/marketplace/releases/${unwrap(release.id)}`)
     } catch (err) {
       error = err
@@ -71,17 +94,19 @@
                         placeholder='{intl.enterReleaseSummary}'
                         bind:value={payload.summary}
               ></textarea>
-              <fieldset id='status'>
-                <legend>{intl.releaseStatus}</legend>
-                <div>
+              {#if newRelease}
+                <fieldset id='status'>
+                  <legend>{intl.releaseStatus}</legend>
+                  <div>
                     <label for="draft-status">{intl.releaseDraftColon}</label>
-                    <input type="radio" id="draft-status" name="status" value="draft" checked={payload.status === 'draft'} on:change={selectStatus} />
-                </div>
-                <div>
-                    <label for="active-status">{intl.releaseActiveColon}</label>
-                    <input type="radio" id="active-status" name="active" value="active" checked={payload.status === 'active'} on:change={selectStatus} />
-                </div>
-              </fieldset>
+                      <input type="radio" id="draft-status" name="status" value="draft" checked={payload.status === 'draft'} on:change={selectStatus} />
+                    </div>
+                    <div>
+                      <label for="active-status">{intl.releaseActiveColon}</label>
+                      <input type="radio" id="active-status" name="active" value="active" checked={payload.status === 'active'} on:change={selectStatus} />
+                    </div>
+                  </fieldset>
+                {/if}
               <label for="start-time">{intl.releaseStartsAtColon}</label>
               <input type="datetime-local" name="startTime" id="start-time" bind:value={payload.startTime} />
               <label for="end-time">{intl.releaseEndsAtColon}</label>
@@ -92,11 +117,11 @@
                     {intl.cancel}
                 </a>
                 <button class="primary" type="submit" id="submitButton" disabled={buttonDisabled}>
-                    {#if submitting}
-                      <LoadingSpinner size={20} maskStyle />
-                    {:else}
-                      {buttonLabel}
-                    {/if}
+                  {#if submitting}
+                    <LoadingSpinner size={20} maskStyle />
+                  {:else}
+                    {buttonLabel}
+                  {/if}
                 </button>
             </div>
           </form>

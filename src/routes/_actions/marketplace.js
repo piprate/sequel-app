@@ -2,7 +2,7 @@ import { database } from '../_database/database'
 import { clearComposeData, currentInstance, observedListing, observedRelease } from '../_store/local'
 import { accessToken, currentSparkId } from '../_store/instance'
 import { get } from 'svelte/store'
-import { cancel, getMarketplaceRelease, newRelease } from '../_api/releases'
+import { cancel, editRelease, getMarketplaceRelease, newRelease } from '../_api/releases'
 import { unwrap } from '../_utils/mapper'
 import { getListing, withdrawMarketplaceListing } from '../_api/marketplace'
 import { goto } from '$app/navigation'
@@ -47,11 +47,14 @@ export async function loadListing (id) {
   return getListing(currentInstance.get(), get(accessToken), id, get(currentSparkId))
 }
 
-export async function updateRelease(id, newRelease = undefined) {
-  if (newRelease) observedRelease.set(newRelease)
-  else {
+export async function updateRelease (id, newRelease = undefined) {
+  if (newRelease) {
+    observedRelease.set(newRelease)
+    return newRelease
+  } else {
     const release = await getMarketplaceRelease(currentInstance.get(), get(accessToken), unwrap(id), get(currentSparkId))
     if (release) observedRelease.set(release)
+    return release
   }
 }
 
@@ -67,12 +70,14 @@ export async function saveRelease (realm, releaseId, payload) {
   if (!submission.name) {
     throw new Error('Name is required')
   }
-  
+
   const asSpark = get(currentSparkId)
   submission.seller = asSpark
 
   if (!releaseId) {
     release = await newRelease(currentInstance.get(), get(accessToken), submission, asSpark)
+  } else {
+    release = await editRelease(currentInstance.get(), get(accessToken), releaseId, submission, asSpark)
   }
 
   clearComposeData(realm)

@@ -67,6 +67,7 @@ const intl = {
   error: 'Error: {error}',
   errorShort: 'Error:',
   total: 'Total',
+  update: 'Update',
   // Relative timestamps
   justNow: 'just now',
   // Navigation, page titles

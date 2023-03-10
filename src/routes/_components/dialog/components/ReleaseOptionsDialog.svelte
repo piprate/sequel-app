@@ -39,6 +39,11 @@
         label: 'intl.activate',
         icon: '#fa-power-off'
       },
+      isAuthorised && {
+        key: 'edit',
+        label: 'intl.edit',
+        icon: '#fa-edit'
+      },
       isAuthorised && ['draft', 'announced'].includes(release.status) && {
         key: 'cancel',
         label: 'intl.cancel',
@@ -55,6 +60,11 @@
       const showActivateDialog = await importShowActivateDialog()
       showActivateDialog(releaseId, id)
     }
+  
+    async function edit () {
+      goto(`/marketplace/releases/${unwrap(release.id)}/edit`)
+      close(id)
+    }
     
     async function cancel () {
       const showCancelDialog = await importShowCancelDialog()
@@ -67,6 +77,8 @@
           return announce()
         case 'activate':
           return activate()
+        case 'edit':
+          return edit()
         case 'cancel':
           return cancel()
       }
