@@ -1,4 +1,3 @@
-import { postBodyToPlainText } from '../_utils/postBodyToPlainText'
 import { importShowComposeDialog } from '../_components/dialog/asyncDialogs/importShowComposeDialog.js'
 import { setComposeData } from '../_store/local'
 import { unwrap } from '../_utils/mapper'
@@ -8,7 +7,8 @@ export async function editPost (post) {
   const dialogPromise = importShowComposeDialog()
 
   setComposeData('dialog', {
-    text: postBodyToPlainText(post),
+    text: post.body,
+    postInputFormat: post.bodyFormat,
     contentWarningShown: false,
     contentWarning: '',
     postPrivacy: post.visibility,
