@@ -17,9 +17,17 @@
   export let bubbleId
   export let newBubble = false
   export let filter
+  
+  let overrideJoined
 
   $: bubble = $observedBubble
   $: relationship = $observedBubbleRelationship
+  $: joined = (() => {
+    if (typeof overrideJoined === 'boolean') {
+      return overrideJoined
+    }
+    return relationship && (relationship.status === 'active')
+  })()
   $: bubbleName = (bubble && bubble.name) || ''
   $: timeline = `bubble/${bubbleId}` + (filter ? `/${filter}` : '')
   $: ariaTitle = formatIntl('intl.homePageForBubble', { bubble: bubbleName })
@@ -37,12 +45,15 @@
   $: showInvitation = showReadWarning || showPostWarning
   $: invitationMessage = showReadWarning ? 'intl.inviteToRead' : 'intl.inviteToPost'
 
+  let loading = false
   let notFound = false
   let loadError
-
-  async function onJoinButtonClick (e) {
-    e.stopPropagation()
-    await updateMembership(bubbleId, true, $currentSpark.id, false)
+  
+  async function onJoinButtonClick (e, newJoinedValue, toastOnSuccess) {
+    e?.stopPropagation()
+    loading = true
+    await updateMembership(bubbleId, typeof newJoinedValue === 'boolean' ? newJoinedValue : true, $currentSpark.id, toastOnSuccess || false)
+    loading = false
     await updateBubbleProfileAndRelationship(bubbleId)
   }
 
@@ -70,6 +81,9 @@
                           relationship={$observedBubbleRelationship}
                           ourSpark={$currentSpark}
                           {filter}
+                          {joined}
+                          {loading}
+                          {onJoinButtonClick}
             />
             {#if showInvitation }
                 <InfoAside className="warning-aside">

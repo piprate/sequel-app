@@ -16,6 +16,9 @@
   export let relationship
   export let ourSpark
   export let filter
+  export let joined
+  export let loading
+  export let onJoinButtonClick
 
   $: headerImageIsMissing = !bubble.header
   $: headerImage = bubble.header ?
@@ -46,7 +49,7 @@
   <div class="bubble-profile-grid-wrapper">
     <div class="bubble-profile-grid">
       <BubbleProfileHeader {bubble} {relationship} />
-      <BubbleProfileJoin {bubble} {relationship} {ourSpark} />
+      <BubbleProfileJoin {bubble} {relationship} {ourSpark} {loading} {joined} {onJoinButtonClick} />
       <BubbleProfileSummary {bubble} />
       <BubbleProfileDetails {bubble} {relationship} {ourSpark} />
     </div>
