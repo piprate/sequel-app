@@ -1,14 +1,16 @@
 <script>
   import Payments from './Payments.svelte'
+  import SparkRole from '../SparkRole.svelte'
   import { createEventDispatcher } from 'svelte'
-  import { formatIntl } from "../../_utils/formatIntl";
+  import { formatIntl } from '../../_utils/formatIntl'
+  import { currentSpark } from '../../_store/instance'
 
   export let listing
 
   const dispatch = createEventDispatcher()
 
   let numEditions = 1
-  let editionsList = [...new Array(listing.availableEditions)].map((_, i) => i + 1)
+  const editionsList = [...new Array(listing.availableEditions)].map((_, i) => i + 1)
 
   $: primarySale = listing.listingType === 'primary'
   $: selectEditions = listing.availableEditions > 1
@@ -24,6 +26,9 @@
 </script>
 
 {#if primarySale }
+  <div class="buyer-panel">
+    <SparkRole spark={$currentSpark} roleLabel="Buyer" />
+  </div>
   <div class="notice">
     <div class="invitation">
       {@html formatIntl('intl.confirmationNotice', { token: listing.object.name })}
@@ -51,6 +56,10 @@
 {/if}
 
 <style>
+  .buyer-panel {
+    margin: 10px
+  }
+
   .notice {
     margin: 10px 10px 10px 5px;
     grid-area: content;
