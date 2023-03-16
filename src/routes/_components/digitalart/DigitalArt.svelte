@@ -125,6 +125,7 @@
             "created   created"
             "artist    artist"
             "details   details"
+            "offer     offer"   
             "evergreen evergreen";
       grid-template-rows: repeat(8, min-content);
       padding: 10px;
@@ -148,6 +149,7 @@
               "summary"
               "artist"
               "details"
+              "offer"   
               "evergreen";
       grid-template-rows: repeat(8, min-content);
       grid-column-gap: 5px;

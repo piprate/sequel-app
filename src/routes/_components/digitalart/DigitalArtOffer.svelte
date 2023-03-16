@@ -9,7 +9,7 @@
   }
 </script>
 
-{#if !digitalArt.sealRecord}
+{#if digitalArt.offerCount < digitalArt.maxEdition || !digitalArt.offerCount}
   <div class="offer">
     <button class="primary" on:click={openModal}>OFFER</button>
   </div>

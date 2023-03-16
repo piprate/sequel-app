@@ -36,15 +36,24 @@
     roles: []
   }
 
+  let editions
+
   const payload = {
     unitPrice: null,
     currency: 'Flow',
     evergreenProfile: '',
-    maxEditions: digitalArt.maxEdition,
+    maxEditions: editions,
     release: '',
     roleMapping: null,
     scope: 'public',
     scopeSubject: ''
+  }
+
+  $: {
+    editions = digitalArt.offerCount ? digitalArt.maxEdition - digitalArt.offerCount : digitalArt.maxEdition
+    if (payload.maxEditions === undefined) {
+      payload.maxEditions = editions
+    }
   }
 
   $: {
@@ -172,7 +181,7 @@
         id="max-editions-input"
         bind:value={payload.maxEditions}
       >
-        {#each Array(digitalArt.maxEdition) as _, index}
+        {#each Array(editions) as _, index}
           <option value={index + 1}>{index + 1}</option>
         {/each}
       </select>
@@ -186,21 +195,23 @@
         {/each}
       </select>
     </div>
-    <div id="evergreen-profile" class="field">
-      <label for="evergreen-profile-input">Evergreen Profile</label>
-      <select
-        name="evergreenProfile"
-        id="evergreen-profile-input"
-        bind:value={payload.evergreenProfile}
-      >
-        {#each evergreenTemplates as { id, name }}
-          <option value={id}>{name}</option>
-        {/each}
-      </select>
-      {#if payload.evergreenProfile}
-        <EvergreenProfile profile={customEvergreenProfile} title='' />
-      {/if}
-    </div>
+    {#if digitalArt.sealRecord === '' || !digitalArt.sealRecord}
+      <div id="evergreen-profile" class="field">
+        <label for="evergreen-profile-input">Evergreen Profile</label>
+        <select
+          name="evergreenProfile"
+          id="evergreen-profile-input"
+          bind:value={payload.evergreenProfile}
+        >
+          {#each evergreenTemplates as { id, name }}
+            <option value={id}>{name}</option>
+          {/each}
+        </select>
+        {#if payload.evergreenProfile}
+          <EvergreenProfile profile={customEvergreenProfile} title='' />
+        {/if}
+      </div>
+    {/if}
     {#if payload.roleMapping}
       <fieldset id="role-mapping" class="field">
         <legend>Role Mapping</legend>
