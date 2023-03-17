@@ -52,6 +52,7 @@
     for (const file of files) {
       await doMediaUpload(realm, '', file, true, '')
     }
+    e.target.value = null
   }
 
   async function onPostPrivacyClick () {
