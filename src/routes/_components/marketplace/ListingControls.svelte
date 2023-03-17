@@ -11,6 +11,7 @@
   $: sparkSelected = !!ourSpark
   $: moreToBuy = listing.availableEditions > 0
   $: buttonLabel = listing.price === 0.0 ? 'intl.claimButtonLabel' : 'intl.buyButtonLabel'
+  $: isOwner = listing.seller === ourSpark.id
 
   async function onBuyClick () {
     const showDialog = await importShowBuyTokenDialog()
@@ -32,7 +33,7 @@
 <div class="listing-controls">
     {#if $isAuthenticated}
         {#if sparkSelected}
-            {#if moreToBuy}
+            {#if moreToBuy && !isOwner}
                 <button class="button primary text-button" on:click="{onBuyClick}">{buttonLabel}</button>
             {/if}
         {:else}
