@@ -13,6 +13,7 @@ import {
   rootTimelineItemSummariesToAdd,
   setForTimeline
 } from '../_store/timeline'
+import { addTimelineItemSummaries, showMoreItemsForCurrentTimeline } from './timeline'
 
 function getExistingItemIdsSet (instanceName, timelineName) {
   const timelineItemSummaries = getForTimeline(rootTimelineItemSummaries, instanceName, timelineName) || []
@@ -53,6 +54,10 @@ async function insertUpdatesIntoTimeline (instanceName, timelineName, updates, a
     console.log('adding ', (newItemSummariesToAdd.length - itemSummariesToAdd.length),
       'items to timelineItemSummariesToAdd for timeline', timelineName)
     setForTimeline(rootTimelineItemSummariesToAdd, instanceName, timelineName, newItemSummariesToAdd, asSpark)
+    
+    if (newItemSummariesToAdd.filter(summary => summary.sparkId === asSpark).length) {
+      showMoreItemsForCurrentTimeline()
+    }
   }
 }
 
