@@ -22,8 +22,10 @@ import {
   BUBBLE_RELATIONSHIPS_STORE,
   DB_VERSION_ENTITY,
   DB_VERSION_NAME_INDEX,
-  ENTITY_STORE
+  ENTITY_STORE,
+  DB_VERSION_TIMELINES_KEY_UPDATE
 } from './constants'
+import { mergeKeyWithSparkId } from './keys'
 
 function initialMigration (db, tx, done) {
   function createObjectStore (name, init, indexes) {
@@ -142,6 +144,29 @@ function nameIndexMigration (db, tx, done) {
   done()
 }
 
+function timelinesKeyMigration (db, tx, done) {
+  tx.objectStore(POST_TIMELINES_STORE).createIndex(mergeKeyWithSparkId('postId'), '')
+  tx.objectStore(POST_TIMELINES_STORE).deleteIndex('postId')
+  tx.objectStore(THREADS_STORE).createIndex(mergeKeyWithSparkId('postId'), '')
+  tx.objectStore(THREADS_STORE).deleteIndex('postId')
+  tx.objectStore(NOTIFICATION_TIMELINES_STORE).createIndex(mergeKeyWithSparkId('notificationId'), '')
+  tx.objectStore(NOTIFICATION_TIMELINES_STORE).deleteIndex('notificationId')
+
+  db.deleteObjectStore(BUBBLE_RELATIONSHIPS_STORE)
+  const bubbleRelationShipsStore = db.createObjectStore(BUBBLE_RELATIONSHIPS_STORE, null)
+  bubbleRelationShipsStore.createIndex(TIMESTAMP, TIMESTAMP)
+
+  db.deleteObjectStore(RELATIONSHIPS_STORE)
+  const sparkRelationsStore = db.createObjectStore(RELATIONSHIPS_STORE, null)
+  sparkRelationsStore.createIndex(TIMESTAMP, TIMESTAMP)
+
+  db.deleteObjectStore(WORLD_RELATIONSHIPS_STORE)
+  const worldRelationsStore = db.createObjectStore(WORLD_RELATIONSHIPS_STORE, null)
+  worldRelationsStore.createIndex(TIMESTAMP, TIMESTAMP)
+
+  done()
+}
+
 export const migrations = [
   {
     version: DB_VERSION_INITIAL,
@@ -162,5 +187,9 @@ export const migrations = [
   {
     version: DB_VERSION_NAME_INDEX,
     migration: nameIndexMigration
+  },
+  {
+    version: DB_VERSION_TIMELINES_KEY_UPDATE,
+    migration: timelinesKeyMigration
   }
 ]

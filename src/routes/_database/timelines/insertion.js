@@ -13,7 +13,7 @@ import {
   SPARKS_STORE,
   THREADS_STORE
 } from '../constants'
-import { createThreadId, createThreadKeyRange, createTimelineId } from '../keys'
+import { createThreadId, createThreadKeyRange, createTimelineId, mergeKeyWithSparkId } from '../keys'
 import { cachePost, sparkSpecificPostId } from './cachePost'
 
 export function putPost (postsStore, post, asSpark) {
@@ -71,7 +71,7 @@ async function insertTimelineNotifications (instanceName, timeline, notification
     const [timelineStore, notificationsStore, sparksStore, postsStore, bubblesStore] = stores
     for (const notification of notifications) {
       storeNotification(notificationsStore, postsStore, sparksStore, bubblesStore, notification, asSpark)
-      timelineStore.put(notification.id, createTimelineId(timeline, notification.id))
+      timelineStore.put(notification.id, mergeKeyWithSparkId(createTimelineId(timeline, notification.id)))
     }
   })
 }
@@ -86,7 +86,7 @@ async function insertTimelinePosts (instanceName, timeline, posts, asSpark) {
     const [timelineStore, postsStore, sparksStore, bubblesStore] = stores
     for (const post of posts) {
       storePost(postsStore, sparksStore, bubblesStore, post, asSpark)
-      timelineStore.put(post.id, createTimelineId(timeline, post.timelineID))
+      timelineStore.put(post.id, mergeKeyWithSparkId(createTimelineId(timeline, post.timelineID)))
     }
   })
 }
@@ -109,7 +109,7 @@ async function insertPostThread (instanceName, postId, posts, asSpark) {
     }
     posts.forEach((otherPost, i) => {
       storePost(postsStore, sparksStore, bubblesStore, otherPost, asSpark)
-      threadsStore.put(otherPost.id, createThreadId(postId, i))
+      threadsStore.put(otherPost.id, mergeKeyWithSparkId(createThreadId(postId, i)))
     })
   })
 }

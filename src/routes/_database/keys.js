@@ -1,3 +1,6 @@
+import { get } from 'svelte/store'
+import { currentSparkId } from '../_store/instance'
+import { unwrap } from '../_utils/mapper'
 import { reverseTimelineId, zeroPad } from '../_utils/timelineIdSorting'
 
 //
@@ -62,4 +65,8 @@ export function createNamePrefixKeyRange (namePrefix) {
     namePrefix,
     namePrefix + '\uffff'
   )
+}
+
+export function mergeKeyWithSparkId (key) {
+  return `${key}_${unwrap(get(currentSparkId))}`
 }

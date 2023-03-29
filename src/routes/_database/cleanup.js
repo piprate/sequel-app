@@ -19,7 +19,7 @@ import {
 import debounce from 'lodash-es/debounce'
 import { mark, stop } from '../_utils/marks'
 import { deleteAll } from './utils'
-import { createPinnedPostKeyRange, createThreadKeyRange } from './keys'
+import { createPinnedPostKeyRange, createThreadKeyRange, mergeKeyWithSparkId } from './keys'
 import { getKnownInstances } from './knownInstances'
 import noop from 'lodash-es/noop'
 import { CLEANUP_DELAY, CLEANUP_TIME_AGO } from '../_static/database'
@@ -50,7 +50,7 @@ function cleanupPosts (postsStore, postTimelinesStore, threadsStore, cutoff) {
         postsStore.delete(postId)
         deleteAll(
           postTimelinesStore,
-          postTimelinesStore.index('postId'),
+          postTimelinesStore.index(mergeKeyWithSparkId('postId')),
           IDBKeyRange.only(postId)
         )
         deleteAll(
@@ -71,7 +71,7 @@ function cleanupNotifications (notificationsStore, notificationTimelinesStore, c
         notificationsStore.delete(notificationId)
         deleteAll(
           notificationTimelinesStore,
-          notificationTimelinesStore.index('notificationId'),
+          notificationTimelinesStore.index(mergeKeyWithSparkId('notificationId')),
           IDBKeyRange.only(notificationId)
         )
       })

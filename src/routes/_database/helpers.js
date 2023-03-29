@@ -10,6 +10,7 @@ import {
   NAME_LOWERCASE,
   WORLD_ID
 } from './constants'
+import { mergeKeyWithSparkId } from './keys'
 
 export async function getGenericEntityWithId (store, cache, instanceName, id) {
   if (hasInCache(cache, instanceName, id)) {
@@ -17,7 +18,7 @@ export async function getGenericEntityWithId (store, cache, instanceName, id) {
   }
   const db = await getDatabase(instanceName)
   const result = await dbPromise(db, store, 'readonly', (store, callback) => {
-    store.get(id).onsuccess = (e) => callback(e.target.result)
+    store.get(mergeKeyWithSparkId(id)).onsuccess = (e) => callback(e.target.result)
   })
   setInCache(cache, instanceName, id, result)
   return result
@@ -27,7 +28,7 @@ export async function setGenericEntityWithId (store, cache, instanceName, entity
   setInCache(cache, instanceName, entity.id, entity)
   const db = await getDatabase(instanceName)
   return dbPromise(db, store, 'readwrite', (store) => {
-    store.put(entity)
+    store.put(entity, store.keyPath ? undefined : mergeKeyWithSparkId(entity.id))
   })
 }
 

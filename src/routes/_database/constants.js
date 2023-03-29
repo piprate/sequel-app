@@ -28,7 +28,8 @@ export const DB_VERSION_MARKETPLACE = 2
 export const DB_VERSION_NFT = 3
 export const DB_VERSION_ENTITY = 4
 export const DB_VERSION_NAME_INDEX = 5
+export const DB_VERSION_TIMELINES_KEY_UPDATE = 6
 
 // Using an object for these so that unit tests can change them
-export const DB_VERSION_CURRENT = { version: 5 }
+export const DB_VERSION_CURRENT = { version: 6 }
 export const CURRENT_TIME = { now: () => Date.now() }

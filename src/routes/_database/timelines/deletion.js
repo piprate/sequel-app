@@ -8,7 +8,7 @@ import {
   POSTS_STORE,
   THREADS_STORE
 } from '../constants'
-import { createThreadKeyRange } from '../keys'
+import { createThreadKeyRange, mergeKeyWithSparkId } from '../keys'
 import { deleteAll } from '../utils'
 import { sparkSpecificPostId } from './cachePost'
 
@@ -51,12 +51,12 @@ export async function deletePostsAndNotifications (instanceName, postIds, notifi
       )
       deleteAll(
         postTimelinesStore,
-        postTimelinesStore.index('postId'),
+        postTimelinesStore.index(mergeKeyWithSparkId('postId')),
         IDBKeyRange.only(postId)
       )
       deleteAll(
         threadsStore,
-        threadsStore.index('postId'),
+        threadsStore.index(mergeKeyWithSparkId('postId')),
         IDBKeyRange.only(postId)
       )
       deleteAll(
@@ -70,7 +70,7 @@ export async function deletePostsAndNotifications (instanceName, postIds, notifi
       notificationsStore.delete(notificationId)
       deleteAll(
         notificationTimelinesStore,
-        notificationTimelinesStore.index('notificationId'),
+        notificationTimelinesStore.index(mergeKeyWithSparkId('notificationId')),
         IDBKeyRange.only(notificationId)
       )
     }
