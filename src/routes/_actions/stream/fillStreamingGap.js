@@ -21,7 +21,7 @@ export async function fillStreamingGap (instanceName, accessToken, timelineName,
       timelineName, maxId, firstTimelineItemId, TIMELINE_GAP_BATCH_SIZE)).items
     if (newTimelineItems.length) {
       addPostsOrNotifications(instanceName, timelineName, newTimelineItems, asSpark)
-      maxId = newTimelineItems[newTimelineItems.length - 1].id
+      maxId = newTimelineItems[newTimelineItems.length - 1].timelineID
     }
   } while (numRequests < MAX_NUM_REQUESTS && newTimelineItems.length === TIMELINE_GAP_BATCH_SIZE)
 }
