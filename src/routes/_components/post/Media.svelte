@@ -142,6 +142,7 @@
               label={animatedLabel}
               poster={previewUrl}
               {blurhash}
+              {blurhashToUse}
               src={url}
               staticSrc={previewUrl}
               useWidthHeight={!blurhash}
@@ -155,7 +156,7 @@
               alt={description}
               title={description}
               src={previewUrl}
-              fallback={oneTransparentPixel}
+              fallback={blurhashToUse || oneTransparentPixel}
               {blurhash}
               width={inlineWidth}
               height={inlineHeight}

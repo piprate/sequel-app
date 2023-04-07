@@ -9,6 +9,7 @@
   export let label;
   export let poster;
   export let blurhash;
+  export let blurhashToUse;
   export let src;
   export let staticSrc;
   export let useWidthHeight;
@@ -48,7 +49,7 @@
             title={label || ''}
             src={staticSrc}
             {blurhash}
-            fallback={oneTransparentPixel}
+            fallback={blurhashToUse || oneTransparentPixel}
             {width}
             {height}
             background="var(--loading-bg)"

@@ -13,6 +13,7 @@
   import { formatIntl } from '../../../_utils/formatIntl'
   import { database } from '../../../_database/database'
   import { createEventDispatcher, onMount } from 'svelte'
+  import SvgIcon from '../../SvgIcon.svelte';
 
   const dispatch = createEventDispatcher()
 
@@ -160,21 +161,21 @@
           max={mediaAltCharLimit}
           style="width: 100%; text-align: right;"
   />
-<!--  <button class="extract-text-button" type="button"-->
-<!--          on:click="{onClick}"-->
-<!--          disabled={extracting}-->
-<!--          aria-label={extractButtonLabel}-->
-<!--  >-->
-<!--    <SvgIcon href="{extracting ? '#fa-spinner' : '#fa-magic'}"-->
-<!--             className="extract-text-svg {extracting ? 'spin' : ''}"-->
-<!--    />-->
-<!--    <span>{extractButtonText}</span>-->
-<!--  </button>-->
-<!--  <LengthGauge-->
-<!--          length={extractionProgress}-->
-<!--          overLimit={false}-->
-<!--          max={100}-->
-<!--  />-->
+ <button class="extract-text-button" type="button"
+         on:click="{onClick}"
+         disabled={extracting}
+         aria-label={extractButtonLabel}
+ >
+   <SvgIcon href="{extracting ? '#fa-spinner' : '#fa-magic'}"
+            className="extract-text-svg {extracting ? 'spin' : ''}"
+   />
+   <span>{extractButtonText}</span>
+ </button>
+ <LengthGauge
+         length={extractionProgress}
+         overLimit={false}
+         max={100}
+ />
 </div>
 <style>
   .media-alt-editor {
@@ -193,22 +194,22 @@
     max-height: 70vh;
   }
 
-  /*.extract-text-button {*/
-  /*  display: flex;*/
-  /*  justify-content: center;*/
-  /*  align-items: center;*/
-  /*  margin-top: 10px;*/
-  /*}*/
+  .extract-text-button {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-top: 10px;
+  }
 
-  /*.extract-text-button span {*/
-  /*  margin-left: 15px;*/
-  /*}*/
+  .extract-text-button span {
+   margin-left: 15px;
+  }
 
-  /*:global(.extract-text-svg) {*/
-  /*  fill: var(--button-text);*/
-  /*  width: 18px;*/
-  /*  height: 18px;*/
-  /*}*/
+  :global(.extract-text-svg) {
+   fill: var(--button-text);
+   width: 18px;
+   height: 18px;
+  }
 
   @media (max-height: 767px) {
     .media-alt-input {
@@ -216,12 +217,12 @@
       width: 100%;
       overflow: auto;
     }
-    /*.extract-text-button {*/
-    /*  margin-top: 0;*/
-    /*}*/
-    /*button.extract-text-button {*/
-    /*  padding: 7px 10px;*/
-    /*}*/
+    .extract-text-button {
+     margin-top: 0;
+    }
+    button.extract-text-button {
+     padding: 7px 10px;
+    }
   }
 
   @media (min-height: 768px) {
