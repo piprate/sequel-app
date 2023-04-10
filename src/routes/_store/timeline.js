@@ -4,7 +4,10 @@ import { derived, get as svelteGet } from 'svelte/store'
 import { currentInstance, currentTimeline } from './local'
 import { transientStore } from './base'
 import { currentSparkId } from './instance'
+import { isTimelineInReaderMode } from '../_actions/timeline'
 
+export const rootLastReaderModeTimelineItem = transientStore({})
+export const rootTimelineGroupHeads = transientStore({})
 export const rootTimelineItemSummaries = transientStore({})
 export const rootTimelineItemSummariesToAdd = transientStore({})
 export const rootRunningUpdate = transientStore({})
@@ -15,7 +18,12 @@ export const rootShouldShowHeader = transientStore({})
 export const rootTimelineItemSummariesAreStale = transientStore({})
 export const rootTimelineNextPageId = transientStore({})
 export const rootFreshUpdates = transientStore({})
+export const rootPostFromSocket = transientStore({})
 
+export const timelineGroupHeads =
+  deriveForCurrentTimeline(rootTimelineGroupHeads, null)
+export const lastReaderModeTimelineItem =
+  deriveForCurrentTimeline(rootLastReaderModeTimelineItem, null)
 export const timelineItemSummaries =
   deriveForCurrentTimeline(rootTimelineItemSummaries, null)
 export const timelineItemSummariesToAdd =
@@ -36,6 +44,8 @@ export const timelineNextPageId =
   deriveForCurrentTimeline(rootTimelineNextPageId, null)
 export const freshUpdates =
   deriveForCurrentTimeline(rootFreshUpdates, null)
+export const postFromSocket =
+  deriveForCurrentTimeline(rootPostFromSocket, null)
 
 function deriveForCurrentTimeline (timelineStore, defaultValue) {
   return derived(

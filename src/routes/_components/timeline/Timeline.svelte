@@ -20,7 +20,7 @@
     setupTimeline,
     showMoreItemsForCurrentTimeline,
     showMoreItemsForThread,
-    showMoreItemsForTimeline
+    showMoreItemsForTimeline,
   } from '../../_actions/timeline'
   import { scheduleIdleTask } from '../../_utils/scheduleIdleTask'
   import { mark, stop } from '../../_utils/marks'

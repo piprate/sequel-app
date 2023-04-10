@@ -9,11 +9,12 @@ import {
   getForTimeline,
   getThreads,
   rootFreshUpdates,
+  rootPostFromSocket,
   rootTimelineItemSummaries,
   rootTimelineItemSummariesToAdd,
   setForTimeline
 } from '../_store/timeline'
-import { addTimelineItemSummaries, showMoreItemsForCurrentTimeline } from './timeline'
+import { addTimelineItemSummaries, isTimelineInReaderMode, showMoreItemsForCurrentTimeline } from './timeline'
 
 function getExistingItemIdsSet (instanceName, timelineName) {
   const timelineItemSummaries = getForTimeline(rootTimelineItemSummaries, instanceName, timelineName) || []
@@ -54,8 +55,8 @@ async function insertUpdatesIntoTimeline (instanceName, timelineName, updates, a
     console.log('adding ', (newItemSummariesToAdd.length - itemSummariesToAdd.length),
       'items to timelineItemSummariesToAdd for timeline', timelineName)
     setForTimeline(rootTimelineItemSummariesToAdd, instanceName, timelineName, newItemSummariesToAdd, asSpark)
-    
-    if (newItemSummariesToAdd.filter(summary => summary.sparkId === asSpark).length) {
+
+    if (newItemSummariesToAdd.filter(summary => summary.sparkId === asSpark).length || isTimelineInReaderMode(timelineName)) {
       showMoreItemsForCurrentTimeline()
     }
   }
@@ -129,7 +130,10 @@ function lazilyProcessFreshUpdates (instanceName, timelineName, asSpark) {
   })
 }
 
-export function addPostOrNotification (instanceName, timelineName, newPostOrNotification, asSpark) {
+export function addPostOrNotification (instanceName, timelineName, newPostOrNotification, asSpark, isPostFromSocket) {
+  if (isPostFromSocket) {
+    setForTimeline(rootPostFromSocket, instanceName, timelineName, newPostOrNotification, asSpark)
+  }
   addPostsOrNotifications(instanceName, timelineName, [newPostOrNotification], asSpark)
 }
 

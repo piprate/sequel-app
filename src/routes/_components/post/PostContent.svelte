@@ -1,15 +1,16 @@
 <script>
   import { mark, stop } from '../../_utils/marks'
-  import { autoplayGifs } from '../../_store/local'
+  import { autoplayGifs, currentTimeline } from '../../_store/local'
   import { classname } from '../../_utils/classname'
   import { massageUserText } from '../../_utils/massageUserText'
   import { urlIsCrossOrigin } from '../../_utils/urlIsCrossOrigin'
   import { onMount } from 'svelte'
+  import { isTimelineInReaderMode } from '../../_actions/timeline';
 
   export let post
   export let uuid
-  export let isPostInOwnThread
-  export let isPostInNotification
+  export let isPostInOwnThread = false
+  export let isPostInNotification = false
   export let postEmojis
   export let shown
 
@@ -20,7 +21,8 @@
       'post-content',
       isPostInOwnThread && 'post-in-own-thread',
       isPostInNotification && 'post-in-notification',
-      shown && 'shown'
+      shown && 'shown',
+      isTimelineInReaderMode($currentTimeline) && 'reader-mode'
     )
   })()
 
@@ -86,6 +88,10 @@
     white-space: pre-wrap;
     font-size: 0.9em;
     display: none;
+  }
+  
+  .post-content.reader-mode {
+    margin: 4px 10px 4px 5px;
   }
 
   .post-content.post-in-own-thread {

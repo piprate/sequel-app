@@ -2,6 +2,8 @@ import { DEFAULT_TIMEOUT, getWithHeaders, paramsString } from '../_utils/ajax'
 import { base, sequelAuth } from './utils'
 import { populateNotificationMediaURLs, populatePostMediaURLs } from './media'
 import { unwrap } from '../_utils/mapper'
+import { isTimelineInReaderMode } from '../_actions/timeline'
+import { getForTimeline, rootLastReaderModeTimelineItem } from '../_store/timeline'
 
 export async function getTimeline (instanceName, accessToken, asSpark, timeline, maxId, since, limit) {
   let url = `${base(instanceName, accessToken)}/`
@@ -19,7 +21,7 @@ export async function getTimeline (instanceName, accessToken, asSpark, timeline,
     if (timeline.endsWith('media')) {
       params.only_media = true
     } else {
-      params.include_comments = timeline.endsWith('/with_comments')
+      params.include_comments = timeline.includes('/with_comments')
     }
   } else if (timeline === 'bookmarks') {
     if (!asSpark) {
@@ -53,6 +55,18 @@ export async function getTimeline (instanceName, accessToken, asSpark, timeline,
 
   if (limit) {
     params.limit = limit
+  }
+
+  if (isTimelineInReaderMode()) {
+    params.reader_mode = true
+    delete params.max_id
+
+    if (!since) {
+      const lastItem = getForTimeline(rootLastReaderModeTimelineItem, instanceName, timeline, asSpark)
+      if (lastItem) {
+        params.since_id = lastItem
+      }
+    }
   }
 
   url += '?' + paramsString(params)

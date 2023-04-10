@@ -2,9 +2,12 @@ import { accessToken, currentSparkId } from '../_store/instance'
 import {
   getForTimeline,
   lastTimelineItemId,
+  rootLastReaderModeTimelineItem,
+  rootPostFromSocket,
   rootRunningUpdate,
   rootShouldShowHeader,
   rootShowHeader,
+  rootTimelineGroupHeads,
   rootTimelineItemSummaries,
   rootTimelineItemSummariesAreStale,
   rootTimelineItemSummariesToAdd,
@@ -127,7 +130,7 @@ async function addPagedTimelineItems (instanceName, timelineName, items) {
 
 export async function addPagedTimelineItemSummaries (instanceName, timelineName, newSummaries) {
   const oldSummaries = getForTimeline(rootTimelineItemSummaries, instanceName, timelineName)
-
+  
   const mergedSummaries = uniqBy(concat(oldSummaries || [], newSummaries), byId)
 
   if (!isEqual(oldSummaries, mergedSummaries)) {
@@ -191,10 +194,26 @@ async function addTimelineItems (instanceName, timelineName, items, stale) {
 }
 
 export async function addTimelineItemSummaries (instanceName, timelineName, newSummaries, newStale) {
+  if (isTimelineInReaderMode(timelineName)) {
+    const lastTimelineItem = newSummaries.at(-1)?.timelineId
+    const prevLastTimelineItem = getForTimeline(rootLastReaderModeTimelineItem, instanceName, timelineName, get(currentSparkId))
+    const postFromSocket = getForTimeline(rootPostFromSocket, instanceName, timelineName, get(currentSparkId))
+
+    if (lastTimelineItem !== postFromSocket) {
+      setForTimeline(rootLastReaderModeTimelineItem, instanceName, timelineName, lastTimelineItem, get(currentSparkId))
+    }
+
+    const prevGroupHeads = getForTimeline(rootTimelineGroupHeads, instanceName, timelineName, get(currentSparkId)) || []
+    const { batchGroupHeads, orderedItems } = await orderItemsByTimelineType(newSummaries, timelineName.split('/')[0], prevLastTimelineItem, prevGroupHeads)
+    newSummaries = orderedItems
+    const groupHeads = prevGroupHeads.concat(batchGroupHeads)
+    setForTimeline(rootTimelineGroupHeads, instanceName, timelineName, groupHeads, get(currentSparkId))
+  }
+
   const oldSummaries = getForTimeline(rootTimelineItemSummaries, instanceName, timelineName)
   const oldStale = getForTimeline(rootTimelineItemSummariesAreStale, instanceName, timelineName)
 
-  const mergedSummaries = uniqBy(mergeArrays(oldSummaries || [], newSummaries, compareTimelineItemSummaries), byId)
+  const mergedSummaries = uniqBy(mergeArrays(oldSummaries || [], newSummaries, compareTimelineItemSummaries, isTimelineInReaderMode(timelineName) ? 'ascending' : 'descending'), byId)
 
   if (!isEqual(oldSummaries, mergedSummaries)) {
     setForTimeline(rootTimelineItemSummaries, instanceName, timelineName, mergedSummaries)
@@ -289,4 +308,77 @@ export async function showMoreItemsForThread (instanceName, timelineName) {
   setForTimeline(rootTimelineItemSummariesToAdd, instanceName, timelineName, [])
   setForTimeline(rootTimelineItemSummaries, instanceName, timelineName, sortedTimelineItemSummaries)
   stop('showMoreItemsForThread')
+}
+
+export function isTimelineInReaderMode (_timeline = location.pathname) {
+  return _timeline?.endsWith('/reader_mode')
+}
+
+export async function orderItemsByTimelineType (items, timelineType, lastTimelineItem, groupHeads = []) {
+  const batchItems = items.filter(_ => _.timelineId !== lastTimelineItem)
+  if (!batchItems?.length) return { batchGroupHeads: groupHeads, orderedItems: [] }
+
+  const mapGroupWithTimelineType = {
+    bubble: 'sparkId',
+    spark: 'bubbleId'
+  }
+
+  const selectedProp = mapGroupWithTimelineType[timelineType]
+  const [lastItem, ...remainingItems] = batchItems
+  const loadedPosts = [lastItem]
+  const lastItemGroup = lastItem[selectedProp]
+
+  let groupKeys = [lastItemGroup]
+  let batchGroupHeads = groupHeads.length ? groupHeads : []
+
+  if (timelineType === 'world') {
+    const lastItemGroupKeys = [lastItem.sparkId, lastItem.bubbleId]
+    groupKeys = [lastItemGroupKeys]
+
+    for (const item of remainingItems) {
+      loadedPosts.push(item)
+      const itemInGroup = groupKeys.some(([author, bubble]) => {
+        return author === item.sparkId && bubble === item.bubbleId
+      })
+
+      if (!itemInGroup) {
+        groupKeys.push([item.sparkId, item.bubbleId])
+      }
+    }
+
+    const groupedItems = groupKeys.map(propValues => loadedPosts.filter(post => post.sparkId === propValues[0] && post.bubbleId === propValues[1]))
+
+    for (const group of groupedItems.values()) {
+      const lastGroupHead = batchGroupHeads.at(-1)
+      const [groupHead] = group
+
+      if (groupHead.sparkId !== lastGroupHead?.sparkId || groupHead.bubbleId !== lastGroupHead?.bubbleId) {
+        batchGroupHeads = batchGroupHeads.concat(groupHead)
+      }
+    }
+
+    return { batchGroupHeads, orderedItems: groupedItems.flat() }
+  }
+
+  for (const item of remainingItems) {
+    const propValue = item[selectedProp]
+    loadedPosts.push(item)
+
+    if (!groupKeys.includes(propValue)) {
+      groupKeys.push(propValue)
+    }
+  }
+
+  const groupedItems = groupKeys.map(propValue => loadedPosts.filter(post => post[selectedProp] === propValue))
+
+  for (const group of groupedItems.values()) {
+    const lastGroupHead = batchGroupHeads.at(-1)
+    const [groupHead] = group
+
+    if (groupHead[selectedProp] !== lastGroupHead?.[selectedProp]) {
+      batchGroupHeads = batchGroupHeads.concat(groupHead)
+    }
+  }
+
+  return { batchGroupHeads, orderedItems: groupedItems.flat() }
 }

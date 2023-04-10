@@ -7,6 +7,7 @@ class TimelineSummary {
     this.id = item.id
     this.timelineId = item.timelineID || item.id
     this.sparkId = item.attributedTo || (item.actor && item.actor.id)
+    this.bubbleId = item.bubble
     this.replyId = (item.inReplyTo) || undefined
     this.createdAt = item.createdAt
     this.type = item.type || undefined

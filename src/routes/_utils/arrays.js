@@ -1,5 +1,5 @@
 // Merge two arrays, using the given comparator
-export function mergeArrays (leftArray, rightArray, comparator) {
+export function mergeArrays (leftArray, rightArray, comparator, order) {
   let leftIndex = 0
   let rightIndex = 0
   const merged = []
@@ -16,7 +16,7 @@ export function mergeArrays (leftArray, rightArray, comparator) {
     }
     const left = leftArray[leftIndex]
     const right = rightArray[rightIndex]
-    const comparison = comparator(right, left)
+    const comparison = comparator(right, left, order)
     if (comparison === 0) {
       merged.push(left)
       rightIndex++

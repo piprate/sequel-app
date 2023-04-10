@@ -193,6 +193,8 @@ const intl = {
   notificationMentions: 'Notification mentions',
   profileWithMedia: 'Profile with media',
   profileWithComments: 'Profile with comments',
+  postsInReaderMode: 'Posts in reader mode',
+  postsInWithCommentsReaderMode: 'Posts with comments in reader mode',
   hashtag: 'Hashtag',
   // timelines
   world: 'World',
@@ -875,6 +877,9 @@ const intl = {
   loadMore: 'Load more',
   showCountMore: 'Show {count} more',
   nothingToShow: 'Nothing to show.',
+  authorWrote: '{author} wrote:',
+  wroteInBubble: 'Wrote in {bubble}:',
+  authorWroteInBubble: '{author} wrote in {bubble}:',
   // post thread page
   postThreadPage: 'Post thread page',
   post: 'Post',
@@ -1004,6 +1009,8 @@ const intl = {
   postOptions: 'Post options',
   confirm: 'Confirm',
   closeDialog: 'Close dialog',
+  interactiveMode: 'Interactive mode',
+  readerMode: 'Reader mode',
   yes: 'Yes',
   no: 'No',
   postPrivacy: 'Post privacy',

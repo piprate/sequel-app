@@ -13,6 +13,7 @@
   import { loadSpark, setCurrentSpark } from '../../../_actions/sparks'
   import { currentInstance } from '../../../_store/local'
   import { toast } from '../../toast/toast'
+  import { isTimelineInReaderMode } from '../../../_actions/timeline';
 
   export let id
   export let label
@@ -55,6 +56,8 @@
   )
   $: blockIcon = blocked ? '#fa-unlock' : '#fa-ban'
   $: archiveLabel = formatIntl('intl.archiveBubble', { bubble: bubbleName })
+  $: readerModeIcon = isTimelineInReaderMode() ? '#fa-hand-pointer-o' : '#fa-book-open-reader'
+  $: readerModeLabel = isTimelineInReaderMode() ? 'intl.interactiveMode' : 'intl.readerMode'
   $: items = [
     isOwner && {
       key: 'edit',
@@ -75,6 +78,11 @@
       key: 'bookmark',
       label: bookmarkLabel,
       icon: bookmarkIcon
+    },
+    {
+      key: 'readerMode',
+      label: readerModeLabel,
+      icon: readerModeIcon
     },
     // !isOwner && {
     //   key: 'block',
@@ -107,6 +115,8 @@
         return onCopyClicked()
       case 'edit':
         return onEdit()
+      case 'readerMode':
+        return onToggleReaderMode()
       case 'switchAndEdit':
         return onSwitchAndEdit()
     }
@@ -155,6 +165,13 @@
     setTimeout(() => {
       goto(`/bubbles/${unwrap(bubbleId)}/edit`)
     }, gotoDelay)
+  }
+
+  async function onToggleReaderMode () {
+    const readerModeUrl = `${location.pathname}/reader_mode`
+    goto(isTimelineInReaderMode() ? location.pathname.replace('/reader_mode', '') : readerModeUrl)
+    
+    close(id)
   }
 </script>
 

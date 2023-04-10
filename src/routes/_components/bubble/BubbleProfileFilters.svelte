@@ -6,16 +6,17 @@
   export let filter
 
   $: id = unwrap(bubble.id)
+  $: inReaderMode = location.pathname.endsWith('/reader_mode')
   $: tabs = [
     {
-      name: '',
+      name: inReaderMode ? 'reader_mode' : '',
       label: 'Posts',
-      href: `/bubbles/${id}`
+      href: `/bubbles/${id}${inReaderMode ? '/reader_mode' : ''}` 
     },
     {
-      name: 'with_comments',
+      name: inReaderMode ? 'with_comments/reader_mode' : 'with_comments',
       label: 'Posts and comments',
-      href: `/bubbles/${id}/with_comments`
+      href: `/bubbles/${id}/with_comments${inReaderMode ? '/reader_mode' : ''}`
     }
     // {
     //   name: 'media',
