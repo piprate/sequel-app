@@ -395,6 +395,7 @@ const intl = {
   dropToUpload: 'Drop to upload',
   invalidFileType: 'Invalid file type',
   composeLabel: "What's on your mind?",
+  composeMediaWarning: 'Cannot add the same attachment twice',
   autocompleteDescription: 'When autocomplete results are available, press up or down arrows and enter to select.',
   mediaUploads: 'Media uploads',
   delete: 'Delete',

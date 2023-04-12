@@ -178,6 +178,7 @@ on:publishAction="{doPublishPost}" />
       "avatar autosuggest autosuggest autosuggest"
       "avatar mentions    mentions    mentions"
       "avatar toolbar     toolbar     length"
+      "avatar warning     warning     warning"
       "avatar media       media       media"
       "avatar sensitive   sensitive   sensitive";
     grid-template-columns: min-content minmax(0, max-content) 1fr 1fr;

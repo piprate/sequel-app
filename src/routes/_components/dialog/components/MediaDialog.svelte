@@ -167,7 +167,7 @@
 >
   <div class="media-container">
     <ul class="media-scroll" bind:this={scroller}  on:click="{onImageClick}">
-      {#each mediaItems as media (media.id)}
+      {#each mediaItems as media}
         <li class="media-scroll-item">
           <div class="media-scroll-item-inner">
             <div class="media-scroll-item-image-area">

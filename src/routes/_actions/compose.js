@@ -63,6 +63,13 @@ export async function publishPost (realm, bubbleId, asSpark, text, originalPostI
     prepareMediaItem(mediaItem)
   }
   const mediaToSend = media.map(_ => _.data)
+  for (const [index, mediaItem] of mediaToSend.entries()) {
+    const duplicateIndex = mediaToSend.findIndex((_, i) => {
+      return _.id === mediaItem.id && index !== i
+    })
+
+    if (duplicateIndex > index) mediaToSend.splice(duplicateIndex, 1)
+  }
 
   publishingPost.set(true)
   try {
