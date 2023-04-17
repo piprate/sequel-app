@@ -19,7 +19,7 @@ export const createFilterFunction = (
         return showWorldNotices
       case 'mention':
         return showMentions
-      case 'subscriber':
+      case 'subscription':
         return showSubscribers
     }
 

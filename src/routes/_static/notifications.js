@@ -23,7 +23,7 @@ const NOTIFICATION_TYPES = {
     actionText: 'intl.leftHeader',
     label: parse('intl.labelLeftBubble')
   },
-  subscriber: {
+  subscription: {
     icon: '#fa-user-plus',
     actionText: 'intl.subscribedToYourPosts',
     label: parse('intl.labelSubscribedToYourPosts')

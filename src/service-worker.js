@@ -1,4 +1,7 @@
 import { version, files, build } from '$service-worker'
+import { getKnownInstances } from './routes/_database/knownInstances.js'
+import { basename } from './routes/_api/utils.js'
+import { get, post } from './routes/_utils/ajax.js'
 
 const ASSETS = `cache${version}`
 
@@ -85,5 +88,172 @@ self.addEventListener('fetch', event => {
         return cachedAsset || fetchAndCache(event.request)
       })()
     )
+  }
+})
+
+self.addEventListener('push', event => {
+  event.waitUntil((async () => {
+    const data = event.data.json()
+    // If there is only once instance, then we know for sure that the push notification came from it
+    const knownInstances = await getKnownInstances()
+    if (knownInstances.length !== 1) {
+      // TODO: Mastodon currently does not tell us which instance the push notification came from.
+      // So we have to guess and currently just choose the first one. We _could_ locally store the instance that
+      // currently has push notifications enabled, but this would only work for one instance at a time.
+      // See: https://github.com/mastodon/mastodon/issues/22183
+      await showSimpleNotification(data)
+      return
+    }
+
+    const origin = basename(knownInstances[0])
+    try {
+      const notification = await get(`${origin}/api/v1/notifications/${data.notification_id}`, {
+        Authorization: `Bearer ${data.access_token}`
+      }, { timeout: 2000 })
+
+      await showRichNotification(data, notification)
+    } catch (e) {
+      await showSimpleNotification(data)
+    }
+  })())
+})
+
+async function showSimpleNotification (data) {
+  await self.registration.showNotification(data.title, {
+    badge: '/icon-push-badge.png',
+    icon: data.icon,
+    body: data.body,
+    tag: data.notification_id,
+    data: {
+      url: `${self.origin}/notifications`
+    }
+  })
+}
+
+async function showRichNotification (data, notification) {
+  const { icon, body } = data
+  const tag = notification.id
+  const { origin } = self.location
+  const badge = '/icon-push-badge.png'
+
+  switch (notification.type) {
+    case 'follow':
+    case 'follow_request':
+    case 'admin.report':
+    case 'admin.sign_up': {
+      await self.registration.showNotification(data.title, {
+        badge,
+        icon,
+        body,
+        tag,
+        data: {
+          url: `${origin}/accounts/${notification.account.id}`
+        }
+      })
+      break
+    }
+    case 'reblog':
+    case 'favourite':
+    case 'status':
+    case 'poll': {
+      await self.registration.showNotification(data.title, {
+        badge,
+        icon,
+        body,
+        tag,
+        data: {
+          url: `${origin}/statuses/${notification.status.id}`
+        }
+      })
+      break
+    }
+    case 'mention': {
+      const isPublic = ['public', 'unlisted'].includes(notification.status.visibility)
+      const actions = [
+        isPublic && {
+          action: 'reblog',
+          icon: '/icon-push-fa-retweet.png', // generated manually from font-awesome-svg
+          title: 'intl.reblog'
+        },
+        {
+          action: 'favourite',
+          icon: '/icon-push-fa-star.png', // generated manually from font-awesome-svg
+          title: 'intl.favorite'
+        }
+      ].filter(Boolean)
+
+      await self.registration.showNotification(data.title, {
+        badge,
+        icon,
+        body,
+        tag,
+        data: {
+          instance: new URL(data.icon).origin,
+          status_id: notification.status.id,
+          access_token: data.access_token,
+          url: `${origin}/statuses/${notification.status.id}`
+        },
+        actions
+      })
+      break
+    }
+  }
+}
+
+const cloneNotification = notification => {
+  const clone = {}
+
+  for (const k in notification) {
+    // deliberately not doing a hasOwnProperty check, but skipping
+    // functions and null props like onclick and onshow and showTrigger
+    if (typeof notification[k] !== 'function' && notification[k] !== null) {
+      clone[k] = notification[k]
+    }
+  }
+
+  return clone
+}
+
+const updateNotificationWithoutAction = (notification, action) => {
+  const newNotification = cloneNotification(notification)
+
+  newNotification.actions = newNotification.actions.filter(item => item.action !== action)
+
+  return self.registration.showNotification(newNotification.title, newNotification)
+}
+
+self.addEventListener('notificationclick', event => {
+  event.waitUntil((async () => {
+    switch (event.action) {
+      case 'reblog': {
+        const url = `${event.notification.data.instance}/api/v1/statuses/${event.notification.data.status_id}/reblog`
+        await post(url, null, {
+          Authorization: `Bearer ${event.notification.data.access_token}`
+        })
+        await updateNotificationWithoutAction(event.notification, 'reblog')
+        break
+      }
+      case 'favourite': {
+        const url = `${event.notification.data.instance}/api/v1/statuses/${event.notification.data.status_id}/favourite`
+        await post(url, null, {
+          Authorization: `Bearer ${event.notification.data.access_token}`
+        })
+        await updateNotificationWithoutAction(event.notification, 'favourite')
+        break
+      }
+      default: {
+        await self.clients.openWindow(event.notification.data.url)
+        await event.notification.close()
+        break
+      }
+    }
+  })())
+})
+
+self.addEventListener('message', (event) => {
+  switch (event.data) {
+    case 'skip-waiting':
+      self.skipWaiting()
+      break
   }
 })

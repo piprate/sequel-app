@@ -50,8 +50,8 @@
     <NotificationFilterSettings {instanceName} />
 <!--    <h2>{intl.wordFilters}</h2>-->
 <!--    <WordFilterSettings {instanceName} />-->
-<!--    <h2>{intl.pushNotifications}</h2>-->
-<!--    <PushNotificationSettings {instanceName} />-->
+   <h2>{intl.pushNotifications}</h2>
+   <PushNotificationSettings {instanceName} />
   {/if}
   <InstanceActions {instanceName} />
 </SettingsLayout>

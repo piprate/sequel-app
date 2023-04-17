@@ -26,7 +26,7 @@ export async function updatePushSubscriptionForInstance (instanceName) {
     const backendSubscription = await getSubscription(instanceName, accessToken)
 
     // Check if applicationServerKey changed (need to get another subscription from the browser)
-    if (btoa(urlBase64ToUint8Array(backendSubscription.server_key).buffer) !== btoa(subscription.options.applicationServerKey)) {
+    if (btoa(urlBase64ToUint8Array(backendSubscription.serverKey).buffer) !== btoa(subscription.options.applicationServerKey)) {
       await subscription.unsubscribe()
       await deleteSubscription(instanceName, accessToken)
       await updateAlerts(instanceName, currentPushSubscriptionVal.alerts)
@@ -65,7 +65,7 @@ export async function updateAlerts (instanceName, alerts) {
     await subscription.unsubscribe()
 
     subscription = await registration.pushManager.subscribe({
-      applicationServerKey: urlBase64ToUint8Array(backendSubscription.server_key),
+      applicationServerKey: urlBase64ToUint8Array(backendSubscription.serverKey),
       userVisibleOnly: true
     })
 
@@ -74,7 +74,7 @@ export async function updateAlerts (instanceName, alerts) {
     pushSubscriptions.setKey(instanceName, backendSubscription)
   } else {
     try {
-      const backendSubscription = await putSubscription(instanceName, accessToken, alerts)
+      const backendSubscription = await putSubscription(instanceName, accessToken, subscription, alerts)
       pushSubscriptions.setKey(instanceName, backendSubscription)
     } catch (e) {
       const backendSubscription = await postSubscription(instanceName, accessToken, subscription, alerts)

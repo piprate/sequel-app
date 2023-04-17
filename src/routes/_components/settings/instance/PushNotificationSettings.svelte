@@ -24,7 +24,7 @@
       label: 'intl.tellMeMores'
     },
     {
-      key: 'subscriber',
+      key: 'subscription',
       label: 'intl.newSubscribers'
     },
     {
