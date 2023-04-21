@@ -19,8 +19,8 @@
 
   $: composeData = $currentComposeData[realm] || {}
   $: isComment = !!composeData.inReplyToId
-  $: federationMode = $observedBubble.federationMode
-  $: defaultVisibility = ($observedBubbleRelationship && $observedBubbleRelationship.defaultVisibility) || 'private'
+  $: federationMode = $observedBubble?.federationMode || 'disabled'
+  $: defaultVisibility = ($observedBubbleRelationship?.defaultVisibility) || 'private'
   $: defaultPostPrivacy = federationMode === 'continuous_mirror' ? 'fediverse' : defaultVisibility
   $: originalPostPrivacyKey = composeData.originalPostPrivacy || defaultPostPrivacy
   $: postPrivacyKey = composeData.postPrivacy || defaultPostPrivacy

@@ -40,13 +40,13 @@
   // begin copypasta (PostOptionsDialog.html / SparkProfileOptionsDialog.html)
   //
   $: sparkId = spark.id
-  $: subscribed = relationship && relationship.subscribed
-  $: requestedSubscription = relationship && relationship.requestedSubscription
-  $: authorId = author && author.id
-  $: authorName = author && author.name
-  $: isManaged = relationship.managed
-  $: muting = relationship.muted
-  $: blocking = relationship.blocked
+  $: subscribed = relationship?.subscribed
+  $: requestedSubscription = relationship?.requestedSubscription
+  $: authorId = author?.id
+  $: authorName = author?.name
+  $: isManaged = relationship?.managed
+  $: muting = relationship?.muted
+  $: blocking = relationship?.blocked
   $: subscribeLabel = (() => {
     if (typeof subscribed === 'undefined' || !author) {
       return ''

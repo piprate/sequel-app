@@ -58,9 +58,9 @@
   $: media = composeData.media || []
   $: mentions = composeData.mentions || []
   $: inReplyToId = composeData.inReplyToId  // delete-and-redraft replies, using standard id
-  $: federationMode = $observedBubble.federationMode
+  $: federationMode = $observedBubble?.federationMode
   $: defaultVisibility = (
-    ($observedBubbleRelationship && $observedBubbleRelationship.defaultVisibility) || 'private'
+    ($observedBubbleRelationship?.defaultVisibility) || 'private'
   )
   $: defaultPostPrivacyKey = federationMode === 'continuous_mirror' ? 'fediverse' : defaultVisibility
   $: postPrivacyKey = composeData.postPrivacy || defaultPostPrivacyKey
