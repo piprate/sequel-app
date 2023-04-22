@@ -76,7 +76,7 @@ export async function publishPost (realm, bubbleId, asSpark, text, originalPostI
     const post = await sendPost(_currentInstance, _accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, mediaToSend, visibility, textFormatKey, mentions)
     if (originalPostId) {
       updateEditedPost(_currentInstance, post, asSpark)
-      emit('postUpdated')
+      emit('postUpdated', post)
     } else {
       const insertionTimeline = inReplyToId ? `post/${unwrap(inReplyToId)}` : get(currentTimeline)
       addPostOrNotification(_currentInstance, insertionTimeline, post, asSpark)
