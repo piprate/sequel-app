@@ -51,7 +51,7 @@
 
     if (user.flow.addr !== out.addr) {
       user.flow.addr = out.addr
-      user.flow.network = await fcl.config().get('env', 'unknown')
+      user.flow.network = await fcl.config().get('flow.network', 'unknown')
 
       await saveUser(user)
     }
