@@ -10,6 +10,7 @@
     logInToInstanceLoading
   } from '../../../_store/local'
   import { onMount } from 'svelte'
+  import { importShowRecoverPasswordDialog } from '../../../_components/dialog/asyncDialogs/importShowForgotPasswordDialog';
 
   let hasIndexedDB = true
   let hasLocalStorage = true
@@ -42,6 +43,11 @@
 
   function onChangeInstance () {
     showInstance = true
+  }
+
+  async function forgotPassword () {
+    const showRecoverPasswordDialog = await importShowRecoverPasswordDialog()
+    showRecoverPasswordDialog()
   }
 
   function onSubmitInstance (event) {
@@ -101,6 +107,7 @@
       </button>
       <span class="register-option">or <a href="/settings/instances/register">{'intl.signUp'}</a></span>
     </form>
+    <p class="forgot-password">Forgot Password? <a href="#forgot-password" on:click={forgotPassword}>Click here to recover password</a></p>
   </div>
 </SettingsLayout>
 <style>
@@ -137,6 +144,10 @@
 
   .register-option {
     font-size: 1.1em;
+  }
+
+  .forgot-password {
+    font-size: 0.875rem;
   }
 
   .change-instance-link {

@@ -53,6 +53,7 @@
     "@rollup/plugin-url": "^8.0.1",
     "@testing-library/svelte": "^3.2.2",
     "arrow-key-navigation": "^1.2.0",
+    "base58-js": "^2.0.0",
     "blurhash": "^2.0.4",
     "cheerio": "1.0.0-rc.12",
     "chokidar": "^3.5.3",
@@ -95,6 +96,9 @@
     "tesseract.js-core": "^4.0.1",
     "text-encoding": "^0.7.0",
     "tiny-queue": "^0.2.1",
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
+    "web-bip39": "^0.0.2",
     "worker-loader": "^3.0.8"
   },
   "devDependencies": {
