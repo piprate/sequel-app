@@ -17,7 +17,6 @@
   $: bubbleCount = spark?.bubbleCount || 0
   $: subscriberCount = spark?.subscriberCount || 0
 
-
   onMount(async () => {
     if (isPostInOwnThread) {
       if ($isUserLoggedIn) {

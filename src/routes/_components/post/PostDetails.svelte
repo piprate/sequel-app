@@ -11,7 +11,10 @@
   export let post
   export let createdAtDate
   export let createdAtDateTS
-  export let absoluteFormattedDate
+  export let updatedAtDate
+  export let updatedAtDateTS
+  export let absoluteFormattedCreatedAtDate
+  export let absoluteFormattedUpdatedAtDate
 
   let overrideNumTMMs = undefined
 
@@ -32,8 +35,11 @@
     }
     return post.tmmCount || 0
   })()
-  $: displayAbsoluteFormattedDate = (
+  $: displayAbsoluteFormattedCreatedDate = (
           ($isMobileSize ? shortAbsoluteDateFormatter : absoluteDateFormatter)().format(createdAtDateTS)
+  )
+  $: displayAbsoluteFormattedUpdatedDate = (
+          ($isMobileSize ? shortAbsoluteDateFormatter : absoluteDateFormatter)().format(updatedAtDateTS)
   )
   $: tmmsLabel = (() => {
     if ($disableTMMCounts) {
@@ -53,9 +59,17 @@
 </script>
 
 <div class="post-details">
-  <time class="post-absolute-date" datetime={createdAtDate} title={absoluteFormattedDate}>
-    {displayAbsoluteFormattedDate}
-  </time>
+  {#if createdAtDateTS !== updatedAtDateTS}
+    <div class="updated-date">
+      <time class="post-absolute-date" datetime={updatedAtDate} title={absoluteFormattedUpdatedAtDate}>
+        {displayAbsoluteFormattedUpdatedDate}
+      </time> <span>&bull;</span> <span class="edited">Edited</span>
+    </div>
+  {:else}
+    <time class="post-absolute-date" datetime={createdAtDate} title={absoluteFormattedCreatedAtDate}>
+      {displayAbsoluteFormattedCreatedDate}
+    </time>
+  {/if}
   <a href={locationUrl} aria-label={locationAriaLabel} class="post-location">
     <SvgIcon className="location-svg" href="#fa-map-marker" />
     <span class="post-location post-location-span">{bubbleName}</span>
@@ -200,10 +214,19 @@
       font-size: 1em;
     }
     .post-details {
-      grid-gap: 5px;
+      grid-gap: 8px;
       justify-content: space-between;
     }
 
   }
 
+  .updated-date {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .updated-date span {
+    color: var(--very-deemphasized-text-color);
+  }
 </style>

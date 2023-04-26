@@ -105,7 +105,10 @@
   })()
   $: createdAtDate = post.createdAt
   $: createdAtDateTS = new Date(createdAtDate).getTime()
-  $: absoluteFormattedDate = absoluteDateFormatter().format(createdAtDateTS)
+  $: updatedAtDate = post.lastUpdatedAt
+  $: updatedAtDateTS = new Date(updatedAtDate).getTime()
+  $: absoluteFormattedCreatedAtDate = absoluteDateFormatter().format(createdAtDateTS)
+  $: absoluteFormattedUpdatedAtDate = absoluteDateFormatter().format(updatedAtDateTS)
   $: shortInlineFormattedDate = (
           $disableRelativeTimestamps
                   ? dayOnlyAbsoluteDateFormatter().format(createdAtDateTS)
@@ -205,9 +208,9 @@
   {#if showHeader}
     <PostHeader {author} {authorId} {uuid} {isPostInNotification} {notification} {timelineType} />
   {/if}
-  <PostAuthorName {uuid} {isPostInNotification} {isPostInOwnThread} {postAuthor} {postAuthorId}/>
+  <PostAuthorName {uuid} {isPostInNotification} {isPostInOwnThread} {postAuthor} {postAuthorId} />
   {#if !isPostInOwnThread}
-    <PostRelativeDate {uuid} {postId} {isPostInNotification} {createdAtDate} {shortInlineFormattedDate} {absoluteFormattedDate} />
+    <PostRelativeDate {uuid} {postId} {isPostInNotification} {createdAtDate} {shortInlineFormattedDate} absoluteFormattedDate={absoluteFormattedCreatedAtDate} />
   {/if}
   <PostSidebar {uuid} {isPostInOwnThread} {postAuthor} {postAuthorId} />
   {#if spoilerText}
@@ -229,7 +232,7 @@
     <PostLocation bubble={post.bubbleRef} />
   {/if}
   {#if isPostInOwnThread}
-    <PostDetails {post} {createdAtDate} {createdAtDateTS} {absoluteFormattedDate} />
+    <PostDetails {post} {createdAtDate} {createdAtDateTS} {updatedAtDate} {updatedAtDateTS} {absoluteFormattedCreatedAtDate} {absoluteFormattedUpdatedAtDate} />
   {/if}
   {#if $isAuthenticated }
     <PostToolbar {uuid} {isPostInOwnThread} {enableShortcuts} {shortcutScope} {inReplyToId}
@@ -298,6 +301,10 @@
       "compose     compose";
     grid-template-columns: min-content 1fr;
     grid-template-rows: repeat(7, max-content);
+  }
+
+  
+  .edited {
   }
 </style>
 
