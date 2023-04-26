@@ -43,8 +43,8 @@
 </script>
 
 <h1 class="sr-only">{profileForBubble}</h1>
-<div class={className}
-     style="background-image: url({headerImage});"
+<div id={bubble.header.id} class={className}
+     style="background-image: url({headerImage}?id={bubble.header?.id});"
      bind:this={bubbleProfile}>
   <div class="bubble-profile-grid-wrapper">
     <div class="bubble-profile-grid">

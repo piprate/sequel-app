@@ -42,7 +42,7 @@
 
 <h1 class="sr-only">{profileForSpark}</h1>
 <div class={className}
-     style="background-image: url({headerImage});"
+     style="background-image: url({headerImage}?id={spark.header?.id});"
      bind:this={sparkProfile}>
   <div class="spark-profile-grid-wrapper">
     <div class="spark-profile-grid">

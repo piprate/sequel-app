@@ -41,7 +41,7 @@
 
 <h1 class="sr-only">{profileForWorld}</h1>
 <div class={className}
-     style="background-image: url({headerImage});"
+     style="background-image: url({headerImage}?id={world.header?.id});"
      bind:this={worldProfile}>
   <div class="world-profile-grid-wrapper">
     <div class="world-profile-grid">
