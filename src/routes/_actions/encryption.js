@@ -2,6 +2,7 @@ import nacl from 'tweetnacl'
 import { binary_to_base58 as base58 } from 'base58-js'
 import { Hash } from 'fast-sha256'
 import { encodeBase64 } from 'tweetnacl-util'
+import { sha512_256 } from 'js-sha512'
 import { mnemonicToSeed } from 'web-bip39'
 
 function doubleHasher (password) {
@@ -41,4 +42,8 @@ export function sign (privateKey, recoveryCode) {
 
 export function encryptPassword (password) {
   return encodeBase64(doubleHasher(password))
+}
+
+export function generateManagedFromHostedKey(hostedKey) {
+  return new Uint8Array(sha512_256.hmac.update('managed key', hostedKey).array())
 }

@@ -4,10 +4,11 @@
   import { toast } from "../toast/toast";
   import { close } from "../dialog/helpers/closeDialog";
   import { goto } from "$app/navigation";
+  import { encodeBase64 } from 'tweetnacl-util'
   import ErrorMessage from "../ErrorMessage.svelte";
   import LoadingSpinner from "../LoadingSpinner.svelte";
   import { getInstanceName, processURI } from "../../_utils/instance";
-  import { encryptPassword, generateKey, generateNewSeed, sign } from "../../_actions/encryption";
+  import { encryptPassword, generateKey, generateNewSeed, sign, generateManagedFromHostedKey } from "../../_actions/encryption";
 
   export let dialogId;
   export let email;
@@ -33,17 +34,19 @@
       const privateKey = generateKey(seed)
       const signature = sign(privateKey, recoveryCode)
       const encryptedPassword = encryptPassword(newPassword);
+      const managedCryptoKey = encodeBase64(generateManagedFromHostedKey(seed))
 
       const payload = {
         userID: email,
         recoveryCode,
         signature,
-        encryptedPassword
+        encryptedPassword,
+        managedCryptoKey
       };
 
       const instanceName = getInstanceName(instance)
       const instanceInfo = await getInstanceInfo(instanceName);
-      
+
       let chainlockerURI = processURI(instanceInfo.chainlockerURI);
       const url = `${chainlockerURI}/v1/recover-account`;
 
