@@ -1,39 +1,39 @@
 <script>
-  import { getInstanceInfo } from "../../_api/instance";
-  import { post } from "../../_utils/ajax";
-  import { toast } from "../toast/toast";
-  import { close } from "../dialog/helpers/closeDialog";
-  import { goto } from "$app/navigation";
+  import { getInstanceInfo } from '../../_api/instance'
+  import { post } from '../../_utils/ajax'
+  import { toast } from '../toast/toast'
+  import { close } from '../dialog/helpers/closeDialog'
+  import { goto } from '$app/navigation'
   import { encodeBase64 } from 'tweetnacl-util'
-  import ErrorMessage from "../ErrorMessage.svelte";
-  import LoadingSpinner from "../LoadingSpinner.svelte";
-  import { getInstanceName, processURI } from "../../_utils/instance";
-  import { encryptPassword, generateKey, generateNewSeed, sign, generateManagedFromHostedKey } from "../../_actions/encryption";
+  import ErrorMessage from '../ErrorMessage.svelte'
+  import LoadingSpinner from '../LoadingSpinner.svelte'
+  import { getInstanceName, processURI } from '../../_utils/instance'
+  import { encryptPassword, generateKey, generateNewSeed, sign, generateManagedFromHostedKey } from '../../_actions/encryption'
 
-  export let dialogId;
-  export let email;
-  export let instance;
-  export let recoveryCode;
+  export let dialogId
+  export let email
+  export let instance
+  export let recoveryCode
 
-  let recoveryPhrase;
-  let newPassword;
-  let confirmPassword;
-  let error;
-  let loading = false;
+  let recoveryPhrase
+  let newPassword
+  let confirmPassword
+  let error
+  let loading = false
 
-  async function submitRecoveryCode() {
+  async function submitRecoveryCode () {
     try {
-      error = null;
-      loading = true;
+      error = null
+      loading = true
 
       if (newPassword !== confirmPassword) {
-        throw new Error("Passwords do not match")
+        throw new Error('Passwords do not match')
       }
 
       const seed = await generateNewSeed(recoveryPhrase)
       const privateKey = generateKey(seed)
       const signature = sign(privateKey, recoveryCode)
-      const encryptedPassword = encryptPassword(newPassword);
+      const encryptedPassword = encryptPassword(newPassword)
       const managedCryptoKey = encodeBase64(generateManagedFromHostedKey(seed))
 
       const payload = {
@@ -42,26 +42,26 @@
         signature,
         encryptedPassword,
         managedCryptoKey
-      };
+      }
 
       const instanceName = getInstanceName(instance)
-      const instanceInfo = await getInstanceInfo(instanceName);
+      const instanceInfo = await getInstanceInfo(instanceName)
 
-      let chainlockerURI = processURI(instanceInfo.chainlockerURI);
-      const url = `${chainlockerURI}/v1/recover-account`;
+      const chainlockerURI = processURI(instanceInfo.chainlockerURI)
+      const url = `${chainlockerURI}/v1/recover-account`
 
-      const response = await post(url, payload);
+      const response = await post(url, payload)
 
       if (response) {
-        toast.say("Your password has been reset");
-        close(dialogId);
-        goto("/settings/instances/add");
+        toast.say('Your password has been reset')
+        close(dialogId)
+        goto('/settings/instances/add')
       }
     } catch (err) {
-      error = err;
-      console.log(error);
+      error = err
+      console.log(error)
     } finally {
-      loading = false;
+      loading = false
     }
   }
 </script>
@@ -116,7 +116,7 @@
     aria-labelledby="button-text"
     disabled={loading}
   >
-    <span id="button-text">Submit</span>{" "}
+    <span id="button-text">Submit</span>{' '}
     {#if loading}
       <LoadingSpinner size={20} maskStyle />
     {/if}

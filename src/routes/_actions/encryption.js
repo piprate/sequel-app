@@ -44,6 +44,6 @@ export function encryptPassword (password) {
   return encodeBase64(doubleHasher(password))
 }
 
-export function generateManagedFromHostedKey(hostedKey) {
+export function generateManagedFromHostedKey (hostedKey) {
   return new Uint8Array(sha512_256.hmac.update('managed key', hostedKey).array())
 }

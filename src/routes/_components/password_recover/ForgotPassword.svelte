@@ -1,14 +1,14 @@
 <script>
   import { getInstanceInfo } from '../../_api/instance'
   import { get } from '../../_utils/ajax'
-  import { getInstanceName, processURI } from '../../_utils/instance';
+  import { getInstanceName, processURI } from '../../_utils/instance'
   import ErrorMessage from '../ErrorMessage.svelte'
   import LoadingSpinner from '../LoadingSpinner.svelte'
 
   export let setValues
 
   let email
-  let instance='localhost'
+  let instance = 'localhost'
   let error
   let loading = false
 
@@ -18,9 +18,9 @@
       loading = true
 
       const instanceName = getInstanceName(instance)
-      const instanceInfo = await getInstanceInfo(instanceName);
+      const instanceInfo = await getInstanceInfo(instanceName)
 
-      let chainlockerURI = processURI(instanceInfo.chainlockerURI);
+      const chainlockerURI = processURI(instanceInfo.chainlockerURI)
 
       const url = `${chainlockerURI}/v1/recovery-code?email=${email}`
       const res = await get(url)
