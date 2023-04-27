@@ -5,12 +5,18 @@
   import ErrorMessage from '../ErrorMessage.svelte'
   import LoadingSpinner from '../LoadingSpinner.svelte'
 
+  export let email
   export let setValues
 
-  let email
-  let instance = 'localhost'
+  let instance = 'sequel.space'
   let error
   let loading = false
+
+  let production = import.meta.env.PROD
+
+  if (!production) {
+    instance = 'localhost'
+  }
 
   async function submitEmail () {
     try {

@@ -730,6 +730,7 @@ const intl = {
   registrationCodeColon: 'Registration Code:',
   invalidEmail: 'Invalid email',
   passwordMismatch: 'Passwords don\'t match',
+  forgotPassword: 'Forgot Password?',
   recoveryPhraseWarning: 'Recovery Phrase',
   saveRecoveryPhrase: 'Write down these words in the right order and save them somewhere safe.',
   recoveryPhraseColon: 'Recovery Phrase:',
@@ -1016,8 +1017,6 @@ const intl = {
   closeDialog: 'Close dialog',
   interactiveMode: 'Interactive mode',
   readerMode: 'Reader mode',
-  yes: 'Yes',
-  no: 'No',
   postPrivacy: 'Post privacy',
   selectedWorldLabel: `{world} {selected, select,
     true {(selected world)}

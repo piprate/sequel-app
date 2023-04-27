@@ -47,7 +47,7 @@
 
   async function forgotPassword () {
     const showRecoverPasswordDialog = await importShowRecoverPasswordDialog()
-    showRecoverPasswordDialog()
+    showRecoverPasswordDialog(email)
   }
 
   function onSubmitInstance (event) {
@@ -107,7 +107,7 @@
       </button>
       <span class="register-option">or <a href="/settings/instances/register">{'intl.signUp'}</a></span>
     </form>
-    <p class="forgot-password">Forgot Password? <a href="#forgot-password" on:click={forgotPassword}>Click here to recover password</a></p>
+    <p class="forgot-password"><a href="#forgot-password" on:click={forgotPassword}>{intl.forgotPassword}</a></p>
   </div>
 </SettingsLayout>
 <style>

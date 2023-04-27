@@ -4,11 +4,11 @@
   import ModalDialog from './ModalDialog.svelte'
 
   export let id
+  export let email
 
   const label = 'Recover Password'
   const title = 'Recover your password'
 
-  let email
   let instance
   let recoveryCode
 
@@ -32,6 +32,6 @@
   {#if recoveryCode}
     <RecoveryPhrase dialogId={id} {email} {instance} {recoveryCode} />
   {:else}
-    <ForgotPassword {setValues} />
+    <ForgotPassword {email} {setValues} />
   {/if}
 </ModalDialog>
