@@ -390,46 +390,125 @@ const serverAuthorization = (instanceName, accessToken, id, buyerAddress, numEdi
   }
 }
 
+export async function readNFTCollections (addr) {
+  const res = await fcl.query({
+    cadence: `
+import MetadataViews from 0xMetadataViews
+import NFTCatalog from 0xNFTCatalog
+import NFTRetrieval from 0xNFTRetrieval
+
+pub struct NFTCollection {
+    pub let id: String
+    pub let name: String
+    pub let description: String
+    pub let squareImage: String
+    pub let bannerImage: String
+    pub let externalURL: String
+    pub let count: Number
+
+    init(
+        id: String,
+        name: String,
+        description: String,
+        squareImage: String,
+        bannerImage: String,
+        externalURL: String,
+        count: Number
+    ) {
+        self.id = id
+        self.name = name
+        self.description = description
+        self.squareImage = squareImage
+        self.bannerImage = bannerImage
+        self.externalURL = externalURL
+        self.count = count
+    }
+}
+
+pub fun main(ownerAddress: Address): {String: NFTCollection} {
+    let account = getAccount(ownerAddress)
+    let collections: {String: NFTCollection} = {}
+
+    NFTCatalog.forEachCatalogKey(fun (collectionIdentifier: String):Bool {
+        let value = NFTCatalog.getCatalogEntry(collectionIdentifier: collectionIdentifier)!
+
+        let collectionCap = account
+          .getCapability<&AnyResource{MetadataViews.ResolverCollection}>(value.collectionData.publicPath)
+
+        if !collectionCap.check() {
+            return true
+        }
+
+        let count = NFTRetrieval.getNFTCountFromCap(collectionIdentifier: collectionIdentifier, collectionCap: collectionCap)
+
+        if count != 0 {
+            collections[collectionIdentifier] = NFTCollection(
+                id: collectionIdentifier,
+                name: value.collectionDisplay.name,
+                description: value.collectionDisplay.description,
+                squareImage: value.collectionDisplay.squareImage.file.uri(),
+                bannerImage: value.collectionDisplay.bannerImage.file.uri(),
+                externalURL: value.collectionDisplay.externalURL.url,
+                count: count
+            )
+        }
+        return true
+    })
+
+    return collections
+}
+      `,
+    args: (arg, t) => [
+      arg(addr, t.Address)
+    ]
+  })
+
+  return Array.from(Object.entries(res)).map(([id, col]) => (
+    {
+      id: id,
+      name: col.name,
+      type: 'source',
+      summary: col.description,
+      loaded: false,
+      nftList: [],
+      nftCount: parseInt(col.count),
+    }))
+}
+
 export async function readNFTCollection (source, account) {
   const _currentInstance = currentInstance.get()
-  const _accessToken = get(accessToken)
 
   let col
+  let list
   switch (source) {
     case 'sequel':
       col = await getSequelDigitalArtCollection(account)
-      break
-    case 'versus':
-      col = await getVersusCollection(account)
+      list = Array.from(Object.entries(col)).map(([id, meta]) => (
+        {
+          token: parseInt(id),
+          name: meta.name,
+          source,
+          account,
+          asset: meta.asset,
+          avatar: populateDigitalArtPreviewURLs({}, _currentInstance, meta.asset)
+        }))
       break
     default:
-      console.log('NFT source not supported: ', source)
-      col = []
-  }
-
-  console.log('Collection: ', col)
-
-  let list
-
-  if (source === 'sequel') {
-    list = Array.from(Object.entries(col)).map(([id, meta]) => (
-      {
-        token: parseInt(id),
-        name: meta.name,
-        source,
-        account,
-        asset: meta.asset,
-        avatar: populateDigitalArtPreviewURLs({}, _currentInstance, meta.asset)
-      }))
-  } else {
-    list = Array.from(Object.entries(col)).map(([id, name]) => (
-      {
-        token: parseInt(id),
-        name,
-        source,
-        account,
-        avatar: populateExternalNFTPreviewURLs({}, _currentInstance, _accessToken, source, account, id)
-      }))
+      col = await getNFTCatalogCollection(account, source)
+      list = col.map(item => {
+        return {
+          token: parseInt(item.id),
+          name: item.name,
+          source,
+          account,
+          avatar: {
+            url: item.thumbnail,
+            previewUrl: item.thumbnail,
+            staticUrl: item.thumbnail,
+          }
+        }
+      })
+      break
   }
 
   console.log('NFT list: ', list)
@@ -477,25 +556,84 @@ async function getSequelDigitalArtCollection (addr) {
   })
 }
 
-async function getVersusCollection (addr) {
+async function getNFTCatalogCollection (addr, collectionID) {
   return await fcl.query({
     cadence: `
-        import Art from 0xArt
+import MetadataViews from 0xMetadataViews
+import NFTCatalog from 0xNFTCatalog
+import NFTRetrieval from 0xNFTRetrieval
 
-        pub fun main(address: Address): { UInt64: String } {
-          let account = getAccount(address)
+pub struct NFT {
+    pub let id: UInt64
+    pub let name: String
+    pub let description: String
+    pub let thumbnail: String
+    pub let externalURL: String
 
-          let art = Art.getArt(address: address)
+    init(
+        id: UInt64,
+        name: String,
+        description: String,
+        thumbnail: String,
+        externalURL: String
+    ) {
+        self.id = id
+        self.name = name
+        self.description = description
+        self.thumbnail = thumbnail
+        self.externalURL = externalURL
+    }
+}
 
-          let res : { UInt64: String } = {}
-          for a in art {
-              res[a.id] = a.metadata.name
-          }
+pub fun main(ownerAddress: Address, collectionIdentifier: String): [NFT] {
+    let account = getAuthAccount(ownerAddress)
 
-          return res
-      }`,
+    let value = NFTCatalog.getCatalogEntry(collectionIdentifier: collectionIdentifier)!
+    let keyHash = String.encodeHex(HashAlgorithm.SHA3_256.hash(collectionIdentifier.utf8))
+    let tempPathStr = "catalog".concat(keyHash)
+    let tempPublicPath = PublicPath(identifier: tempPathStr)!
+
+    account.link<&{MetadataViews.ResolverCollection}>(
+        tempPublicPath,
+        target: value.collectionData.storagePath
+    )
+
+    let collectionCap = account.getCapability<&AnyResource{MetadataViews.ResolverCollection}>(tempPublicPath)
+
+    if !collectionCap.check() {
+        return []
+    }
+
+    let views = NFTRetrieval.getNFTViewsFromCap(collectionIdentifier: collectionIdentifier, collectionCap: collectionCap)
+
+    let items: [NFT] = []
+
+    for view in views {
+        let displayView = view.display
+        let externalURLView = view.externalURL
+
+        if (displayView == nil || externalURLView == nil) {
+            // Bad NFT. Skipping....
+            continue
+        }
+
+        items.append(
+            NFT(
+                id: view.id,
+                name: displayView!.name,
+                description: displayView!.description,
+                thumbnail: displayView!.thumbnail.uri(),
+                externalURL: externalURLView!.url
+            )
+        )
+    }
+
+    return items
+}
+`,
     args: (arg, t) => [
-      arg(addr, t.Address)
+      arg(addr, t.Address),
+      arg(collectionID, t.String)
     ]
   })
 }

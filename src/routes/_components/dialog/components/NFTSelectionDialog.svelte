@@ -4,15 +4,15 @@
   import SvgIcon from '../../SvgIcon.svelte'
   import RadioGroup from '../../radio/RadioGroup.svelte'
   import RadioGroupButton from '../../radio/RadioGroupButton.svelte'
-  import WorldDisplayName from '../../world/WorldDisplayName.svelte'
+  import EntityDisplayName from '../../EntityDisplayName.svelte'
   import FlowConnect from '../../flow/FlowConnect.svelte'
   import LoadingSpinner from '../../LoadingSpinner.svelte'
   import { close } from '../helpers/closeDialog'
   import { createEventDispatcher, onMount } from 'svelte'
-  import { currentInstance, flowLoggedInAccount, instanceUsers } from '../../../_store/local'
+  import { currentInstance, flowLoggedInAccount, instanceUsers, isUserLoggedIn } from '../../../_store/local'
   import { formatIntl } from '../../../_utils/formatIntl'
   import { toast } from '../../toast/toast'
-  import { readNFTCollection } from '../../../_actions/flow'
+  import { readNFTCollection, readNFTCollections } from '../../../_actions/flow'
 
   export let id
   export let label
@@ -28,41 +28,15 @@
     name: '',
     summary: '',
     type: 'folder',
-    loaded: true,
+    nftCount: 0,
     folderList: [
       {
         id: 'sequel',
         name: 'Sequel',
         summary: 'Digital Art',
         type: 'source',
-        loaded: false,
-        nftList: []
-      },
-      {
-        id: 'metaverse',
-        name: 'Metaverse',
-        summary: 'NFTs from Metaverse',
-        type: 'folder',
-        loaded: false,
-        folderList: [
-          {
-            id: 'versus',
-            name: 'Versus',
-            type: 'source',
-            summary: 'https://www.versus.auction',
-            loaded: false,
-            nftList: []
-          },
-          {
-            id: 'xtingles',
-            name: 'xtingles',
-            type: 'source',
-            summary: 'https://xtingles.com',
-            notSupported: true,
-            loaded: false,
-            nftList: []
-          }
-        ]
+        nftList: [],
+        nftCount: 0,
       }
     ]
   }
@@ -76,7 +50,7 @@
   $: flowNetwork = (user && user.flow && user.flow.network) || ''
   $: flowAddressMismatch = $flowLoggedInAccount && flowAddress && $flowLoggedInAccount !== flowAddress
   $: notConnectedToFlow = !flowAddress || flowAddressMismatch || $flowLoggedInAccount !== flowAddress
-  $: nftCount = currentSelectionTree.nftList && currentSelectionTree.nftList.length
+  $: nftCount = currentSelectionTree.nftCount || 0
   $: enableBackButton = selectionHistory.length > 0
 
   function onClick (nft) {
@@ -95,13 +69,15 @@
 
     currentSelectionTree = folder
 
-    if (folder.type !== 'folder' && !folder.loaded && !folder.notSupported) {
+    if (folder.type !== 'folder') {
       loadingNFTs = true
       try {
         folder.nftList = await readNFTCollection(folder.id, flowAddress)
         if (folder.nftList == null) {
           folder.nftList = []
-          folder.notSupported = true
+          folder.nftCount = 0
+        } else {
+          folder.nftCount = folder.nftList.length
         }
         folder.loaded = true
       } catch (e) {
@@ -123,6 +99,41 @@
     // cause variable refresh
     selectionHistory = selectionHistory
   }
+
+  onMount(async () => {
+    if ($isUserLoggedIn && flowAddress) {
+      let collections
+      loadingNFTs = true
+      try {
+        collections = await readNFTCollections(flowAddress)
+      } catch (e) {
+        console.log(e)
+        /* no await */
+        toast.say(formatIntl('intl.error', { error: (e.message || '') }))
+      } finally {
+        loadingNFTs = false
+      }
+      console.log('Loaded collections', collections)
+
+      let flowverseCount = 0
+      for (const col of collections) {
+        flowverseCount += col.nftCount
+      }
+
+      rootSelectionTree.folderList.push({
+        id: 'flowverse',
+        name: 'Flowverse',
+        summary: 'NFTs from Flowverse',
+        type: 'folder',
+        folderList: collections,
+        nftCount: flowverseCount,
+      })
+
+      console.log("Root Tree", rootSelectionTree)
+
+      currentSelectionTree = rootSelectionTree
+    }
+  })
 </script>
 
 <ModalDialog
@@ -135,8 +146,8 @@
   {#if notConnectedToFlow }
     <FlowConnect className="flow-sign-in-dialog" />
   {:else}
-    <RadioGroup id="nft-selector" className="world-selection-radio" label="{intl.selectWorldFromList}" length={nftCount}>
-      <ul class="nft-results" aria-label="{intl.worldList}">
+    <RadioGroup id="nft-selector" className="nft-selection-radio" label="{intl.selectNFTFromList}" length={nftCount}>
+      <ul class="nft-results" aria-label="{intl.nftList}">
         {#if currentSelectionTree.type === 'folder'}
           {#if enableBackButton }
             <li class="search-result">
@@ -148,17 +159,23 @@
               </div>
             </li>
           {/if}
-          {#each currentSelectionTree.folderList as folder}
-            <li class="search-result">
-              <div class="search-result-nft-folder" on:click={(e) => onFolderClick(folder)}>
-                <div class="nft-folder-name">{folder.name} {#if folder.loaded} ({folder.nftList.length}){/if}</div>
-                <div class="nft-folder-summary">{folder.summary}</div>
-                <div class="nft-selector-button-wrapper">
-                  <SvgIcon className="nft-selector-button-svg" href="#fa-angle-right" />
+          {#if currentSelectionTree.folderList.length > 0}
+            {#each currentSelectionTree.folderList as folder}
+              <li class="search-result">
+                <div class="search-result-nft-folder" on:click={(e) => onFolderClick(folder)}>
+                  <div class="nft-folder-name">{folder.name} ({folder.nftCount || 0})</div>
+                  <div class="nft-folder-summary">{folder.summary}</div>
+                  <div class="nft-selector-button-wrapper">
+                    <SvgIcon className="nft-selector-button-svg" href="#fa-angle-right" />
+                  </div>
                 </div>
-              </div>
-            </li>
-          {/each}
+              </li>
+            {/each}
+          {:else}
+            <div class="search-result-nft">
+              <div class="search-result-not-found">{intl.noNFTsFound}</div>
+            </div>
+          {/if}
         {:else}
           {#if enableBackButton }
             <li class="search-result">
@@ -175,7 +192,7 @@
               <LoadingSpinner />
             </div>
           {:else}
-            {#if currentSelectionTree.nftList.length > 0}
+            {#if currentSelectionTree.nftCount > 0}
               {#each currentSelectionTree.nftList as nft, idx}
                 <li class="search-result">
                   <RadioGroupButton
@@ -187,10 +204,10 @@
                           on:click="{ (e) => onClick(nft) }">
                     <div class="search-result-nft">
                       <div class="search-result-nft-image">
-                        <Avatar entity={nft} size="small" secure={true} />
+                        <Avatar entity={nft} size="small" secure={false} />
                       </div>
                       <div class="search-result-nft-name">
-                        <WorldDisplayName world={nft} />
+                        <EntityDisplayName entity={nft} />
                       </div>
                       <div class="search-result-nft-username">
                         {nft.token}
@@ -205,7 +222,7 @@
               {/each}
             {:else}
               <div class="search-result-nft">
-                <div class="search-result-not-found">{currentSelectionTree.notSupported ? 'intl.nftSourceNotSupported' : 'intl.noNFTsFound'}</div>
+                <div class="search-result-not-found">{'intl.noNFTsFound'}</div>
               </div>
             {/if}
           {/if}
@@ -232,7 +249,7 @@
   .search-result:hover {
     background: var(--settings-list-item-bg-hover);
   }
-  :global(.world-selection-radio) {
+  :global(.nft-selection-radio) {
     width: 100%;
   }
   .nft-results {

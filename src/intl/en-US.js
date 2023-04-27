@@ -180,7 +180,7 @@ const intl = {
   nftSelectionFolderTitle: 'Choose NFT source',
   nftSelectionTitle: 'Choose NFT',
   noNFTsFound: 'No NFTs found',
-  nftSourceNotSupported: 'NFT source not supported yet',
+  nftList: 'List of NFTs',
   // community page
   community: 'Community',
   explore: 'Explore',
@@ -1024,6 +1024,7 @@ const intl = {
   }`,
   switchToNameOfWorld: 'Switch to {world}',
   selectWorldFromList: 'Select world',
+  selectNFTFromList: 'Select NFT',
   worldList: 'Worlds',
   selectedPlanLabel: `{plan} {selected, select,
     true {(selected plan)}
