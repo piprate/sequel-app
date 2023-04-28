@@ -4,6 +4,7 @@
   import SvgIcon from './SvgIcon.svelte'
   import { page } from '$app/stores'
   import { redirectToPage } from '../_store/local'
+  import { onMount } from 'svelte';
 
   export let message = 'intl.accessRestricted'
   export let showLogo = false
@@ -12,11 +13,13 @@
 
   $: panelClass = offerVisitorMode ? '' : 'right-align'
 
-  function setRedirect (e) {
-    if ($page.path !== '/') {
-      $redirectToPage = $page.path
+  onMount(() => {
+    const { pathname } = $page.url
+
+    if (pathname !== '/') {
+      $redirectToPage = pathname
     }
-  }
+  })
 </script>
 
 <HiddenFromSSR>
@@ -33,10 +36,10 @@
                 {@html message}
             </div>
             <div class={panelClass}>
-                <a class="button primary action-button" data-sveltekit-preload-data href="/settings/instances/register" on:click="{setRedirect}">{intl.signUp}</a>
-                <a class="button primary action-button" data-sveltekit-preload-data href="/settings/instances/add" on:click="{setRedirect}">{intl.logIn}</a>
+                <a class="button primary action-button" data-sveltekit-preload-data href="/settings/instances/register">{intl.signUp}</a>
+                <a class="button primary action-button" data-sveltekit-preload-data href="/settings/instances/add">{intl.logIn}</a>
                 {#if offerVisitorMode }
-                    <span class="visitor-invite">or <a data-sveltekit-preload-data href="/settings/instances/visit" on:click="{setRedirect}">{'intl.continueAsVisitorLink'}</a></span>
+                    <span class="visitor-invite">or <a data-sveltekit-preload-data href="/settings/instances/visit">{'intl.continueAsVisitorLink'}</a></span>
                 {/if}
             </div>
         </div>
