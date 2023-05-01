@@ -8,13 +8,15 @@
   import { reportPosts } from '../../../_actions/reportPosts'
   import { formatIntl } from '../../../_utils/formatIntl'
   import { onMount } from "svelte";
+  import { unwrap } from '../../../_utils/mapper';
 
   export let id;
   export let label;
   export let title;
+  export let post;
+  export let spark;
 
-  let spark = undefined;
-  let post = undefined;
+
   let positiveText = 'intl.report';
   let reportMap = {};
   let recentPosts = [];
@@ -32,23 +34,23 @@
   $: posts = (
           [post].concat((recentPosts || []).filter(({ id }) => (!post || id !== post.id))).filter(Boolean)
   );
-  $: remoteInstance = spark.acct.split('@')[1];
+  // $: remoteInstance = post.bubbleRef.name
   $: reportingLabel = (
           formatIntl('intl.reportingLabel', {
-            spark: `@${spark.acct}`,
+            spark: spark.name,
             instance: $currentInstance
           })
   );
-  $: forwardDescription = (
-          formatIntl('intl.forwardDescription', {
-            instance: remoteInstance
-          })
-  )
-  $: forwardLabel = (
-          formatIntl('intl.forwardLabel', {
-            instance: remoteInstance
-          })
-  )
+  // $: forwardDescription = (
+  //         formatIntl('intl.forwardDescription', {
+  //           instance: remoteInstance
+  //         })
+  // )
+  // $: forwardLabel = (
+  //         formatIntl('intl.forwardLabel', {
+  //           instance: remoteInstance
+  //         })
+  // )
 
   function onChange (postId, event) {
     reportMap[postId] = event.target.checked
@@ -59,7 +61,7 @@
     if (!postIds.length) {
       toast.say('intl.noPosts')
     } else {
-      await reportPosts(spark, postIds, comment, forward)
+      await reportPosts(postIds, spark.id, comment)
     }
   }
 
@@ -68,7 +70,7 @@
       reportMap[post.id] = true
     }
     try {
-      recentPosts = await getRecentPostsForSpark(spark.id)
+      recentPosts = await getRecentPostsForSpark(unwrap(spark.id))
       console.log('recentPosts', recentPosts)
     } catch (err) {
       console.error(err)
@@ -119,7 +121,7 @@
                   placeholder="{intl.additionalComments}"
                   aria-labelledby="comments-label"
                   maxlength="1000"></textarea>
-        {#if remoteInstance}
+        <!-- {#if remoteInstance}
           <p>{forwardDescription}</p>
           <input type="checkbox"
                  id="report-forward"
@@ -128,7 +130,7 @@
           <label for="report-forward">
             {forwardLabel}
           </label>
-        {/if}
+        {/if} -->
       </div>
     </div>
   </div>

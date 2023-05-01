@@ -1,15 +1,10 @@
 import { toast } from '../_components/toast/toast'
 import { report } from '../_api/report'
 import { formatIntl } from '../_utils/formatIntl'
-import { currentInstance } from '../_store/local'
-import { get } from 'svelte/store'
-import { accessToken } from '../_store/instance'
 
-export async function reportPosts (spark, postIds, comment, forward) {
-  const _currentInstance = currentInstance.get()
-  const _accessToken = get(accessToken)
+export async function reportPosts (postIds, sparkId, comment) {
   try {
-    await report(_currentInstance, _accessToken, spark.id, postIds, comment, forward)
+    await report(postIds, sparkId, comment)
     /* no await */
     toast.say('intl.submittedReport')
   } catch (e) {

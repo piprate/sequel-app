@@ -212,7 +212,7 @@
 
   async function onReport () {
     close(id)
-    await reportPostOrSpark(({ post, spark: author }))
+    await reportPostOrSpark(({ post }))
   }
 </script>
 

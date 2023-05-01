@@ -489,7 +489,7 @@ const intl = {
   zoomOut: 'Zoom out',
   zoomIn: 'Zoom in',
   // Reporting
-  reportingLabel: 'You are reporting {spark} to the moderators of {instance}.',
+  reportingLabel: 'You are reporting to the moderators of {instance}',
   additionalComments: 'Additional comments',
   forwardDescription: 'Forward to the moderators of {instance} as well?',
   forwardLabel: 'Forward to {instance}',
