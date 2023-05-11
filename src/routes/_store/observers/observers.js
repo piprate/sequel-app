@@ -10,8 +10,7 @@ import { grayscaleObservers } from './grayscaleObservers'
 import { focusRingObservers } from './focusRingObservers'
 import { leftRightFocusObservers } from './leftRightFocusObservers'
 
-export function setupObservers (alwaysShowFocusRing, isUserLoggedIn, online, pageVisibilityHidden,
-  enableGrayscale, instanceThemes, currentInstance, leftRightChangesFocus) {
+export function setupObservers (alwaysShowFocusRing, isUserLoggedIn, online, pageVisibilityHidden, enableGrayscale, leftRightChangesFocus) {
   onlineObservers(online)
   nowObservers()
   // navObservers();
@@ -20,7 +19,7 @@ export function setupObservers (alwaysShowFocusRing, isUserLoggedIn, online, pag
   touchObservers()
   logOutObservers(isUserLoggedIn)
   focusRingObservers(alwaysShowFocusRing)
-  grayscaleObservers(enableGrayscale, instanceThemes, currentInstance)
+  grayscaleObservers(enableGrayscale)
   leftRightFocusObservers(leftRightChangesFocus)
   setupLoggedInObservers(isUserLoggedIn)
 }

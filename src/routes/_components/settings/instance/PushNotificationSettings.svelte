@@ -4,15 +4,17 @@
     loggedInInstancesInOrder,
     notificationPermission,
     pushNotificationsSupport,
-    pushSubscriptions
+
+    userSettings
+
   } from '../../../_store/local'
   import { importShowTextConfirmationDialog } from '../../dialog/asyncDialogs/importShowTextConfirmationDialog.js'
   import { logOutOfInstance } from '../../../_actions/instances'
   import { updateAlerts, updatePushSubscriptionForInstance } from '../../../_actions/pushSubscription'
   import { toast } from '../../toast/toast'
-  import { get } from '../../../_utils/lodash-lite'
   import { formatIntl } from '../../../_utils/formatIntl'
   import { onMount } from 'svelte'
+  import { getStoreSettings, parseSettings, saveSettings } from '../../../_actions/settings';
 
   export let instanceName
 
@@ -42,6 +44,15 @@
   ]
 
   let form
+  
+  function applyChanges() {
+    const settings = {}
+    for (const { key } of options) {
+      settings[key] = form.elements[key].checked
+    }
+
+    saveSettings(parseSettings({ pushNotifications: settings }), 'instance', instanceName, false, true)
+  }
 
   async function onPushSettingsChange (e) {
     const alerts = {}
@@ -51,6 +62,7 @@
     }
 
     try {
+      applyChanges()
       await updateAlerts(instanceName, alerts)
     } catch (err) {
       e.target.checked = !e.target.checked
@@ -75,10 +87,8 @@
   onMount(async () => {
     await updatePushSubscriptionForInstance(instanceName)
 
-    const pushSubscription = $pushSubscriptions[instanceName]
-
     for (const { key } of options) {
-      form.elements[key].checked = get(pushSubscription, ['alerts', key])
+      form.elements[key].checked = getStoreSettings('instance', instanceName, 'pushNotifications', key)
     }
   })
 </script>
@@ -94,6 +104,7 @@
   <form id="push-notification-settings"
         disabled="{!$pushNotificationsSupport}"
         bind:this={form}
+        on:change={onPushSettingsChange}
         aria-label="{intl.pushSettings}">
     {#each options as option, i (option.key)}
       {#if i > 0}
@@ -103,7 +114,7 @@
              id="push-notifications-{option.key}"
              name="{option.key}"
              disabled="{!$pushNotificationsSupport}"
-             on:change="{onPushSettingsChange}">
+            >
       <label for="push-notifications-{option.key}">{option.label}</label>
     {/each}
   </form>

@@ -12,7 +12,13 @@
 
   <div class="settings">
     <FreeTextLayout>
+      <div class="settings-header">
+        <slot name="header"></slot>
+      </div>
       <slot></slot>
+      <div class="settings-footer">
+        <slot name="footer"></slot>
+      </div>
     </FreeTextLayout>
   </div>
 </FocusRestoration>
@@ -20,12 +26,22 @@
   .settings {
     margin: 20px;
   }
-  :global(.settings .free-text h1) {
-    margin-bottom: 30px;
-  }
+
   :global(.settings .free-text h2) {
     margin: 20px 0 10px;
   }
+
+  .settings-header {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .settings-footer {
+    margin: 1.5rem 0 2rem;
+  }
+
   @media (max-width: 767px) {
     .settings {
       margin: 20px 10px;

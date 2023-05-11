@@ -19,7 +19,7 @@ export function customEmojiObservers () {
   }
 
   currentCustomEmoji.subscribe(_currentCustomEmoji => {
-    setEmoji(_currentCustomEmoji, autoplayGifs.get())
+    setEmoji(_currentCustomEmoji, get(autoplayGifs))
   })
 
   autoplayGifs.subscribe(_autoplayGifs => {

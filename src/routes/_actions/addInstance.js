@@ -1,11 +1,10 @@
 import { getInstanceInfo } from '../_api/instance'
 import { goto } from '$app/navigation'
-import { DEFAULT_THEME, switchToTheme } from '../_utils/themeEngine'
+import { switchToTheme } from '../_utils/themeEngine'
 import {
   currentInstance,
   enableGrayscale,
   instanceNameInSearch,
-  instanceThemes,
   isAuthenticated,
   loggedInInstances,
   loggedInInstancesInOrder,
@@ -21,6 +20,7 @@ import { authenticate, register } from '../_api/chainlocker'
 import { enrollUser } from '../_api/user'
 import { configureFlow } from './flow'
 import { get } from 'svelte/store'
+import { getSettingsFromRemote } from './settings'
 
 const GENERIC_ERROR = `
   Unexpected error when connecting to a Sequel instance.
@@ -133,10 +133,6 @@ async function registerNewInstance (instanceName, token, instanceInfo) {
     flowAddresses: instanceInfo.flowAddresses
   }
 
-  const themes = instanceThemes.get()
-  themes[instanceName] = DEFAULT_THEME
-  instanceThemes.set(themes)
-
   const instances = loggedInInstances.get()
   instances[instanceName] = instanceData
   loggedInInstances.set(instances)
@@ -148,7 +144,10 @@ async function registerNewInstance (instanceName, token, instanceInfo) {
   instanceNameInSearch.set('')
   currentInstance.set(instanceName)
 
-  switchToTheme(DEFAULT_THEME, enableGrayscale.get())
+  getSettingsFromRemote().then(settings => {
+    switchToTheme(settings.instance[instanceName].theme, get(enableGrayscale))
+  })
+
   configureFlow(instanceName)
 
   if (token) {

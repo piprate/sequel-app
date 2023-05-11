@@ -1,4 +1,8 @@
 <style>
+  :global(.save-settings) {
+    width: 100%;
+  }
+
   :global(.ui-settings) {
     background: var(--form-bg);
     border: 1px solid var(--main-border);

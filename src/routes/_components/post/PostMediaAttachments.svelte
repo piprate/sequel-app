@@ -6,7 +6,7 @@
     largeInlineMedia,
     markMediaAsSensitive,
     neverMarkMediaAsSensitive,
-    sensitivesShown
+    sensitivesShown,
   } from '../../_store/local'
   import { registerClickDelegate } from '../../_utils/delegate'
   import { classname } from '../../_utils/classname'

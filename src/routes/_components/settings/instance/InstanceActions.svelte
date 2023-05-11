@@ -3,6 +3,7 @@
   import { importShowTextConfirmationDialog } from '../../dialog/asyncDialogs/importShowTextConfirmationDialog.js'
   import { switchToInstance, logOutOfInstance } from '../../../_actions/instances'
   import { formatIntl } from '../../../_utils/formatIntl'
+  import { saveInstanceSettings } from './helpers/save';
 
   export let instanceName;
 
@@ -26,6 +27,10 @@
       }, 200)
     })
   }
+
+  async function onSave () {
+    saveInstanceSettings(instanceName)
+  }
 </script>
 
 <form class="instance-actions" aria-label="{intl.switchOrLogOut}">
@@ -35,6 +40,7 @@
       {intl.switchTo}
     </button>
   {/if}
+  <button type="button" class='primary' on:click={onSave}>{intl.saveSettings}</button>
   <button on:click="{onLogOut}">{intl.logOut}</button>
 </form>
 <style>

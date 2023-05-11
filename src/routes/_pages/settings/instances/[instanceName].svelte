@@ -1,5 +1,5 @@
 <script>
-  import { instanceCurrentSparks, instanceUsers, loggedInInstances } from '../../../_store/local';
+  import { instanceCurrentSparks, instanceUsers, loggedInInstances, pushNotificationsSupport } from '../../../_store/local';
   import SettingsLayout from '../../../_components/settings/SettingsLayout.svelte'
   import InstanceUserProfile from '../../../_components/settings/instance/InstanceUserProfile.svelte'
   import HomeTimelineFilterSettings from '../../../_components/settings/instance/HomeTimelineFilterSettings.svelte'
@@ -11,6 +11,7 @@
   import { updateUserForInstance } from '../../../_actions/instances'
   import { updateFiltersForInstance } from '../../../_actions/filters'
   import { onMount } from "svelte";
+  import { saveInstanceSettings } from '../../../_components/settings/instance/helpers/save';
 
   export let params;
 
@@ -31,10 +32,17 @@
       ])
     }
   });
+
+  function onSave () {
+    saveInstanceSettings(instanceName)
+  }
 </script>
 
 <SettingsLayout page='settings/instances/{params.instanceName}' label={params.instanceName}>
-  <h1 class="instance-name-h1">{displayName}</h1>
+    <h1 class="instance-name-h1" slot="header">{displayName}</h1>
+    <div class="save-settings">
+      <button class='primary' on:click={onSave}>{intl.saveSettings}</button>
+    </div>
 
   {#if isAuthenticated && user}
     <h2>{intl.loggedInAs}</h2>
@@ -42,7 +50,7 @@
 <!--    <InstanceUserProfile {user} {spark} />-->
   {/if}
   <h2>{intl.theme}</h2>
-  <ThemeSettings {instanceName} />
+  <ThemeSettings />
   {#if isAuthenticated && user}
 <!--    <h2>{intl.homeTimelineFilters}</h2>-->
 <!--    <HomeTimelineFilterSettings {instanceName} />-->
@@ -63,6 +71,11 @@
   }
   .user-id {
     font-size: 1.4em;
+  }
+
+  .save-settings {
+    display: flex;
+    justify-content: flex-end;
   }
 
   @media (max-width: 767px) {

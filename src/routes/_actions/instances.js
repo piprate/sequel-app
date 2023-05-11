@@ -7,7 +7,6 @@ import {
   instanceCurrentSparks,
   instanceInfos,
   instanceLists,
-  instanceThemes,
   instanceUsers,
   loggedInInstances,
   loggedInInstancesInOrder,
@@ -15,11 +14,12 @@ import {
   queryInSearch,
   searchResults,
   timelineInitialized,
-  timelinePreinitialized
+  timelinePreinitialized,
+  userSettings
 } from '../_store/local'
 import { clearAutosuggestDataForInstance } from '../_store/autosuggest'
 import { clearTimelineDataForInstance } from '../_store/timeline'
-import { switchToTheme } from '../_utils/themeEngine'
+import { DEFAULT_THEME, switchToTheme } from '../_utils/themeEngine'
 import { toast } from '../_components/toast/toast'
 import { goto } from '$app/navigation'
 import { cacheFirstUpdateAfter } from '../_utils/sync'
@@ -28,22 +28,15 @@ import { database } from '../_database/database'
 import { importVirtualListStore } from '../_utils/asyncModules/importVirtualListStore.js'
 import { formatIntl } from '../_utils/formatIntl'
 import { configureFlow, disconnectFromFlow } from './flow'
-
-export function changeTheme (instanceName, newTheme) {
-  const themes = instanceThemes.get()
-  themes[instanceName] = newTheme
-  instanceThemes.set(themes)
-  if (instanceName === currentInstance.get()) {
-    switchToTheme(newTheme, enableGrayscale.get())
-  }
-}
+import { get } from 'svelte/store'
+import { deleteSettings } from './settings'
 
 export function switchToInstance (instanceName) {
-  const themes = instanceThemes.get()
+  const theme = userSettings.get()?.instance[instanceName].theme
   currentInstance.set(instanceName)
   searchResults.set(null)
   queryInSearch.set('')
-  switchToTheme(themes[instanceName], enableGrayscale.get())
+  switchToTheme(theme, get(enableGrayscale))
   configureFlow(instanceName)
 }
 
@@ -58,7 +51,6 @@ export async function logOutOfInstance (instanceName, message) {
     customEmoji,
     instanceInfos,
     instanceLists,
-    instanceThemes,
     loggedInInstances,
     instanceUsers,
     instanceCurrentSparks,
@@ -83,7 +75,8 @@ export async function logOutOfInstance (instanceName, message) {
   const { virtualListStore } = await importVirtualListStore()
   virtualListStore.clearRealmByPrefix(_currentInstance + '/') // TODO: this is a hacky way to clear the vlist cache
   toast.say(message)
-  switchToTheme(instanceThemes[newInstance], enableGrayscale.get())
+  deleteSettings()
+  switchToTheme(DEFAULT_THEME, get(enableGrayscale))
   disconnectFromFlow()
   /* no await */
   database.clearDatabaseForInstance(instanceName)

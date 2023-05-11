@@ -14,40 +14,15 @@ if (inBrowser()) {
 
 // persisted state
 
-export const alwaysShowFocusRing = persistentStore('alwaysShowFocusRing', false)
-export const autoplayGifs = persistentStore('autoplayGifs', false)
 export const composeData = persistentStore('composeData', {})
 export const currentInstance = persistentStore('currentInstance', null)
 // we disable scrollbars by default on iOS
-export const disableCustomScrollbars = persistentStore('disableCustomScrollbars',
-  inBrowser() && /iP(?:hone|ad|od)/.test(navigator.userAgent))
-export const disableSubscriberCounts = persistentStore('disableSubscriberCounts', false)
-export const disableHotkeys = persistentStore('disableHotkeys', false)
-export const disableInfiniteScroll = persistentStore('disableInfiniteScroll', false)
-export const disableLongAriaLabels = persistentStore('disableLongAriaLabels', false)
-export const disableNotificationBadge = persistentStore('disableNotificationBadge', false)
-export const disableTMMCounts = persistentStore('disableTMMCounts', false)
-export const disableRelativeTimestamps = persistentStore('disableRelativeTimestamps', false)
-export const disableTapOnPost = persistentStore('disableTapOnPost', false)
-export const enableGrayscale = persistentStore('enableGrayscale', false)
-export const hideCards = persistentStore('hideCards', false)
-export const ignoreBlurhash = persistentStore('ignoreBlurhash', false)
 export const instanceNameInSearch = persistentStore('instanceNameInSearch', '')
 export const instanceSettings = persistentStore('instanceSettings', {})
-export const instanceThemes = persistentStore('instanceThemes', {})
-export const markMediaAsSensitive = persistentStore('markMediaAsSensitive', false)
-export const largeInlineMedia = persistentStore('largeInlineMedia', false)
-export const leftRightChangesFocus = persistentStore('leftRightChangesFocus', isKaiOS())
 export const loggedInInstances = persistentStore('loggedInInstances', {})
 export const loggedInInstancesInOrder = persistentStore('loggedInInstancesInOrder', [])
-export const neverMarkMediaAsSensitive = persistentStore('neverMarkMediaAsSensitive', false)
-export const omitEmojiInDisplayNames = persistentStore('omitEmojiInDisplayNames', undefined)
 export const pinnedPages = persistentStore('pinnedPages', {})
 export const pushSubscriptions = persistentStore('pushSubscriptions', {})
-export const reduceMotion = persistentStore('reduceMotion', !inBrowser() ||
-  matchMedia('(prefers-reduced-motion: reduce)').matches)
-export const underlineLinks = persistentStore('underlineLinks', false)
-export const centerNav = persistentStore('centerNav', false)
 export const instanceCurrentSparks = persistentStore('instanceCurrentSparks', {})
 export const inductionLevel = persistentStore('inductionLevel', {})
 
@@ -170,11 +145,172 @@ export const observedDigitalArt = transientStore(null)
 export const pageVisibilityHidden = transientStore(false)
 export const redirectToPage = transientStore('')
 export const flowLoggedInAccount = transientStore('')
+export const userSettings = transientStore(null)
+
+export const markMediaAsSensitive = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.media?.allMediaSensitive
+  }
+)
+
+export const neverMarkMediaAsSensitive = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.media?.showSensitiveMedia
+  }
+)
+
+export const ignoreBlurhash = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.media?.ignoreBlurhash
+  }
+)
+
+export const largeInlineMedia = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.media?.largeInlineMedia
+  }
+)
+
+export const autoplayGifs = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.media?.autoplayGifs
+  }
+)
+
+export const disableCustomScrollbars = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.ui?.disableCustomScrollbars
+  }
+)
+
+export const disableInfiniteScroll = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.ui?.disableInfiniteScroll
+  }
+)
+
+export const hideCards = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.ui?.hideCards
+  }
+)
+
+export const underlineLinks = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.ui?.underlineLinks
+  }
+)
+
+export const centerNav = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.ui?.centerNav
+  }
+)
+
+export const reduceMotion = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.a11y?.reduceMotion
+  }
+)
+
+export const alwaysShowFocusRing = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.a11y?.alwaysShowFocusRing
+  }
+)
+
+export const disableTapOnPost = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.a11y?.disableTapOnPost
+  }
+)
+
+export const omitEmojiInDisplayNames = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.a11y?.omitEmojiInDisplayNames
+  }
+)
+
+export const disableLongAriaLabels = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.general.a11y?.disableLongAriaLabels
+  }
+)
+
+export const selectedTheme = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.instance[currentInstance.get()]?.theme
+  }
+)
+
+export const disableSubscriberCounts = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.wellness.metrics?.hideSubscriberCount
+  }
+)
+
+export const disableTMMCounts = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.wellness.metrics?.hideTMMCount
+  }
+)
+
+export const disableNotificationBadge = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.wellness.immediacy?.hideUnread
+  }
+)
+
+export const disableRelativeTimestamps = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.wellness.immediacy?.showAbsoluteTimestamps
+  }
+)
+
+export const enableGrayscale = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.wellness.ui?.enableGrayscale
+  }
+)
+
+export const disableHotkeys = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.hotkeys.disableAll
+  }
+)
+
+export const leftRightChangesFocus = derived(
+  [userSettings],
+  ([$userSettings]) => {
+    return $userSettings?.hotkeys.leftRightChangesFocus
+  }
+)
 
 // observers
 
-setupObservers(alwaysShowFocusRing, isUserLoggedIn, online, pageVisibilityHidden, enableGrayscale,
-  instanceThemes, currentInstance, leftRightChangesFocus)
+setupObservers(alwaysShowFocusRing, isUserLoggedIn, online, pageVisibilityHidden, enableGrayscale, leftRightChangesFocus)
 
 export { notificationPermission } from './observers/notificationPermissionObservers'
 export { isMobileSize, isSmallMobileSize, isTinyMobileSize, isVeryTinyMobileSize } from './observers/resizeObservers'

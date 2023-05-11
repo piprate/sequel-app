@@ -1,16 +1,15 @@
 <script>
-  import { onMount } from "svelte";
   import GenericInstanceSettingsStyle from './GenericInstanceSettingsStyle.svelte'
-  import { changeTheme } from '../../../_actions/instances'
   import { themes } from '../../../_static/themes'
-  import { DEFAULT_THEME } from '../../../_utils/themeEngine'
+  import { DEFAULT_THEME, switchToTheme } from '../../../_utils/themeEngine'
   import { formatIntl } from '../../../_utils/formatIntl'
-  import { instanceThemes } from "../../../_store/local";
-  import { currentTheme } from "../../../_store/instance";
+  import { currentInstance, selectedTheme, userSettings } from "../../../_store/local";
+  import { get } from '../../../_utils/lodash-lite';
+  import { onMount } from 'svelte';
+  import { parseSettings, saveSettings } from '../../../_actions/settings';
 
-  export let instanceName;
-
-  let selectedTheme = DEFAULT_THEME;
+  let currentTheme
+  let isGeneral = false
 
   let themeGroups = [
     {
@@ -22,6 +21,14 @@
       themes: themes.filter(_ => !_.dark)
     }
   ]
+  
+  $: generalTheme = get($userSettings, ['general', 'theme'])
+
+  onMount(() => {
+    isGeneral = location.pathname.includes('general')
+
+    currentTheme = isGeneral ? generalTheme : $selectedTheme
+  })
 
   function createThemeLabel (theme) {
     return formatIntl('intl.themeLabel', {
@@ -30,16 +37,18 @@
     })
   }
 
-  function onThemeChange () {
-    changeTheme(instanceName, selectedTheme)
+  function previewTheme (event) {
+    const selectedTheme = event.target.value
+    switchToTheme(selectedTheme)
+    saveSettings(parseSettings({ theme: selectedTheme }), 'instance', $currentInstance, false, true)
+    
+    if (isGeneral) {
+      saveSettings(parseSettings({ theme: selectedTheme }), 'general', undefined, false, true)
+    }
   }
-
-  onMount(() => {
-    selectedTheme = $instanceThemes[instanceName] || DEFAULT_THEME
-  });
 </script>
 
-<form class="generic-instance-settings" aria-label="{intl.chooseTheme}">
+<form id="theme-settings" class="generic-instance-settings" aria-label="{intl.chooseTheme}">
   <div class="theme-groups">
     {#each themeGroups as themeGroup}
     <div class="theme-group">
@@ -48,9 +57,7 @@
       </h3>
       {#each themeGroup.themes as theme}
       <div class="theme-picker">
-        <input type="radio" id="choice-theme-{theme.name}"
-               value={theme.name} checked="{$currentTheme === theme.name}"
-               bind:group="{selectedTheme}" on:change="{onThemeChange}">
+        <input name='theme' type="radio" id="choice-theme-{theme.name}" value={theme.name} checked={currentTheme === theme.name} on:change={previewTheme}>
         <label class="theme-picker-label" for="choice-theme-{theme.name}">
           <div class="theme-preview theme-preview-{themeGroup.dark ? 'dark' : 'light'}"
                style="background-color: {theme.color};" >

@@ -8,14 +8,12 @@ import {
   instanceCurrentSparks,
   instanceInfos,
   instanceLists,
-  instanceThemes,
   instanceUsers,
   loggedInInstances,
   pinnedPages,
   pushSubscriptions
 } from './local'
 
-export const currentTheme = deriveForInstance('currentTheme', instanceThemes, DEFAULT_THEME)
 export const currentSpark = deriveForInstance('currentSpark', instanceCurrentSparks, null)
 export const currentInductionLevel = deriveForInstance('currentInductionLevel', inductionLevel, 0)
 export const currentInstanceInfo = deriveForInstance('currentInstanceInfo', instanceInfos, null)

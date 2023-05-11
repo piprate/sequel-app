@@ -14,13 +14,10 @@ window.__themeColors = import.meta.env?.THEME_COLORS
 
 const {
   currentInstance,
-  instanceThemes,
   disableCustomScrollbars,
   enableGrayscale,
   centerNav
 } = storeLite.get()
-
-const theme = (instanceThemes && instanceThemes[currentInstance]) || DEFAULT_THEME
 
 if (currentInstance) {
   // Do preconnect if we're logged in, so we can connect faster to the other origin.
@@ -29,11 +26,6 @@ if (currentInstance) {
   link.setAttribute('href', basename(currentInstance))
   link.setAttribute('crossorigin', 'anonymous')
   document.head.appendChild(link)
-}
-
-if (theme !== INLINE_THEME) {
-  // switch theme ASAP to minimize flash of default theme
-  switchToTheme(theme, enableGrayscale)
 }
 
 if (enableGrayscale) {

@@ -764,6 +764,7 @@ const intl = {
   switchTo: 'Switch to this instance',
   switchToInstance: 'Switch to instance',
   switchToNameOfInstance: 'Switch to {instance}',
+  saveSettings: 'Save settings',
   logOut: 'Log out',
   logOutOfInstanceConfirm: 'Log out of {instance}?',
   turnOffAnonymousMode: 'Visitor mode turned off',

@@ -8,43 +8,78 @@
     disableTMMCounts,
     disableNotificationBadge,
     disableRelativeTimestamps,
-    enableGrayscale
+    enableGrayscale,
+    selectedTheme
   } from '../../_store/local';
-  import {onMount} from "svelte";
+  import { parseSettings, saveSettings } from '../../_actions/settings';
+  import { switchToTheme } from '../../_utils/themeEngine';
 
   // suppress warnings
   export let params;
   params = undefined;
   const intl = {};
 
+  let enableAll
+  let hideSubscriberCount = $disableSubscriberCounts
+  let hideTMMCount = $disableTMMCounts
+  let hideUnread = $disableNotificationBadge
+  let showAbsoluteTimestamps = $disableRelativeTimestamps
+  let grayscaleMode = $enableGrayscale
+
+  let metricsForm
+  let immediacyForm
+  let uiForm
+  
+  $: {
+    if ($currentInstance) {
+      enableAll = hideSubscriberCount && hideTMMCount && hideUnread && showAbsoluteTimestamps && grayscaleMode
+      const settings = {
+        metrics: {
+          hideSubscriberCount,
+          hideTMMCount
+        },
+        immediacy: {
+          hideUnread,
+          showAbsoluteTimestamps
+        },
+        ui: {
+          enableGrayscale: grayscaleMode
+        }
+      }
+
+      saveSettings(parseSettings(settings), 'wellness', undefined, true, true)
+      switchToTheme($selectedTheme, grayscaleMode)
+    }
+  }
+
   function onCheckAllChange (e) {
-    const { checked } = e.target
-    $disableSubscriberCounts = checked;
-    $disableTMMCounts = checked;
-    $disableNotificationBadge = checked;
-    $disableRelativeTimestamps = checked;
-    $enableGrayscale = checked;
+    const { checked } = e.target;
+
+    hideSubscriberCount = checked
+    hideTMMCount = checked
+    hideUnread = checked
+    showAbsoluteTimestamps = checked
+    grayscaleMode = checked
   }
 
-  function onChange () {
-    flushChangesToCheckAll()
-  }
+  function onSave () {
+    const metricsFormData = new FormData(metricsForm)
+    const immediacyFormData = new FormData(immediacyForm)
+    const uiFormData = new FormData(uiForm)
 
-  function flushChangesToCheckAll () {
-    document.querySelector('#choice-check-all').checked = $disableSubscriberCounts &&
-            $disableTMMCounts &&
-            $disableNotificationBadge &&
-            $disableRelativeTimestamps &&
-            $enableGrayscale
+    const metrics = Object.fromEntries(metricsFormData)
+    const immediacy = Object.fromEntries(immediacyFormData)
+    const ui = Object.fromEntries(uiFormData)
+    
+    saveSettings(parseSettings({ metrics, immediacy, ui }), 'wellness')
   }
-
-  onMount(() => {
-    flushChangesToCheckAll();
-  });
 </script>
 
 <SettingsLayout page='settings/wellness' label="{intl.wellness}">
-  <h1>{intl.wellnessSettings}</h1>
+  <h1 slot="header">{intl.wellnessSettings}</h1>
+  <div class="wellness-header">
+    <button class="primary" on:click={onSave}>{intl.saveSettings}</button>
+  </div>
 
   <p>
     {intl.wellnessDescription}
@@ -52,7 +87,7 @@
 
   <form class="ui-settings">
     <label class="setting-group">
-      <input type="checkbox" id="choice-check-all"
+      <input bind:checked={enableAll} type="checkbox" id="choice-check-all"
              on:change="{onCheckAllChange}">
       {intl.enableAll}
     </label>
@@ -60,30 +95,26 @@
 
   <h2>{intl.metrics}</h2>
 
-  <form class="ui-settings">
+  <form bind:this={metricsForm} class="ui-settings">
     <label class="setting-group">
-      <input type="checkbox" id="choice-disable-subscriber-counts"
-             bind:checked="{$disableSubscriberCounts}" on:change="{onChange}">
+      <input bind:checked={hideSubscriberCount} name="hideSubscriberCount" type="checkbox" id="choice-disable-subscriber-counts">
       {intl.hideSubscriberCount}
     </label>
     <label class="setting-group">
-      <input type="checkbox" id="choice-disable-tmm-counts"
-             bind:checked="{$disableTMMCounts}" on:change="{onChange}">
+      <input bind:checked={hideTMMCount} name="hideTMMCount" type="checkbox" id="choice-disable-tmm-counts">
       {intl.hideTMMCount}
     </label>
   </form>
 
   <h2>{intl.immediacy}</h2>
 
-  <form class="ui-settings">
+  <form bind:this={immediacyForm} class="ui-settings">
     <label class="setting-group">
-      <input type="checkbox" id="choice-disable-unread-notification-counts"
-             bind:checked="{$disableNotificationBadge}" on:change="{onChange}">
+      <input bind:checked={hideUnread} name="hideUnread" type="checkbox" id="choice-disable-unread-notification-counts">
       {intl.hideUnread}
     </label>
     <label class="settings-group">
-      <input type="checkbox" id="choice-disable-relative-timestamps"
-             bind:checked="{$disableRelativeTimestamps}" on:change="{onChange}">
+      <input bind:checked={showAbsoluteTimestamps} name="showAbsoluteTimestamps" type="checkbox" id="choice-disable-relative-timestamps">
       {intl.showAbsoluteTimestamps}
     </label>
   </form>
@@ -96,20 +127,35 @@
 
   <h2>{intl.ui}</h2>
 
-  <form class="ui-settings">
+  <form bind:this={uiForm} class="ui-settings">
     <label class="setting-group">
-      <input type="checkbox" id="choice-grayscale"
-             bind:checked="{$enableGrayscale}" on:change="{onChange}">
+      <input bind:checked={grayscaleMode} name="enableGrayscale" type="checkbox" id="choice-grayscale">
       {intl.grayscaleMode}
     </label>
   </form>
   <p>
     {intl.wellnessFooter}
   </p>
+  <button slot="footer" class='primary save-settings' on:click={onSave}>{intl.saveSettings}</button>
 </SettingsLayout>
 <UISettingsStyles />
 <style>
   :global(.wellness-aside) {
     margin: 20px 10px 0px 10px;
+  }
+
+  .wellness-header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .save-settings {
+    width: 100%;
+  }
+
+  .wellness-footer {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
   }
 </style>
