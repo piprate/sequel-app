@@ -10,5 +10,5 @@ $toast-bg: #333;
 $focus-outline: lighten($main-theme-color, 50%);
 $compose-background: lighten($main-theme-color, 52%);
 
-@import "_base.scss";
-@import "_light_scrollbars.scss";
+@import '_base.scss';
+@import '_light_scrollbars.scss';

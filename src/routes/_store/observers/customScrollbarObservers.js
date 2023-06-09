@@ -3,8 +3,8 @@ import { disableCustomScrollbars } from '../local'
 
 const theScrollbarStyle = inBrowser() && document.getElementById('theScrollbarStyle')
 
-export function customScrollbarObservers () {
-  disableCustomScrollbars.subscribe(_disableCustomScrollbars => {
+export function customScrollbarObservers() {
+  disableCustomScrollbars.subscribe((_disableCustomScrollbars) => {
     if (inNode()) {
       return
     }

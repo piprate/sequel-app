@@ -1,61 +1,65 @@
 <script>
-  import Avatar from '../Avatar.svelte';
-  import { isVeryTinyMobileSize } from '../../_store/local';
-  import { currentSpark } from '../../_store/instance';
-  import SparkDisplayName from '../spark/SparkDisplayName.svelte';
-  import { ONE_TRANSPARENT_PIXEL } from '../../_static/media';
-  import { emit } from '../../_utils/eventBus';
-  import { goto } from '$app/navigation';
-  import { unwrap } from "../../_utils/mapper";
+  import Avatar from '../Avatar.svelte'
+  import { isVeryTinyMobileSize } from '../../_store/local'
+  import { currentSpark } from '../../_store/instance'
+  import SparkDisplayName from '../spark/SparkDisplayName.svelte'
+  import { ONE_TRANSPARENT_PIXEL } from '../../_static/media'
+  import { emit } from '../../_utils/eventBus'
+  import { goto } from '$app/navigation'
+  import { unwrap } from '../../_utils/mapper'
 
-  export let realm;
-  export let dialogId;
+  export let realm
+  export let dialogId
 
-  $: loaded = !!$currentSpark;
+  $: loaded = !!$currentSpark
   $: spark = $currentSpark || {
     // return a placeholder while we're waiting on IndexedDB to load
     name: '',
     handle: '',
     avatar: ONE_TRANSPARENT_PIXEL,
     avatar_static: ONE_TRANSPARENT_PIXEL
-  };
-  $: id = unwrap(spark && spark.id);
-  $: href = (id ? `/sparks/${id}` : '#');
-  $: avatarSize = $isVeryTinyMobileSize ? 'extra-small' : 'small';
-  $: handle = (spark && spark.handle) || '';
+  }
+  $: id = unwrap(spark && spark.id)
+  $: href = id ? `/sparks/${id}` : '#'
+  $: avatarSize = $isVeryTinyMobileSize ? 'extra-small' : 'small'
+  $: handle = (spark && spark.handle) || ''
 
-  function onClick (e) {
+  function onClick(e) {
     if (realm === 'dialog') {
-      e.preventDefault();
-      e.stopPropagation();
+      e.preventDefault()
+      e.stopPropagation()
       // in dialog mode, we have to close the dialog and then navigate to the profile
-      emit('closeDialog', dialogId);
-      setTimeout(() => { // setTimeout to work around dialog navigation issues
-        goto(href);
-      });
+      emit('closeDialog', dialogId)
+      setTimeout(() => {
+        // setTimeout to work around dialog navigation issues
+        goto(href)
+      })
     }
   }
 </script>
 
-<a {href}
-   data-sveltekit-preload-data
-   class="compose-box-avatar {loaded ? 'loaded' : 'not-loaded'}"
-   aria-hidden="true"
-   tabindex="-1"
-   on:click="{onClick}"
+<a
+  {href}
+  data-sveltekit-preload-data
+  class="compose-box-avatar {loaded ? 'loaded' : 'not-loaded'}"
+  aria-hidden="true"
+  tabindex="-1"
+  on:click={onClick}
 >
   <!-- the avatar is duplicated information, so hide from tab order and screenreaders -->
   <Avatar entity={spark} size={avatarSize} />
 </a>
-<a class="compose-box-display-name {loaded ? 'loaded' : 'not-loaded'}"
-   {href}
-   aria-busy={!loaded}
-   aria-live="off"
-   data-sveltekit-preload-data
-   on:click="{onClick}"
+<a
+  class="compose-box-display-name {loaded ? 'loaded' : 'not-loaded'}"
+  {href}
+  aria-busy={!loaded}
+  aria-live="off"
+  data-sveltekit-preload-data
+  on:click={onClick}
 >
   <SparkDisplayName {spark} />
 </a>
+
 <!--{#if handle }-->
 <!--<span class="compose-box-handle {loaded ? 'loaded' : 'not-loaded'}"-->
 <!--      aria-busy={!loaded}-->

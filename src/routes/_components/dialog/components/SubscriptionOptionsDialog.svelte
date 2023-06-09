@@ -24,7 +24,7 @@
   let loading = true
   let plans = []
 
-  function onClick (plan) {
+  function onClick(plan) {
     if (plan.id === '') {
       dispatch('select', null)
     } else {
@@ -33,7 +33,7 @@
     close(id)
   }
 
-  function getPlanCostLabel (plan) {
+  function getPlanCostLabel(plan) {
     switch (plan.type) {
       case 'CommunityPlan':
         return 'intl.communityPlanCost'
@@ -53,9 +53,11 @@
     index,
     name: getPlanName(plan.type),
     costLabel: getPlanCostLabel(plan),
-    selected: (selectedPlan === plan.id),
-    label: formatIntl('intl.selectedPlanLabel', { plan: getPlanName(plan.type), selected: (selectedPlan === plan.id) }),
-    switchLabel: plan.id ? formatIntl('intl.switchToNameOfPlan', { plan: getPlanName(plan.type) }) : 'intl.subscribeLater',
+    selected: selectedPlan === plan.id,
+    label: formatIntl('intl.selectedPlanLabel', { plan: getPlanName(plan.type), selected: selectedPlan === plan.id }),
+    switchLabel: plan.id
+      ? formatIntl('intl.switchToNameOfPlan', { plan: getPlanName(plan.type) })
+      : 'intl.subscribeLater',
     data: plan
   }))
 
@@ -64,7 +66,7 @@
       const proposal = await getSubscriptionProposal($currentInstance, $accessToken, creatorId)
       plans = proposal.plans.concat([
         {
-          id: '', // entry for 'Subscribe later' option
+          id: '' // entry for 'Subscribe later' option
         }
       ])
     } catch (e) {
@@ -75,52 +77,49 @@
   })
 </script>
 
-<ModalDialog
-        {id}
-        {label}
-        {title}
-        shrinkWidthToFit={true}
-        background="var(--main-bg)"
->
+<ModalDialog {id} {label} {title} shrinkWidthToFit={true} background="var(--main-bg)">
   {#if loading}
     <LoadingPage />
-  {:else}
-    {#if plans && plans.length}
-      <RadioGroup id="plan-selector" className="plan-selection-radio" label="{intl.selectPlanFromList}" length={plans.length}>
-        <ul class="plans-results" aria-label="{intl.planList}">
-          {#each planStates as plan}
-            <li class="subscription-options">
-              <RadioGroupButton
-                      id="plan-selector={plan.id}"
-                      className="plan-selector-button"
-                      label={plan.switchLabel}
-                      checked={plan.selected}
-                      index={plan.index}
-                      on:click="{ (e) => onClick(plan) }">
-                <div class="plan-details">
-                  {#if plan.id}
+  {:else if plans && plans.length}
+    <RadioGroup
+      id="plan-selector"
+      className="plan-selection-radio"
+      label={intl.selectPlanFromList}
+      length={plans.length}
+    >
+      <ul class="plans-results" aria-label={intl.planList}>
+        {#each planStates as plan}
+          <li class="subscription-options">
+            <RadioGroupButton
+              id="plan-selector={plan.id}"
+              className="plan-selector-button"
+              label={plan.switchLabel}
+              checked={plan.selected}
+              index={plan.index}
+              on:click={(e) => onClick(plan)}
+            >
+              <div class="plan-details">
+                {#if plan.id}
                   <div class="plan-name">
                     {plan.name}
                   </div>
                   <div class="plan-cost">
                     {plan.costLabel}
                   </div>
-                  {:else}
-                    <div class="subscribe-later">{intl.subscribeLater}</div>
-                  {/if}
-                  <div class="plan-selector-button-wrapper">
-                    <SvgIcon className="plan-selector-button-svg {plan.selected ? '' : 'hidden'}"
-                             href="#fa-check" />
-                  </div>
+                {:else}
+                  <div class="subscribe-later">{intl.subscribeLater}</div>
+                {/if}
+                <div class="plan-selector-button-wrapper">
+                  <SvgIcon className="plan-selector-button-svg {plan.selected ? '' : 'hidden'}" href="#fa-check" />
                 </div>
-              </RadioGroupButton>
-            </li>
-          {/each}
-        </ul>
-      </RadioGroup>
-    {:else}
-     no plans found
-    {/if}
+              </div>
+            </RadioGroupButton>
+          </li>
+        {/each}
+      </ul>
+    </RadioGroup>
+  {:else}
+    no plans found
   {/if}
 </ModalDialog>
 
@@ -174,8 +173,8 @@
     flex: 1;
     display: grid;
     grid-template-areas:
-      "name  button"
-      "cost  button";
+      'name  button'
+      'cost  button';
     grid-column-gap: 20px;
     grid-template-columns: max-content 1fr max-content;
     align-items: center;

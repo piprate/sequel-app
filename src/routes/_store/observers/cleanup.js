@@ -3,7 +3,7 @@ import { scheduleIdleTask } from '../../_utils/scheduleIdleTask'
 import { CLEANUP_DELAY, CLEANUP_TIME_AGO } from '../../_static/database'
 import { scheduleInterval } from '../../_utils/scheduleInterval'
 
-function doCleanup () {
+function doCleanup() {
   // Periodically clean up drafts in localStorage, so they don't grow without bound.
   // Only do this for replies, so not for the home timeline or the compose modal.
   const now = Date.now()
@@ -27,10 +27,10 @@ function doCleanup () {
   }
 }
 
-function doCleanupLazily () {
+function doCleanupLazily() {
   scheduleIdleTask(doCleanup)
 }
 
-export function cleanup () {
+export function cleanup() {
   scheduleInterval(doCleanupLazily, CLEANUP_DELAY, /* runOnActive */ false)
 }

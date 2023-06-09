@@ -1,9 +1,9 @@
 <script>
   import SparkDisplayName from '../spark/SparkDisplayName.svelte'
   import { unwrap } from '../../_utils/mapper'
-  import { onMount } from 'svelte';
-  import { isUserLoggedIn, observedSpark } from '../../_store/local';
-  import { clearProfileAndRelationship, updateProfileAndRelationship } from '../../_actions/sparks';
+  import { onMount } from 'svelte'
+  import { isUserLoggedIn, observedSpark } from '../../_store/local'
+  import { clearProfileAndRelationship, updateProfileAndRelationship } from '../../_actions/sparks'
 
   export let uuid
   export let isPostInNotification
@@ -27,11 +27,14 @@
   })
 </script>
 
-<a id={elementId}
-   class="post-author-name {isPostInNotification ? 'post-in-notification' : '' } {isPostInOwnThread ? 'post-in-own-thread' : ''}"
-   data-sveltekit-preload-data
-   href="/sparks/{unwrap(postAuthorId)}"
-   title="{'@' + postAuthor.acct}"
+<a
+  id={elementId}
+  class="post-author-name {isPostInNotification ? 'post-in-notification' : ''} {isPostInOwnThread
+    ? 'post-in-own-thread'
+    : ''}"
+  data-sveltekit-preload-data
+  href="/sparks/{unwrap(postAuthorId)}"
+  title={'@' + postAuthor.acct}
 >
   <SparkDisplayName spark={postAuthor} />
 </a>
@@ -40,6 +43,7 @@
     Posts: {postCount} Bubbles: {bubbleCount} Subscribers: {subscriberCount}
   </div>
 {/if}
+
 <style>
   .post-author-name {
     grid-area: author-name;
@@ -62,7 +66,9 @@
     font-size: 1.3em;
   }
 
-  .post-author-name, .post-author-name:hover, .post-author-name:visited {
+  .post-author-name,
+  .post-author-name:hover,
+  .post-author-name:visited {
     color: var(--body-text-color);
   }
 
@@ -71,5 +77,4 @@
   .post-author-name.post-in-notification:visited {
     color: var(--very-deemphasized-text-color);
   }
-
 </style>

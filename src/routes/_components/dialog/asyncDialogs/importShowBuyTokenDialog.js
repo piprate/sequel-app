@@ -1,3 +1,1 @@
-export const importShowBuyTokenDialog = () => import(
-  '../creators/showBuyTokenDialog'
-).then(mod => mod.default)
+export const importShowBuyTokenDialog = () => import('../creators/showBuyTokenDialog').then((mod) => mod.default)

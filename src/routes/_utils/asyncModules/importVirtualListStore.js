@@ -1,3 +1,1 @@
-export const importVirtualListStore = () => import(
-  '../../_components/virtualList/virtualListStore.js'
-)
+export const importVirtualListStore = () => import('../../_components/virtualList/virtualListStore.js')

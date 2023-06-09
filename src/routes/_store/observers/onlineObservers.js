@@ -14,12 +14,12 @@ const notifyOffline = debounce(() => {
   }
 }, OFFLINE_DELAY)
 
-export function onlineObservers (online) {
+export function onlineObservers(online) {
   if (inNode()) {
     return
   }
 
-  online.subscribe(_online => {
+  online.subscribe((_online) => {
     if (!_online) {
       notifyOffline()
     }

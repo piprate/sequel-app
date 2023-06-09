@@ -3,15 +3,17 @@ import { DEFAULT_TIMEOUT, get, paramsString, post, put, WRITE_TIMEOUT } from '..
 import { populateDigitalArtMediaURLs } from './media'
 import { unwrap } from '../_utils/mapper'
 
-export async function getDigitalArts (instanceName, accessToken, asSpark, limit = 50) {
+export async function getDigitalArts(instanceName, accessToken, asSpark, limit = 50) {
   let url = `${base(instanceName, accessToken)}/digital-art`
   url += '?' + paramsString({ limit, st: 'active' })
   return await populateMediaURLsInDigitalArts(
-    get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }), instanceName, accessToken
+    get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }),
+    instanceName,
+    accessToken
   )
 }
 
-export async function getDigitalArt (instanceName, accessToken, id, asSpark) {
+export async function getDigitalArt(instanceName, accessToken, id, asSpark) {
   const url = `${base(instanceName, accessToken)}/digital-art/${unwrap(id)}`
   return await get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }).then((listing) => {
     populateDigitalArtMediaURLs(listing, instanceName, accessToken)
@@ -19,21 +21,21 @@ export async function getDigitalArt (instanceName, accessToken, id, asSpark) {
   })
 }
 
-export async function newDigitalArt (instanceName, accessToken, data, asSpark) {
+export async function newDigitalArt(instanceName, accessToken, data, asSpark) {
   const url = `${basename(instanceName)}/digital-art`
   const result = await post(url, data, sequelAuth(accessToken, asSpark), { timeout: WRITE_TIMEOUT })
 
   return populateDigitalArtMediaURLs(result, instanceName, accessToken)
 }
 
-export async function editDigitalArt (digitalArtId, instanceName, accessToken, data, asSpark) {
+export async function editDigitalArt(digitalArtId, instanceName, accessToken, data, asSpark) {
   const url = `${basename(instanceName)}/digital-art/${digitalArtId}`
   const result = await put(url, data, sequelAuth(accessToken, asSpark), { timeout: WRITE_TIMEOUT })
 
   return populateDigitalArtMediaURLs(result, instanceName, accessToken)
 }
 
-export function populateMediaURLsInDigitalArts (apiCall, instanceName, accessToken) {
+export function populateMediaURLsInDigitalArts(apiCall, instanceName, accessToken) {
   return apiCall.then((entityList) => {
     for (const entity of entityList) {
       populateDigitalArtMediaURLs(entity, instanceName, accessToken)
@@ -42,7 +44,7 @@ export function populateMediaURLsInDigitalArts (apiCall, instanceName, accessTok
   })
 }
 
-export function finaliseOffer (instanceName, accessToken, id, data, asSpark) {
+export function finaliseOffer(instanceName, accessToken, id, data, asSpark) {
   const url = `${base(instanceName, accessToken)}/digital-art/${unwrap(id)}/offer`
   return post(url, data, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT })
 }

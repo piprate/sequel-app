@@ -1,6 +1,6 @@
 import { getComposeData, setComposeData } from '../_store/local'
 
-export function toggleContentWarningShown (realm) {
+export function toggleContentWarningShown(realm) {
   const shown = getComposeData(realm, 'contentWarningShown')
   const contentWarning = getComposeData(realm, 'contentWarning')
   const newShown = !shown

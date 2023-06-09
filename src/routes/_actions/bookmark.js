@@ -10,7 +10,7 @@ import { storeFreshTimelineItemsInDatabase } from './timeline'
 import { rootTimelineItemSummaries, setForTimeline } from '../_store/timeline'
 import { getTimeline } from '../_api/timelines'
 
-export async function setPostBookmarked (postId, bookmarked, asSpark) {
+export async function setPostBookmarked(postId, bookmarked, asSpark) {
   if (!online.get()) {
     /* no await */
     toast.say(bookmarked ? 'intl.cannotBookmarkOffline' : 'intl.cannotUnbookmarkOffline')
@@ -44,8 +44,8 @@ export async function setPostBookmarked (postId, bookmarked, asSpark) {
     /* no await */
     toast.say(
       bookmarked
-        ? formatIntl('intl.unableToBookmark', { error: (e.message || '') })
-        : formatIntl('intl.unableToUnbookmark', { error: (e.message || '') })
+        ? formatIntl('intl.unableToBookmark', { error: e.message || '' })
+        : formatIntl('intl.unableToUnbookmark', { error: e.message || '' })
     )
   }
 }

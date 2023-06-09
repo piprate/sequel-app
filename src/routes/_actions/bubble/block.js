@@ -7,7 +7,7 @@ import { get } from 'svelte/store'
 import { accessToken } from '../../_store/instance'
 import { unwrap } from '../../_utils/mapper'
 
-export async function setBubbleBlocked (bubbleId, block, asSpark, toastOnSuccess) {
+export async function setBubbleBlocked(bubbleId, block, asSpark, toastOnSuccess) {
   bubbleId = unwrap(bubbleId)
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
@@ -32,9 +32,10 @@ export async function setBubbleBlocked (bubbleId, block, asSpark, toastOnSuccess
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(block
-      ? formatIntl('intl.unableToBlockBubble', { block: !!block, error: (e.message || '') })
-      : formatIntl('intl.unableToUnblockBubble', { error: (e.message || '') })
+    toast.say(
+      block
+        ? formatIntl('intl.unableToBlockBubble', { block: !!block, error: e.message || '' })
+        : formatIntl('intl.unableToUnblockBubble', { error: e.message || '' })
     )
   }
 }

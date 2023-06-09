@@ -12,39 +12,52 @@ const planNames = {
   StandardPlan: 'intl.standardPlanName'
 }
 
-export function getPlanName (planType) {
+export function getPlanName(planType) {
   return planNames[planType] || 'intl.unknownPlanName'
 }
 
-export async function setSparkSubscribed (sparkId, subscribe, currentPlan, asSpark, toastOnSuccess, resultCertainCallback) {
+export async function setSparkSubscribed(
+  sparkId,
+  subscribe,
+  currentPlan,
+  asSpark,
+  toastOnSuccess,
+  resultCertainCallback
+) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   if (subscribe) {
     const showDialog = await importShowSubscriptionOptionsDialog()
-    showDialog(sparkId, currentPlan, async function (event) {
-      const plan = event.detail
-      if (!plan) {
-        // no plan was selected
-        return
-      }
-      try {
-        const offer = await requestSubscription(_currentInstance, _accessToken, sparkId, plan.id, asSpark)
-        if (resultCertainCallback) {
-          resultCertainCallback(true)
+    showDialog(
+      sparkId,
+      currentPlan,
+      async function (event) {
+        const plan = event.detail
+        if (!plan) {
+          // no plan was selected
+          return
         }
-        const relationship = await confirmSubscription(_currentInstance, _accessToken, sparkId, offer, null, asSpark)
-        await updateLocalRelationship(_currentInstance, sparkId, relationship)
-        if (toastOnSuccess) {
+        try {
+          const offer = await requestSubscription(_currentInstance, _accessToken, sparkId, plan.id, asSpark)
+          if (resultCertainCallback) {
+            resultCertainCallback(true)
+          }
+          const relationship = await confirmSubscription(_currentInstance, _accessToken, sparkId, offer, null, asSpark)
+          await updateLocalRelationship(_currentInstance, sparkId, relationship)
+          if (toastOnSuccess) {
+            /* no await */
+            toast.say('intl.subbedSpark')
+          }
+        } catch (e) {
+          resultCertainCallback(false)
+          console.error(e)
           /* no await */
-          toast.say('intl.subbedSpark')
+          toast.say(formatIntl('intl.unableToSubscribe', { error: e.message || '' }))
         }
-      } catch (e) {
-        resultCertainCallback(false)
-        console.error(e)
-        /* no await */
-        toast.say(formatIntl('intl.unableToSubscribe', { error: (e.message || '') }))
-      }
-    }, '', 'intl.chooseSubscriptionPlan')
+      },
+      '',
+      'intl.chooseSubscriptionPlan'
+    )
   } else {
     if (resultCertainCallback) {
       resultCertainCallback(false)
@@ -60,7 +73,7 @@ export async function setSparkSubscribed (sparkId, subscribe, currentPlan, asSpa
       resultCertainCallback(true)
       console.error(e)
       /* no await */
-      toast.say(formatIntl('intl.unableToUnsubscribe', { error: (e.message || '') }))
+      toast.say(formatIntl('intl.unableToUnsubscribe', { error: e.message || '' }))
     }
   }
 }

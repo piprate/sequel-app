@@ -3,22 +3,18 @@
   import { timelineInitialized } from '../../_store/local'
   import { importShowComposeDialog } from '../dialog/asyncDialogs/importShowComposeDialog.js'
   import { classname } from '../../_utils/classname'
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from 'svelte'
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
-  export let showSticky;
-  export let overLimit;
-  export let hideAndFadeIn;
+  export let showSticky
+  export let overLimit
+  export let hideAndFadeIn
 
-  let sticky = false;
-  let sentinel;
+  let sticky = false
+  let sentinel
 
-  $: computedClass = classname(
-          'compose-box-button-wrapper',
-          showSticky && 'compose-box-button-sticky',
-          hideAndFadeIn
-  );
+  $: computedClass = classname('compose-box-button-wrapper', showSticky && 'compose-box-button-sticky', hideAndFadeIn)
 
   function onClickButton() {
     if (sticky) {
@@ -27,26 +23,26 @@
       showDialog()
     } else {
       // else we're actually publishing a new post, let our parent know
-      dispatch('publishAction');
+      dispatch('publishAction')
     }
   }
 
   async function showDialog() {
-    (await importShowComposeDialog())()
+    ;(await importShowComposeDialog())()
   }
 
-  let __stickyObserver;
-  let __oneShotObserver;
+  let __stickyObserver
+  let __oneShotObserver
 
   function onObserve(entries) {
     sticky = !entries[0].isIntersecting
   }
 
-  let enableObserveTimelineInitialized = false;
+  let enableObserveTimelineInitialized = false
 
   function observeTimelineInitialized(timelineInitialized) {
     if (timelineInitialized && !__oneShotObserver) {
-      __oneShotObserver = new IntersectionObserver(entries => {
+      __oneShotObserver = new IntersectionObserver((entries) => {
         onObserve(entries)
         __oneShotObserver.disconnect()
         __oneShotObserver = null
@@ -55,7 +51,7 @@
     }
   }
   $: if (enableObserveTimelineInitialized) {
-    observeTimelineInitialized($timelineInitialized);
+    observeTimelineInitialized($timelineInitialized)
   }
 
   function setupIntersectionObservers() {
@@ -63,13 +59,13 @@
       return // no need to set up observers if this button can never be sticky (e.g. dialogs)
     }
 
-    __stickyObserver = new IntersectionObserver(entries => onObserve(entries))
+    __stickyObserver = new IntersectionObserver((entries) => onObserve(entries))
     __stickyObserver.observe(sentinel)
 
     // also create a one-shot observer for the $timelineInitialized event,
     // due to a bug in Firefox where when the scrollTop is set
     // manually, the other observer doesn't necessarily fire
-    enableObserveTimelineInitialized = true;
+    enableObserveTimelineInitialized = true
   }
 
   function teardownIntersectionObservers() {
@@ -83,20 +79,21 @@
     }
   }
 
-  let wrapper;
+  let wrapper
 
   onMount(() => {
-    setupIntersectionObservers();
+    setupIntersectionObservers()
     return () => {
-      teardownIntersectionObservers();
+      teardownIntersectionObservers()
     }
-  });
+  })
 </script>
 
-<div class="compose-box-button-sentinel" bind:this={sentinel}></div>
-<div class="{computedClass}" bind:this={wrapper} >
-  <ComposeButton {overLimit} {sticky} on:click="{onClickButton}" />
+<div class="compose-box-button-sentinel" bind:this={sentinel} />
+<div class={computedClass} bind:this={wrapper}>
+  <ComposeButton {overLimit} {sticky} on:click={onClickButton} />
 </div>
+
 <style>
   .compose-box-button-wrapper {
     /*

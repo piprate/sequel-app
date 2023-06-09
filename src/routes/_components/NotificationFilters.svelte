@@ -1,7 +1,7 @@
 <script>
   import TabSet from './TabSet.svelte'
 
-  export let filter;
+  export let filter
 
   let tabs = [
     {
@@ -14,12 +14,7 @@
       label: 'intl.mentions',
       href: '/notifications/mentions'
     }
-  ];
+  ]
 </script>
 
-<TabSet
-  label="{intl.filters}"
-  currentTabName={filter}
-  {tabs}
-  className="notification-filters"
-/>
+<TabSet label={intl.filters} currentTabName={filter} {tabs} className="notification-filters" />

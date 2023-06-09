@@ -1,3 +1,1 @@
-export const importLoggedInObservers = () => import(
-  '../../_store/observers/loggedInObservers.js'
-)
+export const importLoggedInObservers = () => import('../../_store/observers/loggedInObservers.js')

@@ -1,12 +1,13 @@
 <script>
   import SvgIcon from './SvgIcon.svelte'
 
-  let className = undefined;
+  let className = undefined
 </script>
 
 <div class="play-video-icon {className || ''}">
   <SvgIcon className="play-video-icon-svg" href="#fa-play-circle" />
 </div>
+
 <style>
   .play-video-icon {
     position: absolute;

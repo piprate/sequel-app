@@ -1,6 +1,6 @@
-import { inNode } from "../../_utils/browserOrNode"
+import { inNode } from '../../_utils/browserOrNode'
 
-export function pageVisibilityObservers (pageVisibilityHidden) {
+export function pageVisibilityObservers(pageVisibilityHidden) {
   if (inNode()) {
     return
   }

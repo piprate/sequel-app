@@ -16,7 +16,6 @@ describe('RecoverPhrase.svelte', () => {
     assert.isDefined(await result.findAllByText('Recovery Phrase:'))
   })
 
-
   it('Generates a private key', async () => {
     const seed = binary('446ZHDoHFsXFfAPWe3YbAecm4D3B1xty9TNFnhd4U7L8')
     const privateKey = generateKey(seed)

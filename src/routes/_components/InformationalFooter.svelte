@@ -7,4 +7,3 @@
     {@html intl.footer}
   </footer>
 </HiddenFromSSR>
-

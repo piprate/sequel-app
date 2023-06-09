@@ -6,7 +6,7 @@ import { currentInstance } from '../_store/local'
 import { get } from 'svelte/store'
 import { accessToken } from '../_store/instance'
 
-export async function doDeletePost (bubbleId, postId, asSpark) {
+export async function doDeletePost(bubbleId, postId, asSpark) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   try {
@@ -18,7 +18,7 @@ export async function doDeletePost (bubbleId, postId, asSpark) {
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(formatIntl('intl.unableToDelete', { error: (e.message || '') }))
+    toast.say(formatIntl('intl.unableToDelete', { error: e.message || '' }))
     throw e
   }
 }

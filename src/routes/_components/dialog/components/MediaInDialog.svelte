@@ -1,34 +1,34 @@
 <script>
   import { get } from '../../../_utils/lodash-lite'
   import MediaControlsFix from '../../MediaControlsFix.svelte'
-  import { onDestroy, onMount } from "svelte";
-  import { ONE_TRANSPARENT_PIXEL } from "../../../_static/media";
-  import { loadSecureMedia } from "../../../_api/media";
-  import { accessToken } from "../../../_store/instance";
+  import { onDestroy, onMount } from 'svelte'
+  import { ONE_TRANSPARENT_PIXEL } from '../../../_static/media'
+  import { loadSecureMedia } from '../../../_api/media'
+  import { accessToken } from '../../../_store/instance'
 
-  export let media;
+  export let media
 
-  let loadedMedia = undefined;
+  let loadedMedia = undefined
 
-  $: type = media.type;
-  $: displaySrc = loadedMedia || ONE_TRANSPARENT_PIXEL;
-  $: description = media.description || '';
-  $: poster = ONE_TRANSPARENT_PIXEL; // FIXME: add poster support for videos. media.preview_url;
-  $: static_url = media.static_url;
+  $: type = media.type
+  $: displaySrc = loadedMedia || ONE_TRANSPARENT_PIXEL
+  $: description = media.description || ''
+  $: poster = ONE_TRANSPARENT_PIXEL // FIXME: add poster support for videos. media.preview_url;
+  $: static_url = media.static_url
   // intrinsic width/height to avoid layout shifting https://chromestatus.com/feature/5695266130755584
   // note pleroma does not give us intrinsic width/height
-  $: intrinsicWidth = get(media, ['meta', 'original', 'width']);
-  $: intrinsicHeight = get(media, ['meta', 'original', 'height']);
+  $: intrinsicWidth = get(media, ['meta', 'original', 'width'])
+  $: intrinsicHeight = get(media, ['meta', 'original', 'height'])
 
-  let player;
+  let player
 
   onMount(async () => {
     try {
-      loadedMedia = await loadSecureMedia($accessToken, media.url);
+      loadedMedia = await loadSecureMedia($accessToken, media.url)
     } catch (e) {
       console.error('Image loading error', media.url, e)
     }
-  });
+  })
 
   onDestroy(() => {
     if (player && !player.paused) {
@@ -48,19 +48,13 @@
     height={intrinsicHeight}
     bind:this={player}
   >
-      <!--  See https://github.com/sveltejs/svelte/blob/master/site/content/docs/05-accessibility-warnings.md#a11y-media-has-caption -->
-      <track kind="captions">
+    <!--  See https://github.com/sveltejs/svelte/blob/master/site/content/docs/05-accessibility-warnings.md#a11y-media-has-caption -->
+    <track kind="captions" />
   </video>
   <MediaControlsFix />
 {:else if type === 'Audio'}
   <div class="audio-player-container">
-    <audio
-      class="audio-player"
-      aria-label={description}
-      src={displaySrc}
-      controls
-      bind:this={player}
-    />
+    <audio class="audio-player" aria-label={description} src={displaySrc} controls bind:this={player} />
   </div>
   <MediaControlsFix />
 {:else if type === 'gifv'}
@@ -87,6 +81,7 @@
     height={intrinsicHeight}
   />
 {/if}
+
 <style>
   .media-fit {
     object-fit: contain;

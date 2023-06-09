@@ -43,12 +43,8 @@
     {#if !newSpark}
       <DynamicPageBanner title="" {ariaTitle} />
     {/if}
-    <TimelinePage {timeline} >
-      <SparkProfile spark={$observedSpark}
-                    relationship={$observedRelationship}
-                    ourSpark={$currentSpark}
-                    {filter}
-      />
+    <TimelinePage {timeline}>
+      <SparkProfile spark={$observedSpark} relationship={$observedRelationship} ourSpark={$currentSpark} {filter} />
       {#if !filter}
         <PinnedStatuses {sparkId} />
       {/if}
@@ -63,5 +59,5 @@
     <LoadingPage />
   {/if}
 {:else}
-  <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+  <RestrictedPageWarning message={intl.loginToAccess} offerVisitorMode={true} />
 {/if}

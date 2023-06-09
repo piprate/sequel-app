@@ -1,28 +1,28 @@
 <script>
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from 'svelte'
   import { addToShortcutScope, removeFromShortcutScope } from '../../_utils/shortcuts'
 
-  export let scope = 'global';
-  export let key = null;
+  export let scope = 'global'
+  export let key = null
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
   let __this = {
     onKeyDown: function (event) {
-      console.log("key pressed");
+      console.log('key pressed')
       event.stopPropagation()
       event.preventDefault()
       dispatch('pressed', {
         key: event.key,
         timeStamp: event.timeStamp
-      });
+      })
     }
-  };
+  }
 
   onMount(() => {
-    addToShortcutScope(scope, key, __this);
+    addToShortcutScope(scope, key, __this)
     return () => {
-      removeFromShortcutScope(scope, key, __this);
+      removeFromShortcutScope(scope, key, __this)
     }
-  });
+  })
 </script>

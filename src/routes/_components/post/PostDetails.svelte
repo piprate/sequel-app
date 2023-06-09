@@ -24,8 +24,8 @@
   $: bubbleName = (bubble && bubble.name) || ''
   $: locationAriaLabel = formatIntl('intl.postedIn', { bubble: bubbleName })
   $: application = post.application // FIXME
-  $: applicationName = (application && application.name)
-  $: applicationWebsite = (application && application.website)
+  $: applicationName = application && application.name
+  $: applicationWebsite = application && application.website
   $: numTMM = (() => {
     if ($disableTMMCounts) {
       return 0
@@ -36,23 +36,21 @@
     return post.tmmCount || 0
   })()
   $: displayAbsoluteFormattedCreatedDate = (
-          ($isMobileSize ? shortAbsoluteDateFormatter : absoluteDateFormatter)().format(createdAtDateTS)
-  )
+    $isMobileSize ? shortAbsoluteDateFormatter : absoluteDateFormatter
+  )().format(createdAtDateTS)
   $: displayAbsoluteFormattedUpdatedDate = (
-          ($isMobileSize ? shortAbsoluteDateFormatter : absoluteDateFormatter)().format(updatedAtDateTS)
-  )
+    $isMobileSize ? shortAbsoluteDateFormatter : absoluteDateFormatter
+  )().format(updatedAtDateTS)
   $: tmmsLabel = (() => {
     if ($disableTMMCounts) {
       return 'intl.tmmCountsHidden'
     }
     return formatIntl('intl.tellMeMoredTimes', { count: numTMM })
   })()
-  $: applicationLinkLabel = (
-          formatIntl('intl.opensInNewWindow', { label: applicationName })
-  )
+  $: applicationLinkLabel = formatIntl('intl.opensInNewWindow', { label: applicationName })
 
   onMount(() => {
-    return on('postUpdated', post => {
+    return on('postUpdated', (post) => {
       overrideNumTMMs = post.tmmCount || 0
     })
   })
@@ -76,10 +74,12 @@
   </a>
   {#if applicationName}
     {#if applicationWebsite}
-      <ExternalLink className="post-application"
-                    href={applicationWebsite}
-                    showIcon={false}
-                    ariaLabel={applicationLinkLabel}>
+      <ExternalLink
+        className="post-application"
+        href={applicationWebsite}
+        showIcon={false}
+        ariaLabel={applicationLinkLabel}
+      >
         <span class="post-application-span">
           {applicationName}
         </span>
@@ -90,14 +90,12 @@
       </span>
     {/if}
   {/if}
-  <a class="post-tmms post-tmms"
-     data-sveltekit-preload-data
-     href="/posts/{unwrap(postId)}/tmm"
-     aria-label={tmmsLabel}>
+  <a class="post-tmms post-tmms" data-sveltekit-preload-data href="/posts/{unwrap(postId)}/tmm" aria-label={tmmsLabel}>
     <SvgIcon className="post-tmms-svg" href="#fa-fire" />
     <span>{numTMM}</span>
   </a>
 </div>
+
 <style>
   .post-details {
     grid-area: details;
@@ -217,7 +215,6 @@
       grid-gap: 8px;
       justify-content: space-between;
     }
-
   }
 
   .updated-date {

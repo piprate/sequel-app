@@ -26,18 +26,22 @@ const GENERIC_ERROR = `
   Unexpected error when connecting to a Sequel instance.
   Are you in private browsing mode?`
 
-function createKnownError (message) {
+function createKnownError(message) {
   const err = new Error(message)
   err.knownError = true
   return err
 }
 
-export async function registerInInstance (email, password, registrationCode) {
+export async function registerInInstance(email, password, registrationCode) {
   logInToInstanceLoading.set(true)
   logInToInstanceError.set(null)
 
   try {
-    const instanceName = instanceNameInSearch.get().replace(/^https?:\/\//, '').replace(/\/+$/, '').toLowerCase()
+    const instanceName = instanceNameInSearch
+      .get()
+      .replace(/^https?:\/\//, '')
+      .replace(/\/+$/, '')
+      .toLowerCase()
     if (Object.keys(loggedInInstances.get()).includes(instanceName)) {
       const msg = `You've already logged in to ${instanceName}`
       console.error(msg)
@@ -61,8 +65,8 @@ export async function registerInInstance (email, password, registrationCode) {
     return accountData.recoveryPhrase
   } catch (err) {
     console.error(err)
-    const error = (err.message || err.name) +
-      (err.knownError ? '' : '. ' + (navigator.onLine ? GENERIC_ERROR : 'Are you offline?'))
+    const error =
+      (err.message || err.name) + (err.knownError ? '' : '. ' + (navigator.onLine ? GENERIC_ERROR : 'Are you offline?'))
     logInToInstanceError.set(error)
     logInToInstanceErrorForText.set(instanceNameInSearch.get())
   } finally {
@@ -72,14 +76,18 @@ export async function registerInInstance (email, password, registrationCode) {
   return ''
 }
 
-export async function logInToInstance (email, password) {
+export async function logInToInstance(email, password) {
   logInToInstanceLoading.set(true)
   logInToInstanceError.set(null)
 
   const anonymousMode = !email
 
   try {
-    const instanceName = instanceNameInSearch.get().replace(/^https?:\/\//, '').replace(/\/+$/, '').toLowerCase()
+    const instanceName = instanceNameInSearch
+      .get()
+      .replace(/^https?:\/\//, '')
+      .replace(/\/+$/, '')
+      .toLowerCase()
     if (Object.keys(loggedInInstances.get()).includes(instanceName)) {
       if (get(isAuthenticated)) {
         const msg = `You've already logged in to ${instanceName}`
@@ -113,8 +121,8 @@ export async function logInToInstance (email, password) {
     }
   } catch (err) {
     console.error(err)
-    const error = `${err.message || err.name}. ` +
-      (err.knownError ? '' : (navigator.onLine ? GENERIC_ERROR : 'Are you offline?'))
+    const error =
+      `${err.message || err.name}. ` + (err.knownError ? '' : navigator.onLine ? GENERIC_ERROR : 'Are you offline?')
     logInToInstanceError.set(error)
     logInToInstanceErrorForText.set(instanceNameInSearch.get())
   } finally {
@@ -122,7 +130,7 @@ export async function logInToInstance (email, password) {
   }
 }
 
-async function registerNewInstance (instanceName, token, instanceInfo) {
+async function registerNewInstance(instanceName, token, instanceInfo) {
   const instanceData = {
     access_token: token,
     flowEnv: instanceInfo.flowEnv,
@@ -144,7 +152,7 @@ async function registerNewInstance (instanceName, token, instanceInfo) {
   instanceNameInSearch.set('')
   currentInstance.set(instanceName)
 
-  getSettingsFromRemote().then(settings => {
+  getSettingsFromRemote().then((settings) => {
     switchToTheme(settings.instance[instanceName].theme, get(enableGrayscale))
   })
 

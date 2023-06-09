@@ -26,37 +26,34 @@ export const currentPushSubscription = deriveForInstance('currentPushSubscriptio
 
 export const currentUser = deriveForInstance('currentUser', instanceUsers, null)
 
-export const currentSparkId = derived(
-  currentSpark,
-  $currentSpark => {
-    return $currentSpark ? $currentSpark.id : ''
-  }
-)
+export const currentSparkId = derived(currentSpark, ($currentSpark) => {
+  return $currentSpark ? $currentSpark.id : ''
+})
 
 export const currentInstanceData = derived(
   [currentInstance, loggedInInstances],
   ([$currentInstance, $loggedInInstances]) => {
-    return Object.assign({
-      name: $currentInstance
-    }, $loggedInInstances[$currentInstance])
+    return Object.assign(
+      {
+        name: $currentInstance
+      },
+      $loggedInInstances[$currentInstance]
+    )
   }
 )
 
 export const accessToken = derived(
   currentInstanceData,
-  $currentInstanceData => $currentInstanceData && $currentInstanceData.access_token
+  ($currentInstanceData) => $currentInstanceData && $currentInstanceData.access_token
 )
 
-function deriveForInstance (computedKey, instanceStore, defaultValue) {
-  return derived(
-    [instanceStore, currentInstance],
-    ([$instanceStore, $currentInstance]) => {
-      return ($currentInstance && $instanceStore[$currentInstance]) || defaultValue
-    }
-  )
+function deriveForInstance(computedKey, instanceStore, defaultValue) {
+  return derived([instanceStore, currentInstance], ([$instanceStore, $currentInstance]) => {
+    return ($currentInstance && $instanceStore[$currentInstance]) || defaultValue
+  })
 }
 
-export function setInductionLevel (val) {
+export function setInductionLevel(val) {
   const _currentInstance = currentInstance.get()
   const lvl = inductionLevel.get()
   lvl[_currentInstance] = val

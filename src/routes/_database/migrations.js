@@ -27,13 +27,11 @@ import {
 } from './constants'
 import { mergeKeyWithSparkId } from './keys'
 
-function initialMigration (db, tx, done) {
-  function createObjectStore (name, init, indexes) {
-    const store = init
-      ? db.createObjectStore(name, init)
-      : db.createObjectStore(name)
+function initialMigration(db, tx, done) {
+  function createObjectStore(name, init, indexes) {
+    const store = init ? db.createObjectStore(name, init) : db.createObjectStore(name)
     if (indexes) {
-      Object.keys(indexes).forEach(indexKey => {
+      Object.keys(indexes).forEach((indexKey) => {
         store.createIndex(indexKey, indexes[indexKey])
       })
     }
@@ -46,32 +44,60 @@ function initialMigration (db, tx, done) {
   createObjectStore(POST_TIMELINES_STORE, null, {
     postId: ''
   })
-  createObjectStore(NOTIFICATIONS_STORE, { keyPath: 'id' }, {
-    [TIMESTAMP]: TIMESTAMP,
-    [POST_ID]: POST_ID
-  })
+  createObjectStore(
+    NOTIFICATIONS_STORE,
+    { keyPath: 'id' },
+    {
+      [TIMESTAMP]: TIMESTAMP,
+      [POST_ID]: POST_ID
+    }
+  )
   createObjectStore(NOTIFICATION_TIMELINES_STORE, null, {
     notificationId: ''
   })
-  createObjectStore(SPARKS_STORE, { keyPath: 'id' }, {
-    [TIMESTAMP]: TIMESTAMP,
-    [NAME_LOWERCASE]: NAME_LOWERCASE
-  })
-  createObjectStore(RELATIONSHIPS_STORE, { keyPath: 'id' }, {
-    [TIMESTAMP]: TIMESTAMP
-  })
-  createObjectStore(WORLDS_STORE, { keyPath: 'id' }, {
-    [TIMESTAMP]: TIMESTAMP
-  })
-  createObjectStore(WORLD_RELATIONSHIPS_STORE, { keyPath: 'id' }, {
-    [TIMESTAMP]: TIMESTAMP
-  })
-  createObjectStore(BUBBLES_STORE, { keyPath: 'id' }, {
-    [TIMESTAMP]: TIMESTAMP
-  })
-  createObjectStore(BUBBLE_RELATIONSHIPS_STORE, { keyPath: 'id' }, {
-    [TIMESTAMP]: TIMESTAMP
-  })
+  createObjectStore(
+    SPARKS_STORE,
+    { keyPath: 'id' },
+    {
+      [TIMESTAMP]: TIMESTAMP,
+      [NAME_LOWERCASE]: NAME_LOWERCASE
+    }
+  )
+  createObjectStore(
+    RELATIONSHIPS_STORE,
+    { keyPath: 'id' },
+    {
+      [TIMESTAMP]: TIMESTAMP
+    }
+  )
+  createObjectStore(
+    WORLDS_STORE,
+    { keyPath: 'id' },
+    {
+      [TIMESTAMP]: TIMESTAMP
+    }
+  )
+  createObjectStore(
+    WORLD_RELATIONSHIPS_STORE,
+    { keyPath: 'id' },
+    {
+      [TIMESTAMP]: TIMESTAMP
+    }
+  )
+  createObjectStore(
+    BUBBLES_STORE,
+    { keyPath: 'id' },
+    {
+      [TIMESTAMP]: TIMESTAMP
+    }
+  )
+  createObjectStore(
+    BUBBLE_RELATIONSHIPS_STORE,
+    { keyPath: 'id' },
+    {
+      [TIMESTAMP]: TIMESTAMP
+    }
+  )
   createObjectStore(THREADS_STORE, null, {
     postId: ''
   })
@@ -82,69 +108,75 @@ function initialMigration (db, tx, done) {
   done()
 }
 
-function migration1_1 (db, tx, done) {
-  function createObjectStore (name, init, indexes) {
-    const store = init
-      ? db.createObjectStore(name, init)
-      : db.createObjectStore(name)
+function migration1_1(db, tx, done) {
+  function createObjectStore(name, init, indexes) {
+    const store = init ? db.createObjectStore(name, init) : db.createObjectStore(name)
     if (indexes) {
-      Object.keys(indexes).forEach(indexKey => {
+      Object.keys(indexes).forEach((indexKey) => {
         store.createIndex(indexKey, indexes[indexKey])
       })
     }
   }
 
-  createObjectStore(LISTINGS_STORE, { keyPath: 'id' }, {
-    [TIMESTAMP]: TIMESTAMP
-  })
+  createObjectStore(
+    LISTINGS_STORE,
+    { keyPath: 'id' },
+    {
+      [TIMESTAMP]: TIMESTAMP
+    }
+  )
   done()
 }
 
-function migration3 (db, tx, done) {
-  function createObjectStore (name, init, indexes) {
-    const store = init
-      ? db.createObjectStore(name, init)
-      : db.createObjectStore(name)
+function migration3(db, tx, done) {
+  function createObjectStore(name, init, indexes) {
+    const store = init ? db.createObjectStore(name, init) : db.createObjectStore(name)
     if (indexes) {
-      Object.keys(indexes).forEach(indexKey => {
+      Object.keys(indexes).forEach((indexKey) => {
         store.createIndex(indexKey, indexes[indexKey])
       })
     }
   }
 
-  createObjectStore(DIGITAL_ARTS_STORE, { keyPath: 'id' }, {
-    [TIMESTAMP]: TIMESTAMP
-  })
+  createObjectStore(
+    DIGITAL_ARTS_STORE,
+    { keyPath: 'id' },
+    {
+      [TIMESTAMP]: TIMESTAMP
+    }
+  )
   done()
 }
 
-function entityMigration (db, tx, done) {
-  function createObjectStore (name, init, indexes) {
-    const store = init
-      ? db.createObjectStore(name, init)
-      : db.createObjectStore(name)
+function entityMigration(db, tx, done) {
+  function createObjectStore(name, init, indexes) {
+    const store = init ? db.createObjectStore(name, init) : db.createObjectStore(name)
     if (indexes) {
-      Object.keys(indexes).forEach(indexKey => {
+      Object.keys(indexes).forEach((indexKey) => {
         store.createIndex(indexKey, indexes[indexKey])
       })
     }
   }
 
-  createObjectStore(ENTITY_STORE, { keyPath: 'id' }, {
-    [TIMESTAMP]: TIMESTAMP,
-    [NAME_LOWERCASE]: NAME_LOWERCASE
-  })
+  createObjectStore(
+    ENTITY_STORE,
+    { keyPath: 'id' },
+    {
+      [TIMESTAMP]: TIMESTAMP,
+      [NAME_LOWERCASE]: NAME_LOWERCASE
+    }
+  )
   done()
 }
 
-function nameIndexMigration (db, tx, done) {
+function nameIndexMigration(db, tx, done) {
   tx.objectStore(BUBBLES_STORE).createIndex(NAME_LOWERCASE, NAME_LOWERCASE)
   tx.objectStore(WORLDS_STORE).createIndex(NAME_LOWERCASE, NAME_LOWERCASE)
 
   done()
 }
 
-function timelinesKeyMigration (db, tx, done) {
+function timelinesKeyMigration(db, tx, done) {
   tx.objectStore(POST_TIMELINES_STORE).createIndex(mergeKeyWithSparkId('postId'), '')
   tx.objectStore(POST_TIMELINES_STORE).deleteIndex('postId')
   tx.objectStore(THREADS_STORE).createIndex(mergeKeyWithSparkId('postId'), '')

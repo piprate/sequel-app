@@ -7,7 +7,7 @@ import { database } from '../_database/database'
 export const userOperationInProgress = writable(false)
 export const userOperationError = writable(null)
 
-export async function saveUser (user) {
+export async function saveUser(user) {
   userOperationInProgress.set(true)
   userOperationError.set(null)
 
@@ -32,7 +32,7 @@ export async function saveUser (user) {
   return updatedUser
 }
 
-export function setStoreUser (instanceName, user) {
+export function setStoreUser(instanceName, user) {
   const _instanceUsers = instanceUsers.get()
   _instanceUsers[instanceName] = user
   instanceUsers.set(_instanceUsers)

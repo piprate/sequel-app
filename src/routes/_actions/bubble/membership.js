@@ -7,7 +7,7 @@ import { get } from 'svelte/store'
 import { accessToken } from '../../_store/instance'
 import { unwrap } from '../../_utils/mapper'
 
-export async function updateMembership (bubbleId, join, asSpark, toastOnSuccess) {
+export async function updateMembership(bubbleId, join, asSpark, toastOnSuccess) {
   bubbleId = unwrap(bubbleId)
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
@@ -26,9 +26,10 @@ export async function updateMembership (bubbleId, join, asSpark, toastOnSuccess)
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(join
-      ? formatIntl('intl.unableToJoinBubble', { error: (e.message || '') })
-      : formatIntl('intl.unableToLeaveBubble', { error: (e.message || '') })
+    toast.say(
+      join
+        ? formatIntl('intl.unableToJoinBubble', { error: e.message || '' })
+        : formatIntl('intl.unableToLeaveBubble', { error: e.message || '' })
     )
   }
 }

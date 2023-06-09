@@ -13,12 +13,9 @@
 
   $: id = digitalArt.id
   $: summary = digitalArt.description
-  $: croppedSummary = summary ?
-          summary.length > 250 ? summary.substring(0, 250) + '...' : summary
-          :
-          ''
+  $: croppedSummary = summary ? (summary.length > 250 ? summary.substring(0, 250) + '...' : summary) : ''
 
-  function onButtonClick (event, action, id) {
+  function onButtonClick(event, action, id) {
     event.preventDefault()
     event.stopPropagation()
     dispatch('click', {
@@ -44,7 +41,7 @@
         {#each actions as action}
           <IconButton
             label={action.label}
-            on:click="{ (event) => onButtonClick(event, action, id) }"
+            on:click={(event) => onButtonClick(event, action, id)}
             href={action.icon}
             big="true"
           />
@@ -53,14 +50,15 @@
     {/if}
   </div>
 </SearchResult>
+
 <style>
   .digital-art-card {
     display: grid;
     grid-template-areas:
-      "image"
-      "name"
-      "summary"
-      "buttons";
+      'image'
+      'name'
+      'summary'
+      'buttons';
     grid-column-gap: 20px;
     grid-template-columns: 1fr;
     align-items: center;

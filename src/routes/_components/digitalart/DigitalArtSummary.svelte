@@ -6,7 +6,7 @@
 
   let emojis = []
 
-  $: summary = (digitalArt && digitalArt.description) || ""
+  $: summary = (digitalArt && digitalArt.description) || ''
   $: massagedSummary = massageUserText(summary, emojis, $autoplayGifs)
 </script>
 
@@ -14,11 +14,12 @@
 <div class="digital-art-summary">
   {@html massagedSummary}
 </div>
+
 <style>
   .digital-art-summary {
     grid-area: summary;
     padding: 10px 0;
-    font-size: 1.0em;
+    font-size: 1em;
     word-wrap: break-word;
     overflow: hidden;
     white-space: pre-wrap;

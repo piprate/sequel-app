@@ -4,10 +4,10 @@
   import { LOCALE } from '../../_static/intl'
   import { formatIntl } from '../../_utils/formatIntl'
   import { thunk } from '../../_utils/thunk'
-  import { observedRelationship } from '../../_store/local';
-  import { onMount } from 'svelte';
-  import { updateRelationship } from '../../_actions/sparks';
-  import { unwrap } from '../../_utils/mapper';
+  import { observedRelationship } from '../../_store/local'
+  import { onMount } from 'svelte'
+  import { updateRelationship } from '../../_actions/sparks'
+  import { unwrap } from '../../_utils/mapper'
 
   const numberFormat = thunk(() => new Intl.NumberFormat(LOCALE))
 
@@ -30,7 +30,7 @@
     updateRelationship(unwrap(ourSpark.id))
   })
 
-  async function onMoreOptionsClick () {
+  async function onMoreOptionsClick() {
     const showOptionsDialog = await importShowMarketplaceListingOptionsDialog()
     showOptionsDialog(listing, $observedRelationship, ourSpark)
   }
@@ -62,17 +62,13 @@
       {soldDisplay}
     </span>
   </div>
-  {#if sparkSelected }
-  <div class="listing-more-options">
-    <IconButton
-      label="{intl.moreOptions}"
-      href="#fa-bars"
-      muted="true"
-      on:click="{onMoreOptionsClick}"
-    />
-  </div>
+  {#if sparkSelected}
+    <div class="listing-more-options">
+      <IconButton label={intl.moreOptions} href="#fa-bars" muted="true" on:click={onMoreOptionsClick} />
+    </div>
   {/if}
 </div>
+
 <style>
   .listing-details {
     grid-area: details;

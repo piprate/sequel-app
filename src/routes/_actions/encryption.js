@@ -5,7 +5,7 @@ import { encodeBase64 } from 'tweetnacl-util'
 import { sha512_256 } from 'js-sha512'
 import { mnemonicToSeed } from 'web-bip39'
 
-function doubleHasher (password) {
+function doubleHasher(password) {
   const passwordBuffer = new TextEncoder().encode(password)
   let hasher = new Hash()
   hasher.update(passwordBuffer)
@@ -16,7 +16,7 @@ function doubleHasher (password) {
   return hasher.digest()
 }
 
-export async function generateNewSeed (recoveryPhrase) {
+export async function generateNewSeed(recoveryPhrase) {
   try {
     return (await mnemonicToSeed(recoveryPhrase, 'Piprate u5SPXFiNqfxYfZU2V23k4s9HsiN44UFhzPk5t9QLvNt')).slice(0, 32)
   } catch (error) {
@@ -28,11 +28,11 @@ export async function generateNewSeed (recoveryPhrase) {
   }
 }
 
-export function generateKey (seed) {
+export function generateKey(seed) {
   return nacl.sign.keyPair.fromSeed(seed).secretKey
 }
 
-export function sign (privateKey, recoveryCode) {
+export function sign(privateKey, recoveryCode) {
   const recoveryCodeBuffer = new TextEncoder().encode(recoveryCode)
   const hasher = new Hash()
   hasher.update(recoveryCodeBuffer)
@@ -40,10 +40,10 @@ export function sign (privateKey, recoveryCode) {
   return base58(nacl.sign.detached(hasher.digest(), privateKey))
 }
 
-export function encryptPassword (password) {
+export function encryptPassword(password) {
   return encodeBase64(doubleHasher(password))
 }
 
-export function generateManagedFromHostedKey (hostedKey) {
+export function generateManagedFromHostedKey(hostedKey) {
   return new Uint8Array(sha512_256.hmac.update('managed key', hostedKey).array())
 }

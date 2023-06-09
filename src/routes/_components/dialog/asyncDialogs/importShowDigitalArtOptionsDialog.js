@@ -1,3 +1,2 @@
-export const importShowDigitalArtOptionsDialog = () => import(
-  '../creators/showDigitalArtOptionsDialog'
-).then(mod => mod.default)
+export const importShowDigitalArtOptionsDialog = () =>
+  import('../creators/showDigitalArtOptionsDialog').then((mod) => mod.default)

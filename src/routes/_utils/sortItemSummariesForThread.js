@@ -5,11 +5,11 @@ import { concat } from './arrays'
 import { reverseCompareTimelineItemSummaries } from './timelineIdSorting'
 import { mapBy, multimapBy } from './maps'
 
-export function sortItemSummariesForThread (summaries, postId) {
+export function sortItemSummariesForThread(summaries, postId) {
   const ancestors = []
   const descendants = []
-  const summariesById = mapBy(summaries, _ => _.id)
-  const summariesByReplyId = multimapBy(summaries, _ => _.replyId)
+  const summariesById = mapBy(summaries, (_) => _.id)
+  const summariesByReplyId = multimapBy(summaries, (_) => _.replyId)
 
   const post = summariesById.get(postId)
   if (!post) {
@@ -33,7 +33,8 @@ export function sortItemSummariesForThread (summaries, postId) {
     const current = stack.shift()
     const newChildren = (summariesByReplyId.get(current.id) || []).sort(reverseCompareTimelineItemSummaries)
     Array.prototype.unshift.apply(stack, newChildren)
-    if (current.id !== post.id) { // the post is not a descendant of itself
+    if (current.id !== post.id) {
+      // the post is not a descendant of itself
       descendants.push(current)
     }
   }
@@ -61,13 +62,8 @@ export function sortItemSummariesForThread (summaries, postId) {
   const promotedDescendants = []
   const otherDescendants = []
   for (const descendant of descendants) {
-    (isUnbrokenSelfReply(descendant) ? promotedDescendants : otherDescendants).push(descendant)
+    ;(isUnbrokenSelfReply(descendant) ? promotedDescendants : otherDescendants).push(descendant)
   }
 
-  return concat(
-    ancestors,
-    [post],
-    promotedDescendants,
-    otherDescendants
-  )
+  return concat(ancestors, [post], promotedDescendants, otherDescendants)
 }

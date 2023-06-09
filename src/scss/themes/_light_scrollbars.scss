@@ -3,4 +3,4 @@ $scrollbar-face-hover: #{lighten($main-theme-color, 20%)} !default;
 $scrollbar-face-active: #{lighten($main-theme-color, 15%)} !default;
 $scrollbar-track: #{darken($body-bg-color, 3%)} !default;
 
-@import "_scrollbars.scss";
+@import '_scrollbars.scss';

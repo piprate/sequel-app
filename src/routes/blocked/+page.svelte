@@ -3,6 +3,7 @@
   import LazyPage from '../_components/LazyPage.svelte'
   import pageComponent from '../_pages/blocked.svelte'
 </script>
-<Title name="{intl.blockedSparks}" />
+
+<Title name={intl.blockedSparks} />
 
 <LazyPage {pageComponent} />

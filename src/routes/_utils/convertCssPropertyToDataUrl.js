@@ -2,7 +2,7 @@ const colorsToUrls = new Map()
 let canvas
 let context
 
-export function convertCssPropertyToDataUrl (prop) {
+export function convertCssPropertyToDataUrl(prop) {
   const color = getComputedStyle(document.documentElement).getPropertyValue(prop)
   let url = colorsToUrls.get(color)
   if (!url) {

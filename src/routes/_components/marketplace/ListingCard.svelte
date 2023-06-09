@@ -12,15 +12,12 @@
 
   $: id = listing.id
   $: summary = listing.object.description
-  $: croppedSummary = summary ?
-          summary.length > 250 ? summary.substring(0, 250) + '...' : summary
-          :
-          ''
+  $: croppedSummary = summary ? (summary.length > 250 ? summary.substring(0, 250) + '...' : summary) : ''
   $: price = listing.price || 0
   $: priceText = price === 0 ? 'intl.free' : `${price} ${listing.currency}`
   $: tokenIDText = listing.listingType === 'primary' ? '' : `(#${listing.tokenID || 0})`
 
-  function onButtonClick (event, action, listingId) {
+  function onButtonClick(event, action, listingId) {
     event.preventDefault()
     event.stopPropagation()
     dispatch('click', {
@@ -36,7 +33,8 @@
       <TokenMedia content={listing.object.content} size="wide" isLink={true} />
     </div>
     <div class="listing-card-name">
-      <EntityDisplayName entity={listing.object} /> {tokenIDText}
+      <EntityDisplayName entity={listing.object} />
+      {tokenIDText}
     </div>
     <div class="listing-card-artist">
       by <EntityDisplayName entity={listing.artistRef} />
@@ -52,7 +50,7 @@
         {#each actions as action}
           <IconButton
             label={action.label}
-            on:click="{ (event) => onButtonClick(event, action, listing.id) }"
+            on:click={(event) => onButtonClick(event, action, listing.id)}
             href={action.icon}
             big="true"
           />
@@ -61,16 +59,17 @@
     {/if}
   </div>
 </SearchResult>
+
 <style>
   .listing-card {
     display: grid;
     grid-template-areas:
-      "image"
-      "name"
-      "artist"
-      "summary"
-      "stats"
-      "buttons";
+      'image'
+      'name'
+      'artist'
+      'summary'
+      'stats'
+      'buttons';
     grid-column-gap: 20px;
     grid-template-columns: 1fr;
     align-items: center;

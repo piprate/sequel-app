@@ -2,16 +2,16 @@
   import SettingsNavItem from './SettingsNavItem.svelte'
   import { isUserLoggedIn } from '../../_store/local'
 
-  export let page;
-  export let label;
+  export let page
+  export let label
 
-  $: navItemLabels = ({
+  $: navItemLabels = {
     settings: 'intl.settings',
     'settings/about': 'intl.aboutApp',
     'settings/general': 'intl.general',
     'settings/instances': 'intl.instances',
     'settings/instances/add': $isUserLoggedIn ? 'intl.addInstance' : 'intl.logIn'
-  })
+  }
 
   $: navItems = ((page, navItemLabels) => {
     const res = []
@@ -34,9 +34,9 @@
 <nav class="settings-nav">
   <ul>
     {#each navItems as navItem}
-    <li>
-      <SettingsNavItem {page} name={navItem.name} href={navItem.href} label={navItem.label} />
-    </li>
+      <li>
+        <SettingsNavItem {page} name={navItem.name} href={navItem.href} label={navItem.label} />
+      </li>
     {/each}
     <li>
       <SettingsNavItem {page} name={page} href="/{page}" {label} />
@@ -68,5 +68,4 @@
     margin-left: 0;
     font-size: 1em;
   }
-
 </style>

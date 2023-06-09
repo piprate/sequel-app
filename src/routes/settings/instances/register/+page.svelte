@@ -9,4 +9,4 @@
 
 <Title name={titleName} settingsPage={true} />
 
-  <LazyPage {pageComponent} />
+<LazyPage {pageComponent} />

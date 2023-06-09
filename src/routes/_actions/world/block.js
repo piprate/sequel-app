@@ -8,7 +8,7 @@ import { get } from 'svelte/store'
 import { accessToken } from '../../_store/instance'
 import { unwrap } from '../../_utils/mapper'
 
-export async function setWorldBlocked (worldId, block, asSpark, toastOnSuccess) {
+export async function setWorldBlocked(worldId, block, asSpark, toastOnSuccess) {
   worldId = unwrap(worldId)
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
@@ -33,9 +33,10 @@ export async function setWorldBlocked (worldId, block, asSpark, toastOnSuccess) 
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(block
-      ? formatIntl('intl.unableToBlockWorld', { block: !!block, error: (e.message || '') })
-      : formatIntl('intl.unableToUnblockWorld', { error: (e.message || '') })
+    toast.say(
+      block
+        ? formatIntl('intl.unableToBlockWorld', { block: !!block, error: e.message || '' })
+        : formatIntl('intl.unableToUnblockWorld', { error: e.message || '' })
     )
   }
 }

@@ -1,6 +1,6 @@
 // Delegate certain events to the global document for perf purposes.
 
-import { inBrowser } from "./browserOrNode"
+import { inBrowser } from './browserOrNode'
 
 const callbacks = {}
 
@@ -8,7 +8,7 @@ if (inBrowser()) {
   window.__delegateCallbacks = callbacks
 }
 
-function onEvent (e) {
+function onEvent(e) {
   const { type, keyCode, target } = e
   if (!(type === 'click' || (type === 'keydown' && keyCode === 13))) {
     // we're not interested in any non-click or non-Enter events
@@ -41,17 +41,17 @@ function onEvent (e) {
   }
 }
 
-export function registerClickDelegates (delegates) {
+export function registerClickDelegates(delegates) {
   Object.assign(callbacks, delegates)
 
   return () => {
-    Object.keys(delegates).forEach(key => {
+    Object.keys(delegates).forEach((key) => {
       delete callbacks[key]
     })
   }
 }
 
-export function registerClickDelegate (key, callback) {
+export function registerClickDelegate(key, callback) {
   return registerClickDelegates({ [key]: callback })
 }
 

@@ -48,9 +48,9 @@
 
   let password2 = password
 
-  $: buttonDisabled = !$instanceNameInSearch || (!email || !password) || $logInToInstanceLoading
+  $: buttonDisabled = !$instanceNameInSearch || !email || !password || $logInToInstanceLoading
 
-  async function onSubmitForm (event) {
+  async function onSubmitForm(event) {
     event.preventDefault()
     event.stopPropagation()
 
@@ -72,16 +72,16 @@
     }
   }
 
-  async function onCopyRecoveryPhrase () {
+  async function onCopyRecoveryPhrase() {
     await copyText(recoveryPhrase)
   }
 
-  function onContinue () {
+  function onContinue() {
     // go to Flow setup page
     goto('/settings/flow?new')
   }
 
-  function onChangeInstance () {
+  function onChangeInstance() {
     showInstance = true
   }
 
@@ -92,11 +92,10 @@
 </script>
 
 {#if page === 'sign_up'}
-  <SettingsLayout page='settings/instances/register' label={pageLabel}>
+  <SettingsLayout page="settings/instances/register" label={pageLabel}>
     <h1 id="sign-up-h1">{pageLabel}</h1>
     <div class="sign-up">
-      <form on:submit='{onSubmitForm}' aria-labelledby="sign-up-h1">
-
+      <form on:submit={onSubmitForm} aria-labelledby="sign-up-h1">
         {#if !hasIndexedDB || !hasLocalStorage}
           <div class="form-error form-error-user-error" role="alert">
             {intl.storageError}
@@ -116,22 +115,50 @@
         </noscript>
 
         <label for="email">{intl.emailColon}</label>
-        <input type="text" inputmode="email" autocapitalize="none" spellcheck="false" id="email"
-               bind:value='{email}' placeholder="{intl.enterInstanceEmail}" required
-        >
+        <input
+          type="text"
+          inputmode="email"
+          autocapitalize="none"
+          spellcheck="false"
+          id="email"
+          bind:value={email}
+          placeholder={intl.enterInstanceEmail}
+          required
+        />
         <label for="password">{intl.passwordColon}</label>
-        <input type="password" inputmode="text" autocapitalize="none" spellcheck="false" id="password"
-               bind:value='{password}' placeholder="{intl.enterInstancePassword}" required
-        >
+        <input
+          type="password"
+          inputmode="text"
+          autocapitalize="none"
+          spellcheck="false"
+          id="password"
+          bind:value={password}
+          placeholder={intl.enterInstancePassword}
+          required
+        />
         <label for="password2">{intl.confirmPasswordColon}</label>
-        <input type="password" inputmode="text" autocapitalize="none" spellcheck="false" id="password2"
-               bind:value='{password2}' placeholder="{intl.confirmInstancePassword}" required
-        >
+        <input
+          type="password"
+          inputmode="text"
+          autocapitalize="none"
+          spellcheck="false"
+          id="password2"
+          bind:value={password2}
+          placeholder={intl.confirmInstancePassword}
+          required
+        />
         {#if showInstance}
           <label for="instanceInput">{intl.instanceColon}</label>
-          <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" id="instanceInput"
-                 bind:value='{$instanceNameInSearch}' placeholder="{intl.enterInstanceName}" required
-          >
+          <input
+            type="text"
+            inputmode="url"
+            autocapitalize="none"
+            spellcheck="false"
+            id="instanceInput"
+            bind:value={$instanceNameInSearch}
+            placeholder={intl.enterInstanceName}
+            required
+          />
         {:else}
           <div on:click={onChangeInstance} class="change-instance-link">{'intl.changeInstance'}</div>
         {/if}
@@ -140,9 +167,15 @@
           <div class="legal-notice">
             {intl.betaNotice}
           </div>
-          <input type="text" inputmode="text" autocapitalize="characters" spellcheck="false" id="code"
-                 bind:value='{registrationCode}' placeholder="{intl.enterRegistrationCode}"
-          >
+          <input
+            type="text"
+            inputmode="text"
+            autocapitalize="characters"
+            spellcheck="false"
+            id="code"
+            bind:value={registrationCode}
+            placeholder={intl.enterRegistrationCode}
+          />
         {:else}
           <div class="legal-notice">
             {intl.betaNoticeNoCode}
@@ -151,7 +184,9 @@
         <button class="primary inline-button" type="submit" id="submitButton" disabled={buttonDisabled}>
           {intl.signUp}
         </button>
-        <span class="register-option">or <a data-sveltekit-preload-data href="/settings/instances/visit">{'intl.continueAsVisitorLink'}</a></span>
+        <span class="register-option"
+          >or <a data-sveltekit-preload-data href="/settings/instances/visit">{'intl.continueAsVisitorLink'}</a></span
+        >
 
         <div class="legal-notice">
           {intl.signUpLegalNotice}
@@ -159,7 +194,7 @@
       </form>
     </div>
   </SettingsLayout>
-{:else if page === 'recovery_phrase' }
+{:else if page === 'recovery_phrase'}
   <FreeTextLayout>
     <h1>{intl.recoveryPhraseWarning}</h1>
 
@@ -169,15 +204,16 @@
       {recoveryPhrase}
     </div>
     <div class="button-panel">
-      <button class="primary" on:click="{onCopyRecoveryPhrase}">
+      <button class="primary" on:click={onCopyRecoveryPhrase}>
         {intl.copy}
       </button>
-      <button class="primary" on:click="{onContinue}">
+      <button class="primary" on:click={onContinue}>
         {intl.continue}
       </button>
     </div>
   </FreeTextLayout>
 {/if}
+
 <style>
   .sign-up {
     background: var(--form-bg);
@@ -195,13 +231,16 @@
     margin: 5px;
     background-color: var(--main-bg);
   }
-  input[type="text"] {
+  input[type='text'] {
     min-width: 70%;
     max-width: 100%;
     background-color: var(--input-bg);
   }
 
-  label, input, button, :global(.sign-up-aside) {
+  label,
+  input,
+  button,
+  :global(.sign-up-aside) {
     display: block;
     margin: 20px 5px;
   }
@@ -242,9 +281,8 @@
   }
 
   @media (max-width: 767px) {
-    input[type="text"] {
+    input[type='text'] {
       min-width: 95%;
     }
   }
-
 </style>

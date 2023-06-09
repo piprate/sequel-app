@@ -11,14 +11,7 @@ export default {
   skinToneDescription: 'Wenn angezeigt, nutze Pfeiltasten rauf und runter zum Auswählen, Eingabe zum Akzeptieren.',
   skinToneLabel: 'Wähle einen Hautton (aktuell {skinTone})',
   skinTonesLabel: 'Hauttöne',
-  skinTones: [
-    'Standard',
-    'Hell',
-    'Mittel-hell',
-    'Mittel',
-    'Mittel-dunkel',
-    'Dunkel'
-  ],
+  skinTones: ['Standard', 'Hell', 'Mittel-hell', 'Mittel', 'Mittel-dunkel', 'Dunkel'],
   categories: {
     custom: 'Benutzerdefiniert',
     'smileys-emotion': 'Smileys und Emoticons',

@@ -6,4 +6,4 @@
 
 <Title name={'intl.visitorTitle'} settingsPage={true} />
 
-  <LazyPage {pageComponent} />
+<LazyPage {pageComponent} />

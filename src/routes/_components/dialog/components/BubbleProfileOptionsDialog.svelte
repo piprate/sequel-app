@@ -13,7 +13,7 @@
   import { loadSpark, setCurrentSpark } from '../../../_actions/sparks'
   import { currentInstance } from '../../../_store/local'
   import { toast } from '../../toast/toast'
-  import { isTimelineInReaderMode } from '../../../_actions/timeline';
+  import { isTimelineInReaderMode } from '../../../_actions/timeline'
 
   export let id
   export let label
@@ -25,11 +25,11 @@
   const gotoDelay = 100
 
   $: ourSparkId = ourSpark.id
-  $: joined = relationship && (relationship.status === 'active')
-  $: requestedMembership = relationship && (relationship.status === 'pending')
+  $: joined = relationship && relationship.status === 'active'
+  $: requestedMembership = relationship && relationship.status === 'pending'
   $: bubbleId = bubble && bubble.id
   $: bubbleName = (bubble && bubble.name) || 'unnamed'
-  $: isOwner = relationship && (relationship.memberType === 'owner')
+  $: isOwner = relationship && relationship.memberType === 'owner'
   $: isManaged = relationship && relationship.managed
   $: owner = isManaged && relationship.owner
   $: muting = relationship && relationship.muted
@@ -40,20 +40,16 @@
     if (typeof joined === 'undefined' || !bubble) {
       return ''
     }
-    return (joined || requestedMembership)
-            ? formatIntl('intl.leaveBubble', { bubble: bubbleName })
-            : formatIntl('intl.joinBubble', { bubble: bubbleName })
+    return joined || requestedMembership
+      ? formatIntl('intl.leaveBubble', { bubble: bubbleName })
+      : formatIntl('intl.joinBubble', { bubble: bubbleName })
   })()
   $: joinIcon = joined ? '#fa-sign-out' : requestedMembership ? '#fa-hourglass' : '#fa-sign-in'
-  $: bookmarkLabel = bookmarked
-          ? 'intl.removeBookmark'
-          : formatIntl('intl.addBubbleBookmark', { bubble: bubbleName })
+  $: bookmarkLabel = bookmarked ? 'intl.removeBookmark' : formatIntl('intl.addBubbleBookmark', { bubble: bubbleName })
   $: bookmarkIcon = bookmarked ? '#fa-bookmark-o' : '#fa-bookmark'
-  $: blockLabel = (
-          blocked
-                  ? formatIntl('intl.unblockBubble', { bubble: bubbleName })
-                  : formatIntl('intl.blockBubble', { bubble: bubbleName })
-  )
+  $: blockLabel = blocked
+    ? formatIntl('intl.unblockBubble', { bubble: bubbleName })
+    : formatIntl('intl.blockBubble', { bubble: bubbleName })
   $: blockIcon = blocked ? '#fa-unlock' : '#fa-ban'
   $: archiveLabel = formatIntl('intl.archiveBubble', { bubble: bubbleName })
   $: readerModeIcon = isTimelineInReaderMode() ? '#fa-hand-pointer-o' : '#fa-book-open-reader'
@@ -64,11 +60,12 @@
       label: 'intl.editBubble',
       icon: '#fa-edit'
     },
-    !isOwner && isManaged && {
-      key: 'switchAndEdit',
-      label: 'intl.switchAndEditBubble',
-      icon: '#fa-edit'
-    },
+    !isOwner &&
+      isManaged && {
+        key: 'switchAndEdit',
+        label: 'intl.switchAndEditBubble',
+        icon: '#fa-edit'
+      },
     enableJoin && {
       key: 'join',
       label: joinLabel,
@@ -101,7 +98,7 @@
     }
   ].filter(Boolean)
 
-  function onClick (event) {
+  function onClick(event) {
     switch (event.detail.key) {
       case 'join':
         return onJoinClicked()
@@ -122,41 +119,41 @@
     }
   }
 
-  async function onJoinClicked () {
+  async function onJoinClicked() {
     close(id)
     await updateMembership(bubbleId, !joined, ourSparkId, true)
   }
 
-  async function onBookmarkClicked () {
+  async function onBookmarkClicked() {
     close(id)
     await setBubbleBookmarked(bubbleId, !bookmarked, ourSparkId, true)
   }
 
-  async function onBlockClicked () {
+  async function onBlockClicked() {
     close(id)
     await setBubbleBlocked(bubbleId, !blocked, ourSparkId, true)
   }
 
-  async function onArchiveClicked () {
+  async function onArchiveClicked() {
     close(id)
     await doDeleteBubble(bubbleId, ourSparkId)
     goto('/')
   }
 
-  async function onCopyClicked () {
+  async function onCopyClicked() {
     const url = `${location.origin}${location.pathname}`
     close(id)
     await copyText(url)
   }
 
-  function onEdit () {
+  function onEdit() {
     close(id)
     setTimeout(() => {
       goto(`/bubbles/${unwrap(bubbleId)}/edit`)
     }, gotoDelay)
   }
 
-  async function onSwitchAndEdit () {
+  async function onSwitchAndEdit() {
     close(id)
     const spark = await loadSpark(unwrap(owner))
     setCurrentSpark($currentInstance, spark)
@@ -167,20 +164,14 @@
     }, gotoDelay)
   }
 
-  async function onToggleReaderMode () {
+  async function onToggleReaderMode() {
     const readerModeUrl = `${location.pathname}/reader_mode`
     goto(isTimelineInReaderMode() ? location.pathname.replace('/reader_mode', '') : readerModeUrl)
-    
+
     close(id)
   }
 </script>
 
-<ModalDialog
-  {id}
-  {label}
-  {title}
-  shrinkWidthToFit={true}
-  background="var(--main-bg)"
->
-  <GenericDialogList selectable={false} {items} on:click="{onClick}"/>
+<ModalDialog {id} {label} {title} shrinkWidthToFit={true} background="var(--main-bg)">
+  <GenericDialogList selectable={false} {items} on:click={onClick} />
 </ModalDialog>

@@ -18,17 +18,13 @@
   export let filter
 
   $: headerImageIsMissing = !world.header
-  $: headerImage = world.header ?
-          ($autoplayGifs ?
-                  world.header.url :
-                  world.header.staticUrl) :
-          ''
+  $: headerImage = world.header ? ($autoplayGifs ? world.header.url : world.header.staticUrl) : ''
   $: headerNft = world.header && world.header.partOf
   $: worldName = (world && world.name) || ''
   $: className = classname(
-          'world-profile',
-          headerImageIsMissing && 'header-image-is-missing',
-          $underlineLinks && 'underline-links'
+    'world-profile',
+    headerImageIsMissing && 'header-image-is-missing',
+    $underlineLinks && 'underline-links'
   )
   $: profileForWorld = formatIntl('intl.profileForWorld', { world: worldName })
 
@@ -40,9 +36,7 @@
 </script>
 
 <h1 class="sr-only">{profileForWorld}</h1>
-<div class={className}
-     style="background-image: url({headerImage}?id={world.header?.id});"
-     bind:this={worldProfile}>
+<div class={className} style="background-image: url({headerImage}?id={world.header?.id});" bind:this={worldProfile}>
   <div class="world-profile-grid-wrapper">
     <div class="world-profile-grid">
       <WorldProfileHeader {world} {relationship} />
@@ -56,6 +50,7 @@
 {#if headerNft}
   <NFTMediaTag nft={headerNft} position="top" />
 {/if}
+
 <style>
   .world-profile {
     position: relative;
@@ -71,10 +66,11 @@
 
   .world-profile-grid {
     display: grid;
-    grid-template-areas: "avatar     name        label     relationship  membership"
-                         "avatar     username    username  username      membership"
-                         "avatar     summary     summary   summary       membership"
-                         "details    details     details   details       details";
+    grid-template-areas:
+      'avatar     name        label     relationship  membership'
+      'avatar     username    username  username      membership'
+      'avatar     summary     summary   summary       membership'
+      'details    details     details   details       details';
     grid-template-columns: min-content auto 1fr 1fr min-content;
     grid-column-gap: 10px;
     grid-row-gap: 5px;
@@ -103,12 +99,13 @@
 
     .world-profile-grid {
       display: grid;
-      grid-template-areas: "avatar     name          membership"
-                           "avatar     label         membership"
-                           "avatar     username      membership"
-                           "avatar     relationship  membership"
-                           "summary    summary       summary"
-                           "details    details       details";
+      grid-template-areas:
+        'avatar     name          membership'
+        'avatar     label         membership'
+        'avatar     username      membership'
+        'avatar     relationship  membership'
+        'summary    summary       summary'
+        'details    details       details';
       grid-template-columns: min-content minmax(auto, 1fr) min-content;
       grid-template-rows: min-content min-content 1fr min-content;
       padding: 10px;
@@ -126,13 +123,14 @@
       padding-top: 0;
     }
     .world-profile-grid {
-      grid-template-areas: "avatar       name"
-                           "avatar       label"
-                           "username     username"
-                           "relationship relationship"
-                           "membership   membership"
-                           "summary      summary"
-                           "details      details";
+      grid-template-areas:
+        'avatar       name'
+        'avatar       label'
+        'username     username'
+        'relationship relationship'
+        'membership   membership'
+        'summary      summary'
+        'details      details';
       grid-template-columns: min-content 1fr;
       grid-column-gap: 5px;
       grid-row-gap: 0;

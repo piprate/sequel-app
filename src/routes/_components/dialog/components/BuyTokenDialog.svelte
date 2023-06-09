@@ -31,19 +31,19 @@
   let errorMessage = ''
 
   const stageTitles = {
-    'init_mod': 'intl.initModStatus',
-    'open_wallet': 'intl.openWalletStatus',
-    'tx_signing': 'intl.txSigningStatus',
-    'wait_seal': 'intl.waitSealStatus',
-    'tx_executed': 'intl.txExecutedStatus',
-    'tx_sealed': 'intl.txSealedStatus',
-    'confirm_sale': 'intl.confirmSaleStatus',
+    init_mod: 'intl.initModStatus',
+    open_wallet: 'intl.openWalletStatus',
+    tx_signing: 'intl.txSigningStatus',
+    wait_seal: 'intl.waitSealStatus',
+    tx_executed: 'intl.txExecutedStatus',
+    tx_sealed: 'intl.txSealedStatus',
+    confirm_sale: 'intl.confirmSaleStatus'
   }
 
-  async function onConfirmClick (e) {
+  async function onConfirmClick(e) {
     const numEditions = e.detail
 
-    if ($currentSparkId === "") {
+    if ($currentSparkId === '') {
       screen = 'error'
       title = 'intl.saleError'
       errorMessage = 'intl.modSparkNotSelected'
@@ -66,7 +66,7 @@
       dispatch('cancel')
       close(id)
     } else if (mod.result === 'failed') {
-      console.log("Transaction failed", mod.error)
+      console.log('Transaction failed', mod.error)
       errorMessage = mod.error
       title = 'intl.saleError'
       screen = 'error'
@@ -76,47 +76,41 @@
     }
   }
 
-  function onCancelClick (e) {
+  function onCancelClick(e) {
     dispatch('cancel')
     close(id)
   }
 
-  function onOkClick (e) {
+  function onOkClick(e) {
     dispatch('success', listing)
     close(id)
   }
 
-  function onOkErrorClick (e) {
+  function onOkErrorClick(e) {
     dispatch('error', errorMessage)
     close(id)
   }
 </script>
 
-<ModalDialog
-        {id}
-        {label}
-        {title}
-        shrinkWidthToFit={false}
-        background="var(--main-bg)"
->
-  {#if notConnectedToFlow }
+<ModalDialog {id} {label} {title} shrinkWidthToFit={false} background="var(--main-bg)">
+  {#if notConnectedToFlow}
     <FlowConnect className="flow-sign-in-dialog" />
-  {:else if saleInProgress }
+  {:else if saleInProgress}
     <div class="sale-in-progress">
       <LoadingSpinner />
     </div>
-  {:else if screen === 'confirmation' }
+  {:else if screen === 'confirmation'}
     <ConfirmTokenPurchase {listing} on:confirm={onConfirmClick} on:cancel={onCancelClick} />
-  {:else if screen === 'success' }
+  {:else if screen === 'success'}
     <div class="purchase-successful">
       {intl.purchaseSuccessful}
     </div>
-    <button class="button primary text-button" on:click="{onOkClick}">{intl.okay}</button>
-  {:else if screen === 'error' }
+    <button class="button primary text-button" on:click={onOkClick}>{intl.okay}</button>
+  {:else if screen === 'error'}
     <div class="error-box" role="alert">
       {errorMessage}
     </div>
-    <button class="button primary text-button" on:click="{onOkErrorClick}">{intl.okay}</button>
+    <button class="button primary text-button" on:click={onOkErrorClick}>{intl.okay}</button>
   {/if}
 </ModalDialog>
 
@@ -137,7 +131,7 @@
   .text-button {
     margin: 10px auto;
     min-width: 140px;
-    display:block;
+    display: block;
     text-align: center;
   }
 

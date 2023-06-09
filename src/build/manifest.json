@@ -4,9 +4,7 @@
   "name": "{intl.longAppName}",
   "short_name": "{intl.appName}",
   "description": "{intl.appDescription}",
-  "categories": [
-    "social"
-  ],
+  "categories": ["social"],
   "display": "standalone",
   "start_url": "/?pwa=true",
   "share_target": {
@@ -20,11 +18,7 @@
       "files": [
         {
           "name": "file",
-          "accept": [
-            "audio/*",
-            "image/*",
-            "video/*"
-          ]
+          "accept": ["audio/*", "image/*", "video/*"]
         }
       ]
     }
@@ -134,6 +128,5 @@
       ]
     }
   ],
-  "screenshots": [
-  ]
+  "screenshots": []
 }

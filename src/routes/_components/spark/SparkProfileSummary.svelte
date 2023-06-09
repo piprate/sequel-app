@@ -13,6 +13,7 @@
 <div class="spark-profile-note">
   {@html massagedNote}
 </div>
+
 <style>
   .spark-profile-note {
     grid-area: note;

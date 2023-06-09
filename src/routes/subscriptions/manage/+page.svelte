@@ -4,6 +4,6 @@
   import pageComponent from '../../_pages/subscriptions/manage.svelte'
 </script>
 
-<Title name="{intl.manageSubscriptions}" />
+<Title name={intl.manageSubscriptions} />
 
 <LazyPage {pageComponent} />

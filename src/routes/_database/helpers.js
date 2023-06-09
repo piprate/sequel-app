@@ -1,18 +1,9 @@
 import { dbPromise, getDatabase } from './databaseLifecycle'
 import { getInCache, hasInCache, setInCache } from './cache'
-import {
-  ACTOR_ID,
-  BUBBLE_ID,
-  CURRENT_TIME,
-  POST_ID,
-  SPARK_ID,
-  TIMESTAMP,
-  NAME_LOWERCASE,
-  WORLD_ID
-} from './constants'
+import { ACTOR_ID, BUBBLE_ID, CURRENT_TIME, POST_ID, SPARK_ID, TIMESTAMP, NAME_LOWERCASE, WORLD_ID } from './constants'
 import { mergeKeyWithSparkId } from './keys'
 
-export async function getGenericEntityWithId (store, cache, instanceName, id) {
+export async function getGenericEntityWithId(store, cache, instanceName, id) {
   if (hasInCache(cache, instanceName, id)) {
     return getInCache(cache, instanceName, id)
   }
@@ -24,7 +15,7 @@ export async function getGenericEntityWithId (store, cache, instanceName, id) {
   return result
 }
 
-export async function setGenericEntityWithId (store, cache, instanceName, entity) {
+export async function setGenericEntityWithId(store, cache, instanceName, entity) {
   setInCache(cache, instanceName, entity.id, entity)
   const db = await getDatabase(instanceName)
   return dbPromise(db, store, 'readwrite', (store) => {
@@ -32,7 +23,7 @@ export async function setGenericEntityWithId (store, cache, instanceName, entity
   })
 }
 
-export function cloneForStorage (obj) {
+export function cloneForStorage(obj) {
   const res = {}
   const keys = Object.keys(obj)
   for (const key of keys) {

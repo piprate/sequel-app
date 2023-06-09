@@ -40,8 +40,5 @@
     }
   ]
 </script>
-<GenericInstanceSettings
-        {instanceName}
-        {options}
-        label="{intl.notificationFilterSettings}"
-/>
+
+<GenericInstanceSettings {instanceName} {options} label={intl.notificationFilterSettings} />

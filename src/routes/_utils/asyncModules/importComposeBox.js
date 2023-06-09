@@ -1,3 +1,1 @@
-export const importComposeBox = () => import(
-  '../../_components/compose/ComposeBox.svelte'
-).then(mod => mod.default)
+export const importComposeBox = () => import('../../_components/compose/ComposeBox.svelte').then((mod) => mod.default)

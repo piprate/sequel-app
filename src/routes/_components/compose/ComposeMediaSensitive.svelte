@@ -1,17 +1,17 @@
 <script>
   import { scheduleIdleTask } from '../../_utils/scheduleIdleTask'
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte'
   import { getComposeData, setComposeData } from '../../_store/local'
 
-  export let realm;
-  export let media;
-  export let sensitive;
-  export let contentWarning;
-  export let contentWarningShown;
+  export let realm
+  export let media
+  export let sensitive
+  export let contentWarning
+  export let contentWarningShown
 
-  let rawChecked = false;
+  let rawChecked = false
 
-  $: disabled = contentWarning && contentWarningShown;
+  $: disabled = contentWarning && contentWarningShown
 
   function observeRawChecked(rawChecked) {
     scheduleIdleTask(() => {
@@ -22,15 +22,15 @@
     })
   }
 
-  $: observeRawChecked(rawChecked);
+  $: observeRawChecked(rawChecked)
 
   function observeSensitive(sensitive) {
-    rawChecked = sensitive;
+    rawChecked = sensitive
   }
 
-  $: observeSensitive(sensitive);
+  $: observeSensitive(sensitive)
 
-  function setupSyncToStore () {
+  function setupSyncToStore() {
     // this.observe('rawChecked', () => {
     //   scheduleIdleTask(() => {
     //     const sensitive = getComposeData(realm, 'sensitive')
@@ -41,28 +41,29 @@
     // }, { init: false })
   }
 
-  function setupSyncFromStore () {
+  function setupSyncFromStore() {
     // this.observe('sensitive', sensitive => {
     //   this.set({ rawChecked: sensitive })
     // })
   }
 
   onMount(() => {
-    setupSyncToStore();
-    setupSyncFromStore();
-  });
+    setupSyncToStore()
+    setupSyncFromStore()
+  })
 </script>
 
 {#if media.length}
   <div class="compose-media-sensitive">
     <label>
-      <input type="checkbox" bind:checked="{rawChecked}" {disabled} />
-      <span class="{disabled ? 'compose-sensitive-span-disabled' : ''}">
+      <input type="checkbox" bind:checked={rawChecked} {disabled} />
+      <span class={disabled ? 'compose-sensitive-span-disabled' : ''}>
         {intl.markAsSensitive}
       </span>
     </label>
   </div>
 {/if}
+
 <style>
   .compose-media-sensitive {
     grid-area: sensitive;
@@ -92,5 +93,4 @@
       font-size: 0.9em;
     }
   }
-
 </style>

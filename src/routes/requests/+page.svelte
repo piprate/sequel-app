@@ -4,6 +4,6 @@
   import pageComponent from '../_pages/requests.svelte'
 </script>
 
-<Title name="{intl.subRequests}" />
+<Title name={intl.subRequests} />
 
 <LazyPage {pageComponent} />

@@ -24,7 +24,7 @@ export const testHasIndexedDB = thunk(async () => {
   }
 
   try {
-    const idbFailed = await new Promise(resolve => {
+    const idbFailed = await new Promise((resolve) => {
       const db = indexedDB.open(testKey)
       db.onerror = () => resolve(true)
       db.onsuccess = () => {

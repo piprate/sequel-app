@@ -17,10 +17,9 @@ let prefixMap
 let prefixMapScope
 
 // A map of key to components or other KeyMaps
-function KeyMap () {
-}
+function KeyMap() {}
 
-export function initShortcuts () {
+export function initShortcuts() {
   currentScopeKey = 'global'
   scopeStack = []
   scopeKeyMaps = null
@@ -31,13 +30,13 @@ export function initShortcuts () {
 initShortcuts()
 
 // Sets scopeKey as current scope.
-export function pushShortcutScope (scopeKey) {
+export function pushShortcutScope(scopeKey) {
   scopeStack.push(currentScopeKey)
   currentScopeKey = scopeKey
 }
 
 // Go back to previous current scope.
-export function popShortcutScope (scopeKey) {
+export function popShortcutScope(scopeKey) {
   if (scopeKey !== currentScopeKey) {
     return
   }
@@ -46,7 +45,7 @@ export function popShortcutScope (scopeKey) {
 
 // Call component.onKeyDown(event) when a key in keys is pressed
 // in the given scope.
-export function addToShortcutScope (scopeKey, keys, component) {
+export function addToShortcutScope(scopeKey, keys, component) {
   if (scopeKeyMaps == null) {
     window.addEventListener('keydown', onKeyDown)
     scopeKeyMaps = {}
@@ -59,7 +58,7 @@ export function addToShortcutScope (scopeKey, keys, component) {
   mapKeys(keyMap, keys, component)
 }
 
-export function removeFromShortcutScope (scopeKey, keys, component) {
+export function removeFromShortcutScope(scopeKey, keys, component) {
   const keyMap = scopeKeyMaps[scopeKey]
   if (!keyMap) {
     return
@@ -78,17 +77,17 @@ const FALLBACK_KEY = '__fallback__'
 
 // Call component.onKeyDown(event) if no other shortcuts handled
 // the current key.
-export function addShortcutFallback (scopeKey, component) {
+export function addShortcutFallback(scopeKey, component) {
   addToShortcutScope(scopeKey, FALLBACK_KEY, component)
 }
 
-export function removeShortcutFallback (scopeKey, component) {
+export function removeShortcutFallback(scopeKey, component) {
   removeFromShortcutScope(scopeKey, FALLBACK_KEY, component)
 }
 
 // Direct the given event to the appropriate component in the given
 // scope for the event's key.
-export function onKeyDownInShortcutScope (scopeKey, event) {
+export function onKeyDownInShortcutScope(scopeKey, event) {
   if (prefixMap) {
     let handled = false
     if (prefixMap && prefixMapScope === scopeKey) {
@@ -109,12 +108,13 @@ export function onKeyDownInShortcutScope (scopeKey, event) {
   }
 }
 
-function handleEvent (scopeKey, keyMap, key, event) {
+function handleEvent(scopeKey, keyMap, key, event) {
   const value = keyMap[key] || keyMap[key.toLowerCase()] // treat uppercase and lowercase the same (e.g. caps lock)
   if (!value) {
     return false
   }
-  if (KeyMap.prototype.isPrototypeOf(value)) { // eslint-disable-line no-prototype-builtins
+  if (KeyMap.prototype.isPrototypeOf(value)) {
+    // eslint-disable-line no-prototype-builtins
     prefixMap = value
     prefixMapScope = scopeKey
   } else {
@@ -123,7 +123,7 @@ function handleEvent (scopeKey, keyMap, key, event) {
   return true
 }
 
-function onKeyDown (event) {
+function onKeyDown(event) {
   if (get(disableHotkeys)) {
     return
   }
@@ -133,57 +133,54 @@ function onKeyDown (event) {
   onKeyDownInShortcutScope(currentScopeKey, event)
 }
 
-function mapKeys (keyMap, keys, component) {
-  keys.split('|').forEach(
-    (seq) => {
-      const seqArray = seq.split(' ')
-      const prefixLen = seqArray.length - 1
-      let currentMap = keyMap
-      let i = -1
-      while (++i < prefixLen) {
-        let prefixMap = currentMap[seqArray[i]]
-        if (!prefixMap) {
-          prefixMap = new KeyMap()
-          currentMap[seqArray[i]] = prefixMap
-        }
-        currentMap = prefixMap
+function mapKeys(keyMap, keys, component) {
+  keys.split('|').forEach((seq) => {
+    const seqArray = seq.split(' ')
+    const prefixLen = seqArray.length - 1
+    let currentMap = keyMap
+    let i = -1
+    while (++i < prefixLen) {
+      let prefixMap = currentMap[seqArray[i]]
+      if (!prefixMap) {
+        prefixMap = new KeyMap()
+        currentMap[seqArray[i]] = prefixMap
       }
-      currentMap[seqArray[prefixLen]] = component
-    })
+      currentMap = prefixMap
+    }
+    currentMap[seqArray[prefixLen]] = component
+  })
 }
 
-function unmapKeys (keyMap, keys, component) {
-  keys.split('|').forEach(
-    (seq) => {
-      const seqArray = seq.split(' ')
-      const prefixLen = seqArray.length - 1
-      let currentMap = keyMap
-      let i = -1
-      while (++i < prefixLen) {
-        const prefixMap = currentMap[seqArray[i]]
-        if (!prefixMap) {
-          return
-        }
-        currentMap = prefixMap
+function unmapKeys(keyMap, keys, component) {
+  keys.split('|').forEach((seq) => {
+    const seqArray = seq.split(' ')
+    const prefixLen = seqArray.length - 1
+    let currentMap = keyMap
+    let i = -1
+    while (++i < prefixLen) {
+      const prefixMap = currentMap[seqArray[i]]
+      if (!prefixMap) {
+        return
       }
-      const lastKey = seqArray[prefixLen]
-      if (currentMap[lastKey] === component) {
-        delete currentMap[lastKey]
-      }
-    })
+      currentMap = prefixMap
+    }
+    const lastKey = seqArray[prefixLen]
+    if (currentMap[lastKey] === component) {
+      delete currentMap[lastKey]
+    }
+  })
 }
 
-function acceptShortcutEvent (event) {
+function acceptShortcutEvent(event) {
   const { target } = event
   return !(
     event.altKey ||
     event.metaKey ||
     event.ctrlKey ||
     (event.shiftKey && event.key !== '?') || // '?' is a special case - it is allowed
-    (target && (
-      target.isContentEditable ||
-      ['TEXTAREA', 'SELECT'].includes(target.tagName) ||
-      (target.tagName === 'INPUT' && !['radio', 'checkbox'].includes(target.getAttribute('type')))
-    ))
+    (target &&
+      (target.isContentEditable ||
+        ['TEXTAREA', 'SELECT'].includes(target.tagName) ||
+        (target.tagName === 'INPUT' && !['radio', 'checkbox'].includes(target.getAttribute('type')))))
   )
 }

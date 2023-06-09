@@ -11,12 +11,12 @@
   let loading = true
   let bubbles = []
 
-  function onClickAction (event) {
+  function onClickAction(event) {
     const { action, bubbleId } = event
     action.onclick(bubbleId)
   }
 
-  async function refreshBubbles () {
+  async function refreshBubbles() {
     bubbles = await bubblesFetcher()
     console.log('BUBBLES', bubbles)
   }
@@ -42,24 +42,21 @@
   {#if loading}
     <LoadingPage />
   {:else if bubbles && bubbles.length}
-    <slot name="header"></slot>
+    <slot name="header" />
     <ul class="bubbles-results">
       {#each bubbles as bubble}
-        <BubbleSearchResult
-          {bubble}
-          actions={bubbleActions}
-          on:click="{onClickAction}"
-        />
+        <BubbleSearchResult {bubble} actions={bubbleActions} on:click={onClickAction} />
       {/each}
     </ul>
-    <slot name="footer"></slot>
+    <slot name="footer" />
   {:else if loadError}
-    <slot name="header"></slot>
+    <slot name="header" />
     <ErrorMessage error={loadError} />
   {:else}
-    <slot name="is-empty"></slot>
+    <slot name="is-empty" />
   {/if}
 </div>
+
 <style>
   .bubbles-page {
     padding: 20px 20px;

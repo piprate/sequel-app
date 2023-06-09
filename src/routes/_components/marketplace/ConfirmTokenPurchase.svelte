@@ -16,16 +16,16 @@
   $: selectEditions = listing.availableEditions > 1
   $: secondarySale = listing.listingType === 'secondary'
 
-  function onConfirmClick (e) {
+  function onConfirmClick(e) {
     dispatch('confirm', numEditions)
   }
 
-  function onCancelClick (e) {
+  function onCancelClick(e) {
     dispatch('cancel')
   }
 </script>
 
-{#if primarySale }
+{#if primarySale}
   <div class="buyer-panel">
     <SparkRole spark={$currentSpark} roleLabel="Buyer" />
   </div>
@@ -34,7 +34,7 @@
       {@html formatIntl('intl.confirmationNotice', { token: listing.object.name })}
     </div>
     {#if selectEditions}
-      <select bind:value={numEditions} >
+      <select bind:value={numEditions}>
         {#each editionsList as edition}
           <option value={edition}>
             {edition}
@@ -43,21 +43,18 @@
       </select> edition(s)
     {/if}
     <Payments {listing} {numEditions} />
-    <button class="button primary text-button" on:click="{onConfirmClick}">{intl.confirmButton}</button>
-    <button class="button primary text-button" on:click="{onCancelClick}">{intl.cancel}</button>
+    <button class="button primary text-button" on:click={onConfirmClick}>{intl.confirmButton}</button>
+    <button class="button primary text-button" on:click={onCancelClick}>{intl.cancel}</button>
   </div>
-
-{:else if secondarySale }
-  <p>
-    Secondary sales not supported.
-  </p>
+{:else if secondarySale}
+  <p>Secondary sales not supported.</p>
   <Payments {listing} />
-  <button class="button primary text-button" on:click="{onCancelClick}">{intl.cancel}</button>
+  <button class="button primary text-button" on:click={onCancelClick}>{intl.cancel}</button>
 {/if}
 
 <style>
   .buyer-panel {
-    margin: 10px
+    margin: 10px;
   }
 
   .notice {

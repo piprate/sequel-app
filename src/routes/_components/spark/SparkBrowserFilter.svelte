@@ -1,7 +1,7 @@
 <script>
   import TabSet from '../TabSet.svelte'
 
-  export let filter;
+  export let filter
 
   $: tabs = [
     {
@@ -19,17 +19,13 @@
     //   label: 'intl.sparkExploreTitle',
     //   href: `/sparks/explore`
     // }
-  ];
+  ]
 </script>
 
-<TabSet
-        label="{intl.filters}"
-        currentTabName={filter}
-        {tabs}
-        className="spark-browser-filters"
-/>
+<TabSet label={intl.filters} currentTabName={filter} {tabs} className="spark-browser-filters" />
+
 <style>
-    :global(.spark-browser-filters) {
-        background: var(--spark-profile-bg);
-    }
+  :global(.spark-browser-filters) {
+    background: var(--spark-profile-bg);
+  }
 </style>

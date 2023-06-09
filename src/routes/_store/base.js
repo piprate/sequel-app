@@ -3,7 +3,7 @@ import { safeParse } from '../_utils/safeParse'
 import { writable } from 'svelte/store'
 import { inBrowser } from '../_utils/browserOrNode'
 
-export function persistentStore (key, initialValue) {
+export function persistentStore(key, initialValue) {
   if (inBrowser()) {
     const val = LS.getItem(`store_${key}`)
     if (val) {
@@ -17,7 +17,7 @@ export function persistentStore (key, initialValue) {
     subscribe,
     get: () => {
       let val
-      const unsubscribe = subscribe(value => {
+      const unsubscribe = subscribe((value) => {
         val = value
       })
       unsubscribe()
@@ -25,7 +25,7 @@ export function persistentStore (key, initialValue) {
     },
     getKey: (k) => {
       let state
-      const unsubscribe = subscribe(value => {
+      const unsubscribe = subscribe((value) => {
         state = value
       })
       unsubscribe()
@@ -58,36 +58,37 @@ export function persistentStore (key, initialValue) {
   }
 }
 
-export function transientStore (initialValue) {
+export function transientStore(initialValue) {
   const { subscribe, set, update } = writable(initialValue)
 
   return {
     subscribe,
     get: () => {
       let val
-      const unsubscribe = subscribe(value => {
+      const unsubscribe = subscribe((value) => {
         val = value
       })
       unsubscribe()
       return val
     },
-    delKey: (key) => update(val => {
-      delete val[key]
-      return val
-    }),
+    delKey: (key) =>
+      update((val) => {
+        delete val[key]
+        return val
+      }),
     set,
     update
   }
 }
 
-export function transientMapStore (state) {
+export function transientMapStore(state) {
   const { subscribe, update } = writable(state)
 
   return {
     subscribe,
     get: () => {
       let state
-      const unsubscribe = subscribe(value => {
+      const unsubscribe = subscribe((value) => {
         state = value
       })
       unsubscribe()
@@ -95,7 +96,7 @@ export function transientMapStore (state) {
     },
     getKey: (key) => {
       let state
-      const unsubscribe = subscribe(value => {
+      const unsubscribe = subscribe((value) => {
         state = value
       })
       unsubscribe()

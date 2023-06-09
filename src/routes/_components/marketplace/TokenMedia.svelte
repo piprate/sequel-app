@@ -15,11 +15,7 @@
   let loaded = false
   let error = undefined
 
-  $: computedClass = classname(
-          'media-view',
-          className,
-          loaded && 'loaded'
-  )
+  $: computedClass = classname('media-view', className, loaded && 'loaded')
 
   $: width = ((size, isMobileSize) => {
     switch (size) {
@@ -28,7 +24,7 @@
       case 'big':
         return isMobileSize ? 160 : 200
       case 'wide':
-        return isMobileSize ? 300 : 250  // larger size for 1-column grid, and smaller - for 2-column grid
+        return isMobileSize ? 300 : 250 // larger size for 1-column grid, and smaller - for 2-column grid
       case 'medium':
       default:
         return 64
@@ -38,23 +34,28 @@
   $: height = 'auto'
   $: svgStyle = `width: ${width}px; height: ${width}px;`
   $: staticSrc = content ? content.staticUrl : ''
-  $: src = flatMode ? staticSrc : (content ? content.url : '')
+  $: src = flatMode ? staticSrc : content ? content.url : ''
   $: showDefaultIcon = error || !content
 </script>
 
 <div class="media-view-wrapper">
   {#if showDefaultIcon}
-  <SvgIcon className={computedClass} style={svgStyle} href="#fa-user" />
+    <SvgIcon className={computedClass} style={svgStyle} href="#fa-user" />
   {:else if $autoplayGifs}
     <LazyImage
       ariaHidden="true"
-      forceSize=true
+      forceSize="true"
       alt=""
-      src={src}
+      {src}
       {width}
       {height}
-      on:imgLoad="{ () => { loaded = true } }"
-      on:imgLoadError="{ () => { error = true } }" />
+      on:imgLoad={() => {
+        loaded = true
+      }}
+      on:imgLoadError={() => {
+        error = true
+      }}
+    />
   {:else}
     <NonAutoplayImg
       className={computedClass}
@@ -66,10 +67,16 @@
       {height}
       {isLink}
       {secure}
-      on:imgLoad="{ () => { loaded = true } }"
-      on:imgLoadError="{ () => { error = true } }" />
+      on:imgLoad={() => {
+        loaded = true
+      }}
+      on:imgLoadError={() => {
+        error = true
+      }}
+    />
   {/if}
 </div>
+
 <style>
   .media-view-wrapper {
     position: relative;
@@ -89,4 +96,3 @@
     fill: var(--deemphasized-text-color);
   }
 </style>
-

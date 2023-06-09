@@ -15,7 +15,6 @@ body {
   @media (max-width: 240px) {
     font-size: 0.75em; /* tiny text for tiny screens */
   }
-
 }
 
 .main-content {
@@ -57,7 +56,12 @@ footer {
   border: 1px solid var(--main-border);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0 0 0.5em 0;
   font-weight: 400;
   line-height: 1.2;
@@ -78,7 +82,6 @@ a {
   &:hover {
     text-decoration: underline;
   }
-
 }
 
 input {
@@ -87,12 +90,13 @@ input {
   box-sizing: border-box;
 }
 
-input[type=search] {
+input[type='search'] {
   -webkit-appearance: none; // reset Safari user agent stylesheet
 }
 
 // Fixes gray/black background when using a dark GTK theme
-input, textarea {
+input,
+textarea {
   background: inherit;
   color: inherit;
 }
@@ -101,7 +105,8 @@ textarea {
   font-family: system-ui, -apple-system, SequelRegular, sans-serif, SequelEmoji;
 }
 
-button, .button {
+button,
+.button {
   font-size: 1.2em;
   background: var(--button-bg);
   border-radius: 10px;
@@ -140,11 +145,15 @@ button, .button {
   }
 }
 
-p, label, input {
+p,
+label,
+input {
   font-size: 1.3em;
 }
 
-ul, li, p {
+ul,
+li,
+p {
   padding: 0;
   margin: 0;
 }
@@ -159,7 +168,8 @@ button::-moz-focus-inner {
 
 /* Firefox hacks to remove ugly red border.
    Unnecessary since it gives a warning if you submit an empty field anyway. */
-input:required, input:invalid {
+input:required,
+input:invalid {
   box-shadow: none;
 }
 
@@ -183,7 +193,7 @@ textarea {
 }
 
 .ellipsis::after {
-  content: "\2026";
+  content: '\2026';
 }
 
 /* via https://stackoverflow.com/a/19758620 */

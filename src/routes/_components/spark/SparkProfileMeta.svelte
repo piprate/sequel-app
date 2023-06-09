@@ -3,33 +3,29 @@
   import { emojifyText } from '../../_utils/emojifyText'
   import { autoplayGifs } from '../../_store/local'
 
-  export let spark;
+  export let spark
 
-  $: emojis = spark.emojis || [];
-  $: fields = spark.fields || [];
-  $: massagedFields = (fields.map(field => ({
+  $: emojis = spark.emojis || []
+  $: fields = spark.fields || []
+  $: massagedFields = fields.map((field) => ({
     name: field.name,
     value: emojifyText(field.value, emojis, $autoplayGifs),
     verified: !!field.verified_at
-  })));
+  }))
 </script>
 
 {#if massagedFields.length}
   <h2 class="sr-only">{intl.fields}</h2>
   <div class="spark-profile-meta">
-    <div class="spark-profile-meta-border"></div>
+    <div class="spark-profile-meta-border" />
     {#each massagedFields as field, i}
-      <div
-              id="spark-profile-meta-name-{i}"
-              class="spark-profile-meta-cell spark-profile-meta-name"
-              role="term"
-      >
+      <div id="spark-profile-meta-name-{i}" class="spark-profile-meta-cell spark-profile-meta-name" role="term">
         {field.name}
       </div>
       <div
-              class="spark-profile-meta-cell spark-profile-meta-value"
-              role="definition"
-              aria-labelledby="spark-profile-meta-name-{i}"
+        class="spark-profile-meta-cell spark-profile-meta-value"
+        role="definition"
+        aria-labelledby="spark-profile-meta-name-{i}"
       >
         {@html field.value}
       </div>
@@ -39,9 +35,10 @@
         {/if}
       </div>
     {/each}
-    <div class="spark-profile-meta-border"></div>
+    <div class="spark-profile-meta-border" />
   </div>
 {/if}
+
 <style>
   .spark-profile-meta {
     grid-area: meta;

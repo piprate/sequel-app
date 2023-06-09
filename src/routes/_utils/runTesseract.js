@@ -15,13 +15,13 @@ const steps = [
 ]
 
 if (!import.meta.env.PROD) {
-  if (steps.map(_ => _.proportion).reduce((a, b) => a + b, 0) !== 1) {
+  if (steps.map((_) => _.proportion).reduce((a, b) => a + b, 0) !== 1) {
     console.error('Steps do not add up to 1! You should probably fix this.')
   }
 }
 
-async function spyOnWorkerProgress (onProgress, runnable) {
-  const listener = event => {
+async function spyOnWorkerProgress(onProgress, runnable) {
+  const listener = (event) => {
     const { data } = event
     if (onProgress && data.status === 'progress' && steps.find(({ status }) => status === data.data.status)) {
       onProgress(getTotalProgress(data.data))
@@ -37,7 +37,7 @@ async function spyOnWorkerProgress (onProgress, runnable) {
   }
 }
 
-async function initWorker (onProgress) {
+async function initWorker(onProgress) {
   if (!worker) {
     const createWorker = await importTesseractWorker()
     worker = await createWorker()
@@ -49,7 +49,7 @@ async function initWorker (onProgress) {
   }
 }
 
-function destroyWorker () {
+function destroyWorker() {
   console.log('destroying tesseract worker')
   if (worker) {
     worker.terminate()
@@ -58,19 +58,19 @@ function destroyWorker () {
 }
 
 // destroy the worker after a delay to reduce memory usage
-function scheduleDestroyWorker () {
+function scheduleDestroyWorker() {
   cancelDestroyWorker()
   destroyWorkerHandle = setTimeout(destroyWorker, DESTROY_WORKER_DELAY)
 }
 
-function cancelDestroyWorker () {
+function cancelDestroyWorker() {
   if (destroyWorkerHandle) {
     clearTimeout(destroyWorkerHandle)
     destroyWorkerHandle = null
   }
 }
 
-function getTotalProgress (progressInfo) {
+function getTotalProgress(progressInfo) {
   const idx = steps.findIndex(({ status }) => progressInfo.status === status)
   let total = 0
   for (let i = 0; i < idx; i++) {
@@ -80,11 +80,11 @@ function getTotalProgress (progressInfo) {
   return total
 }
 
-async function recognize (url, onProgress) {
+async function recognize(url, onProgress) {
   return spyOnWorkerProgress(onProgress, () => worker.recognize(url, 'eng'))
 }
 
-export async function runTesseract (url, onProgress) {
+export async function runTesseract(url, onProgress) {
   cancelDestroyWorker()
   await initWorker(onProgress)
   try {

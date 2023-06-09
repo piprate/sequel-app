@@ -7,40 +7,33 @@
   import { currentInstance } from '../../../_store/local'
   import { reportPosts } from '../../../_actions/reportPosts'
   import { formatIntl } from '../../../_utils/formatIntl'
-  import { onMount } from "svelte";
-  import { unwrap } from '../../../_utils/mapper';
+  import { onMount } from 'svelte'
+  import { unwrap } from '../../../_utils/mapper'
 
-  export let id;
-  export let label;
-  export let title;
-  export let post;
-  export let spark;
+  export let id
+  export let label
+  export let title
+  export let post
+  export let spark
 
+  let positiveText = 'intl.report'
+  let reportMap = {}
+  let recentPosts = []
+  let loading = true
+  let forward = false
+  let comment = ''
 
-  let positiveText = 'intl.report';
-  let reportMap = {};
-  let recentPosts = [];
-  let loading = true;
-  let forward = false;
-  let comment = '';
-
-  $: displayPosts = (
-          posts.map(post => ({
-            id: post.id,
-            text: postBodyToPlainText(post) || 'intl.noContent',
-            report: reportMap[post.id]
-          }))
-  );
-  $: posts = (
-          [post].concat((recentPosts || []).filter(({ id }) => (!post || id !== post.id))).filter(Boolean)
-  );
+  $: displayPosts = posts.map((post) => ({
+    id: post.id,
+    text: postBodyToPlainText(post) || 'intl.noContent',
+    report: reportMap[post.id]
+  }))
+  $: posts = [post].concat((recentPosts || []).filter(({ id }) => !post || id !== post.id)).filter(Boolean)
   // $: remoteInstance = post.bubbleRef.name
-  $: reportingLabel = (
-          formatIntl('intl.reportingLabel', {
-            spark: spark.name,
-            instance: $currentInstance
-          })
-  );
+  $: reportingLabel = formatIntl('intl.reportingLabel', {
+    spark: spark.name,
+    instance: $currentInstance
+  })
   // $: forwardDescription = (
   //         formatIntl('intl.forwardDescription', {
   //           instance: remoteInstance
@@ -52,12 +45,12 @@
   //         })
   // )
 
-  function onChange (postId, event) {
+  function onChange(postId, event) {
     reportMap[postId] = event.target.checked
   }
 
   async function doReport() {
-    const postIds = displayPosts.map(({ id }) => id).filter(id => reportMap[id])
+    const postIds = displayPosts.map(({ id }) => id).filter((id) => reportMap[id])
     if (!postIds.length) {
       toast.say('intl.noPosts')
     } else {
@@ -74,11 +67,11 @@
       console.log('recentPosts', recentPosts)
     } catch (err) {
       console.error(err)
-      /* no await */ toast.say(formatIntl('intl.unableToLoadPosts', { error: (err.message || '') }))
+      /* no await */ toast.say(formatIntl('intl.unableToLoadPosts', { error: err.message || '' }))
     } finally {
-      loading = false;
+      loading = false
     }
-  });
+  })
 </script>
 
 <GenericConfirmationDialog
@@ -87,7 +80,8 @@
   {title}
   className="report-dialog-contents"
   {positiveText}
-  on:positive="{doReport}">
+  on:positive={doReport}
+>
   <div class="report-dialog">
     <div class="report-flex">
       <div class="recent-posts">
@@ -99,12 +93,13 @@
           <ul>
             {#each displayPosts as post (post.id)}
               <li>
-                <input type="checkbox"
-                       id="post-report-{post.id}"
-                       name="post-report-{post.id}"
-                       checked={post.report}
-                       on:change="{ (event) => onChange(post.id, event) }"
-                >
+                <input
+                  type="checkbox"
+                  id="post-report-{post.id}"
+                  name="post-report-{post.id}"
+                  checked={post.report}
+                  on:change={(event) => onChange(post.id, event)}
+                />
                 <label for="post-report-{post.id}">
                   {post.text}
                 </label>
@@ -116,11 +111,13 @@
       <div class="report-info">
         <p>{reportingLabel}</p>
         <label class="sr-only" id="comments-label" for="comments-textarea">{intl.additionalComments}</label>
-        <textarea bind:value="{comment}"
-                  id="comments-textarea"
-                  placeholder="{intl.additionalComments}"
-                  aria-labelledby="comments-label"
-                  maxlength="1000"></textarea>
+        <textarea
+          bind:value={comment}
+          id="comments-textarea"
+          placeholder={intl.additionalComments}
+          aria-labelledby="comments-label"
+          maxlength="1000"
+        />
         <!-- {#if remoteInstance}
           <p>{forwardDescription}</p>
           <input type="checkbox"
@@ -135,6 +132,7 @@
     </div>
   </div>
 </GenericConfirmationDialog>
+
 <style>
   :global(.report-dialog-contents .confirmation-dialog-form) {
     max-width: 80vw;
@@ -229,7 +227,8 @@
     textarea {
       max-height: 20vh;
     }
-    p, label {
+    p,
+    label {
       word-wrap: break-word;
     }
     :global(.report-dialog-contents .confirmation-dialog-form) {

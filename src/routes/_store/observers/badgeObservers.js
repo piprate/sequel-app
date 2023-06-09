@@ -2,7 +2,7 @@ import { badgeNumber } from '../badge'
 import { isChromePre87 } from '../../_utils/userAgent/isChromePre87'
 import { inNode } from '../../_utils/browserOrNode'
 
-export function badgeObservers () {
+export function badgeObservers() {
   if (inNode()) {
     return
   }
@@ -10,7 +10,7 @@ export function badgeObservers () {
   if (isChromePre87() || !('setAppBadge' in navigator)) {
     return
   }
-  badgeNumber.subscribe(_badgeNumber => {
+  badgeNumber.subscribe((_badgeNumber) => {
     if (_badgeNumber) {
       navigator.setAppBadge(_badgeNumber)
     } else {

@@ -14,11 +14,12 @@
     {priceText}
   </div>
 </div>
+
 <style>
   .price-banner {
     grid-area: controls;
     padding: 10px 0;
-    font-size: 1.0em;
+    font-size: 1em;
     word-wrap: break-word;
     overflow: hidden;
     white-space: pre-wrap;

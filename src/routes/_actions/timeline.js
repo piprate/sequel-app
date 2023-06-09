@@ -38,28 +38,28 @@ import { get } from 'svelte/store'
 import { wrap } from '../_utils/mapper'
 import { displayError } from './errors'
 
-const byId = _ => _.id
+const byId = (_) => _.id
 
-export async function storeFreshTimelineItemsInDatabase (instanceName, timelineName, items, asSpark) {
+export async function storeFreshTimelineItemsInDatabase(instanceName, timelineName, items, asSpark) {
   await database.insertTimelineItems(instanceName, timelineName, items, asSpark)
   if (timelineName.startsWith('post/')) {
     // For post threads, we want to be sure to update the favorite/reblog counts even if
     // this is a stale "view" of the post. See 119-post-counts-update.js for
     // an example of why we need this.
-    items.forEach(item => {
+    items.forEach((item) => {
       emit('postUpdated', item)
     })
   }
 }
 
-async function updatePost (instanceName, accessToken, postId, asSpark) {
+async function updatePost(instanceName, accessToken, postId, asSpark) {
   const post = await getPost(instanceName, accessToken, postId, asSpark)
   await database.insertPost(instanceName, post, asSpark)
   emit('postUpdated', post)
   return post
 }
 
-async function updatePostAndThread (instanceName, accessToken, timelineName, postId, asSpark) {
+async function updatePostAndThread(instanceName, accessToken, timelineName, postId, asSpark) {
   const [post, context] = await Promise.all([
     updatePost(instanceName, accessToken, postId, asSpark),
     getPostContext(instanceName, accessToken, postId)
@@ -73,7 +73,7 @@ async function updatePostAndThread (instanceName, accessToken, timelineName, pos
   addPostsOrNotifications(instanceName, timelineName, concat(context.ancestors, context.descendants), asSpark)
 }
 
-async function fetchFreshThreadFromNetwork (instanceName, accessToken, postId, asSpark) {
+async function fetchFreshThreadFromNetwork(instanceName, accessToken, postId, asSpark) {
   const [post, context] = await Promise.all([
     getPost(instanceName, accessToken, postId, asSpark),
     getPostContext(instanceName, accessToken, postId)
@@ -81,7 +81,7 @@ async function fetchFreshThreadFromNetwork (instanceName, accessToken, postId, a
   return concat(context.ancestors, post, context.descendants)
 }
 
-async function fetchThreadFromNetwork (instanceName, accessToken, timelineName, asSpark) {
+async function fetchThreadFromNetwork(instanceName, accessToken, timelineName, asSpark) {
   const postId = timelineName.split('/').slice(-1)[0]
 
   // For threads, we do several optimizations to make it a bit faster to load.
@@ -111,26 +111,36 @@ async function fetchThreadFromNetwork (instanceName, accessToken, timelineName, 
   return concat(context.ancestors, post, context.descendants)
 }
 
-async function fetchTimelineItemsFromNetwork (instanceName, accessToken, asSpark, timelineName, lastTimelineItemId) {
-  if (timelineName.startsWith('post/')) { // special case - this is a list of descendents and ancestors
+async function fetchTimelineItemsFromNetwork(instanceName, accessToken, asSpark, timelineName, lastTimelineItemId) {
+  if (timelineName.startsWith('post/')) {
+    // special case - this is a list of descendents and ancestors
     return fetchThreadFromNetwork(instanceName, accessToken, timelineName, asSpark)
-  } else { // normal timeline
-    const { items } = await getTimeline(instanceName, accessToken, asSpark, timelineName, lastTimelineItemId, null, TIMELINE_BATCH_SIZE)
+  } else {
+    // normal timeline
+    const { items } = await getTimeline(
+      instanceName,
+      accessToken,
+      asSpark,
+      timelineName,
+      lastTimelineItemId,
+      null,
+      TIMELINE_BATCH_SIZE
+    )
     return items
   }
 }
 
-async function addPagedTimelineItems (instanceName, timelineName, items) {
+async function addPagedTimelineItems(instanceName, timelineName, items) {
   console.log('addPagedTimelineItems, length:', items.length)
   mark('addPagedTimelineItemSummaries')
-  const newSummaries = items.map(item => timelineItemToSummary(item, instanceName))
+  const newSummaries = items.map((item) => timelineItemToSummary(item, instanceName))
   await addPagedTimelineItemSummaries(instanceName, timelineName, newSummaries)
   stop('addPagedTimelineItemSummaries')
 }
 
-export async function addPagedTimelineItemSummaries (instanceName, timelineName, newSummaries) {
+export async function addPagedTimelineItemSummaries(instanceName, timelineName, newSummaries) {
   const oldSummaries = getForTimeline(rootTimelineItemSummaries, instanceName, timelineName)
-  
+
   const mergedSummaries = uniqBy(concat(oldSummaries || [], newSummaries), byId)
 
   if (!isEqual(oldSummaries, mergedSummaries)) {
@@ -138,25 +148,30 @@ export async function addPagedTimelineItemSummaries (instanceName, timelineName,
   }
 }
 
-async function fetchPagedItems (instanceName, accessToken, asSpark, timelineName) {
+async function fetchPagedItems(instanceName, accessToken, asSpark, timelineName) {
   const _timelineNextPageId = get(timelineNextPageId)
   console.log('saved timelineNextPageId', _timelineNextPageId)
-  const {
-    items,
-    headers
-  } = await getTimeline(instanceName, accessToken, asSpark, timelineName, _timelineNextPageId, null, TIMELINE_BATCH_SIZE)
+  const { items, headers } = await getTimeline(
+    instanceName,
+    accessToken,
+    asSpark,
+    timelineName,
+    _timelineNextPageId,
+    null,
+    TIMELINE_BATCH_SIZE
+  )
   const linkHeader = headers.get('Link')
   const parsedLinkHeader = li.parse(linkHeader)
   // FIXME
   const nextUrl = parsedLinkHeader && parsedLinkHeader.next
-  const nextId = nextUrl && (new URL(nextUrl)).searchParams.get('max_id')
+  const nextId = nextUrl && new URL(nextUrl).searchParams.get('max_id')
   console.log('new timelineNextPageId', nextId)
   setForTimeline(rootTimelineNextPageId, instanceName, timelineName, nextId, asSpark)
   await storeFreshTimelineItemsInDatabase(instanceName, timelineName, items, asSpark)
   await addPagedTimelineItems(instanceName, timelineName, items)
 }
 
-async function fetchTimelineItems (instanceName, accessToken, asSpark, timelineName, online) {
+async function fetchTimelineItems(instanceName, accessToken, asSpark, timelineName, online) {
   mark('fetchTimelineItems')
   const _lastTimelineItemId = get(lastTimelineItemId)
   let items
@@ -185,18 +200,23 @@ async function fetchTimelineItems (instanceName, accessToken, asSpark, timelineN
   return { items, stale }
 }
 
-async function addTimelineItems (instanceName, timelineName, items, stale) {
+async function addTimelineItems(instanceName, timelineName, items, stale) {
   console.log('addTimelineItems, length:', items.length)
   mark('addTimelineItemSummaries')
-  const newSummaries = items.map(item => timelineItemToSummary(item, instanceName))
+  const newSummaries = items.map((item) => timelineItemToSummary(item, instanceName))
   await addTimelineItemSummaries(instanceName, timelineName, newSummaries, stale)
   stop('addTimelineItemSummaries')
 }
 
-export async function addTimelineItemSummaries (instanceName, timelineName, newSummaries, newStale) {
+export async function addTimelineItemSummaries(instanceName, timelineName, newSummaries, newStale) {
   if (isTimelineInReaderMode(timelineName)) {
     const lastTimelineItem = newSummaries.at(-1)?.timelineId
-    const prevLastTimelineItem = getForTimeline(rootLastReaderModeTimelineItem, instanceName, timelineName, get(currentSparkId))
+    const prevLastTimelineItem = getForTimeline(
+      rootLastReaderModeTimelineItem,
+      instanceName,
+      timelineName,
+      get(currentSparkId)
+    )
     const postFromSocket = getForTimeline(rootPostFromSocket, instanceName, timelineName, get(currentSparkId))
 
     if (lastTimelineItem !== postFromSocket) {
@@ -204,7 +224,12 @@ export async function addTimelineItemSummaries (instanceName, timelineName, newS
     }
 
     const prevGroupHeads = getForTimeline(rootTimelineGroupHeads, instanceName, timelineName, get(currentSparkId)) || []
-    const { batchGroupHeads, orderedItems } = await orderItemsByTimelineType(newSummaries, timelineName.split('/')[0], prevLastTimelineItem, prevGroupHeads)
+    const { batchGroupHeads, orderedItems } = await orderItemsByTimelineType(
+      newSummaries,
+      timelineName.split('/')[0],
+      prevLastTimelineItem,
+      prevGroupHeads
+    )
     newSummaries = orderedItems
     const groupHeads = prevGroupHeads.concat(batchGroupHeads)
     setForTimeline(rootTimelineGroupHeads, instanceName, timelineName, groupHeads, get(currentSparkId))
@@ -213,7 +238,15 @@ export async function addTimelineItemSummaries (instanceName, timelineName, newS
   const oldSummaries = getForTimeline(rootTimelineItemSummaries, instanceName, timelineName)
   const oldStale = getForTimeline(rootTimelineItemSummariesAreStale, instanceName, timelineName)
 
-  const mergedSummaries = uniqBy(mergeArrays(oldSummaries || [], newSummaries, compareTimelineItemSummaries, isTimelineInReaderMode(timelineName) ? 'ascending' : 'descending'), byId)
+  const mergedSummaries = uniqBy(
+    mergeArrays(
+      oldSummaries || [],
+      newSummaries,
+      compareTimelineItemSummaries,
+      isTimelineInReaderMode(timelineName) ? 'ascending' : 'descending'
+    ),
+    byId
+  )
 
   if (!isEqual(oldSummaries, mergedSummaries)) {
     setForTimeline(rootTimelineItemSummaries, instanceName, timelineName, mergedSummaries)
@@ -223,7 +256,7 @@ export async function addTimelineItemSummaries (instanceName, timelineName, newS
   }
 }
 
-async function fetchTimelineItemsAndPossiblyFallBack () {
+async function fetchTimelineItemsAndPossiblyFallBack() {
   console.log('fetchTimelineItemsAndPossiblyFallBack')
   mark('fetchTimelineItemsAndPossiblyFallBack')
 
@@ -238,16 +271,19 @@ async function fetchTimelineItemsAndPossiblyFallBack () {
     // these in IndexedDB because of "internal ID" system Mastodon uses to paginate these
     await fetchPagedItems(_currentInstance, _accessToken, _currentSparkId, _currentTimeline)
   } else {
-    const {
-      items,
-      stale
-    } = await fetchTimelineItems(_currentInstance, _accessToken, get(currentSparkId), _currentTimeline, _online)
+    const { items, stale } = await fetchTimelineItems(
+      _currentInstance,
+      _accessToken,
+      get(currentSparkId),
+      _currentTimeline,
+      _online
+    )
     await addTimelineItems(_currentInstance, _currentTimeline, items, stale)
   }
   stop('fetchTimelineItemsAndPossiblyFallBack')
 }
 
-export async function setupTimeline () {
+export async function setupTimeline() {
   console.log('setupTimeline')
   mark('setupTimeline')
   // If we don't have any item summaries, or if the current item summaries are stale
@@ -258,15 +294,13 @@ export async function setupTimeline () {
   const _timelineItemSummariesAreStale = get(timelineItemSummariesAreStale)
   const _currentTimeline = currentTimeline.get()
   console.log({ _timelineItemSummaries, _timelineItemSummariesAreStale, _currentTimeline })
-  if (!_timelineItemSummaries ||
-    _timelineItemSummariesAreStale ||
-    _currentTimeline.startsWith('post/')) {
+  if (!_timelineItemSummaries || _timelineItemSummariesAreStale || _currentTimeline.startsWith('post/')) {
     await fetchTimelineItemsAndPossiblyFallBack()
   }
   stop('setupTimeline')
 }
 
-export async function fetchMoreItemsAtBottomOfTimeline (instanceName, timelineName) {
+export async function fetchMoreItemsAtBottomOfTimeline(instanceName, timelineName) {
   console.log('setting runningUpdate: true')
   setForTimeline(rootRunningUpdate, instanceName, timelineName, true)
   await fetchTimelineItemsAndPossiblyFallBack()
@@ -274,7 +308,7 @@ export async function fetchMoreItemsAtBottomOfTimeline (instanceName, timelineNa
   setForTimeline(rootRunningUpdate, instanceName, timelineName, false)
 }
 
-export async function showMoreItemsForTimeline (instanceName, timelineName) {
+export async function showMoreItemsForTimeline(instanceName, timelineName) {
   mark('showMoreItemsForTimeline')
   let itemSummariesToAdd = getForTimeline(rootTimelineItemSummariesToAdd, instanceName, timelineName) || []
   itemSummariesToAdd = itemSummariesToAdd.sort(compareTimelineItemSummaries).reverse()
@@ -285,18 +319,15 @@ export async function showMoreItemsForTimeline (instanceName, timelineName) {
   stop('showMoreItemsForTimeline')
 }
 
-export function showMoreItemsForCurrentTimeline () {
-  return showMoreItemsForTimeline(
-    currentInstance.get(),
-    currentTimeline.get()
-  )
+export function showMoreItemsForCurrentTimeline() {
+  return showMoreItemsForTimeline(currentInstance.get(), currentTimeline.get())
 }
 
-export async function showMoreItemsForThread (instanceName, timelineName) {
+export async function showMoreItemsForThread(instanceName, timelineName) {
   mark('showMoreItemsForThread')
   const itemSummariesToAdd = getForTimeline(rootTimelineItemSummariesToAdd, instanceName, timelineName) || []
   const timelineItemSummaries = getForTimeline(rootTimelineItemSummaries, instanceName, timelineName) || []
-  const timelineItemIds = new Set(timelineItemSummaries.map(_ => _.id))
+  const timelineItemIds = new Set(timelineItemSummaries.map((_) => _.id))
   // TODO: update database and do the thread merge correctly
   for (const itemSummaryToAdd of itemSummariesToAdd) {
     if (!timelineItemIds.has(itemSummaryToAdd.id)) {
@@ -310,12 +341,12 @@ export async function showMoreItemsForThread (instanceName, timelineName) {
   stop('showMoreItemsForThread')
 }
 
-export function isTimelineInReaderMode (_timeline = location.pathname) {
+export function isTimelineInReaderMode(_timeline = location.pathname) {
   return _timeline?.endsWith('/reader_mode')
 }
 
-export async function orderItemsByTimelineType (items, timelineType, lastTimelineItem, groupHeads = []) {
-  const batchItems = items.filter(_ => _.timelineId !== lastTimelineItem)
+export async function orderItemsByTimelineType(items, timelineType, lastTimelineItem, groupHeads = []) {
+  const batchItems = items.filter((_) => _.timelineId !== lastTimelineItem)
   if (!batchItems?.length) return { batchGroupHeads: groupHeads, orderedItems: [] }
 
   const mapGroupWithTimelineType = {
@@ -346,7 +377,9 @@ export async function orderItemsByTimelineType (items, timelineType, lastTimelin
       }
     }
 
-    const groupedItems = groupKeys.map(propValues => loadedPosts.filter(post => post.sparkId === propValues[0] && post.bubbleId === propValues[1]))
+    const groupedItems = groupKeys.map((propValues) =>
+      loadedPosts.filter((post) => post.sparkId === propValues[0] && post.bubbleId === propValues[1])
+    )
 
     for (const group of groupedItems.values()) {
       const lastGroupHead = batchGroupHeads.at(-1)
@@ -369,7 +402,7 @@ export async function orderItemsByTimelineType (items, timelineType, lastTimelin
     }
   }
 
-  const groupedItems = groupKeys.map(propValue => loadedPosts.filter(post => post[selectedProp] === propValue))
+  const groupedItems = groupKeys.map((propValue) => loadedPosts.filter((post) => post[selectedProp] === propValue))
 
   for (const group of groupedItems.values()) {
     const lastGroupHead = batchGroupHeads.at(-1)

@@ -6,7 +6,7 @@ import { currentTimelineType, currentTimelineValue, timelineItemSummaries } from
 import { tryToFocusElement } from '../_utils/tryToFocusElement'
 import { get } from 'svelte/store'
 
-export function showMoreAndScrollToTop () {
+export function showMoreAndScrollToTop() {
   // Similar to Twitter, pressing "." will click the "show more" button and select
   // the first toot.
   showMoreItemsForCurrentTimeline()
@@ -22,8 +22,11 @@ export function showMoreAndScrollToTop () {
   const postId = _currentTimelineType !== 'notifications' && firstItemSummary.id
   scrollToTop(/* smooth */ false)
   const id = createPostOrNotificationUuid(
-    currentInstance.get(), _currentTimelineType,
-    _currentTimelineValue, notificationId, postId
+    currentInstance.get(),
+    _currentTimelineType,
+    _currentTimelineValue,
+    notificationId,
+    postId
   )
   tryToFocusElement(id)
 }

@@ -6,13 +6,22 @@ import { get } from 'svelte/store'
 import { accessToken } from '../_store/instance'
 import { populateEntityMediaURLs, populatePostMediaURLs } from '../_api/media'
 
-export async function doSearch (type = null) {
+export async function doSearch(type = null) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   const _queryInSearch = queryInSearch.get()
   searchLoading.set(true)
   try {
-    const results = await search(_currentInstance, _accessToken, _queryInSearch, undefined, undefined, undefined, undefined, type)
+    const results = await search(
+      _currentInstance,
+      _accessToken,
+      _queryInSearch,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      type
+    )
 
     results.posts?.forEach((entity) => populatePostMediaURLs(entity, _currentInstance, _accessToken))
     results.sparks?.forEach((entity) => populateEntityMediaURLs(entity, _currentInstance, 'spark'))
@@ -26,7 +35,7 @@ export async function doSearch (type = null) {
     }
   } catch (e) {
     /* no await */
-    toast.say(formatIntl('intl.searchError', { error: (e.message || '') }))
+    toast.say(formatIntl('intl.searchError', { error: e.message || '' }))
     console.error(e)
   } finally {
     searchLoading.set(false)

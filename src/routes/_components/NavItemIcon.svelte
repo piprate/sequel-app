@@ -1,16 +1,16 @@
 <script>
-  import SvgIcon from './SvgIcon.svelte';
-  import NavAvatar from './NavAvatar.svelte';
-  import { currentSpark } from "../_store/instance";
+  import SvgIcon from './SvgIcon.svelte'
+  import NavAvatar from './NavAvatar.svelte'
+  import { currentSpark } from '../_store/instance'
 
-  export let svg;
+  export let svg
 
-  export let showBadge = false;
-  export let badgeNumber = 0;
+  export let showBadge = false
+  export let badgeNumber = 0
 
-  $: badgeDigits = Math.min(3, badgeNumber.toString().length);
-  $: badgeNumberToShow = (badgeNumber < 100 ? badgeNumber.toString() : '99+');
-  $: showSparkAvatar = svg === '#sequel-logo' && $currentSpark;
+  $: badgeDigits = Math.min(3, badgeNumber.toString().length)
+  $: badgeNumberToShow = badgeNumber < 100 ? badgeNumber.toString() : '99+'
+  $: showSparkAvatar = svg === '#sequel-logo' && $currentSpark
 </script>
 
 {#if showBadge}
@@ -20,13 +20,12 @@
       {badgeNumberToShow}
     </span>
   </div>
+{:else if showSparkAvatar}
+  <NavAvatar entity={$currentSpark} size="navigation" flatMode="true" />
 {:else}
-  {#if showSparkAvatar}
-    <NavAvatar entity={$currentSpark} size="navigation" flatMode="true" />
-  {:else}
-    <SvgIcon className="nav-link-svg" href={svg} />
-  {/if}
+  <SvgIcon className="nav-link-svg" href={svg} />
 {/if}
+
 <style>
   .nav-link-svg-wrapper {
     position: relative;

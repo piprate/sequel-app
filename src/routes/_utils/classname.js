@@ -1,4 +1,4 @@
-export function classname () {
+export function classname() {
   let res = ''
   const len = arguments.length
   let i = -1

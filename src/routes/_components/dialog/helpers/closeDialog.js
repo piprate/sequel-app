@@ -1,5 +1,5 @@
 import { emit } from '../../../_utils/eventBus'
 
-export function close (id) {
+export function close(id) {
   emit('closeDialog', id)
 }

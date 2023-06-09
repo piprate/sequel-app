@@ -1,10 +1,10 @@
 <script>
   import { formatIntl } from '../_utils/formatIntl'
 
-  export let label;
-  export let currentTabName;
-  export let tabs;
-  export let className = '';
+  export let label
+  export let currentTabName
+  export let tabs
+  export let className = ''
 
   function createAriaLabel(tabLabel, tabName, currentTabName) {
     return formatIntl('intl.tabLabel', {
@@ -17,18 +17,21 @@
 <nav aria-label={label} class={className}>
   <ul>
     {#each tabs as tab (tab.name)}
-    <li class="{currentTabName === tab.name ? 'current' : 'not-current'}">
-      <a aria-label={createAriaLabel(tab.label, tab.name, currentTabName)}
-         aria-current={tab.name === currentTabName}
-         class="focus-fix"
-         href={tab.href}
-         data-sveltekit-preload-data>
-        {tab.label}
-      </a>
-    </li>
+      <li class={currentTabName === tab.name ? 'current' : 'not-current'}>
+        <a
+          aria-label={createAriaLabel(tab.label, tab.name, currentTabName)}
+          aria-current={tab.name === currentTabName}
+          class="focus-fix"
+          href={tab.href}
+          data-sveltekit-preload-data
+        >
+          {tab.label}
+        </a>
+      </li>
     {/each}
   </ul>
 </nav>
+
 <style>
   li {
     flex: 1;
@@ -36,7 +39,8 @@
   }
 
   /* reset */
-  ul, li {
+  ul,
+  li {
     margin: 0;
     padding: 0;
   }

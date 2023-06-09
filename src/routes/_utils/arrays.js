@@ -1,5 +1,5 @@
 // Merge two arrays, using the given comparator
-export function mergeArrays (leftArray, rightArray, comparator, order) {
+export function mergeArrays(leftArray, rightArray, comparator, order) {
   let leftIndex = 0
   let rightIndex = 0
   const merged = []
@@ -32,7 +32,7 @@ export function mergeArrays (leftArray, rightArray, comparator, order) {
   return merged
 }
 
-export function concat () {
+export function concat() {
   let res = []
   for (let i = 0, len = arguments.length; i < len; i++) {
     const arg = arguments[i]

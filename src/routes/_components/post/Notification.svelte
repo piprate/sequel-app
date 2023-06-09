@@ -21,48 +21,45 @@
   $: notificationId = notification.id
   $: post = notification.subjectPost
   $: postId = post && post.id
-  $: uuid = (
-          createPostOrNotificationUuid($currentInstance, timelineType, timelineValue, notificationId, postId)
-  )
+  $: uuid = createPostOrNotificationUuid($currentInstance, timelineType, timelineValue, notificationId, postId)
   $: elementId = uuid
   $: shortcutScope = elementId
   $: ariaLabel = !post && notificationLabel(notification, $omitEmojiInDisplayNames)
-  $: className = (classname(
-          'notification-article',
-          'shortcut-list-item',
-          'focus-fix',
-          $underlineLinks && 'underline-links'
-  ))
+  $: className = classname(
+    'notification-article',
+    'shortcut-list-item',
+    'focus-fix',
+    $underlineLinks && 'underline-links'
+  )
 
-  function openActorProfile () {
+  function openActorProfile() {
     goto(`/sparks/${actorId}`)
   }
 
-  async function mentionActor () {
+  async function mentionActor() {
     await composeNewPostMentioning(actor)
   }
 </script>
 
 {#if post}
-  <Post {index} {length} {timelineType} {timelineValue}
-          {post} {notification} {enableShortcuts} on:recalculateHeight
-  />
+  <Post {index} {length} {timelineType} {timelineValue} {post} {notification} {enableShortcuts} on:recalculateHeight />
 {:else}
-  <article id={elementId}
-           class={className}
-           tabindex="0"
-           aria-posinset={index + 1}
-           aria-setsize={length}
-           aria-label={ariaLabel}
+  <article
+    id={elementId}
+    class={className}
+    tabindex="0"
+    aria-posinset={index + 1}
+    aria-setsize={length}
+    aria-label={ariaLabel}
   >
-    <PostHeader {notification} {timelineType}
-                author={actor} authorId={actorId} {uuid} isPostInNotification="true" />
+    <PostHeader {notification} {timelineType} author={actor} authorId={actorId} {uuid} isPostInNotification="true" />
     {#if enableShortcuts}
-      <Shortcut scope={shortcutScope} key="p" on:pressed="{openActorProfile}" />
-      <Shortcut scope={shortcutScope} key="m" on:pressed="{mentionActor}" />
+      <Shortcut scope={shortcutScope} key="p" on:pressed={openActorProfile} />
+      <Shortcut scope={shortcutScope} key="m" on:pressed={mentionActor} />
     {/if}
   </article>
 {/if}
+
 <style>
   .notification-article {
     padding: var(--post-pad-v) var(--post-pad-h);

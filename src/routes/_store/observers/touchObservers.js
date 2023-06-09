@@ -3,7 +3,7 @@ import { transientStore } from '../base'
 
 export const isUserTouching = transientStore(false)
 
-export function touchObservers () {
+export function touchObservers() {
   if (inNode()) {
     return
   }

@@ -12,7 +12,7 @@
 
   $: id = token.id || 0
 
-  function onButtonClick (event, action, tokenId) {
+  function onButtonClick(event, action, tokenId) {
     event.preventDefault()
     event.stopPropagation()
     dispatch('click', {
@@ -35,7 +35,7 @@
         {#each actions as action}
           <IconButton
             label={action.label}
-            on:click="{ (event) => onButtonClick(event, action, token.id) }"
+            on:click={(event) => onButtonClick(event, action, token.id)}
             href={action.icon}
             big="true"
           />
@@ -44,13 +44,14 @@
     {/if}
   </div>
 </SearchResult>
+
 <style>
   .token-card {
     display: grid;
     grid-template-areas:
-      "image"
-      "name"
-      "buttons";
+      'image'
+      'name'
+      'buttons';
     grid-column-gap: 20px;
     grid-template-columns: 1fr;
     align-items: center;

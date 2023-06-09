@@ -1,5 +1,4 @@
 :root {
-
   --warn-color: #e14154; // reddish for warnings/errors
 
   //
@@ -28,17 +27,11 @@
   --nav-icon-size: 20px;
 
   --nav-total-height: calc(
-    (var(--nav-icon-pad-v) * 2) +
-    var(--nav-icon-size) +
-    var(--nav-indicator-height) +
-    var(--nav-border-bottom)
+    (var(--nav-icon-pad-v) * 2) + var(--nav-icon-size) + var(--nav-indicator-height) + var(--nav-border-bottom)
   );
 
   --main-content-gap-top: 20px;
-  --main-content-pad-top: calc(
-    var(--nav-total-height) +
-    var(--main-content-gap-top)
-  );
+  --main-content-pad-top: calc(var(--nav-total-height) + var(--main-content-gap-top));
 
   --main-margin-bottom: 15px;
   --main-border-size: 1px;
@@ -69,5 +62,4 @@
   @media (max-width: 240px) {
     --focus-width: 3px;
   }
-
 }

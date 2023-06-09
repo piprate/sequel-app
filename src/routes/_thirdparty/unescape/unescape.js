@@ -7,7 +7,7 @@ import { thunk } from '../../_utils/thunk'
 // plus some more known entities like pound, nbsp, etc
 const chars = {
   '&amp;': '&',
-  '&apos;': '\'',
+  '&apos;': "'",
   '&bdquo;': '„',
   '&cent;': '¢',
   '&circ;': 'ˆ',
@@ -52,20 +52,22 @@ const getRegex = thunk(() => toRegex(chars))
  * @param  {String} `str` String with HTML entities to un-escape.
  * @return {String}
  */
-function unescape (str) {
+function unescape(str) {
   return str.replace(getRegex(), replace)
 }
 
-function replace (match) {
+function replace(match) {
   const knownValue = chars[match]
   if (knownValue) {
     return knownValue
   }
   let codePoint
   try {
-    if (match.startsWith('&#x')) { // hex
+    if (match.startsWith('&#x')) {
+      // hex
       codePoint = parseInt(match.substring(3, match.length - 1), 16)
-    } else { // decimal
+    } else {
+      // decimal
       codePoint = parseInt(match.substring(2, match.length - 1), 10)
     }
     return String.fromCodePoint(codePoint)
@@ -74,7 +76,7 @@ function replace (match) {
   }
 }
 
-function toRegex (chars) {
+function toRegex(chars) {
   const patterns = Object.keys(chars).concat([
     '&#[0-9]{1,6};', // decimal code points
     '&#x[a-fA-F0-9]{1,6};' // hex code points

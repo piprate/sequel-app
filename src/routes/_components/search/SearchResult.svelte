@@ -1,18 +1,19 @@
 <script>
-  export let href = undefined;
+  export let href = undefined
 </script>
 
 <li class="search-result">
   {#if href}
     <a {href} class="search-result-anchor" data-sveltekit-preload-data>
-      <slot></slot>
+      <slot />
     </a>
   {:else}
     <div class="search-result-anchor">
-      <slot></slot>
+      <slot />
     </div>
   {/if}
 </li>
+
 <style>
   .search-result {
     box-sizing: border-box;
@@ -27,7 +28,8 @@
     flex: 1;
     background: var(--settings-list-item-bg);
   }
-  .search-result-anchor, .search-result-anchor:visited {
+  .search-result-anchor,
+  .search-result-anchor:visited {
     color: var(--body-text-color);
   }
   .search-result-anchor:hover {

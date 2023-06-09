@@ -1,7 +1,7 @@
 <script>
   import NavItemIcon from './NavItemIcon.svelte'
-  import { onMount } from "svelte";
-  import { get } from 'svelte/store';
+  import { onMount } from 'svelte'
+  import { get } from 'svelte/store'
   import { on, removeListener, emit } from '../_utils/eventBus'
   import { mark, stop } from '../_utils/marks'
   import { doubleRAF } from '../_utils/doubleRAF'
@@ -9,36 +9,40 @@
   import { normalizePageName } from '../_utils/normalizePageName'
   import { reduceMotion } from '../_store/local'
   import { navPages } from '../_store/navigation'
-  import { numberOfNotifications, hasNotifications, numberOfSubscriptionRequests, hasSubscriptionRequests } from '../_store/badge'
-  import { currentPage } from "../_store/navigation";
-  import { formatIntl } from '../_utils/formatIntl';
+  import {
+    numberOfNotifications,
+    hasNotifications,
+    numberOfSubscriptionRequests,
+    hasSubscriptionRequests
+  } from '../_store/badge'
+  import { currentPage } from '../_store/navigation'
+  import { formatIntl } from '../_utils/formatIntl'
 
-  export let segment;
-  export let name;
-  export let href;
-  export let svg;
-  export let label;
+  export let segment
+  export let name
+  export let href
+  export let svg
+  export let label
 
-  $: selected = (name === normalizePageName(segment))
+  $: selected = name === normalizePageName(segment)
 
   $: ariaLabel = ((name, label, selected) => {
-    const count = name === 'notifications'
-            ? $numberOfNotifications
-            : (name === 'community' ? $numberOfSubscriptionRequests : 0)
+    const count =
+      name === 'notifications' ? $numberOfNotifications : name === 'community' ? $numberOfSubscriptionRequests : 0
     return formatIntl('intl.navItemLabel', {
       label,
       selected,
       name,
       count
     })
-  })(name, label, selected);
+  })(name, label, selected)
 
+  $: showBadge = (name === 'notifications' && $hasNotifications) || (name === 'community' && $hasSubscriptionRequests)
 
-  $: showBadge = (name === 'notifications' && $hasNotifications) || (name === 'community' && $hasSubscriptionRequests);
+  $: badgeNumber =
+    (name === 'notifications' && $numberOfNotifications) || (name === 'community' && $numberOfSubscriptionRequests) || 0
 
-  $: badgeNumber = (name === 'notifications' && $numberOfNotifications) || (name === 'community' && $numberOfSubscriptionRequests) || 0
-
-  export function onClick (e) {
+  export function onClick(e) {
     if (!selected) {
       return
     }
@@ -48,16 +52,16 @@
     }
   }
 
-  let indicator;
+  let indicator
 
-  function animatePart1 ({ toPage }) {
+  function animatePart1({ toPage }) {
     mark('animateNavPart1 gBCR')
     const fromRect = indicator.getBoundingClientRect()
     stop('animateNavPart1 gBCR')
-    emit('animateNavPart2', {fromRect, toPage})
+    emit('animateNavPart2', { fromRect, toPage })
   }
 
-  function animatePart2 ({ fromRect }) {
+  function animatePart2({ fromRect }) {
     mark('animateNavPart2 gBCR')
     const toRect = indicator.getBoundingClientRect()
     stop('animateNavPart2 gBCR')
@@ -75,26 +79,23 @@
     })
   }
 
-  let previousPage = get(currentPage);
+  let previousPage = get(currentPage)
 
-  function pageIsInNav (page) {
-    let val = $navPages.find(_ => _.name === page)
-    return val;
+  function pageIsInNav(page) {
+    let val = $navPages.find((_) => _.name === page)
+    return val
   }
 
-  currentPage.subscribe(page => {
-    page = normalizePageName(page);
+  currentPage.subscribe((page) => {
+    page = normalizePageName(page)
 
-    if (page && previousPage &&
-            previousPage === name &&
-            pageIsInNav(page) &&
-            pageIsInNav(previousPage)) {
+    if (page && previousPage && previousPage === name && pageIsInNav(page) && pageIsInNav(previousPage)) {
       emit('animateNavPart1', {
         fromPage: previousPage,
         toPage: page
-      });
+      })
     }
-    previousPage = page;
+    previousPage = page
   })
 
   const onAnimate1 = ({ fromPage, toPage }) => {
@@ -110,28 +111,30 @@
   }
 
   onMount(() => {
-    on('animateNavPart1', onAnimate1);
-    on('animateNavPart2', onAnimate2);
+    on('animateNavPart1', onAnimate1)
+    on('animateNavPart2', onAnimate2)
 
     return () => {
-      removeListener('animateNavPart1', onAnimate1);
-      removeListener('animateNavPart2', onAnimate2);
+      removeListener('animateNavPart1', onAnimate1)
+      removeListener('animateNavPart2', onAnimate2)
     }
-  });
+  })
 </script>
 
-<a class='main-nav-link focus-fix {selected ? "selected" : ""}'
-   aria-label={ariaLabel}
-   aria-current={selected}
-   on:click={onClick}
-   data-sveltekit-preload-data
-   {href} >
+<a
+  class="main-nav-link focus-fix {selected ? 'selected' : ''}"
+  aria-label={ariaLabel}
+  aria-current={selected}
+  on:click={onClick}
+  data-sveltekit-preload-data
+  {href}
+>
   <div class="nav-icon-and-label">
     <NavItemIcon {showBadge} {badgeNumber} {svg} />
     <span class="nav-link-label">{label}</span>
   </div>
   <div class="nav-indicator-wrapper">
-    <div class="nav-indicator" bind:this={indicator}></div>
+    <div class="nav-indicator" bind:this={indicator} />
   </div>
 </a>
 
@@ -240,4 +243,3 @@
     }
   }
 </style>
-

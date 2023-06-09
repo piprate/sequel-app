@@ -11,38 +11,32 @@ if (inBrowser() && !import.meta.env.PROD) {
   window.reselectStats = {}
 }
 
-export function reselect (rawValue, reselectKey) {
+export function reselect(rawValue, reselectKey) {
   let prevValue
   let nextValue
   let count = 0
 
-  const reselectCount = derived(
-    rawValue,
-    $rawValue => {
-      if (inBrowser() && !import.meta.env.PROD) {
-        window.reselectStats[reselectKey] = window.reselectStats[reselectKey] || {
-          numInputChanges: 0,
-          numOutputChanges: 0
-        }
-        window.reselectStats[reselectKey].numInputChanges++
+  const reselectCount = derived(rawValue, ($rawValue) => {
+    if (inBrowser() && !import.meta.env.PROD) {
+      window.reselectStats[reselectKey] = window.reselectStats[reselectKey] || {
+        numInputChanges: 0,
+        numOutputChanges: 0
       }
-      if (!isEqual(prevValue, $rawValue)) {
-        nextValue = $rawValue
-        count++
-      }
-      return count
+      window.reselectStats[reselectKey].numInputChanges++
     }
-  )
+    if (!isEqual(prevValue, $rawValue)) {
+      nextValue = $rawValue
+      count++
+    }
+    return count
+  })
 
-  return derived(
-    reselectCount,
-    $reselectCount => {
-      if (inBrowser() && !import.meta.env.PROD) {
-        window.reselectStats[reselectKey].numOutputChanges++
-      }
-      prevValue = nextValue
-      nextValue = null
-      return prevValue
+  return derived(reselectCount, ($reselectCount) => {
+    if (inBrowser() && !import.meta.env.PROD) {
+      window.reselectStats[reselectKey].numOutputChanges++
     }
-  )
+    prevValue = nextValue
+    nextValue = null
+    return prevValue
+  })
 }

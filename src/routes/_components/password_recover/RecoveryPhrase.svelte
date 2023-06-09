@@ -8,7 +8,13 @@
   import ErrorMessage from '../ErrorMessage.svelte'
   import LoadingSpinner from '../LoadingSpinner.svelte'
   import { getInstanceName, processURI } from '../../_utils/instance'
-  import { encryptPassword, generateKey, generateNewSeed, sign, generateManagedFromHostedKey } from '../../_actions/encryption'
+  import {
+    encryptPassword,
+    generateKey,
+    generateNewSeed,
+    sign,
+    generateManagedFromHostedKey
+  } from '../../_actions/encryption'
 
   export let dialogId
   export let email
@@ -21,7 +27,7 @@
   let error
   let loading = false
 
-  async function submitRecoveryCode () {
+  async function submitRecoveryCode() {
     try {
       error = null
       loading = true
@@ -78,7 +84,7 @@
       name="recoveryPhrase"
       rows="4"
       bind:value={recoveryPhrase}
-      placeholder="{intl.enterRecoveryPhrase}"
+      placeholder={intl.enterRecoveryPhrase}
       required
     />
   </div>
@@ -90,9 +96,9 @@
       autocapitalize="none"
       spellcheck="false"
       id="new-password"
-      name='newPassword'
+      name="newPassword"
       bind:value={newPassword}
-      placeholder="{intl.enterNewPassword}"
+      placeholder={intl.enterNewPassword}
       required
     />
   </div>
@@ -106,16 +112,11 @@
       id="confirm-password"
       name="confirmPassword"
       bind:value={confirmPassword}
-      placeholder="{intl.enterNewPassword}"
+      placeholder={intl.enterNewPassword}
       required
     />
   </div>
-  <button
-    type="submit"
-    class="primary"
-    aria-labelledby="button-text"
-    disabled={loading}
-  >
+  <button type="submit" class="primary" aria-labelledby="button-text" disabled={loading}>
     <span id="button-text">Submit</span>{' '}
     {#if loading}
       <LoadingSpinner size={20} maskStyle />
@@ -132,7 +133,7 @@
     margin-bottom: 1rem;
   }
 
-  button[type="submit"] {
+  button[type='submit'] {
     margin-top: 16px;
   }
 

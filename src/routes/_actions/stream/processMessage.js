@@ -7,9 +7,9 @@ import { populateNotificationMediaURLs, populatePostMediaURLs } from '../../_api
 
 const KNOWN_EVENTS = ['post_created', 'post_updated', 'post_deleted', 'notification', 'conversation', 'filters_changed']
 
-export function processMessage (instanceName, accessToken, message) {
+export function processMessage(instanceName, accessToken, message) {
   console.log('Received message', message)
-  const { type, timeline, asSpark, object } = (message || {})
+  const { type, timeline, asSpark, object } = message || {}
   if (!KNOWN_EVENTS.includes(type)) {
     console.warn('ignoring message from server', message)
     return

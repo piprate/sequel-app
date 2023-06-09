@@ -1,16 +1,16 @@
-export function getScrollContainer () {
+export function getScrollContainer() {
   return document.scrollingElement
 }
 
-export function addScrollListener (listener) {
+export function addScrollListener(listener) {
   document.addEventListener('scroll', listener)
 }
 
-export function removeScrollListener (listener) {
+export function removeScrollListener(listener) {
   document.removeEventListener('scroll', listener)
 }
 
-export function getOffsetHeight () {
+export function getOffsetHeight() {
   // in a subscroller, this would be element.offsetHeight, but here
   // document.scrollingElement.offsetHeight is too short for some reason.
   // This one is exact, such that scrollHeight - scrollTop - offsetHeight === 0

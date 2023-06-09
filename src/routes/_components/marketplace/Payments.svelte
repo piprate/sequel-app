@@ -6,12 +6,12 @@
 
   $: payments = listing.payments || []
   $: profile = listing.object && listing.object.evergreenProfile
-  $: paymentsForDisplay = (payments.map(payment => ({
+  $: paymentsForDisplay = payments.map((payment) => ({
     role: paymentRoleName(payment.role, profile),
     receiver: `0x${payment.receiver}`,
     rate: (payment.rate * 100.0).toFixed(2) + '%',
     amount: `${(payment.amount * numEditions).toFixed(2)} ${payment.currency}`
-  })))
+  }))
 </script>
 
 <div class="payments">
@@ -19,34 +19,31 @@
     <div class="evergreen-profile-header">
       <h2>{intl.payments}</h2>
     </div>
-    <div class="payments-border"></div>
+    <div class="payments-border" />
     {#each paymentsForDisplay as payment, i}
-      <div
-              id="payments-participant-{i}"
-              class="payments-cell payments-participant-name"
-              role="term"
-      >
+      <div id="payments-participant-{i}" class="payments-cell payments-participant-name" role="term">
         <div class="role-name">{payment.role}</div>
         <div class="role-address">{payment.receiver}</div>
       </div>
       <div
-              class="payments-cell payments-value payments-amount"
-              role="definition"
-              aria-labelledby="payments-participant-{i}"
+        class="payments-cell payments-value payments-amount"
+        role="definition"
+        aria-labelledby="payments-participant-{i}"
       >
         {payment.rate}
       </div>
       <div
-              class="payments-cell payments-value payments-amount"
-              role="definition"
-              aria-labelledby="payments-participant-{i}"
+        class="payments-cell payments-value payments-amount"
+        role="definition"
+        aria-labelledby="payments-participant-{i}"
       >
         {payment.amount}
       </div>
     {/each}
-    <div class="payments-border"></div>
+    <div class="payments-border" />
   {/if}
 </div>
+
 <style>
   .payments {
     grid-area: payments;
@@ -72,7 +69,7 @@
     word-wrap: break-word;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.0em;
+    font-size: 1em;
   }
 
   .payments-participant-name {

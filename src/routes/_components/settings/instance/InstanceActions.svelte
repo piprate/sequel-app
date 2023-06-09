@@ -3,18 +3,18 @@
   import { importShowTextConfirmationDialog } from '../../dialog/asyncDialogs/importShowTextConfirmationDialog.js'
   import { switchToInstance, logOutOfInstance } from '../../../_actions/instances'
   import { formatIntl } from '../../../_utils/formatIntl'
-  import { saveInstanceSettings } from './helpers/save';
+  import { saveInstanceSettings } from './helpers/save'
 
-  export let instanceName;
+  export let instanceName
 
-  const intl = {};
+  const intl = {}
 
-  function onSwitchToThisInstance (e) {
+  function onSwitchToThisInstance(e) {
     e.preventDefault()
     switchToInstance(instanceName)
   }
 
-  async function onLogOut (e) {
+  async function onLogOut(e) {
     e.preventDefault()
 
     const showTextConfirmationDialog = await importShowTextConfirmationDialog()
@@ -23,26 +23,26 @@
     }).$on('positive', () => {
       // TODO: dumb timing hack because the modal navigates back while we're trying to navigate forward
       setTimeout(() => {
-        /* no await */logOutOfInstance(instanceName)
+        /* no await */ logOutOfInstance(instanceName)
       }, 200)
     })
   }
 
-  async function onSave () {
+  async function onSave() {
     saveInstanceSettings(instanceName)
   }
 </script>
 
-<form class="instance-actions" aria-label="{intl.switchOrLogOut}">
+<form class="instance-actions" aria-label={intl.switchOrLogOut}>
   {#if $loggedInInstancesInOrder.length > 1 && $currentInstance !== instanceName}
-    <button class="primary"
-            on:click="{onSwitchToThisInstance}">
+    <button class="primary" on:click={onSwitchToThisInstance}>
       {intl.switchTo}
     </button>
   {/if}
-  <button type="button" class='primary' on:click={onSave}>{intl.saveSettings}</button>
-  <button on:click="{onLogOut}">{intl.logOut}</button>
+  <button type="button" class="primary" on:click={onSave}>{intl.saveSettings}</button>
+  <button on:click={onLogOut}>{intl.logOut}</button>
 </form>
+
 <style>
   .instance-actions {
     width: 100%;

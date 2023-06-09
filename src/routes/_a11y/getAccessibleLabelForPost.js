@@ -2,7 +2,7 @@ import { getSparkAccessibleName } from './getSparkAccessibleName'
 import { POST_PRIVACY_OPTIONS } from '../_static/posts'
 import { formatIntl } from '../_utils/formatIntl'
 
-function getNotificationText (notification, omitEmojiInDisplayNames) {
+function getNotificationText(notification, omitEmojiInDisplayNames) {
   if (!notification) {
     return
   }
@@ -16,7 +16,7 @@ function getNotificationText (notification, omitEmojiInDisplayNames) {
   }
 }
 
-function getPrivacyText (visibility) {
+function getPrivacyText(visibility) {
   for (const option of POST_PRIVACY_OPTIONS) {
     if (option.key === visibility) {
       return option.label
@@ -24,18 +24,28 @@ function getPrivacyText (visibility) {
   }
 }
 
-function cleanupText (text) {
+function cleanupText(text) {
   return text.replace(/\s+/g, ' ').trim()
 }
 
-export function getAccessibleLabelForPost (postAuthor, plainTextBody,
-  shortInlineFormattedDate, spoilerText, showContent,
-  notification, visibility, omitEmojiInDisplayNames,
-  disableLongAriaLabels, showMedia, showPoll) {
+export function getAccessibleLabelForPost(
+  postAuthor,
+  plainTextBody,
+  shortInlineFormattedDate,
+  spoilerText,
+  showContent,
+  notification,
+  visibility,
+  omitEmojiInDisplayNames,
+  disableLongAriaLabels,
+  showMedia,
+  showPoll
+) {
   const postAuthorDisplayName = getSparkAccessibleName(postAuthor, omitEmojiInDisplayNames)
-  const contentTextToShow = (showContent || !spoilerText)
-    ? cleanupText(plainTextBody)
-    : formatIntl('intl.contentWarningContent', { spoiler: cleanupText(spoilerText) })
+  const contentTextToShow =
+    showContent || !spoilerText
+      ? cleanupText(plainTextBody)
+      : formatIntl('intl.contentWarningContent', { spoiler: cleanupText(spoilerText) })
   const mediaTextToShow = showMedia && 'intl.hasMedia'
   const pollTextToShow = showPoll && 'intl.hasPoll'
   const privacyText = getPrivacyText(visibility)

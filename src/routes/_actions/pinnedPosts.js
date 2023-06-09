@@ -5,7 +5,7 @@ import { currentInstance, pinnedPosts } from '../_store/local'
 import { get } from 'svelte/store'
 import { accessToken } from '../_store/instance'
 
-export async function updatePinnedPostsForSpark (sparkId, asSpark) {
+export async function updatePinnedPostsForSpark(sparkId, asSpark) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
 
@@ -18,8 +18,8 @@ export async function updatePinnedPostsForSpark (sparkId, asSpark) {
       }
       return _pinnedPosts
     },
-    posts => database.insertPinnedPosts(_currentInstance, sparkId, posts, asSpark),
-    posts => {
+    (posts) => database.insertPinnedPosts(_currentInstance, sparkId, posts, asSpark),
+    (posts) => {
       const _pinnedPosts = pinnedPosts.get()
       _pinnedPosts[_currentInstance] = _pinnedPosts[_currentInstance] || {}
       _pinnedPosts[_currentInstance][sparkId] = posts

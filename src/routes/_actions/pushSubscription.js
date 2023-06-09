@@ -4,9 +4,10 @@ import { currentPushSubscription } from '../_store/instance'
 import { urlBase64ToUint8Array } from '../_utils/base64'
 import { get } from 'svelte/store'
 
-const dummyApplicationServerKey = 'BImgAz4cF_yvNFp8uoBJCaGpCX4d0atNIFMHfBvAAXCyrnn9IMAFQ10DW_ZvBCzGeR4fZI5FnEi2JVcRE-L88jY='
+const dummyApplicationServerKey =
+  'BImgAz4cF_yvNFp8uoBJCaGpCX4d0atNIFMHfBvAAXCyrnn9IMAFQ10DW_ZvBCzGeR4fZI5FnEi2JVcRE-L88jY='
 
-export async function updatePushSubscriptionForInstance (instanceName) {
+export async function updatePushSubscriptionForInstance(instanceName) {
   const currentPushSubscriptionVal = get(currentPushSubscription)
   const accessToken = loggedInInstances.get()[instanceName].access_token
 
@@ -26,7 +27,10 @@ export async function updatePushSubscriptionForInstance (instanceName) {
     const backendSubscription = await getSubscription(instanceName, accessToken)
 
     // Check if applicationServerKey changed (need to get another subscription from the browser)
-    if (btoa(urlBase64ToUint8Array(backendSubscription.serverKey).buffer) !== btoa(subscription.options.applicationServerKey)) {
+    if (
+      btoa(urlBase64ToUint8Array(backendSubscription.serverKey).buffer) !==
+      btoa(subscription.options.applicationServerKey)
+    ) {
       await subscription.unsubscribe()
       await deleteSubscription(instanceName, accessToken)
       await updateAlerts(instanceName, currentPushSubscriptionVal.alerts)
@@ -42,7 +46,7 @@ export async function updatePushSubscriptionForInstance (instanceName) {
   }
 }
 
-export async function updateAlerts (instanceName, alerts) {
+export async function updateAlerts(instanceName, alerts) {
   const accessToken = loggedInInstances.get()[instanceName].access_token
 
   const registration = await navigator.serviceWorker.ready

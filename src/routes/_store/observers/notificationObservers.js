@@ -5,8 +5,8 @@ import { inNode } from '../../_utils/browserOrNode'
 
 let currentFaviconHasNotifications = false
 
-export function notificationObservers () {
-  hasNotifications.subscribe(_hasNotifications => {
+export function notificationObservers() {
+  hasNotifications.subscribe((_hasNotifications) => {
     if (inNode()) {
       return
     }

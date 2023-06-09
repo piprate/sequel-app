@@ -3,14 +3,14 @@ import { getLists } from '../_api/lists'
 import { cacheFirstUpdateAfter, cacheFirstUpdateOnlyIfNotInCache } from '../_utils/sync'
 import { database } from '../_database/database'
 
-async function syncLists (instanceName, syncMethod) {
+async function syncLists(instanceName, syncMethod) {
   const accessToken = loggedInInstances.get()[instanceName].access_token
 
   await syncMethod(
     () => getLists(instanceName, accessToken),
     () => database.getLists(instanceName),
-    lists => database.setLists(instanceName, lists),
-    lists => {
+    (lists) => database.setLists(instanceName, lists),
+    (lists) => {
       const _instanceLists = instanceLists.get()
       _instanceLists[instanceName] = lists
       instanceLists.set(_instanceLists)
@@ -18,10 +18,10 @@ async function syncLists (instanceName, syncMethod) {
   )
 }
 
-export async function updateListsForInstance (instanceName) {
+export async function updateListsForInstance(instanceName) {
   await syncLists(instanceName, cacheFirstUpdateAfter)
 }
 
-export async function setupListsForInstance (instanceName) {
+export async function setupListsForInstance(instanceName) {
   await syncLists(instanceName, cacheFirstUpdateOnlyIfNotInCache)
 }

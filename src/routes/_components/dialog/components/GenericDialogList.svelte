@@ -1,34 +1,32 @@
 <script>
   import SvgIcon from '../../SvgIcon.svelte'
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from 'svelte'
 
-  export let selectable;
-  export let items;
+  export let selectable
+  export let items
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 </script>
 
 <ul class="generic-dialog-list">
   {#each items as item (item.key)}
-  <li class="generic-dialog-list-item">
-    <button
-        class="generic-dialog-list-button focus-fix"
-        on:click="{() => dispatch('click', item)}">
-      <!-- Extra wrapper inside button is required for KaiOS. Seems old Firefox does not like flex buttons. -->
-      <div class="generic-dialog-list-button-inner">
-        <SvgIcon className="generic-dialog-list-item-svg" href={item.icon} />
-        <span class="generic-dialog-list-button-span">
-          {item.label}
-        </span>
-        {#if selectable}
-          <SvgIcon className="generic-dialog-list-item-svg {item.selected ? '' : 'hidden'}"
-                   href="#fa-check" />
-        {/if}
-      </div>
-    </button>
-  </li>
+    <li class="generic-dialog-list-item">
+      <button class="generic-dialog-list-button focus-fix" on:click={() => dispatch('click', item)}>
+        <!-- Extra wrapper inside button is required for KaiOS. Seems old Firefox does not like flex buttons. -->
+        <div class="generic-dialog-list-button-inner">
+          <SvgIcon className="generic-dialog-list-item-svg" href={item.icon} />
+          <span class="generic-dialog-list-button-span">
+            {item.label}
+          </span>
+          {#if selectable}
+            <SvgIcon className="generic-dialog-list-item-svg {item.selected ? '' : 'hidden'}" href="#fa-check" />
+          {/if}
+        </div>
+      </button>
+    </li>
   {/each}
 </ul>
+
 <style>
   .generic-dialog-list {
     list-style: none;

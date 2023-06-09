@@ -1,30 +1,30 @@
 <script>
-  import IconButton from '../IconButton.svelte';
-  import { importShowBubbleProfileOptionsDialog } from '../dialog/asyncDialogs/importShowBubbleProfileOptionsDialog.js';
-  import { LOCALE } from '../../_static/intl';
-  import { formatIntl } from '../../_utils/formatIntl';
-  import { thunk } from '../../_utils/thunk';
-  import { unwrap } from "../../_utils/mapper";
+  import IconButton from '../IconButton.svelte'
+  import { importShowBubbleProfileOptionsDialog } from '../dialog/asyncDialogs/importShowBubbleProfileOptionsDialog.js'
+  import { LOCALE } from '../../_static/intl'
+  import { formatIntl } from '../../_utils/formatIntl'
+  import { thunk } from '../../_utils/thunk'
+  import { unwrap } from '../../_utils/mapper'
 
-  const numberFormat = thunk(() => new Intl.NumberFormat(LOCALE));
+  const numberFormat = thunk(() => new Intl.NumberFormat(LOCALE))
 
-  export let bubble;
-  export let relationship;
-  export let ourSpark;
+  export let bubble
+  export let relationship
+  export let ourSpark
 
-  $: bubbleId = unwrap(bubble.id);
-  $: numPosts = bubble.postCount || 0;
-  $: numMembers = bubble.memberCount || 0;
-  $: numAssets = bubble.assetCount || 0;
-  $: numPostsDisplay = numberFormat().format(numPosts);
-  $: numMembersDisplay = numberFormat().format(numMembers);
-  $: numAssetsDisplay = numberFormat().format(numAssets);
-  $: membersLabel = formatIntl('intl.bubbleMembersLabel', { count: numMembers });
-  $: sparkSelected = !!ourSpark;
+  $: bubbleId = unwrap(bubble.id)
+  $: numPosts = bubble.postCount || 0
+  $: numMembers = bubble.memberCount || 0
+  $: numAssets = bubble.assetCount || 0
+  $: numPostsDisplay = numberFormat().format(numPosts)
+  $: numMembersDisplay = numberFormat().format(numMembers)
+  $: numAssetsDisplay = numberFormat().format(numAssets)
+  $: membersLabel = formatIntl('intl.bubbleMembersLabel', { count: numMembers })
+  $: sparkSelected = !!ourSpark
 
-  async function onMoreOptionsClick () {
-    const showBubbleProfileOptionsDialog = await importShowBubbleProfileOptionsDialog();
-    showBubbleProfileOptionsDialog(bubble, relationship, ourSpark);
+  async function onMoreOptionsClick() {
+    const showBubbleProfileOptionsDialog = await importShowBubbleProfileOptionsDialog()
+    showBubbleProfileOptionsDialog(bubble, relationship, ourSpark)
   }
 </script>
 
@@ -38,10 +38,11 @@
       {numPostsDisplay}
     </span>
   </div>
-  <a class="bubble-profile-details-item"
-     href='/bubbles/{bubbleId}/members'
-     aria-label={membersLabel}
-     data-sveltekit-preload-data
+  <a
+    class="bubble-profile-details-item"
+    href="/bubbles/{bubbleId}/members"
+    aria-label={membersLabel}
+    data-sveltekit-preload-data
   >
     <span class="bubble-profile-details-item-title">
       {intl.members}
@@ -58,17 +59,13 @@
       {numAssetsDisplay}
     </span>
   </div>
-  {#if sparkSelected }
-  <div class="bubble-profile-more-options">
-    <IconButton
-      label="{intl.moreOptions}"
-      href="#fa-bars"
-      muted="true"
-      on:click="{onMoreOptionsClick}"
-    />
-  </div>
+  {#if sparkSelected}
+    <div class="bubble-profile-more-options">
+      <IconButton label={intl.moreOptions} href="#fa-bars" muted="true" on:click={onMoreOptionsClick} />
+    </div>
   {/if}
 </div>
+
 <style>
   .bubble-profile-details {
     grid-area: details;

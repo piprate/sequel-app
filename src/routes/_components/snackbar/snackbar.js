@@ -1,12 +1,12 @@
 import { importSnackbar } from '../../_utils/asyncModules/importSnackbar.js'
 
-/** 
+/**
  * @type {InstanceType<Awaited<ReturnType<importSnackbar>>>}
  */
 let snackbar
 
 const lazySnackbar = {
-  async announce (text, buttonText, buttonAction) {
+  async announce(text, buttonText, buttonAction) {
     if (!snackbar) {
       const Snackbar = await importSnackbar()
       if (!snackbar) {

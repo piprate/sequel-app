@@ -22,9 +22,11 @@
   $: standaloneHeader = notificationType !== 'tmm'
 </script>
 
-<div class="post-header {isPostInNotification ? 'post-in-notification' : ''} {standaloneHeader ? 'standalone-header' : ''}">
+<div
+  class="post-header {isPostInNotification ? 'post-in-notification' : ''} {standaloneHeader ? 'standalone-header' : ''}"
+>
   <div class="post-header-avatar {timelineType === 'pinned' || notificationType === 'comment' ? 'hidden' : ''}">
-    <Avatar entity={author} size="extra-small"/>
+    <Avatar entity={author} size="extra-small" />
   </div>
   <SvgIcon className="post-header-svg" href={icon} />
 
@@ -35,30 +37,28 @@
       </span>
     {:else}
       {#if notificationType !== 'comment'}
-      <a id={elementId}
-         href="/sparks/{unwrap(authorId)}"
-         data-sveltekit-preload-data
-         class="post-header-author"
-      >
-        <SparkDisplayName spark={author} />
-      </a>
+        <a id={elementId} href="/sparks/{unwrap(authorId)}" data-sveltekit-preload-data class="post-header-author">
+          <SparkDisplayName spark={author} />
+        </a>
       {/if}
       <span class="post-header-action">{actionText}</span>
-      {#if notificationType === 'join_bubble' || notificationType === 'leave_bubble' }
-        <a id={elementSubjectId}
-           href="/bubbles/{unwrap(notification.subjectBubble.id)}"
-           data-sveltekit-preload-data
-           class="post-header-author"
+      {#if notificationType === 'join_bubble' || notificationType === 'leave_bubble'}
+        <a
+          id={elementSubjectId}
+          href="/bubbles/{unwrap(notification.subjectBubble.id)}"
+          data-sveltekit-preload-data
+          class="post-header-author"
         >
           <BubbleDisplayName bubble={notification.subjectBubble} />
         </a>
         <span class="post-header-action">{intl.bubbleSuffix}</span>
       {/if}
       {#if notificationType === 'mod_offer'}
-        <a id={elementSubjectId}
-           href="/marketplace/{notification.subjectListing.id}"
-           data-sveltekit-preload-data
-           class="post-header-author"
+        <a
+          id={elementSubjectId}
+          href="/marketplace/{notification.subjectListing.id}"
+          data-sveltekit-preload-data
+          class="post-header-author"
         >
           <EntityDisplayName entity={notification.subjectListing.object} />
         </a>
@@ -67,6 +67,7 @@
     {/if}
   </div>
 </div>
+
 <style>
   .post-header {
     grid-area: header;

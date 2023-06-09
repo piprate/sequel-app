@@ -17,6 +17,7 @@
 <div class="listing-name">
   <EntityDisplayName entity={listing.object} />
 </div>
+
 <style>
   .listing-name {
     grid-area: name;

@@ -21,32 +21,32 @@
   let mouseOver = false
   let loaded = false
 
-  let image;
-  let mouseOverImage;
+  let image
+  let mouseOverImage
 
-  $: computedClass = (classname(
-    className,
-    src !== staticSrc && 'non-autoplay-zoom-in',
-    isLink && 'is-link'
-  ))
+  $: computedClass = classname(className, src !== staticSrc && 'non-autoplay-zoom-in', isLink && 'is-link')
 
   $: currentSrc = mouseOver ? src : staticSrc
   // using a transparent pixel as placeholder ensures broken images don't have wrong sizes
-  $: displaySrc = secure ?
-    mouseOver ?
-      mouseOverImage ? mouseOverImage : ONE_TRANSPARENT_PIXEL :
-      image ? image : ONE_TRANSPARENT_PIXEL :
-    loaded ?
-      currentSrc :
-      ONE_TRANSPARENT_PIXEL
+  $: displaySrc = secure
+    ? mouseOver
+      ? mouseOverImage
+        ? mouseOverImage
+        : ONE_TRANSPARENT_PIXEL
+      : image
+      ? image
+      : ONE_TRANSPARENT_PIXEL
+    : loaded
+    ? currentSrc
+    : ONE_TRANSPARENT_PIXEL
 
   let node
 
-  async function onMouseOver (_mouseOver) {
+  async function onMouseOver(_mouseOver) {
     mouseOver = _mouseOver
     if (secure && mouseOver && !mouseOverImage) {
       try {
-        mouseOverImage = await loadSecureMedia($accessToken, currentSrc);
+        mouseOverImage = await loadSecureMedia($accessToken, currentSrc)
         dispatch('imgLoad')
       } catch (e) {
         dispatch('imgLoadError', e)
@@ -57,19 +57,19 @@
   const dispatch = createEventDispatcher()
 
   onMount(async () => {
-      try {
-        if (secure) {
-          image = await loadSecureMedia($accessToken, currentSrc);
-        } else {
-          const image = new Image()
-          image.src = currentSrc
-          await decodeImage(image)
-        }
-        loaded = true
-        dispatch('imgLoad')
-      } catch (e) {
-        dispatch('imgLoadError', e)
+    try {
+      if (secure) {
+        image = await loadSecureMedia($accessToken, currentSrc)
+      } else {
+        const image = new Image()
+        image.src = currentSrc
+        await decodeImage(image)
       }
+      loaded = true
+      dispatch('imgLoad')
+    } catch (e) {
+      dispatch('imgLoadError', e)
+    }
   })
 </script>
 
@@ -84,6 +84,7 @@
   bind:this={node}
   use:mouseover={onMouseOver}
 />
+
 <style>
   .non-autoplay-zoom-in {
     cursor: zoom-in;

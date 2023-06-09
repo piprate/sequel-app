@@ -1,9 +1,9 @@
 <script>
   import ListingPage from '../../../_components/marketplace/ListingPage.svelte'
 
-  export let params;
+  export let params
 </script>
 
 {#key params.id}
-    <ListingPage id={params.id} />
+  <ListingPage id={params.id} />
 {/key}

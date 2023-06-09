@@ -12,7 +12,7 @@ import { createThreadKeyRange, mergeKeyWithSparkId } from '../keys'
 import { deleteAll } from '../utils'
 import { sparkSpecificPostId } from './cachePost'
 
-export async function deletePostsAndNotifications (instanceName, postIds, notificationIds, asSpark) {
+export async function deletePostsAndNotifications(instanceName, postIds, notificationIds, asSpark) {
   for (const postId of postIds) {
     deleteFromCache(postsCache, instanceName, sparkSpecificPostId(postId, asSpark))
   }
@@ -38,35 +38,15 @@ export async function deletePostsAndNotifications (instanceName, postIds, notifi
       threadsStore
     ] = stores
 
-    function deletePost (postId) {
-      deleteAll(
-        postsStore,
-        postsStore.index('did'),
-        IDBKeyRange.only(postId)
-      )
-      deleteAll(
-        pinnedPostsStore,
-        pinnedPostsStore.index('postId'),
-        IDBKeyRange.only(postId)
-      )
-      deleteAll(
-        postTimelinesStore,
-        postTimelinesStore.index(mergeKeyWithSparkId('postId')),
-        IDBKeyRange.only(postId)
-      )
-      deleteAll(
-        threadsStore,
-        threadsStore.index(mergeKeyWithSparkId('postId')),
-        IDBKeyRange.only(postId)
-      )
-      deleteAll(
-        threadsStore,
-        threadsStore,
-        createThreadKeyRange(postId)
-      )
+    function deletePost(postId) {
+      deleteAll(postsStore, postsStore.index('did'), IDBKeyRange.only(postId))
+      deleteAll(pinnedPostsStore, pinnedPostsStore.index('postId'), IDBKeyRange.only(postId))
+      deleteAll(postTimelinesStore, postTimelinesStore.index(mergeKeyWithSparkId('postId')), IDBKeyRange.only(postId))
+      deleteAll(threadsStore, threadsStore.index(mergeKeyWithSparkId('postId')), IDBKeyRange.only(postId))
+      deleteAll(threadsStore, threadsStore, createThreadKeyRange(postId))
     }
 
-    function deleteNotification (notificationId) {
+    function deleteNotification(notificationId) {
       notificationsStore.delete(notificationId)
       deleteAll(
         notificationTimelinesStore,

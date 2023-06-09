@@ -1,5 +1,5 @@
 let count = -1
 
-export function createDialogId () {
+export function createDialogId() {
   return ++count
 }

@@ -36,7 +36,7 @@
         summary: 'Digital Art',
         type: 'source',
         nftList: [],
-        nftCount: 0,
+        nftCount: 0
       }
     ]
   }
@@ -53,7 +53,7 @@
   $: nftCount = currentSelectionTree.nftCount || 0
   $: enableBackButton = selectionHistory.length > 0
 
-  function onClick (nft) {
+  function onClick(nft) {
     if (nft.id === '') {
       dispatch('select', null)
     } else {
@@ -62,7 +62,7 @@
     close(id)
   }
 
-  async function onFolderClick (folder) {
+  async function onFolderClick(folder) {
     selectionHistory.push(currentSelectionTree)
     // cause variable refresh
     selectionHistory = selectionHistory
@@ -83,18 +83,18 @@
       } catch (e) {
         console.log(e)
         /* no await */
-        toast.say(formatIntl('intl.error', { error: (e.message || '') }))
+        toast.say(formatIntl('intl.error', { error: e.message || '' }))
       } finally {
         loadingNFTs = false
       }
     }
   }
 
-  function isCurrent (nft) {
+  function isCurrent(nft) {
     return nft.source === currentSource && nft.token === currentToken
   }
 
-  function onBackClick (e) {
+  function onBackClick(e) {
     currentSelectionTree = selectionHistory.pop()
     // cause variable refresh
     selectionHistory = selectionHistory
@@ -109,7 +109,7 @@
       } catch (e) {
         console.log(e)
         /* no await */
-        toast.say(formatIntl('intl.error', { error: (e.message || '') }))
+        toast.say(formatIntl('intl.error', { error: e.message || '' }))
       } finally {
         loadingNFTs = false
       }
@@ -126,30 +126,24 @@
         summary: 'NFTs from Flowverse',
         type: 'folder',
         folderList: collections,
-        nftCount: flowverseCount,
+        nftCount: flowverseCount
       })
 
-      console.log("Root Tree", rootSelectionTree)
+      console.log('Root Tree', rootSelectionTree)
 
       currentSelectionTree = rootSelectionTree
     }
   })
 </script>
 
-<ModalDialog
-        {id}
-        {label}
-        {title}
-        shrinkWidthToFit={false}
-        background="var(--main-bg)"
->
-  {#if notConnectedToFlow }
+<ModalDialog {id} {label} {title} shrinkWidthToFit={false} background="var(--main-bg)">
+  {#if notConnectedToFlow}
     <FlowConnect className="flow-sign-in-dialog" />
   {:else}
-    <RadioGroup id="nft-selector" className="nft-selection-radio" label="{intl.selectNFTFromList}" length={nftCount}>
-      <ul class="nft-results" aria-label="{intl.nftList}">
+    <RadioGroup id="nft-selector" className="nft-selection-radio" label={intl.selectNFTFromList} length={nftCount}>
+      <ul class="nft-results" aria-label={intl.nftList}>
         {#if currentSelectionTree.type === 'folder'}
-          {#if enableBackButton }
+          {#if enableBackButton}
             <li class="search-result">
               <div class="search-result-back" on:click={onBackClick}>
                 <div class="nft-selector-button-wrapper">
@@ -177,7 +171,7 @@
             </div>
           {/if}
         {:else}
-          {#if enableBackButton }
+          {#if enableBackButton}
             <li class="search-result">
               <div class="search-result-back" on:click={onBackClick}>
                 <div class="nft-selector-button-wrapper">
@@ -191,40 +185,38 @@
             <div class="loading-nft-collection">
               <LoadingSpinner />
             </div>
-          {:else}
-            {#if currentSelectionTree.nftCount > 0}
-              {#each currentSelectionTree.nftList as nft, idx}
-                <li class="search-result">
-                  <RadioGroupButton
-                          id="nft-selector={nft.id}"
-                          className="nft-selector-button"
-                          label={nft.name}
-                          index={idx}
-                          checked={isCurrent(nft)}
-                          on:click="{ (e) => onClick(nft) }">
-                    <div class="search-result-nft">
-                      <div class="search-result-nft-image">
-                        <Avatar entity={nft} size="small" secure={false} />
-                      </div>
-                      <div class="search-result-nft-name">
-                        <EntityDisplayName entity={nft} />
-                      </div>
-                      <div class="search-result-nft-username">
-                        {nft.token}
-                      </div>
-                      <div class="nft-selector-button-wrapper">
-                        <SvgIcon className="nft-selector-button-svg {isCurrent(nft) ? '' : 'hidden'}"
-                                 href="#fa-check" />
-                      </div>
+          {:else if currentSelectionTree.nftCount > 0}
+            {#each currentSelectionTree.nftList as nft, idx}
+              <li class="search-result">
+                <RadioGroupButton
+                  id="nft-selector={nft.id}"
+                  className="nft-selector-button"
+                  label={nft.name}
+                  index={idx}
+                  checked={isCurrent(nft)}
+                  on:click={(e) => onClick(nft)}
+                >
+                  <div class="search-result-nft">
+                    <div class="search-result-nft-image">
+                      <Avatar entity={nft} size="small" secure={false} />
                     </div>
-                  </RadioGroupButton>
-                </li>
-              {/each}
-            {:else}
-              <div class="search-result-nft">
-                <div class="search-result-not-found">{'intl.noNFTsFound'}</div>
-              </div>
-            {/if}
+                    <div class="search-result-nft-name">
+                      <EntityDisplayName entity={nft} />
+                    </div>
+                    <div class="search-result-nft-username">
+                      {nft.token}
+                    </div>
+                    <div class="nft-selector-button-wrapper">
+                      <SvgIcon className="nft-selector-button-svg {isCurrent(nft) ? '' : 'hidden'}" href="#fa-check" />
+                    </div>
+                  </div>
+                </RadioGroupButton>
+              </li>
+            {/each}
+          {:else}
+            <div class="search-result-nft">
+              <div class="search-result-not-found">{'intl.noNFTsFound'}</div>
+            </div>
           {/if}
         {/if}
       </ul>
@@ -285,8 +277,8 @@
     flex: 1;
     display: grid;
     grid-template-areas:
-      "name     button"
-      "summary  button";
+      'name     button'
+      'summary  button';
     grid-column-gap: 10px;
     grid-template-columns: auto 30px;
     align-items: center;
@@ -310,8 +302,8 @@
     flex: 1;
     display: grid;
     grid-template-areas:
-      "nft-image    name     button"
-      "nft-image    username button";
+      'nft-image    name     button'
+      'nft-image    username button';
     grid-column-gap: 20px;
     grid-template-columns: max-content 1fr max-content;
     align-items: center;
@@ -338,7 +330,7 @@
   .search-result-back {
     flex: 1;
     display: grid;
-    grid-template-areas: "button label";
+    grid-template-areas: 'button label';
     grid-column-gap: 10px;
     grid-template-columns: 30px auto;
     align-items: center;

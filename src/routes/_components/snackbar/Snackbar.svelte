@@ -2,61 +2,63 @@
   import { doubleRAF } from '../../_utils/doubleRAF'
   import SvgIcon from '../SvgIcon.svelte'
 
-  let shown = false;
-  let text = '';
-  let buttonText = '';
-  let buttonAction = null;
+  let shown = false
+  let text = ''
+  let buttonText = ''
+  let buttonAction = null
 
   export function announce(_text, _buttonText, _buttonAction) {
-    text = _text;
-    buttonText = _buttonText;
-    buttonAction = _buttonAction;
+    text = _text
+    buttonText = _buttonText
+    buttonAction = _buttonAction
     doubleRAF(() => {
-      shown = true;
+      shown = true
     })
   }
 
   function onClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault()
+    e.stopPropagation()
     if (buttonAction) {
-      buttonAction();
+      buttonAction()
     }
-    close();
+    close()
   }
 
   function close(e) {
     if (e) {
-      e.preventDefault();
-      e.stopPropagation();
+      e.preventDefault()
+      e.stopPropagation()
     }
     requestAnimationFrame(() => {
-      buttonAction = null; // avoid memory leaks from the closure
-      shown = false;
+      buttonAction = null // avoid memory leaks from the closure
+      shown = false
     })
   }
 </script>
 
-<section class="snackbar-modal {shown ? 'shown' : ''}"
-     aria-live="assertive"
-     aria-atomic="true"
-     aria-hidden={!shown}
-     aria-label="{intl.alert}"
+<section
+  class="snackbar-modal {shown ? 'shown' : ''}"
+  aria-live="assertive"
+  aria-atomic="true"
+  aria-hidden={!shown}
+  aria-label={intl.alert}
 >
   <div class="snackbar-container">
     <span class="text">
       {text}
     </span>
     <div class="button-wrapper">
-      <button class="button" on:click="{onClick}">
+      <button class="button" on:click={onClick}>
         {buttonText}
       </button>
-      <button class="button" aria-label="{intl.close}" on:click="{close}">
+      <button class="button" aria-label={intl.close} on:click={close}>
         <SvgIcon className="close-snackbar-button" href="#fa-times" />
       </button>
     </div>
   </div>
 </section>
+
 <style>
   .snackbar-modal {
     position: fixed;

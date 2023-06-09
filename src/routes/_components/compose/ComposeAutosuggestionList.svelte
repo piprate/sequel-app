@@ -4,20 +4,20 @@
   import SparkDisplayName from '../spark/SparkDisplayName.svelte'
   import { createAutosuggestAccessibleLabel } from '../../_utils/createAutosuggestAccessibleLabel'
   import SvgIcon from '../SvgIcon.svelte'
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from 'svelte'
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
-  export let items;
-  export let type;
-  export let selected;
-  export let realm;
+  export let items
+  export let type
+  export let selected
+  export let realm
 
   $: ariaLabels = items.map((item, i) => {
     return createAutosuggestAccessibleLabel(type, $omitEmojiInDisplayNames, i, items)
-  });
+  })
 
-  function onClick (event, item) {
+  function onClick(event, item) {
     event.preventDefault()
     event.stopPropagation()
     dispatch('click', item)
@@ -25,52 +25,40 @@
 </script>
 
 <!-- accessible autocomplete, based on https://haltersweb.github.io/Accessibility/autocomplete.html -->
-<ul id="compose-autosuggest-list-{realm}"
-    class="compose-autosuggest-list"
-    role="listbox"
->
+<ul id="compose-autosuggest-list-{realm}" class="compose-autosuggest-list" role="listbox">
   {#each items as item, i (item.shortcodes ? `emoji-${item.unicode || item.name}` : item.id ? `spark-${item.id}` : `hashtag-${item.name}`)}
-    <li id="compose-autosuggest-active-item-{realm}-{i}"
-        class="compose-autosuggest-list-item {i === selected ? 'selected' : ''}"
-        role="option"
-        aria-selected="{i === selected}"
-        on:click="{ (event) => onClick(event, item) }"
+    <li
+      id="compose-autosuggest-active-item-{realm}-{i}"
+      class="compose-autosuggest-list-item {i === selected ? 'selected' : ''}"
+      role="option"
+      aria-selected={i === selected}
+      on:click={(event) => onClick(event, item)}
     >
       <!-- aria-label would be simpler than an sr-only element, but that breaks VoiceOver+Safari -->
       <span class="sr-only">{ariaLabels[i]}</span>
       <div class="compose-autosuggest-list-grid" aria-hidden="true">
         {#if type === 'spark'}
           <div class="compose-autosuggest-list-item-avatar">
-            <Avatar
-                    size="{$isVeryTinyMobileSize ? 'extra-small' : 'small'}"
-                    entity={item}
-            />
+            <Avatar size={$isVeryTinyMobileSize ? 'extra-small' : 'small'} entity={item} />
           </div>
           <span class="compose-autosuggest-list-display-name">
-              <SparkDisplayName spark={item} />
+            <SparkDisplayName spark={item} />
           </span>
           {#if item.handle}
-          <span class="compose-autosuggest-list-username">
-            {'@' + item.handle}
-          </span>
+            <span class="compose-autosuggest-list-username">
+              {'@' + item.handle}
+            </span>
           {/if}
-          {:else if type === 'hashtag'}
-          <SvgIcon
-                  href="#fa-hashtag"
-                  ariaHidden={true}
-                  className="compose-autosuggest-list-item-icon"
-          />
+        {:else if type === 'hashtag'}
+          <SvgIcon href="#fa-hashtag" ariaHidden={true} className="compose-autosuggest-list-item-icon" />
           <span class="compose-autosuggest-list-display-name compose-autosuggest-list-display-name-single">
             {item.name}
           </span>
-        {:else} <!-- emoji -->
+        {:else}
+          <!-- emoji -->
           {#if item.url}
             <!-- custom emoji -->
-            <img src={item.url}
-                 class="compose-autosuggest-list-item-icon"
-                 alt=""
-                 aria-hidden="true"
-            />
+            <img src={item.url} class="compose-autosuggest-list-item-icon" alt="" aria-hidden="true" />
           {:else}
             <!-- native emoji -->
             <span class="compose-autosuggest-list-item-icon compose-autosuggest-list-item-native-emoji">
@@ -78,13 +66,14 @@
             </span>
           {/if}
           <span class="compose-autosuggest-list-display-name compose-autosuggest-list-display-name-single">
-              {item.shortcodes.map(_ => `:${_}:`).join(' ')}
+            {item.shortcodes.map((_) => `:${_}:`).join(' ')}
           </span>
         {/if}
       </div>
     </li>
   {/each}
 </ul>
+
 <style>
   .compose-autosuggest-list {
     list-style: none;
@@ -108,8 +97,9 @@
   .compose-autosuggest-list-grid {
     display: grid;
     width: 100%;
-    grid-template-areas: "icon     display-name"
-                         "icon     username";
+    grid-template-areas:
+      'icon     display-name'
+      'icon     username';
     grid-template-columns: min-content 1fr;
     grid-column-gap: 10px;
     grid-row-gap: 5px;
@@ -154,7 +144,8 @@
     text-overflow: ellipsis;
     text-align: left;
   }
-  .compose-autosuggest-list-item:hover, .compose-autosuggest-list-item.selected {
+  .compose-autosuggest-list-item:hover,
+  .compose-autosuggest-list-item.selected {
     background: var(--compose-autosuggest-item-hover);
   }
   .compose-autosuggest-list-item:active {

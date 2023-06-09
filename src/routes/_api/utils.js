@@ -1,15 +1,15 @@
-function targetIsLocalhost (instanceName) {
+function targetIsLocalhost(instanceName) {
   return instanceName && (instanceName.startsWith('localhost:') || instanceName.startsWith('127.0.0.1:'))
 }
 
-export function basename (instanceName) {
+export function basename(instanceName) {
   if (targetIsLocalhost(instanceName)) {
     return `http://${instanceName}`
   }
   return `https://${instanceName}`
 }
 
-export function base (instanceName, accessToken) {
+export function base(instanceName, accessToken) {
   if (accessToken) {
     return `https://${instanceName}`
   } else {
@@ -17,7 +17,7 @@ export function base (instanceName, accessToken) {
   }
 }
 
-export function auth (accessToken) {
+export function auth(accessToken) {
   if (accessToken) {
     return {
       Authorization: `Bearer ${accessToken}`
@@ -27,7 +27,7 @@ export function auth (accessToken) {
   }
 }
 
-export function sequelAuth (accessToken, sparkID) {
+export function sequelAuth(accessToken, sparkID) {
   const header = {}
 
   if (accessToken) {

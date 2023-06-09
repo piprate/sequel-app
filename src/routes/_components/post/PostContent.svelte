@@ -5,7 +5,7 @@
   import { massageUserText } from '../../_utils/massageUserText'
   import { urlIsCrossOrigin } from '../../_utils/urlIsCrossOrigin'
   import { onMount } from 'svelte'
-  import { isTimelineInReaderMode } from '../../_actions/timeline';
+  import { isTimelineInReaderMode } from '../../_actions/timeline'
 
   export let post
   export let uuid
@@ -26,12 +26,10 @@
     )
   })()
 
-  $: content = (post.bodyHTML || '')
-  $: massagedContent = (
-    massageUserText(content, postEmojis, $autoplayGifs)
-  )
+  $: content = post.bodyHTML || ''
+  $: massagedContent = massageUserText(content, postEmojis, $autoplayGifs)
 
-  function hydrateContent () {
+  function hydrateContent() {
     mark('hydrateContent')
     const { mentions, tags } = post
     let count = 0
@@ -77,8 +75,9 @@
 </script>
 
 <div class={computedClass} bind:this={node}>
-    {@html massagedContent}
+  {@html massagedContent}
 </div>
+
 <style>
   .post-content {
     margin: 10px 10px 10px 5px;
@@ -89,7 +88,7 @@
     font-size: 0.9em;
     display: none;
   }
-  
+
   .post-content.reader-mode {
     margin: 4px 10px 4px 5px;
   }
@@ -107,25 +106,20 @@
     font-size: 1.3em;
   }
 
-  :global(
-      .post-content p,
-      .post-content blockquote,
-      .post-content ul,
-      .post-content ol) {
+  :global(.post-content p, .post-content blockquote, .post-content ul, .post-content ol) {
     margin: 0 0 10px;
   }
 
-  :global(
-      .post-content ul,
-      .post-content ol) {
-      white-space: normal;
+  :global(.post-content ul, .post-content ol) {
+    white-space: normal;
   }
 
   :global(
       .post-content p:first-child,
       .post-content blockquote:first-child,
       .post-content ul:first-child,
-      .post-content ol:first-child) {
+      .post-content ol:first-child
+    ) {
     margin: 0 0 10px;
   }
 
@@ -133,7 +127,8 @@
       .post-content p:last-child,
       .post-content blockquote:last-child,
       .post-content ul:last-child,
-      .post-content ol:last-child) {
+      .post-content ol:last-child
+    ) {
     margin: 0;
   }
 
@@ -171,12 +166,12 @@
 
   @media (max-width: 240px) {
     :global(
-      .post-content p:last-child,
-      .post-content blockquote:last-child,
-      .post-content ul:last-child,
-      .post-content ol:last-child) {
+        .post-content p:last-child,
+        .post-content blockquote:last-child,
+        .post-content ul:last-child,
+        .post-content ol:last-child
+      ) {
       margin: 0 0 5px; /* looks better on KaiOS with some spacing here */
     }
   }
-
 </style>

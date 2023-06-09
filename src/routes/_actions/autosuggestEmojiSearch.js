@@ -10,7 +10,7 @@ import {
   setForCurrentAutosuggest
 } from '../_store/autosuggest'
 
-async function searchEmoji (searchText) {
+async function searchEmoji(searchText) {
   let emojis = await emojiDatabase.findBySearchQuery(searchText)
 
   const results = []
@@ -18,7 +18,7 @@ async function searchEmoji (searchText) {
   if (searchText.startsWith(':') && searchText.endsWith(':')) {
     // exact shortcode search
     const shortcode = searchText.substring(1, searchText.length - 1).toLowerCase()
-    emojis = emojis.filter(_ => _.shortcodes.includes(shortcode))
+    emojis = emojis.filter((_) => _.shortcodes.includes(shortcode))
   }
 
   mark('testEmojiSupported')
@@ -26,7 +26,8 @@ async function searchEmoji (searchText) {
     if (results.length === SEARCH_RESULTS_LIMIT) {
       break
     }
-    if (emoji.url || testEmojiSupported(emoji.unicode)) { // emoji.url is a custom emoji
+    if (emoji.url || testEmojiSupported(emoji.unicode)) {
+      // emoji.url is a custom emoji
       results.push(emoji)
     }
   }
@@ -34,7 +35,7 @@ async function searchEmoji (searchText) {
   return results
 }
 
-export function doEmojiSearch (searchText) {
+export function doEmojiSearch(searchText) {
   let canceled = false
 
   scheduleIdleTask(async () => {

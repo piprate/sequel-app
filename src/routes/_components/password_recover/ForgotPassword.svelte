@@ -18,7 +18,7 @@
     instance = 'localhost'
   }
 
-  async function submitEmail () {
+  async function submitEmail() {
     try {
       error = null
       loading = true
@@ -52,7 +52,7 @@
       spellcheck="false"
       id="email"
       bind:value={email}
-      placeholder="{intl.enterInstanceEmail}"
+      placeholder={intl.enterInstanceEmail}
       required
     />
   </div>
@@ -65,22 +65,18 @@
       spellcheck="false"
       id="instance"
       bind:value={instance}
-      placeholder="{intl.enterInstanceName}"
+      placeholder={intl.enterInstanceName}
       required
     />
   </div>
-  <button
-    type="submit"
-    class="primary"
-    aria-labelledby="button-text"
-    disabled={loading}
-  >
+  <button type="submit" class="primary" aria-labelledby="button-text" disabled={loading}>
     <span id="button-text">Submit</span>{' '}
     {#if loading}
       <LoadingSpinner size={20} maskStyle />
     {/if}
   </button>
 </form>
+
 <style>
   form {
     margin: 1rem 1.2rem;
@@ -90,7 +86,7 @@
     margin-bottom: 1rem;
   }
 
-  button[type="submit"] {
+  button[type='submit'] {
     margin-top: 16px;
   }
 

@@ -3,25 +3,26 @@
   import FreeTextLayout from '../FreeTextLayout.svelte'
   import FocusRestoration from '../FocusRestoration.svelte'
 
-  export let page;
-  export let label;
+  export let page
+  export let label
 </script>
 
 <FocusRestoration realm={page}>
-  <SettingsNav {page} {label}/>
+  <SettingsNav {page} {label} />
 
   <div class="settings">
     <FreeTextLayout>
       <div class="settings-header">
-        <slot name="header"></slot>
+        <slot name="header" />
       </div>
-      <slot></slot>
+      <slot />
       <div class="settings-footer">
-        <slot name="footer"></slot>
+        <slot name="footer" />
       </div>
     </FreeTextLayout>
   </div>
 </FocusRestoration>
+
 <style>
   .settings {
     margin: 20px;
@@ -37,7 +38,7 @@
     align-items: center;
     justify-content: space-between;
   }
-  
+
   .settings-footer {
     margin: 1.5rem 0 2rem;
   }

@@ -1,18 +1,19 @@
 <script>
-  import { autoplayGifs } from '../../_store/local';
-  import { massageUserText } from '../../_utils/massageUserText';
+  import { autoplayGifs } from '../../_store/local'
+  import { massageUserText } from '../../_utils/massageUserText'
 
-  export let bubble;
+  export let bubble
 
-  let emojis = [];
+  let emojis = []
 
-  $: massagedSummary = massageUserText(bubble.summaryHTML, emojis, $autoplayGifs);
+  $: massagedSummary = massageUserText(bubble.summaryHTML, emojis, $autoplayGifs)
 </script>
 
 <h2 class="sr-only">{intl.description}</h2>
 <div class="bubble-profile-summary">
   {@html massagedSummary}
 </div>
+
 <style>
   .bubble-profile-summary {
     grid-area: summary;

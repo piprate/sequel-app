@@ -2,11 +2,9 @@
   import Title from '../../_components/Title.svelte'
   import LazyPage from '../../_components/LazyPage.svelte'
   import pageComponent from '../../_pages/posts/[postId]/index.svelte'
-  import { page } from '$app/stores';
-
- 
+  import { page } from '$app/stores'
 </script>
 
-<Title name="{intl.post}" />
+<Title name={intl.post} />
 
 <LazyPage {pageComponent} params={$page.params} />

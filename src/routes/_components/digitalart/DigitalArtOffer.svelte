@@ -3,7 +3,7 @@
 
   export let digitalArt
 
-  async function openModal () {
+  async function openModal() {
     const showDialog = await importShowOfferDigitalArtDialog()
     showDialog(digitalArt)
   }
@@ -14,13 +14,13 @@
     <button class="primary" on:click={openModal}>OFFER</button>
   </div>
 {/if}
-  
-<style>
-    .offer {
-        grid-area: offer;
-    }
 
-    button.primary {
-        margin: 1rem 0;
-    }
+<style>
+  .offer {
+    grid-area: offer;
+  }
+
+  button.primary {
+    margin: 1rem 0;
+  }
 </style>

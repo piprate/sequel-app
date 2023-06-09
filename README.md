@@ -20,9 +20,9 @@ See [the official site](https://sequel.space) for more details.
 
 For updates and support, follow us on social media:
 
-* [@sequel@mastodon.social](https://mastodon.social/@sequel)
-* [Sequel@Discord](https://discord.gg/YaR7BFuXNk)
-* [@sequelspace@twitter.com](https://twitter.com/sequelspace)
+- [@sequel@mastodon.social](https://mastodon.social/@sequel)
+- [Sequel@Discord](https://discord.gg/YaR7BFuXNk)
+- [@sequelspace@twitter.com](https://twitter.com/sequelspace)
 
 ## Building
 
@@ -61,16 +61,16 @@ developed by [Nolan Lawson](https://nolanlawson.com/).
 Even though Sequel and Mastodon are very different platforms, the team decided to use Pinafore's backbone framework
 for building modern web apps, because:
 
-* it's based on Svelte, the framework that we wanted to use,
-* we share similar views on application design principles, and
-* simply because Pinafore is a great piece of engineering, written with love
+- it's based on Svelte, the framework that we wanted to use,
+- we share similar views on application design principles, and
+- simply because Pinafore is a great piece of engineering, written with love
 
 ### What's changed from Pinafore
 
-* Upgraded from Svelte 2 to Svelte 3
-* Borrowed Pinafore code on as-needed basis, but ended up with 80-90% of supporting libraries
-* Tried switching to Rollup, but ended up with reverting to Webpack. Simply because Flow libraries back then weren't compatible with Rollup
-* Switched from Mastodon domain model to Sequel
-* Reworked all platform specific screens
-* Added Sequel specific features
-* Haven't yet moved any tests over (WIP)
+- Upgraded from Svelte 2 to Svelte 3
+- Borrowed Pinafore code on as-needed basis, but ended up with 80-90% of supporting libraries
+- Tried switching to Rollup, but ended up with reverting to Webpack. Simply because Flow libraries back then weren't compatible with Rollup
+- Switched from Mastodon domain model to Sequel
+- Reworked all platform specific screens
+- Added Sequel specific features
+- Haven't yet moved any tests over (WIP)

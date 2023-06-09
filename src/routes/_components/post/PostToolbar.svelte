@@ -29,10 +29,8 @@
 
   let canComment = false
 
-  $: sparkNotSelected = !($currentSpark)
-  $: replyLabel = (
-          inReplyToId ? 'intl.replyToThread' : 'intl.reply'
-  )
+  $: sparkNotSelected = !$currentSpark
+  $: replyLabel = inReplyToId ? 'intl.replyToThread' : 'intl.reply'
   $: replyIcon = inReplyToId ? '#fa-reply-all' : '#fa-reply'
   $: tellMeMored = (() => {
     if ($currentPostModifications && postId in $currentPostModifications.tellMeMores) {
@@ -52,13 +50,13 @@
   $: optionsKey = `options-${uuid}`
   $: commentCount = post.replyCount || 0
   $: commentCountDigits = Math.min(3, commentCount.toString().length)
-  $: commentCountToShow = (commentCount < 100 ? commentCount.toString() : '99+')
+  $: commentCountToShow = commentCount < 100 ? commentCount.toString() : '99+'
   $: replyDisabled = !canComment
 
   let bookmarkIconComponent
   let tmmIconComponent
 
-  function toggleBookmark () {
+  function toggleBookmark() {
     const newBookmarkValue = !bookmarked
     /* no await */
     setPostBookmarked(postId, newBookmarkValue, $currentSparkId)
@@ -67,7 +65,7 @@
     }
   }
 
-  function tellMeMore () {
+  function tellMeMore() {
     const newTMMValue = !tellMeMored
     /* no await */
     setTMM(postId, newTMMValue)
@@ -76,14 +74,14 @@
     }
   }
 
-  function reply () {
+  function reply() {
     requestAnimationFrame(() => {
       $repliesShown[uuid] = !$repliesShown[uuid]
       dispatch('recalculateHeight')
     })
   }
 
-  async function onOptionsClick () {
+  async function onOptionsClick() {
     const updateRelationshipPromise = updateProfileAndRelationship(unwrap(postAuthorId))
     const showPostOptionsDialog = await importShowPostOptionsDialog()
     await updateRelationshipPromise
@@ -92,14 +90,16 @@
 
   let node
 
-  function onPublishedPost (realm, inReplyToUuid) {
+  function onPublishedPost(realm, inReplyToUuid) {
     if (realm !== postId || inReplyToUuid !== uuid) {
       return
     }
     try {
       // return post to the reply button after posting a reply
       node.querySelector('.post-toolbar-reply-button').focus({ preventScroll: true })
-    } catch (e) { /* ignore */ }
+    } catch (e) {
+      /* ignore */
+    }
   }
 
   onMount(() => {
@@ -125,7 +125,7 @@
     })
     const removeListener = on('publishedPost', onPublishedPost)
 
-    canPost(post.bubble, $currentSparkId, true).then(val => canComment = val)
+    canPost(post.bubble, $currentSparkId, true).then((val) => (canComment = val))
 
     return () => {
       removeClickDelegates()
@@ -137,15 +137,15 @@
 <div class="post-toolbar {isPostInOwnThread ? 'post-in-own-thread' : ''}" bind:this={node}>
   <div class="reply-button-wrapper">
     <IconButton
-            className="post-toolbar-reply-button"
-            label={replyLabel}
-            pressedLabel="{intl.closeReply}"
-            pressable={true}
-            pressed={replyShown}
-            disabled={replyDisabled}
-            href={replyIcon}
-            clickListener={false}
-            elementId={replyKey}
+      className="post-toolbar-reply-button"
+      label={replyLabel}
+      pressedLabel={intl.closeReply}
+      pressable={true}
+      pressed={replyShown}
+      disabled={replyDisabled}
+      href={replyIcon}
+      clickListener={false}
+      elementId={replyKey}
     />
     {#if commentCount}
       <span class="comment-count comment-count-digits-{commentCountDigits}" aria-hidden="true">
@@ -154,8 +154,8 @@
     {/if}
   </div>
   <IconButton
-    label="{intl.tellMeMore}"
-    pressedLabel="{intl.unTellMeMore}"
+    label={intl.tellMeMore}
+    pressedLabel={intl.unTellMeMore}
     pressable={!sparkNotSelected}
     pressed={tellMeMored}
     disabled={sparkNotSelected}
@@ -165,8 +165,8 @@
     bind:this={tmmIconComponent}
   />
   <IconButton
-    label="{intl.bookmarkPost}"
-    pressedLabel="{intl.unbookmarkPost}"
+    label={intl.bookmarkPost}
+    pressedLabel={intl.unbookmarkPost}
     pressable={true}
     pressed={bookmarked}
     disabled={sparkNotSelected}
@@ -174,9 +174,9 @@
     clickListener={false}
     elementId={bookmarkKey}
     bind:this={bookmarkIconComponent}
-    />
+  />
   <IconButton
-    label="{intl.moreOptions}"
+    label={intl.moreOptions}
     href="#fa-ellipsis-h"
     disabled={sparkNotSelected}
     clickListener={false}
@@ -184,10 +184,11 @@
   />
 </div>
 {#if enableShortcuts}
-  <Shortcut scope={shortcutScope} key="b" on:pressed="{toggleBookmark}"/>
-  <Shortcut scope={shortcutScope} key="r" on:pressed="{reply}"/>
-  <Shortcut scope={shortcutScope} key="t" on:pressed="{tellMeMore}"/>
+  <Shortcut scope={shortcutScope} key="b" on:pressed={toggleBookmark} />
+  <Shortcut scope={shortcutScope} key="r" on:pressed={reply} />
+  <Shortcut scope={shortcutScope} key="t" on:pressed={tellMeMore} />
 {/if}
+
 <style>
   .post-toolbar {
     grid-area: toolbar;

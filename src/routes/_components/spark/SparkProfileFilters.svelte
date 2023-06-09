@@ -26,14 +26,10 @@
   ]
 </script>
 
-<TabSet
-        label="{intl.filters}"
-        currentTabName={filter}
-        {tabs}
-        className="spark-profile-filters"
-/>
+<TabSet label={intl.filters} currentTabName={filter} {tabs} className="spark-profile-filters" />
+
 <style>
-    :global(.spark-profile-filters) {
-        background: var(--spark-profile-bg);
-    }
+  :global(.spark-profile-filters) {
+    background: var(--spark-profile-bg);
+  }
 </style>

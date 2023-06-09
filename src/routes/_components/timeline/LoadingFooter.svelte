@@ -1,12 +1,12 @@
 <script>
-  import LoadingSpinner from '../LoadingSpinner.svelte';
-  import { currentInstance, currentTimeline, disableInfiniteScroll, timelineInitialized } from '../../_store/local';
-  import { runningUpdate } from '../../_store/timeline';
-  import { fetchMoreItemsAtBottomOfTimeline } from '../../_actions/timeline';
+  import LoadingSpinner from '../LoadingSpinner.svelte'
+  import { currentInstance, currentTimeline, disableInfiniteScroll, timelineInitialized } from '../../_store/local'
+  import { runningUpdate } from '../../_store/timeline'
+  import { fetchMoreItemsAtBottomOfTimeline } from '../../_actions/timeline'
 
-  $: shown = $timelineInitialized && ($disableInfiniteScroll || $runningUpdate);
-  $: showLoading = $runningUpdate;
-  $: showLoadButton = !$runningUpdate && $disableInfiniteScroll;
+  $: shown = $timelineInitialized && ($disableInfiniteScroll || $runningUpdate)
+  $: showLoading = $runningUpdate
+  $: showLoadButton = !$runningUpdate && $disableInfiniteScroll
 
   function onClickLoadMore(e) {
     e.preventDefault()
@@ -25,10 +25,7 @@
 </script>
 
 <div class="loading-footer {shown ? '' : 'hidden'}">
-  <div class="loading-wrapper {showLoading ? 'shown' : ''}"
-       aria-hidden={!showLoading}
-       role="alert"
-  >
+  <div class="loading-wrapper {showLoading ? 'shown' : ''}" aria-hidden={!showLoading} role="alert">
     <!-- Sapper's mousemove event listener schedules style recalculations for the loading spinner in
          Chrome because it's always animating, even when hidden. So disable animations when not visible
          to avoid this. -->
@@ -37,16 +34,13 @@
       {intl.loadingMore}
     </span>
   </div>
-  <div class="button-wrapper {showLoadButton ? 'shown' : ''}"
-       aria-hidden={!showLoadButton}
-  >
-    <button type="button"
-            class="primary"
-            on:click="{onClickLoadMore}">
+  <div class="button-wrapper {showLoadButton ? 'shown' : ''}" aria-hidden={!showLoadButton}>
+    <button type="button" class="primary" on:click={onClickLoadMore}>
       {intl.loadMore}
     </button>
   </div>
 </div>
+
 <style>
   .loading-footer {
     padding: 20px 0;

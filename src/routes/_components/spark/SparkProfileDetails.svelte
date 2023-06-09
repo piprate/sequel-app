@@ -5,32 +5,32 @@
   import { formatIntl } from '../../_utils/formatIntl'
   import { thunk } from '../../_utils/thunk'
   import { disableSubscriberCounts } from '../../_store/local'
-  import { unwrap } from "../../_utils/mapper";
+  import { unwrap } from '../../_utils/mapper'
 
   const numberFormat = thunk(() => new Intl.NumberFormat(LOCALE))
 
-  export let spark;
-  export let relationship;
-  export let ourSpark;
+  export let spark
+  export let relationship
+  export let ourSpark
 
-  $: sparkId = unwrap(spark.id);
-  $: numPosts = spark.postCount || 0;
-  $: numBubbles = spark.bubbleCount || 0;
-  $: numSubscribers = spark.subscriberCount || 0;
-  $: numPostsDisplay = numberFormat().format(numPosts);
-  $: numBubblesDisplay = numberFormat().format(numBubbles);
+  $: sparkId = unwrap(spark.id)
+  $: numPosts = spark.postCount || 0
+  $: numBubbles = spark.bubbleCount || 0
+  $: numSubscribers = spark.subscriberCount || 0
+  $: numPostsDisplay = numberFormat().format(numPosts)
+  $: numBubblesDisplay = numberFormat().format(numBubbles)
   $: numSubscribersDisplay = (() => {
     if ($disableSubscriberCounts && numSubscribers >= 10) {
       return '10+'
     }
     return numberFormat().format(numSubscribers)
-  })();
-  $: subscribersLabel = formatIntl('intl.subscribersLabel', { count: numSubscribers });
-  $: bubblesLabel = formatIntl('intl.bubblesLabel', { count: numBubbles });
+  })()
+  $: subscribersLabel = formatIntl('intl.subscribersLabel', { count: numSubscribers })
+  $: bubblesLabel = formatIntl('intl.bubblesLabel', { count: numBubbles })
 
   async function onMoreOptionsClick() {
-    const showSparkProfileOptionsDialog = await importShowSparkProfileOptionsDialog();
-    showSparkProfileOptionsDialog(spark, relationship, ourSpark);
+    const showSparkProfileOptionsDialog = await importShowSparkProfileOptionsDialog()
+    showSparkProfileOptionsDialog(spark, relationship, ourSpark)
   }
 </script>
 
@@ -44,10 +44,11 @@
       {numPostsDisplay}
     </span>
   </div>
-  <a class="spark-profile-details-item"
-     href='/sparks/{sparkId}/subscribers'
-     aria-label={subscribersLabel}
-     data-sveltekit-preload-data
+  <a
+    class="spark-profile-details-item"
+    href="/sparks/{sparkId}/subscribers"
+    aria-label={subscribersLabel}
+    data-sveltekit-preload-data
   >
     <span class="spark-profile-details-item-title">
       {intl.subscribers}
@@ -56,10 +57,11 @@
       {numSubscribersDisplay}
     </span>
   </a>
-  <a class="spark-profile-details-item"
-     href='/sparks/{sparkId}/bubbles'
-     aria-label={bubblesLabel}
-     data-sveltekit-preload-data
+  <a
+    class="spark-profile-details-item"
+    href="/sparks/{sparkId}/bubbles"
+    aria-label={bubblesLabel}
+    data-sveltekit-preload-data
   >
     <span class="spark-profile-details-item-title">
       {intl.bubbles}
@@ -69,14 +71,10 @@
     </span>
   </a>
   <div class="spark-profile-more-options">
-    <IconButton
-      label="{intl.moreOptions}"
-      href="#fa-bars"
-      muted="true"
-      on:click="{onMoreOptionsClick}"
-    />
+    <IconButton label={intl.moreOptions} href="#fa-bars" muted="true" on:click={onMoreOptionsClick} />
   </div>
 </div>
+
 <style>
   .spark-profile-details {
     grid-area: details;

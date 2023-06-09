@@ -7,7 +7,7 @@ import { currentInstance } from '../../_store/local'
 import { get } from 'svelte/store'
 import { accessToken } from '../../_store/instance'
 
-export async function setSparkBlocked (sparkId, block, toastOnSuccess) {
+export async function setSparkBlocked(sparkId, block, toastOnSuccess) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   try {
@@ -31,9 +31,10 @@ export async function setSparkBlocked (sparkId, block, toastOnSuccess) {
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(block
-      ? formatIntl('intl.unableToBlock', { block: !!block, error: (e.message || '') })
-      : formatIntl('intl.unableToUnblock', { error: (e.message || '') })
+    toast.say(
+      block
+        ? formatIntl('intl.unableToBlock', { block: !!block, error: e.message || '' })
+        : formatIntl('intl.unableToUnblock', { error: e.message || '' })
     )
   }
 }

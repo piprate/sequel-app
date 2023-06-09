@@ -15,11 +15,7 @@
   let loaded = false
   let error = undefined
 
-  $: computedClass = classname(
-          'avatar',
-          className,
-          loaded && 'loaded'
-  )
+  $: computedClass = classname('avatar', className, loaded && 'loaded')
 
   $: width = ((size, isMobileSize) => {
     switch (size) {
@@ -40,7 +36,7 @@
   $: height = width
   $: svgStyle = `width: ${width}px; height: ${height}px;`
   $: staticSrc = entity.avatar ? entity.avatar.staticUrl : ''
-  $: src = flatMode ? staticSrc : (entity.avatar ? entity.avatar.url : '')
+  $: src = flatMode ? staticSrc : entity.avatar ? entity.avatar.url : ''
   $: avatarId = entity && entity.avatar && entity.avatar.id
   $: showDefaultIcon = error || !entity.avatar
 </script>
@@ -48,17 +44,22 @@
 <div class="avatar-wrapper">
   {#key avatarId}
     {#if showDefaultIcon}
-    <SvgIcon className={computedClass} style={svgStyle} href="#fa-user" />
+      <SvgIcon className={computedClass} style={svgStyle} href="#fa-user" />
     {:else if $autoplayGifs}
       <LazyImage
         ariaHidden="true"
-        forceSize=true
+        forceSize="true"
         alt=""
-        src={src}
+        {src}
         {width}
         {height}
-        on:imgLoad="{ () => { loaded = true } }"
-        on:imgLoadError="{ () => { error = true } }" />
+        on:imgLoad={() => {
+          loaded = true
+        }}
+        on:imgLoadError={() => {
+          error = true
+        }}
+      />
     {:else}
       <NonAutoplayImg
         className={computedClass}
@@ -70,11 +71,17 @@
         {height}
         {isLink}
         {secure}
-        on:imgLoad="{ () => { loaded = true } }"
-        on:imgLoadError="{ () => { error = true } }" />
+        on:imgLoad={() => {
+          loaded = true
+        }}
+        on:imgLoadError={() => {
+          error = true
+        }}
+      />
     {/if}
   {/key}
 </div>
+
 <style>
   .avatar-wrapper {
     position: relative;
@@ -94,4 +101,3 @@
     fill: var(--deemphasized-text-color);
   }
 </style>
-

@@ -1,9 +1,9 @@
 $main-theme-color: #ae91e8;
 //$main-theme-color: #8686CB;
-$main-bg-color: #28252E;
+$main-bg-color: #28252e;
 $body-bg-color: darken($main-bg-color, 5%);
 $anchor-color: $main-theme-color;
-$main-text-color: #FFF;
+$main-text-color: #fff;
 $border-color: lighten($body-bg-color, 10%);
 $secondary-text-color: white;
 $toast-border: #fafafa;
@@ -16,10 +16,10 @@ $scrollbar-face: #{lighten($main-theme-color, 3%)};
 $scrollbar-face-hover: #{lighten($main-theme-color, 5%)};
 $scrollbar-face-active: #{lighten($main-theme-color, 1%)};
 
-@import "_base.scss";
-@import "_dark.scss";
-@import "_dark_navbar.scss";
-@import "_dark_scrollbars.scss";
+@import '_base.scss';
+@import '_dark.scss';
+@import '_dark_navbar.scss';
+@import '_dark_scrollbars.scss';
 
 :root {
   accent-color: #{darken($main-theme-color, 12%)};

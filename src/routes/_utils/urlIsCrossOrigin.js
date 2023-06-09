@@ -1,4 +1,4 @@
-export function urlIsCrossOrigin (href) {
+export function urlIsCrossOrigin(href) {
   try {
     return new URL(href, location.href).origin !== location.origin
   } catch (e) {

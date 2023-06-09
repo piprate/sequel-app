@@ -7,7 +7,7 @@ import { filteredTimelineNotificationItemSummaries } from './timelineFilter'
 export const numberOfNotifications = derived(
   [filteredTimelineNotificationItemSummaries, disableNotificationBadge],
   ([$filteredTimelineNotificationItemSummaries, $disableNotificationBadge]) => {
-    return (!$disableNotificationBadge && $filteredTimelineNotificationItemSummaries)
+    return !$disableNotificationBadge && $filteredTimelineNotificationItemSummaries
       ? $filteredTimelineNotificationItemSummaries.length
       : 0
   }
@@ -27,9 +27,9 @@ export const numberOfSubscriptionRequests = derived(
   }
 )
 
-export const hasSubscriptionRequests = derived(numberOfSubscriptionRequests, $val => !!$val)
+export const hasSubscriptionRequests = derived(numberOfSubscriptionRequests, ($val) => !!$val)
 
 export const badgeNumber = derived(
   [numberOfSubscriptionRequests, numberOfNotifications],
-  ([$numberOfSubscriptionRequests, $numberOfNotifications]) => ($numberOfSubscriptionRequests + $numberOfNotifications)
+  ([$numberOfSubscriptionRequests, $numberOfNotifications]) => $numberOfSubscriptionRequests + $numberOfNotifications
 )

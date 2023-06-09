@@ -35,20 +35,20 @@
 </script>
 
 {#if $isUserLoggedIn}
-    {#if $observedDigitalArt}
-        {#if !newDigitalArt}
-            <DynamicPageBanner title="" {ariaTitle} />
-        {/if}
-        <DigitalArt digitalArt={$observedDigitalArt} ourSpark={$currentSpark} />
-    {:else if notFound}
-        <FreeTextLayout>
-            <h2>{intl.digitalArtNotFound}</h2>
-        </FreeTextLayout>
-    {:else if loadError}
-        <ErrorMessage error={loadError} />
-    {:else}
-        <LoadingPage />
+  {#if $observedDigitalArt}
+    {#if !newDigitalArt}
+      <DynamicPageBanner title="" {ariaTitle} />
     {/if}
+    <DigitalArt digitalArt={$observedDigitalArt} ourSpark={$currentSpark} />
+  {:else if notFound}
+    <FreeTextLayout>
+      <h2>{intl.digitalArtNotFound}</h2>
+    </FreeTextLayout>
+  {:else if loadError}
+    <ErrorMessage error={loadError} />
+  {:else}
+    <LoadingPage />
+  {/if}
 {:else}
-    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+  <RestrictedPageWarning message={intl.loginToAccess} offerVisitorMode={true} />
 {/if}

@@ -23,7 +23,7 @@
 
   let icon
 
-  async function onSwitchButtonClick (e) {
+  async function onSwitchButtonClick(e) {
     e.preventDefault()
     e.stopPropagation()
     setCurrentSpark($currentInstance, spark)
@@ -39,14 +39,15 @@
     3) the current spark isn't subscribed to the displayed spark
   -->
   <IconButton
-          className="spark-profile-switch-icon-button"
-          {label}
-          href="#fa-star"
-          big={!$isVeryTinyMobileSize}
-          on:click="{onSwitchButtonClick}"
-          bind:this={icon}
+    className="spark-profile-switch-icon-button"
+    {label}
+    href="#fa-star"
+    big={!$isVeryTinyMobileSize}
+    on:click={onSwitchButtonClick}
+    bind:this={icon}
   />
 </div>
+
 <style>
   .spark-profile-switch {
     grid-area: subscription;

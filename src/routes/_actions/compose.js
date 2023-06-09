@@ -23,7 +23,7 @@ import { unwrap, wrap } from '../_utils/mapper'
 
 export const publishingPost = writable(false)
 
-export async function canPost (bubbleId, asSpark, isComment = false) {
+export async function canPost(bubbleId, asSpark, isComment = false) {
   const _currentInstance = currentInstance.get()
   const bubble = await database.getBubble(_currentInstance, bubbleId)
   if (!bubble) {
@@ -46,7 +46,19 @@ export async function canPost (bubbleId, asSpark, isComment = false) {
   return false
 }
 
-export async function publishPost (realm, bubbleId, asSpark, text, originalPostId, inReplyToId, media, visibility, inReplyToUuid, textFormatKey, mentions) {
+export async function publishPost(
+  realm,
+  bubbleId,
+  asSpark,
+  text,
+  originalPostId,
+  inReplyToId,
+  media,
+  visibility,
+  inReplyToUuid,
+  textFormatKey,
+  mentions
+) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
 
@@ -62,7 +74,7 @@ export async function publishPost (realm, bubbleId, asSpark, text, originalPostI
   for (const mediaItem of media) {
     prepareMediaItem(mediaItem)
   }
-  const mediaToSend = media.map(_ => _.data)
+  const mediaToSend = media.map((_) => _.data)
   for (const [index, mediaItem] of mediaToSend.entries()) {
     const duplicateIndex = mediaToSend.findIndex((_, i) => {
       return _.id === mediaItem.id && index !== i
@@ -73,7 +85,19 @@ export async function publishPost (realm, bubbleId, asSpark, text, originalPostI
 
   publishingPost.set(true)
   try {
-    const post = await sendPost(_currentInstance, _accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, mediaToSend, visibility, textFormatKey, mentions)
+    const post = await sendPost(
+      _currentInstance,
+      _accessToken,
+      bubbleId,
+      asSpark,
+      text,
+      originalPostId,
+      inReplyToId,
+      mediaToSend,
+      visibility,
+      textFormatKey,
+      mentions
+    )
     if (originalPostId) {
       updateEditedPost(_currentInstance, post, asSpark)
       emit('postUpdated', post)
@@ -85,7 +109,7 @@ export async function publishPost (realm, bubbleId, asSpark, text, originalPostI
     setComposeData(realm, { postInputFormat: textFormatKey })
     emit('publishedPost', realm, inReplyToUuid)
     scheduleIdleTask(() => {
-      media.forEach(mediaItem => database.deleteCachedMediaFile(mediaItem.data.id)) // clean up media cache
+      media.forEach((mediaItem) => database.deleteCachedMediaFile(mediaItem.data.id)) // clean up media cache
 
       // preemptively update bubble stats
       const bubble = get(observedBubble)
@@ -97,13 +121,13 @@ export async function publishPost (realm, bubbleId, asSpark, text, originalPostI
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(formatIntl('intl.unableToPost', { error: (e.message || '') }))
+    toast.say(formatIntl('intl.unableToPost', { error: e.message || '' }))
   } finally {
     publishingPost.set(false)
   }
 }
 
-export function setReplySpoiler (realm, spoiler) {
+export function setReplySpoiler(realm, spoiler) {
   const contentWarning = getComposeData(realm, 'contentWarning')
   const contentWarningShown = getComposeData(realm, 'contentWarningShown')
   if (typeof contentWarningShown !== 'undefined' || contentWarning) {
@@ -122,7 +146,7 @@ const PRIVACY_LEVEL = {
   fediverse: 4
 }
 
-export function setReplyVisibility (realm, replyVisibility) {
+export function setReplyVisibility(realm, replyVisibility) {
   // // return the most private between the user's preferred default privacy
   // // and the privacy of the post they're replying to
   // const postPrivacy = getComposeData(realm, 'postPrivacy')

@@ -1,24 +1,25 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from 'svelte'
 
-  export let id = '';
-  export let href;
-  export let label;
-  export let ariaLabel = undefined;
-  export let className = undefined;
+  export let id = ''
+  export let href
+  export let label
+  export let ariaLabel = undefined
+  export let className = undefined
 
-  $: controlId = `settings-list-button-${id ? id : href}`;
+  $: controlId = `settings-list-button-${id ? id : href}`
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 </script>
 
 {#if href}
-  <a {href}
-     id="{controlId}"
-     on:click="{() => dispatch('click')}"
-     data-sveltekit-preload-data
-     aria-label={ariaLabel || label}
-     class="settings-list-button focus-fix {className ? className : ''}"
+  <a
+    {href}
+    id={controlId}
+    on:click={() => dispatch('click')}
+    data-sveltekit-preload-data
+    aria-label={ariaLabel || label}
+    class="settings-list-button focus-fix {className ? className : ''}"
   >
     <span>
       {label}
@@ -26,15 +27,17 @@
   </a>
 {:else}
   <div
-      id="{controlId}"
-      on:click="{() => dispatch('click')}"
-      aria-label={ariaLabel || label}
-      class="settings-list-button focus-fix {className ? className : ''}">
+    id={controlId}
+    on:click={() => dispatch('click')}
+    aria-label={ariaLabel || label}
+    class="settings-list-button focus-fix {className ? className : ''}"
+  >
     <span>
       {label}
     </span>
   </div>
 {/if}
+
 <style>
   .settings-list-button {
     display: flex;

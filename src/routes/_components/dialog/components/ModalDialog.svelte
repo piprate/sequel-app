@@ -3,65 +3,58 @@
   import SvgIcon from '../../SvgIcon.svelte'
   import { A11yDialog } from '../../../_thirdparty/a11y-dialog/a11y-dialog'
   import { classname } from '../../../_utils/classname'
-  import {on, emit, removeListener} from '../../../_utils/eventBus'
-  import {
-    pushShortcutScope,
-    popShortcutScope
-  } from '../../../_utils/shortcuts'
-  import {createEventDispatcher, onMount} from "svelte";
-  import { inNode } from '../../../_utils/browserOrNode';
+  import { on, emit, removeListener } from '../../../_utils/eventBus'
+  import { pushShortcutScope, popShortcutScope } from '../../../_utils/shortcuts'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import { inNode } from '../../../_utils/browserOrNode'
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
-  export let id;
-  export let label;
-  export let title = undefined;
-  export let className = undefined;
-  export let shrinkWidthToFit = false;
-  export let background;
-  export let muted = false;
-  export let clickHeaderToClose = false;
+  export let id
+  export let label
+  export let title = undefined
+  export let className = undefined
+  export let shrinkWidthToFit = false
+  export let background
+  export let muted = false
+  export let clickHeaderToClose = false
 
   // don't animate if we're showing a modal dialog on top of another modal dialog. it looks ugly
-  let shouldAnimate = inNode() || document.getElementsByClassName('modal-dialog').length < 2;
-  let fadedIn = false;
+  let shouldAnimate = inNode() || document.getElementsByClassName('modal-dialog').length < 2
+  let fadedIn = false
 
-  let statePopped;
-  let statePushed;
-  let _a11yDialog;
+  let statePopped
+  let statePushed
+  let _a11yDialog
 
-  $: backdropClass = classname(
-          'modal-dialog-backdrop',
-          !fadedIn && 'hidden',
-          shouldAnimate && 'should-animate'
-  );
+  $: backdropClass = classname('modal-dialog-backdrop', !fadedIn && 'hidden', shouldAnimate && 'should-animate')
 
   $: contentsClass = classname(
-          'modal-dialog-contents',
-          !fadedIn && 'hidden',
-          muted && 'muted-style',
-          shouldAnimate && 'should-animate',
-          shrinkWidthToFit && 'shrink-width-to-fit',
-          className
-  );
+    'modal-dialog-contents',
+    !fadedIn && 'hidden',
+    muted && 'muted-style',
+    shouldAnimate && 'should-animate',
+    shrinkWidthToFit && 'shrink-width-to-fit',
+    className
+  )
 
   function closeDialog(otherId) {
-     if (id !== otherId) {
+    if (id !== otherId) {
       return
     }
-    _a11yDialog.hide();
+    _a11yDialog.hide()
   }
 
   function onPopState(event) {
     if (!(event.state && event.state.modal === id)) {
       // If the new state is not us, just assume that we need to be closed.
       // This will only fail if modals are ever nested more than 2 levels deep.
-      statePopped = true;
-      closeDialog(id);
+      statePopped = true
+      closeDialog(id)
     }
   }
 
-  function showDialog (otherId) {
+  function showDialog(otherId) {
     if (otherId !== id) {
       return
     }
@@ -69,81 +62,74 @@
     // due to the popstate/pushstate dance.
     setTimeout(() => {
       requestAnimationFrame(() => {
-        window.addEventListener('popstate', onPopState);
-        statePushed = true;
-        window.history.pushState({ modal: id }, null, location.href);
-        document.body.classList.toggle('modal-open', true);
+        window.addEventListener('popstate', onPopState)
+        statePushed = true
+        window.history.pushState({ modal: id }, null, location.href)
+        document.body.classList.toggle('modal-open', true)
         _a11yDialog.show()
-        fadedIn = true;
-        dispatch('show');
-        emit('dialogDidRender', id);
+        fadedIn = true
+        dispatch('show')
+        emit('dialogDidRender', id)
       })
     })
   }
 
-  function onClickHeader (e) {
+  function onClickHeader(e) {
     if (clickHeaderToClose) {
-      e.preventDefault();
-      e.stopPropagation();
-      _a11yDialog.hide();
+      e.preventDefault()
+      e.stopPropagation()
+      _a11yDialog.hide()
     }
   }
 
-  let node;
+  let node
 
   onMount(() => {
-    const dialogElement = node.parentElement;
-    _a11yDialog = new A11yDialog(dialogElement);
+    const dialogElement = node.parentElement
+    _a11yDialog = new A11yDialog(dialogElement)
     _a11yDialog.on('hide', () => {
-      document.body.classList.toggle('modal-open', false);
-      dispatch('close');
-      _a11yDialog.destroy();
-      emit('destroyDialog', id);
-      requestAnimationFrame(() => document.body.removeChild(dialogElement));
+      document.body.classList.toggle('modal-open', false)
+      dispatch('close')
+      _a11yDialog.destroy()
+      emit('destroyDialog', id)
+      requestAnimationFrame(() => document.body.removeChild(dialogElement))
     })
-    const unsubscribeShowDialog = on('showDialog', showDialog);
-    const unsubscribeCloseDialog = on('closeDialog', closeDialog);
-    pushShortcutScope(`modal-${id}`);
+    const unsubscribeShowDialog = on('showDialog', showDialog)
+    const unsubscribeCloseDialog = on('closeDialog', closeDialog)
+    pushShortcutScope(`modal-${id}`)
 
     return () => {
-      unsubscribeShowDialog();
-      unsubscribeCloseDialog();
+      unsubscribeShowDialog()
+      unsubscribeCloseDialog()
 
-      window.removeEventListener('popstate', onPopState);
+      window.removeEventListener('popstate', onPopState)
       if (statePushed && !statePopped) {
         // If we weren't closed due to popstate, then pop state to ensure the correct history.
-        window.history.back();
+        window.history.back()
       }
-      popShortcutScope(`modal-${id}`);
+      popShortcutScope(`modal-${id}`)
     }
-  });
+  })
 </script>
 
-<div class={backdropClass}
-     tabindex="-1"
-     data-a11y-dialog-hide
-></div>
-<div class={contentsClass}
-     role="dialog"
-     aria-label={label || ''}
-     bind:this={node}
->
+<div class={backdropClass} tabindex="-1" data-a11y-dialog-hide />
+<div class={contentsClass} role="dialog" aria-label={label || ''} bind:this={node}>
   <div class="modal-dialog-document" role="document" style="background: {background || '#000'};">
-    <div class="modal-dialog-header" on:click="{onClickHeader}">
+    <div class="modal-dialog-header" on:click={onClickHeader}>
       {#if title}
         <h1 id={`modal-${id}-title`} class="modal-dialog-title">{title}</h1>
       {/if}
       <div class="close-dialog-button-wrapper">
-        <button class="close-dialog-button focus-fix"
-                data-a11y-dialog-hide aria-label="{intl.closeDialog}">
+        <button class="close-dialog-button focus-fix" data-a11y-dialog-hide aria-label={intl.closeDialog}>
           <SvgIcon className="close-dialog-button-svg" href="#fa-times" />
         </button>
       </div>
     </div>
-    <slot></slot>
+    <slot />
   </div>
 </div>
-<Shortcut scope="modal-{id}" key="Backspace" on:pressed="{closeDialog}"/>
+<Shortcut scope="modal-{id}" key="Backspace" on:pressed={closeDialog} />
+
 <style>
   :global(.modal-dialog[aria-hidden='true']) {
     display: none;
@@ -248,7 +234,7 @@
     overflow-y: hidden;
   }
 
-  @media(min-width: 480px) {
+  @media (min-width: 480px) {
     /* On desktop, some dialogs look bad if they expand to fit all the way. So we shrink
        them to fit if shrinkWidthToFit is true.*/
     .modal-dialog-contents.shrink-width-to-fit {

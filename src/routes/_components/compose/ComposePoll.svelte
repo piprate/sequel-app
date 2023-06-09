@@ -1,24 +1,24 @@
 <script>
-  import IconButton from '../IconButton.svelte';
-  import Select from '../Select.svelte';
-  import { scheduleIdleTask } from '../../_utils/scheduleIdleTask';
-  import { POLL_EXPIRY_DEFAULT, POLL_EXPIRY_OPTIONS } from '../../_static/polls';
-  import { formatIntl } from '../../_utils/formatIntl';
-  import { onMount } from "svelte";
-  import { getComposeData, setComposeData } from '../../_store/local';
+  import IconButton from '../IconButton.svelte'
+  import Select from '../Select.svelte'
+  import { scheduleIdleTask } from '../../_utils/scheduleIdleTask'
+  import { POLL_EXPIRY_DEFAULT, POLL_EXPIRY_OPTIONS } from '../../_static/polls'
+  import { formatIntl } from '../../_utils/formatIntl'
+  import { onMount } from 'svelte'
+  import { getComposeData, setComposeData } from '../../_store/local'
 
-  export let realm;
-  export let poll;
+  export let realm
+  export let poll
 
-  function flushPollOptionsToDom (poll, realm) {
+  function flushPollOptionsToDom(poll, realm) {
     for (let i = 0; i < poll.options.length; i++) {
       const element = document.getElementById(`poll-option-${realm}-${i}`)
       element.value = poll.options[i]
     }
   }
 
-  let pollExpiryOptions = POLL_EXPIRY_OPTIONS;
-  let pollExpiryDefaultValue = POLL_EXPIRY_DEFAULT;
+  let pollExpiryOptions = POLL_EXPIRY_OPTIONS
+  let pollExpiryDefaultValue = POLL_EXPIRY_DEFAULT
 
   function createLabel(i) {
     return formatIntl('intl.pollChoiceLabel', { index: i + 1 })
@@ -28,16 +28,16 @@
     return formatIntl('intl.removePollChoice', { index: i + 1 })
   }
 
-  function onChange (i) {
+  function onChange(i) {
     scheduleIdleTask(() => {
-      const element = document.getElementById(`poll-option-${realm}-${i}`);
-      const poll = getComposeData(realm, 'poll');
-      poll.options[i] = element.value;
-      setComposeData(realm, { poll });
+      const element = document.getElementById(`poll-option-${realm}-${i}`)
+      const poll = getComposeData(realm, 'poll')
+      poll.options[i] = element.value
+      setComposeData(realm, { poll })
     })
   }
 
-  function onMultipleChange () {
+  function onMultipleChange() {
     scheduleIdleTask(() => {
       const element = document.getElementById(`poll-option-multiple-${realm}`)
       const poll = getComposeData(realm, 'poll')
@@ -46,26 +46,26 @@
     })
   }
 
-  function onDeleteClick (i) {
+  function onDeleteClick(i) {
     scheduleIdleTask(() => {
-      const poll = getComposeData(realm, 'poll');
-      poll.options.splice(i, 1);
-      setComposeData(realm, { poll });
-      flushPollOptionsToDom(poll, realm);
+      const poll = getComposeData(realm, 'poll')
+      poll.options.splice(i, 1)
+      setComposeData(realm, { poll })
+      flushPollOptionsToDom(poll, realm)
     })
   }
 
-  function onAddClick () {
+  function onAddClick() {
     scheduleIdleTask(() => {
-      const poll = getComposeData(realm, 'poll');
+      const poll = getComposeData(realm, 'poll')
       if (!poll.options.length !== 4) {
         poll.options.push('')
       }
-      setComposeData(realm, { poll });
+      setComposeData(realm, { poll })
     })
   }
 
-  function onExpiryChange (e) {
+  function onExpiryChange(e) {
     scheduleIdleTask(() => {
       const { value } = e.target
       const poll = getComposeData(realm, 'poll')
@@ -78,58 +78,49 @@
     const poll = getComposeData(realm, 'poll')
     flushPollOptionsToDom(poll, realm)
     document.getElementById(`poll-option-multiple-${realm}`).checked = !!poll.multiple
-    pollExpiryDefaultValue = poll.expiry || POLL_EXPIRY_DEFAULT;
-  });
+    pollExpiryDefaultValue = poll.expiry || POLL_EXPIRY_DEFAULT
+  })
 </script>
 
-<section class="compose-poll" aria-label="{intl.createPoll}">
+<section class="compose-poll" aria-label={intl.createPoll}>
   {#each poll.options as option, i}
-    <input id="poll-option-{realm}-{i}"
-           type="text"
-           maxlength="25"
-           on:change="{ () => onChange(i) }"
-           placeholder="{createLabel(i)}"
-
-    >
-    <IconButton
-            label="{createRemoveLabel(i)}"
-            href="#fa-times"
-            muted={true}
-            on:click="{ () => onDeleteClick(i) }"
+    <input
+      id="poll-option-{realm}-{i}"
+      type="text"
+      maxlength="25"
+      on:change={() => onChange(i)}
+      placeholder={createLabel(i)}
     />
+    <IconButton label={createRemoveLabel(i)} href="#fa-times" muted={true} on:click={() => onDeleteClick(i)} />
   {/each}
   <div>
-    <input type="checkbox"
-           id="poll-option-multiple-{realm}"
-           on:change="{onMultipleChange}"
-    >
-    <label class="multiple-choice-label"
-           for="poll-option-multiple-{realm}">
+    <input type="checkbox" id="poll-option-multiple-{realm}" on:change={onMultipleChange} />
+    <label class="multiple-choice-label" for="poll-option-multiple-{realm}">
       {intl.multipleChoice}
     </label>
-    <Select className="poll-expiry-select"
-            options={pollExpiryOptions}
-            defaultValue={pollExpiryDefaultValue}
-            on:change="{onExpiryChange}"
-            label="{intl.pollDuration}"
+    <Select
+      className="poll-expiry-select"
+      options={pollExpiryOptions}
+      defaultValue={pollExpiryDefaultValue}
+      on:change={onExpiryChange}
+      label={intl.pollDuration}
     />
   </div>
   <IconButton
-          className="add-poll-choice-button"
-          label="Add choice"
-          href="#fa-plus"
-          muted={true}
-          disabled={poll.options.length === 4}
-          on:click="{onAddClick}"
+    className="add-poll-choice-button"
+    label="Add choice"
+    href="#fa-plus"
+    muted={true}
+    disabled={poll.options.length === 4}
+    on:click={onAddClick}
   />
   {#each poll.options as option, i}
-    <label id="poll-option-label-{realm}-{i}"
-           class="sr-only"
-           for="poll-option-{realm}-{i}">
+    <label id="poll-option-label-{realm}-{i}" class="sr-only" for="poll-option-{realm}-{i}">
       Choice {i + 1}
     </label>
   {/each}
 </section>
+
 <style>
   .compose-poll {
     margin: 10px 0 10px 5px;

@@ -11,12 +11,12 @@
   export let ourSpark
   export let loading
   export let joined
-  export let onJoinButtonClick  
+  export let onJoinButtonClick
 
   $: bubbleId = bubble.id
-  $: owned = relationship && (relationship.memberType === 'owner')
+  $: owned = relationship && relationship.memberType === 'owner'
   $: blocked = relationship && relationship.blocked
-  $: requestedMembership = relationship && (relationship.status === 'pending')
+  $: requestedMembership = relationship && relationship.status === 'pending'
   $: requested = !joined && requestedMembership
   $: label = (() => {
     if (blocked) {
@@ -36,21 +36,28 @@
       return '#fa-sign-in'
     }
   })()
-  $: shown = !owned && ourSpark && relationship && ourSpark.id !== relationship.owner && (blocked || joined || requestedMembership || bubble.membershipMode !== 'invite_only')
+  $: shown =
+    !owned &&
+    ourSpark &&
+    relationship &&
+    ourSpark.id !== relationship.owner &&
+    (blocked || joined || requestedMembership || bubble.membershipMode !== 'invite_only')
   $: pressable = !blocked
   $: pressed = !blocked && (joined || requestedMembership)
 
   let icon
 
-  async function onClick (e) {
+  async function onClick(e) {
     e.preventDefault()
     e.stopPropagation()
 
-    if (blocked) { // unblock
+    if (blocked) {
+      // unblock
       await setBubbleBlocked(bubbleId, false, ourSpark.id)
-    } else { // join/leave
+    } else {
+      // join/leave
       const newJoinedValue = !(joined || requestedMembership)
-      
+
       if (newJoinedValue) {
         icon.animate(SUBSCRIBE_BUTTON_ANIMATION)
       }
@@ -80,11 +87,12 @@
       {pressed}
       disabled={loading}
       big={!$isVeryTinyMobileSize}
-      on:click="{onClick}"
+      on:click={onClick}
       bind:this={icon}
-      />
+    />
   </div>
 </div>
+
 <style>
   .bubble-profile-join {
     grid-area: membership;

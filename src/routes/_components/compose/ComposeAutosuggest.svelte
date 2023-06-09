@@ -8,26 +8,26 @@
   import { addScrollListener, getScrollContainer, removeScrollListener } from '../../_utils/scrollContainer'
   import { get } from '../../_utils/lodash-lite'
   import { registerResizeListener, unregisterResizeListener } from '../../_utils/resize'
-  import {onMount} from "svelte";
-  import { inBrowser } from '../../_utils/browserOrNode';
+  import { onMount } from 'svelte'
+  import { inBrowser } from '../../_utils/browserOrNode'
 
   const updatePosition = inBrowser() && throttleTimer(requestAnimationFrame)
 
-  export let realm;
+  export let realm
   //export let text;
-  export let dialogId;
+  export let dialogId
 
-  let anchor;
+  let anchor
 
-  $: currentComposeFocused = get($rootComposeFocused, [$currentInstance, realm], false);
-  $: shouldBeShown = !!($autosuggestShown && currentComposeFocused);
+  $: currentComposeFocused = get($rootComposeFocused, [$currentInstance, realm], false)
+  $: shouldBeShown = !!($autosuggestShown && currentComposeFocused)
 
-  let _element;
-  let _autosuggest;
+  let _element
+  let _autosuggest
 
-  const onResize = () => updatePosition(() => doResize());
+  const onResize = () => updatePosition(() => doResize())
 
-  let enableShouldBeShownObserver = false;
+  let enableShouldBeShownObserver = false
 
   $: {
     if (enableShouldBeShownObserver) {
@@ -37,7 +37,7 @@
     }
   }
 
-  function setup () {
+  function setup() {
     requestAnimationFrame(() => {
       const id = `the-autosuggest-container-${realm}`
       _element = document.getElementById(id)
@@ -67,23 +67,23 @@
         //     onResize() // just in case the window size changed while we weren't focused
         //   }
         // })
-        enableShouldBeShownObserver = true;
+        enableShouldBeShownObserver = true
 
-        registerResizeListener(onResize);
-        addScrollListener(onResize);
+        registerResizeListener(onResize)
+        addScrollListener(onResize)
       })
     })
   }
 
-  function doResize () {
+  function doResize() {
     if (_autosuggest && shouldBeShown) {
       const { left, top } = calculateLeftAndTop()
       console.log('updating autosuggest position', { left, top })
-      _autosuggest.$set({ left, top });
+      _autosuggest.$set({ left, top })
     }
   }
 
-  function calculateLeftAndTop () {
+  function calculateLeftAndTop() {
     const { left, bottom } = anchor.getBoundingClientRect()
     const yOffset = realm === 'dialog' ? 0 : getScrollContainer().scrollTop
     return {
@@ -96,7 +96,7 @@
     let setupDone = false
     if (realm === 'dialog') {
       // wait for dialog to render first
-      on('dialogDidRender', id => {
+      on('dialogDidRender', (id) => {
         if (id === dialogId && !setupDone) {
           setupDone = true
           setup()
@@ -109,8 +109,8 @@
 
     return () => {
       if (_autosuggest) {
-        _autosuggest.$destroy();
-        _autosuggest = null;
+        _autosuggest.$destroy()
+        _autosuggest = null
       }
       if (_element) {
         _element.remove()
@@ -118,14 +118,15 @@
       unregisterResizeListener(onResize)
       removeScrollListener(onResize)
     }
-  });
+  })
 </script>
 
-<div class="compose-autosuggest-anchor-point" bind:this={anchor}></div>
+<div class="compose-autosuggest-anchor-point" bind:this={anchor} />
+
 <style>
-    .compose-autosuggest-anchor-point {
-        grid-area: autosuggest;
-        width: 100%;
-        height: 0;
-    }
+  .compose-autosuggest-anchor-point {
+    grid-area: autosuggest;
+    width: 100%;
+    height: 0;
+  }
 </style>

@@ -9,24 +9,24 @@
   export let uuid
 
   $: computedClass = classname(
-          'post-media',
-          sensitive && 'post-media-is-sensitive',
-          oddCols && 'odd-cols',
-          twoCols && 'two-cols',
-          $largeInlineMedia ? 'not-grouped-images' : 'grouped-images'
+    'post-media',
+    sensitive && 'post-media-is-sensitive',
+    oddCols && 'odd-cols',
+    twoCols && 'two-cols',
+    $largeInlineMedia ? 'not-grouped-images' : 'grouped-images'
   )
   $: showAsSensitive = sensitive ? !sensitiveShown : false
-  $: nCols = (!$largeInlineMedia && mediaAttachments.length > 1) ? 2 : 1
-  $: oddCols = (mediaAttachments.length > 1 && (mediaAttachments.length % 2))
-  $: twoCols = (mediaAttachments.length === 2)
+  $: nCols = !$largeInlineMedia && mediaAttachments.length > 1 ? 2 : 1
+  $: oddCols = mediaAttachments.length > 1 && mediaAttachments.length % 2
+  $: twoCols = mediaAttachments.length === 2
 </script>
 
-<div class={computedClass}
-     style="grid-template-columns: repeat({nCols}, 1fr);" >
+<div class={computedClass} style="grid-template-columns: repeat({nCols}, 1fr);">
   {#each mediaAttachments as media, index}
-    <Media {media} {uuid} {mediaAttachments} {index} {showAsSensitive} showNFT=true />
+    <Media {media} {uuid} {mediaAttachments} {index} {showAsSensitive} showNFT="true" />
   {/each}
 </div>
+
 <style>
   .post-media {
     grid-area: media;

@@ -4,6 +4,6 @@
   import pageComponent from '../../_pages/settings/hotkeys.svelte'
 </script>
 
-<Title name="{intl.hotkeys}" settingsPage={true} />
+<Title name={intl.hotkeys} settingsPage={true} />
 
-<LazyPage {pageComponent}/>
+<LazyPage {pageComponent} />

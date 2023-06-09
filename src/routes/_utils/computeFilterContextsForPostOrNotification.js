@@ -1,6 +1,6 @@
 import { createSearchIndexFromPostOrNotification } from './createSearchIndexFromPostOrNotification'
 
-export function computeFilterContextsForPostOrNotification (postOrNotification, contextsToRegex) {
+export function computeFilterContextsForPostOrNotification(postOrNotification, contextsToRegex) {
   if (!contextsToRegex || !Object.keys(contextsToRegex).length) {
     // avoid computing the search index, just bail out
     return undefined

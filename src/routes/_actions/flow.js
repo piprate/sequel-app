@@ -7,7 +7,7 @@ import { accessToken, currentSparkId } from '../_store/instance'
 import { confirmMintOnDemand, getMintOnDemandSignature, initialiseMintOnDemand } from '../_api/marketplace'
 import * as types from '@onflow/types'
 
-export async function configureFlow (instanceName) {
+export async function configureFlow(instanceName) {
   const instanceData = loggedInInstances.get()[instanceName]
 
   let currentAccessNodeAPI = await fcl.config().get('accessNode.api', 'not configured')
@@ -18,7 +18,8 @@ export async function configureFlow (instanceName) {
     return
   }
 
-  const cfg = fcl.config()
+  const cfg = fcl
+    .config()
     .put('accessNode.api', newAccessNodeAPI)
     .put('flow.network', instanceData?.flowEnv)
     .put('discovery.wallet', instanceData.flowDiscoveryWalletURI)
@@ -34,11 +35,11 @@ export async function configureFlow (instanceName) {
   }
 }
 
-export function disconnectFromFlow () {
+export function disconnectFromFlow() {
   fcl.unauthenticate()
 }
 
-export async function getFlowBalance (addr) {
+export async function getFlowBalance(addr) {
   return await fcl.query({
     cadence: `
         import FungibleToken from 0xFungibleToken
@@ -55,13 +56,11 @@ export async function getFlowBalance (addr) {
           return vaultRef.balance
         }
       `,
-    args: (arg, t) => [
-      arg(addr, t.Address)
-    ]
+    args: (arg, t) => [arg(addr, t.Address)]
   })
 }
 
-export async function getFUSDBalance (addr) {
+export async function getFUSDBalance(addr) {
   return await fcl.query({
     cadence: `
         import FungibleToken from 0xFungibleToken
@@ -80,13 +79,11 @@ export async function getFUSDBalance (addr) {
             }
         }
       `,
-    args: (arg, t) => [
-      arg(addr, t.Address)
-    ]
+    args: (arg, t) => [arg(addr, t.Address)]
   })
 }
 
-export async function getRoyaltyVaultTypes (addr) {
+export async function getRoyaltyVaultTypes(addr) {
   return await fcl.query({
     cadence: `
 import FungibleTokenSwitchboard from 0xFungibleTokenSwitchboard
@@ -105,13 +102,11 @@ pub fun main(account: Address): [Type] {
     return switchboardRef!.getVaultTypes()
 }
       `,
-    args: (arg, t) => [
-      arg(addr, t.Address)
-    ]
+    args: (arg, t) => [arg(addr, t.Address)]
   })
 }
 
-export async function setupRoyaltyReceiver (addr) {
+export async function setupRoyaltyReceiver(addr) {
   try {
     const txHash = await fcl.send([
       fcl.transaction(`
@@ -242,7 +237,8 @@ transaction {
       }
     }
   } catch (e) {
-    if (e === 'Declined: Externally Halted' || // Dev Wallet
+    if (
+      e === 'Declined: Externally Halted' || // Dev Wallet
       (e.message && e.message.includes('User rejected signature')) // Blocto
     ) {
       return {
@@ -258,7 +254,7 @@ transaction {
   }
 }
 
-export async function mintOnDemand (listingId, numEditions, minterAddress, statusCallback) {
+export async function mintOnDemand(listingId, numEditions, minterAddress, statusCallback) {
   const _currentInstance = currentInstance.get()
   const _token = get(accessToken)
   const asSpark = get(currentSparkId)
@@ -266,12 +262,29 @@ export async function mintOnDemand (listingId, numEditions, minterAddress, statu
   statusCallback('init_mod')
 
   try {
-    const modParams = await initialiseMintOnDemand(_currentInstance, _token, listingId, minterAddress, 0, numEditions, asSpark)
+    const modParams = await initialiseMintOnDemand(
+      _currentInstance,
+      _token,
+      listingId,
+      minterAddress,
+      0,
+      numEditions,
+      asSpark
+    )
 
     console.log('MOD Params', modParams)
 
-    const serverSigner = serverAuthorization(_currentInstance, _token, listingId, minterAddress, numEditions,
-      asSpark, modParams.adminAddr, modParams.adminKeyIndex, statusCallback)
+    const serverSigner = serverAuthorization(
+      _currentInstance,
+      _token,
+      listingId,
+      minterAddress,
+      numEditions,
+      asSpark,
+      modParams.adminAddr,
+      modParams.adminKeyIndex,
+      statusCallback
+    )
 
     let payer = fcl.authz
     if (modParams.gasPaidByAdmin) {
@@ -319,7 +332,8 @@ export async function mintOnDemand (listingId, numEditions, minterAddress, statu
 
     await confirmMintOnDemand(_currentInstance, _token, listingId, tokens, asSpark)
   } catch (e) {
-    if (e === 'Declined: Externally Halted' || // Dev Wallet
+    if (
+      e === 'Declined: Externally Halted' || // Dev Wallet
       (e.message && e.message.includes('User rejected signature')) // Blocto
     ) {
       return {
@@ -339,7 +353,7 @@ export async function mintOnDemand (listingId, numEditions, minterAddress, statu
   }
 }
 
-function extractMintedTokens (result) {
+function extractMintedTokens(result) {
   const tokens = []
 
   result.events.forEach((event) => {
@@ -362,35 +376,55 @@ function extractMintedTokens (result) {
 }
 
 // this function is inspired by https://github.com/jacob-tucker/multi-sign/blob/master/frontend/src/serverSigner.js
-const serverAuthorization = (instanceName, accessToken, id, buyerAddress, numEditions, asSpark, sequelAdminAddress, sequelAdminKeyID, statusCallback) => async (account) => {
-  // authorization function need to return an account
-  return {
-    ...account, // bunch of defaults in here, we want to overload some of them though
-    tempId: `${sequelAdminAddress}-${sequelAdminKeyID}`, // tempIds are more of an advanced topic, for 99% of the times where you know the address and keyId you will want it to be a unique string per that address and keyId
-    addr: fcl.sansPrefix(sequelAdminAddress), // the address of the signatory, currently it needs to be without a prefix right now
-    keyId: Number(sequelAdminKeyID), // this is the keyId for the accounts registered key that will be used to sign, make extra sure this is a number and not a string
-    signingFunction: async (signable) => {
-      statusCallback('tx_signing')
-      // Signing functions are passed a signable and need to return a composite signature
-      // signable.message is a hex string of what needs to be signed.
-      let signature
-      try {
-        signature = await getMintOnDemandSignature(instanceName, accessToken, id, buyerAddress, numEditions, signable, asSpark)
-      } catch (e) {
-        console.error(e)
-        return
-      }
+const serverAuthorization =
+  (
+    instanceName,
+    accessToken,
+    id,
+    buyerAddress,
+    numEditions,
+    asSpark,
+    sequelAdminAddress,
+    sequelAdminKeyID,
+    statusCallback
+  ) =>
+  async (account) => {
+    // authorization function need to return an account
+    return {
+      ...account, // bunch of defaults in here, we want to overload some of them though
+      tempId: `${sequelAdminAddress}-${sequelAdminKeyID}`, // tempIds are more of an advanced topic, for 99% of the times where you know the address and keyId you will want it to be a unique string per that address and keyId
+      addr: fcl.sansPrefix(sequelAdminAddress), // the address of the signatory, currently it needs to be without a prefix right now
+      keyId: Number(sequelAdminKeyID), // this is the keyId for the accounts registered key that will be used to sign, make extra sure this is a number and not a string
+      signingFunction: async (signable) => {
+        statusCallback('tx_signing')
+        // Signing functions are passed a signable and need to return a composite signature
+        // signable.message is a hex string of what needs to be signed.
+        let signature
+        try {
+          signature = await getMintOnDemandSignature(
+            instanceName,
+            accessToken,
+            id,
+            buyerAddress,
+            numEditions,
+            signable,
+            asSpark
+          )
+        } catch (e) {
+          console.error(e)
+          return
+        }
 
-      return {
-        addr: fcl.withPrefix(sequelAdminAddress), // needs to be the same as the account.addr but this time with a prefix, eventually they will both be with a prefix
-        keyId: Number(sequelAdminKeyID), // needs to be the same as account.keyId, once again make sure its a number and not a string
-        signature // this needs to be a hex string of the signature, where signable.message is the hex value that needs to be signed
+        return {
+          addr: fcl.withPrefix(sequelAdminAddress), // needs to be the same as the account.addr but this time with a prefix, eventually they will both be with a prefix
+          keyId: Number(sequelAdminKeyID), // needs to be the same as account.keyId, once again make sure its a number and not a string
+          signature // this needs to be a hex string of the signature, where signable.message is the hex value that needs to be signed
+        }
       }
     }
   }
-}
 
-export async function readNFTCollections (addr) {
+export async function readNFTCollections(addr) {
   const res = await fcl.query({
     cadence: `
 import MetadataViews from 0xMetadataViews
@@ -458,24 +492,21 @@ pub fun main(ownerAddress: Address): {String: NFTCollection} {
     return collections
 }
       `,
-    args: (arg, t) => [
-      arg(addr, t.Address)
-    ]
+    args: (arg, t) => [arg(addr, t.Address)]
   })
 
-  return Array.from(Object.entries(res)).map(([id, col]) => (
-    {
-      id: id,
-      name: col.name,
-      type: 'source',
-      summary: col.description,
-      loaded: false,
-      nftList: [],
-      nftCount: parseInt(col.count),
-    }))
+  return Array.from(Object.entries(res)).map(([id, col]) => ({
+    id: id,
+    name: col.name,
+    type: 'source',
+    summary: col.description,
+    loaded: false,
+    nftList: [],
+    nftCount: parseInt(col.count)
+  }))
 }
 
-export async function readNFTCollection (source, account) {
+export async function readNFTCollection(source, account) {
   const _currentInstance = currentInstance.get()
 
   let col
@@ -483,19 +514,18 @@ export async function readNFTCollection (source, account) {
   switch (source) {
     case 'sequel':
       col = await getSequelDigitalArtCollection(account)
-      list = Array.from(Object.entries(col)).map(([id, meta]) => (
-        {
-          token: parseInt(id),
-          name: meta.name,
-          source,
-          account,
-          asset: meta.asset,
-          avatar: populateDigitalArtPreviewURLs({}, _currentInstance, meta.asset)
-        }))
+      list = Array.from(Object.entries(col)).map(([id, meta]) => ({
+        token: parseInt(id),
+        name: meta.name,
+        source,
+        account,
+        asset: meta.asset,
+        avatar: populateDigitalArtPreviewURLs({}, _currentInstance, meta.asset)
+      }))
       break
     default:
       col = await getNFTCatalogCollection(account, source)
-      list = col.map(item => {
+      list = col.map((item) => {
         return {
           token: parseInt(item.id),
           name: item.name,
@@ -504,7 +534,7 @@ export async function readNFTCollection (source, account) {
           avatar: {
             url: item.thumbnail,
             previewUrl: item.thumbnail,
-            staticUrl: item.thumbnail,
+            staticUrl: item.thumbnail
           }
         }
       })
@@ -516,21 +546,20 @@ export async function readNFTCollection (source, account) {
   return list
 }
 
-export async function readSequelDigitalArtCollection (account) {
+export async function readSequelDigitalArtCollection(account) {
   const _currentInstance = currentInstance.get()
 
   const col = await getSequelDigitalArtCollection(account)
 
-  return Array.from(Object.entries(col)).map(([id, meta]) => (
-    {
-      id: parseInt(id),
-      name: meta.name,
-      asset: meta.asset,
-      content: populateDigitalArtPreviewURLs({}, _currentInstance, meta.asset)
-    }))
+  return Array.from(Object.entries(col)).map(([id, meta]) => ({
+    id: parseInt(id),
+    name: meta.name,
+    asset: meta.asset,
+    content: populateDigitalArtPreviewURLs({}, _currentInstance, meta.asset)
+  }))
 }
 
-async function getSequelDigitalArtCollection (addr) {
+async function getSequelDigitalArtCollection(addr) {
   return await fcl.query({
     cadence: `
         import DigitalArt from 0xDigitalArt
@@ -550,13 +579,11 @@ async function getSequelDigitalArtCollection (addr) {
 
           return res
       }`,
-    args: (arg, t) => [
-      arg(addr, t.Address)
-    ]
+    args: (arg, t) => [arg(addr, t.Address)]
   })
 }
 
-async function getNFTCatalogCollection (addr, collectionID) {
+async function getNFTCatalogCollection(addr, collectionID) {
   return await fcl.query({
     cadence: `
 import MetadataViews from 0xMetadataViews
@@ -631,9 +658,6 @@ pub fun main(ownerAddress: Address, collectionIdentifier: String): [NFT] {
     return items
 }
 `,
-    args: (arg, t) => [
-      arg(addr, t.Address),
-      arg(collectionID, t.String)
-    ]
+    args: (arg, t) => [arg(addr, t.Address), arg(collectionID, t.String)]
   })
 }

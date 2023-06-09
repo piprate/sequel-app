@@ -11,8 +11,8 @@
   import { onMount } from 'svelte'
   import RestrictedPageWarning from '../../../../_components/RestrictedPageWarning.svelte'
   import { displayError } from '../../../../_actions/errors'
-  import { updateRelease } from '../../../../_actions/marketplace';
-  import ReleaseDetails from '../../../../_components/marketplace/ReleaseDetails.svelte';
+  import { updateRelease } from '../../../../_actions/marketplace'
+  import ReleaseDetails from '../../../../_components/marketplace/ReleaseDetails.svelte'
 
   export let params
 
@@ -21,7 +21,7 @@
 
   let loading = true
   let notFound = false
-  
+
   $: listingsFetcher = () => getReleaseListings($currentInstance, $accessToken, params.id, $currentSparkId)
   $: release = $observedRelease
   $: releaseName = (release && release.name) || ''
@@ -37,30 +37,30 @@
       notFound = !release
     }
     loading = false
-    console.log("LOADED RELEASE", release)
+    console.log('LOADED RELEASE', release)
   })
 </script>
 
-{#if $isUserLoggedIn }
-    <DynamicPageBanner title="" {ariaTitle} />
-    <MarketplaceFilter filter="releases" />
-    {#if release}
-        <ReleaseCard {release} listMode={false} />
-        <ReleaseDetails {release} {listingsFetcher} />
-        <ListingsPage {listingsFetcher}>
-            <span slot="is-empty">
-                <InfoAside className="empty-marketplace-notice-aside">
-                  {intl.releaseEmpty}
-              </InfoAside>
-            </span>
-        </ListingsPage>
-        {/if}
+{#if $isUserLoggedIn}
+  <DynamicPageBanner title="" {ariaTitle} />
+  <MarketplaceFilter filter="releases" />
+  {#if release}
+    <ReleaseCard {release} listMode={false} />
+    <ReleaseDetails {release} {listingsFetcher} />
+    <ListingsPage {listingsFetcher}>
+      <span slot="is-empty">
+        <InfoAside className="empty-marketplace-notice-aside">
+          {intl.releaseEmpty}
+        </InfoAside>
+      </span>
+    </ListingsPage>
+  {/if}
 {:else}
-    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+  <RestrictedPageWarning message={intl.loginToAccess} offerVisitorMode={true} />
 {/if}
 
 <style>
-    :global(.empty-marketplace-notice-aside) {
-        margin: 10px 10px 0 0;
-    }
+  :global(.empty-marketplace-notice-aside) {
+    margin: 10px 10px 0 0;
+  }
 </style>

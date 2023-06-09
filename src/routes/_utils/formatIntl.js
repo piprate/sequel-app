@@ -2,11 +2,11 @@ import interpret from 'format-message-interpret'
 import { LOCALE } from '../_static/intl'
 import { mark, stop } from './marks'
 
-export function doFormatIntl (ast, values) {
+export function doFormatIntl(ast, values) {
   return interpret(ast, LOCALE)(values).trim().replace(/\s+/g, ' ')
 }
 
-export function formatIntl (ast, values) {
+export function formatIntl(ast, values) {
   if (!import.meta.env.PROD) {
     // useful error debugging for dev mode
     if (typeof ast === 'string') {

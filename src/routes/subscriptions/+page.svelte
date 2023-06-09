@@ -4,6 +4,6 @@
   import pageComponent from '../_pages/subscriptions/index.svelte'
 </script>
 
-<Title name="{intl.subscriptionsTimeline}" />
+<Title name={intl.subscriptionsTimeline} />
 
 <LazyPage {pageComponent} />

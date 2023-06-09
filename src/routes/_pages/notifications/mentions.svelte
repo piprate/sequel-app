@@ -13,5 +13,5 @@
   <NotificationFilters filter="mentions" />
   <TimelinePage timeline="notifications/mentions" />
 {:else}
-  <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+  <RestrictedPageWarning message={intl.loginToAccess} offerVisitorMode={true} />
 {/if}

@@ -32,7 +32,7 @@
 
   $: showInstance = $isUserLoggedIn || !production
 
-  function onSubmitInstance (event) {
+  function onSubmitInstance(event) {
     event.preventDefault()
     event.stopPropagation()
 
@@ -50,11 +50,10 @@
   })
 </script>
 
-<SettingsLayout page='settings/instances/visit' label={'intl.visitorBreadcrumb'}>
+<SettingsLayout page="settings/instances/visit" label={'intl.visitorBreadcrumb'}>
   <h1 id="add-an-instance-h1">{'intl.visitorTitle'}</h1>
   <div class="add-new-instance">
-    <form on:submit='{onSubmitInstance}' aria-labelledby="add-an-instance-h1">
-
+    <form on:submit={onSubmitInstance} aria-labelledby="add-an-instance-h1">
       {#if !hasIndexedDB || !hasLocalStorage}
         <div class="form-error form-error-user-error" role="alert">
           {intl.storageError}
@@ -63,7 +62,8 @@
 
       {#if $logInToInstanceError && $logInToInstanceErrorForText === $instanceNameInSearch}
         <div class="form-error form-error-user-error" role="alert">
-          {intl.errorShort} {@html $logInToInstanceError}
+          {intl.errorShort}
+          {@html $logInToInstanceError}
         </div>
       {/if}
 
@@ -79,12 +79,19 @@
 
       {#if showInstance}
         <label for="instanceInput">{intl.instanceColon}</label>
-        <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" id="instanceInput"
-               bind:value='{$instanceNameInSearch}' placeholder="{intl.enterInstanceName}" required
-        >
+        <input
+          type="text"
+          inputmode="url"
+          autocapitalize="none"
+          spellcheck="false"
+          id="instanceInput"
+          bind:value={$instanceNameInSearch}
+          placeholder={intl.enterInstanceName}
+          required
+        />
       {/if}
 
-      <br/>
+      <br />
 
       <div class="notice">
         {intl.visitorLegalNotice}
@@ -97,6 +104,7 @@
     </form>
   </div>
 </SettingsLayout>
+
 <style>
   .add-new-instance {
     background: var(--form-bg);
@@ -115,13 +123,16 @@
     background-color: var(--main-bg);
   }
 
-  input[type="text"] {
+  input[type='text'] {
     min-width: 70%;
     max-width: 100%;
     background-color: var(--input-bg);
   }
 
-  label, input, button, :global(.add-new-instance-aside) {
+  label,
+  input,
+  button,
+  :global(.add-new-instance-aside) {
     display: block;
     margin: 20px 5px;
   }
@@ -142,9 +153,8 @@
   }
 
   @media (max-width: 767px) {
-    input[type="text"] {
+    input[type='text'] {
       min-width: 95%;
     }
   }
-
 </style>

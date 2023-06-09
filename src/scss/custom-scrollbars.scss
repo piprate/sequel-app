@@ -25,7 +25,6 @@ body {
 //
 
 body {
-
   &::-webkit-scrollbar {
     width: var(--scrollbar-width);
     height: var(--scrollbar-height);
@@ -44,12 +43,13 @@ body {
     background: var(--scrollbar-face-color-active);
   }
 
-  &::-webkit-scrollbar-track, &::-webkit-scrollbar-track:hover, &::-webkit-scrollbar-track:active {
+  &::-webkit-scrollbar-track,
+  &::-webkit-scrollbar-track:hover,
+  &::-webkit-scrollbar-track:active {
     background: var(--scrollbar-track-color);
   }
 
   &::-webkit-scrollbar-corner {
     background: var(--scrollbar-background-color);
   }
-
 }

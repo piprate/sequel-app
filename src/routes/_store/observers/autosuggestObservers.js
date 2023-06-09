@@ -12,15 +12,15 @@ import {
 import { get } from 'svelte/store'
 import { doEntitySearch } from '../../_actions/autoSuggestEntitySearch'
 
-function resetAutosuggest () {
+function resetAutosuggest() {
   setForCurrentAutosuggest(rootAutosuggestSelected, 0)
   setForCurrentAutosuggest(rootAutosuggestSearchResults, [])
 }
 
-export function autosuggestObservers () {
+export function autosuggestObservers() {
   let lastSearch
 
-  autosuggestSearchText.subscribe(_autosuggestSearchText => {
+  autosuggestSearchText.subscribe((_autosuggestSearchText) => {
     // cancel any inflight XHRs or other operations
     if (lastSearch) {
       lastSearch.cancel()
@@ -35,9 +35,11 @@ export function autosuggestObservers () {
       return
     }
 
-    if (_autosuggestSearchText.startsWith(':')) { // emoji
+    if (_autosuggestSearchText.startsWith(':')) {
+      // emoji
       lastSearch = doEmojiSearch(_autosuggestSearchText)
-    } else if (_autosuggestSearchText.startsWith('#')) { // hashtag
+    } else if (_autosuggestSearchText.startsWith('#')) {
+      // hashtag
       lastSearch = doHashtagSearch(_autosuggestSearchText)
     } else {
       lastSearch = doEntitySearch(_autosuggestSearchText)

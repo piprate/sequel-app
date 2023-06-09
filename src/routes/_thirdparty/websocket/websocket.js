@@ -8,7 +8,7 @@ export class WebSocketClient {
    * @param protocols DOMString|DOMString[] Either a single protocol string or an array of protocol strings. These strings are used to indicate sub-protocols, so that a single server can implement multiple WebSocket sub-protocols (for example, you might want one server to be able to handle different types of interactions depending on the specified protocol). If you don't specify a protocol string, an empty string is assumed.
    * @param options options
    */
-  constructor (url, protocols = [], options = {}) {
+  constructor(url, protocols = [], options = {}) {
     this.url = url
     this.protocols = protocols
 
@@ -17,12 +17,12 @@ export class WebSocketClient {
 
     this.backoff = new Backoff(this.onBackoffReady.bind(this))
 
-    if (typeof (options.connect) === 'undefined' || options.connect) {
+    if (typeof options.connect === 'undefined' || options.connect) {
       this.open()
     }
   }
 
-  open (reconnect = false) {
+  open(reconnect = false) {
     this.isReconnect = reconnect
 
     // keep binaryType used on previous WebSocket connection
@@ -42,14 +42,14 @@ export class WebSocketClient {
   /**
    * @ignore
    */
-  onBackoffReady () {
+  onBackoffReady() {
     this.open(true)
   }
 
   /**
    * @ignore
    */
-  onCloseCallback (e) {
+  onCloseCallback(e) {
     if (!this.isReconnect && this.listeners.onclose) {
       this.listeners.onclose.apply(null, arguments)
     }
@@ -61,7 +61,7 @@ export class WebSocketClient {
   /**
    * @ignore
    */
-  onErrorCallback () {
+  onErrorCallback() {
     if (this.listeners.onerror) {
       this.listeners.onerror.apply(null, arguments)
     }
@@ -70,7 +70,7 @@ export class WebSocketClient {
   /**
    * @ignore
    */
-  onMessageCallback () {
+  onMessageCallback() {
     if (this.listeners.onmessage) {
       this.listeners.onmessage.apply(null, arguments)
     }
@@ -79,7 +79,7 @@ export class WebSocketClient {
   /**
    * @ignore
    */
-  onOpenCallback () {
+  onOpenCallback() {
     if (this.listeners.onopen) {
       this.listeners.onopen.apply(null, arguments)
     }
@@ -108,7 +108,9 @@ export class WebSocketClient {
    * @type unsigned short
    * @readonly
    */
-  get readyState () { return this.ws.readyState }
+  get readyState() {
+    return this.ws.readyState
+  }
 
   // Unused
   //
@@ -150,8 +152,10 @@ export class WebSocketClient {
    *
    * @return void
    */
-  close (code, reason) {
-    if (typeof code === 'undefined') { code = 1000 }
+  close(code, reason) {
+    if (typeof code === 'undefined') {
+      code = 1000
+    }
 
     this.reconnectEnabled = false
 
@@ -163,51 +167,73 @@ export class WebSocketClient {
    * @param data DOMString|ArrayBuffer|Blob
    * @return void
    */
-  send (data) { this.ws.send(data) }
+  send(data) {
+    this.ws.send(data)
+  }
 
   /**
    * An event listener to be called when the WebSocket connection's readyState changes to CLOSED. The listener receives a CloseEvent named "close".
    * @param listener EventListener
    */
-  set onclose (listener) { this.listeners.onclose = listener }
+  set onclose(listener) {
+    this.listeners.onclose = listener
+  }
 
-  get onclose () { return this.listeners.onclose }
+  get onclose() {
+    return this.listeners.onclose
+  }
 
   /**
    * An event listener to be called when an error occurs. This is a simple event named "error".
    * @param listener EventListener
    */
-  set onerror (listener) { this.listeners.onerror = listener }
+  set onerror(listener) {
+    this.listeners.onerror = listener
+  }
 
-  get onerror () { return this.listeners.onerror }
+  get onerror() {
+    return this.listeners.onerror
+  }
 
   /**
    * An event listener to be called when a message is received from the server. The listener receives a MessageEvent named "message".
    * @param listener EventListener
    */
-  set onmessage (listener) { this.listeners.onmessage = listener }
+  set onmessage(listener) {
+    this.listeners.onmessage = listener
+  }
 
-  get onmessage () { return this.listeners.onmessage }
+  get onmessage() {
+    return this.listeners.onmessage
+  }
 
   /**
    * An event listener to be called when the WebSocket connection's readyState changes to OPEN; this indicates that the connection is ready to send and receive data. The event is a simple one with the name "open".
    * @param listener EventListener
    */
-  set onopen (listener) { this.listeners.onopen = listener }
+  set onopen(listener) {
+    this.listeners.onopen = listener
+  }
 
-  get onopen () { return this.listeners.onopen }
+  get onopen() {
+    return this.listeners.onopen
+  }
 
   /**
    * @param listener EventListener
    */
-  set onreconnect (listener) { this.listeners.onreconnect = listener }
+  set onreconnect(listener) {
+    this.listeners.onreconnect = listener
+  }
 
-  get onreconnect () { return this.listeners.onreconnect }
+  get onreconnect() {
+    return this.listeners.onreconnect
+  }
 
   /**
    * Reset the backoff function back to initial state
    */
-  reset () {
+  reset() {
     console.log('websocket reset')
     this.backoff.reset()
   }
@@ -215,7 +241,7 @@ export class WebSocketClient {
   /** Reconnect the websocket
    *
    */
-  reconnect () {
+  reconnect() {
     console.log('websocket reconnect')
     this.onBackoffReady()
   }

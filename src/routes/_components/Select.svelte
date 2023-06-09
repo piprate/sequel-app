@@ -1,24 +1,25 @@
 <script>
   import SvgIcon from './SvgIcon.svelte'
 
-  export let className = '';
-  export let options;
-  export let defaultValue = '';
-  export let label;
+  export let className = ''
+  export let options
+  export let defaultValue = ''
+  export let label
 </script>
 
 <div class="select-wrapper {className || ''}">
   <select on:blur aria-label={label}>
     {#each options as option (option.value)}
-      <option value="{option.value}" selected="{option.value === defaultValue ? 'selected' : ''}">
+      <option value={option.value} selected={option.value === defaultValue ? 'selected' : ''}>
         {option.label}
       </option>
     {/each}
   </select>
   <div class="select-dropdown-icon-wrapper">
-    <SvgIcon href="#fa-angle-down" className="select-dropdown-icon"/>
+    <SvgIcon href="#fa-angle-down" className="select-dropdown-icon" />
   </div>
 </div>
+
 <style>
   .select-wrapper {
     position: relative;
@@ -68,6 +69,6 @@
     text-shadow: 0 0 0 var(--body-text-color);
   }
   select option {
-    font-weight:normal;
+    font-weight: normal;
   }
 </style>

@@ -17,11 +17,7 @@
   let loaded = false
   let error = undefined
 
-  $: computedClass = classname(
-          'avatar',
-          className,
-          loaded && 'loaded'
-  )
+  $: computedClass = classname('avatar', className, loaded && 'loaded')
 
   $: width = ((size, isMobileSize) => {
     switch (size) {
@@ -42,8 +38,8 @@
   $: height = width
   $: svgStyle = `width: ${width}px; height: ${height}px;`
   $: staticSrc = entity.avatar ? entity.avatar.staticUrl : ''
-  $: src = flatMode ? staticSrc : (entity.avatar ? entity.avatar.url : '')
-  $: entityType = (entity && entity.type) || ""
+  $: src = flatMode ? staticSrc : entity.avatar ? entity.avatar.url : ''
+  $: entityType = (entity && entity.type) || ''
   $: defaultIcon = entityType === 'Bubble' ? '#fa-home' : entityType === 'World' ? '#fa-globe' : '#fa-user'
   $: showDefaultIcon = error || !entity.avatar
   $: nftReference = entity.avatar && entity.avatar.partOf
@@ -51,17 +47,22 @@
 
 <div class="avatar-wrapper">
   {#if showDefaultIcon}
-  <SvgIcon className={computedClass} style={svgStyle} href="{defaultIcon}" />
+    <SvgIcon className={computedClass} style={svgStyle} href={defaultIcon} />
   {:else if $autoplayGifs}
     <LazyImage
       ariaHidden="true"
-      forceSize=true
+      forceSize="true"
       alt=""
-      src={src}
+      {src}
       {width}
       {height}
-      on:imgLoad="{ () => { loaded = true } }"
-      on:imgLoadError="{ () => { error = true } }" />
+      on:imgLoad={() => {
+        loaded = true
+      }}
+      on:imgLoadError={() => {
+        error = true
+      }}
+    />
   {:else}
     <NonAutoplayImg
       className={computedClass}
@@ -73,13 +74,19 @@
       {height}
       {isLink}
       {secure}
-      on:imgLoad="{ () => { loaded = true } }"
-      on:imgLoadError="{ () => { error = true } }" />
+      on:imgLoad={() => {
+        loaded = true
+      }}
+      on:imgLoadError={() => {
+        error = true
+      }}
+    />
   {/if}
   {#if showNFT && nftReference}
-    <NFTMediaTag nft={nftReference}/>
+    <NFTMediaTag nft={nftReference} />
   {/if}
 </div>
+
 <style>
   .avatar-wrapper {
     position: relative;
@@ -99,4 +106,3 @@
     fill: var(--banner-fill);
   }
 </style>
-

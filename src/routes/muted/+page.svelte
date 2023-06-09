@@ -4,6 +4,6 @@
   import pageComponent from '../_pages/muted.svelte'
 </script>
 
-<Title name="{intl.mutedSparks}" />
+<Title name={intl.mutedSparks} />
 
 <LazyPage {pageComponent} />

@@ -2,17 +2,17 @@ import { auth, base, basename } from './utils'
 import { DEFAULT_TIMEOUT, MEDIA_WRITE_TIMEOUT, post, postBinary } from '../_utils/ajax'
 import { unwrap, unwrapBlob } from '../_utils/mapper'
 
-export async function uploadMedia (instanceName, accessToken, file, calculateBlurhash, mediaProfile) {
+export async function uploadMedia(instanceName, accessToken, file, calculateBlurhash, mediaProfile) {
   const url = `${basename(instanceName)}/media-asset?profile=${mediaProfile}${calculateBlurhash ? '&hash=true' : ''}`
   return postBinary(url, file, auth(accessToken), { timeout: MEDIA_WRITE_TIMEOUT })
 }
 
-export async function uploadTokenMedia (instanceName, accessToken, form) {
+export async function uploadTokenMedia(instanceName, accessToken, form) {
   const url = `${basename(instanceName)}/media-asset/external/nft`
   return post(url, form, auth(accessToken), { timeout: MEDIA_WRITE_TIMEOUT })
 }
 
-export function populateEntityMediaURLs (entity, instanceName, entityType) {
+export function populateEntityMediaURLs(entity, instanceName, entityType) {
   const baseUrl = `${base(instanceName, null)}/${entityType}/${unwrap(entity.id)}`
 
   if (entity.avatar) {
@@ -42,14 +42,14 @@ export function populateEntityMediaURLs (entity, instanceName, entityType) {
   }
 }
 
-export function populateMediaURLsInSingleEntity (apiCall, instanceName, entityType) {
+export function populateMediaURLsInSingleEntity(apiCall, instanceName, entityType) {
   return apiCall.then((entity) => {
     populateEntityMediaURLs(entity, instanceName, entityType)
     return entity
   })
 }
 
-export function populateMediaURLsInEntityList (apiCall, instanceName, entityType) {
+export function populateMediaURLsInEntityList(apiCall, instanceName, entityType) {
   return apiCall.then((entityList) => {
     for (const entity of entityList) {
       populateEntityMediaURLs(entity, instanceName, entityType)
@@ -58,7 +58,7 @@ export function populateMediaURLsInEntityList (apiCall, instanceName, entityType
   })
 }
 
-export function populatePostMediaURLs (post, instanceName, accessToken) {
+export function populatePostMediaURLs(post, instanceName, accessToken) {
   if (post.media) {
     const baseUrl = `${base(instanceName, accessToken)}/post/${unwrap(post.id)}/media/`
     for (const mediaItem of post.media) {
@@ -74,7 +74,7 @@ export function populatePostMediaURLs (post, instanceName, accessToken) {
   }
 }
 
-export function populateNotificationMediaURLs (notification, instanceName, accessToken) {
+export function populateNotificationMediaURLs(notification, instanceName, accessToken) {
   if (notification.actor) {
     populateEntityMediaURLs(notification.actor, instanceName, 'spark')
   }
@@ -89,7 +89,7 @@ export function populateNotificationMediaURLs (notification, instanceName, acces
   }
 }
 
-export function populateMarketplaceListingMediaURLs (listing, instanceName) {
+export function populateMarketplaceListingMediaURLs(listing, instanceName) {
   let baseUrl = ''
   if (listing.tokenType === 'DigitalArt') {
     baseUrl = `${base(instanceName, null)}/digital-art/${unwrap(listing.tokenAsset)}/content`
@@ -114,14 +114,14 @@ export function populateMarketplaceListingMediaURLs (listing, instanceName) {
   }
 }
 
-export function populateMediaURLsInSingleListing (apiCall, instanceName) {
+export function populateMediaURLsInSingleListing(apiCall, instanceName) {
   return apiCall.then((listing) => {
     populateMarketplaceListingMediaURLs(listing, instanceName)
     return listing
   })
 }
 
-export function populateMediaURLsInMarketplaceListings (apiCall, instanceName) {
+export function populateMediaURLsInMarketplaceListings(apiCall, instanceName) {
   return apiCall.then((entityList) => {
     for (const entity of entityList) {
       populateMarketplaceListingMediaURLs(entity, instanceName)
@@ -130,7 +130,7 @@ export function populateMediaURLsInMarketplaceListings (apiCall, instanceName) {
   })
 }
 
-export function populateDigitalArtMediaURLs (digitalArt, instanceName, accessToken) {
+export function populateDigitalArtMediaURLs(digitalArt, instanceName, accessToken) {
   const baseUrl = `${base(instanceName, accessToken)}/digital-art/${unwrap(digitalArt.id)}/content`
 
   if (digitalArt.content) {
@@ -142,7 +142,7 @@ export function populateDigitalArtMediaURLs (digitalArt, instanceName, accessTok
   }
 }
 
-export function populateDigitalArtTokenMediaURLs (token, instanceName, accessToken) {
+export function populateDigitalArtTokenMediaURLs(token, instanceName, accessToken) {
   const baseUrl = `${base(instanceName, accessToken)}/digital-art/${unwrap(token.object.id)}/content`
 
   if (token.object.content) {
@@ -158,30 +158,33 @@ export function populateDigitalArtTokenMediaURLs (token, instanceName, accessTok
   }
 }
 
-export function mediaAssetURL (instanceName, media) {
+export function mediaAssetURL(instanceName, media) {
   return `${basename(instanceName)}/media-asset/${media.uploadID}/${unwrapBlob(media.id)}`
 }
 
-export function mediaAssetPreviewURL (instanceName, media) {
+export function mediaAssetPreviewURL(instanceName, media) {
   return `${basename(instanceName)}/media-asset/${media.uploadID}/${unwrapBlob(media.id)}/preview`
 }
 
-export async function loadSecureMedia (accessToken, url) {
+export async function loadSecureMedia(accessToken, url) {
   const timeout = DEFAULT_TIMEOUT
   return new Promise((resolve, reject) => {
     fetch(url, {
       method: 'GET',
       headers: auth(accessToken)
-    }).then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok')
-      }
-      return response.blob()
-    }).then(myBlob => {
-      resolve(URL.createObjectURL(myBlob))
-    }).catch(error => {
-      reject(error)
     })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        return response.blob()
+      })
+      .then((myBlob) => {
+        resolve(URL.createObjectURL(myBlob))
+      })
+      .catch((error) => {
+        reject(error)
+      })
     setTimeout(() => reject(new Error(`Timed out after ${timeout / 1000} seconds`)), timeout)
   })
 }

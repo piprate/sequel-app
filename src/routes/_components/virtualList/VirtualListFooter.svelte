@@ -1,11 +1,11 @@
 <script>
   import { heightWithoutFooter, virtualListStore } from './virtualListStore'
   import { mark, stop } from '../../_utils/marks'
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte'
 
-  export let component;
+  export let component
 
-  let node;
+  let node
 
   onMount(() => {
     requestAnimationFrame(() => {
@@ -18,14 +18,13 @@
       stop('VirtualListFooter gBCR')
       virtualListStore.setForRealm({ footerHeight: rect.height })
     })
-  });
+  })
 </script>
 
-<div class="virtual-list-footer"
-     bind:this={node}
-     style="transform: translateY({$heightWithoutFooter}px);" >
+<div class="virtual-list-footer" bind:this={node} style="transform: translateY({$heightWithoutFooter}px);">
   <svelte:component this={component} />
 </div>
+
 <style>
   .virtual-list-footer {
     position: absolute;

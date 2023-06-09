@@ -7,33 +7,35 @@
   import { deleteFilter } from '../../../_actions/filters'
   import { thunk } from '../../../_utils/thunk'
 
-  export let instanceName;
+  export let instanceName
 
-  const intl = {};
+  const intl = {}
 
   const listFormat = thunk(() => new Intl.ListFormat(LOCALE, { style: 'long', type: 'conjunction' }))
 
-  $: filters = $instanceFilters[instanceName] || [];
+  $: filters = $instanceFilters[instanceName] || []
 
-  $: formattedFilters = filters.map(filter => ({
+  $: formattedFilters = filters.map((filter) => ({
     ...filter,
-    formattedContexts: listFormat().format(filter.context.map(context => {
-      switch (context) {
-        case 'home':
-          return 'intl.filterHome'
-        case 'notifications':
-          return 'intl.filterNotifications'
-        case 'public':
-          return 'intl.filterPublic'
-        case 'thread':
-          return 'intl.filterThread'
-        case 'spark':
-          return 'intl.filterSpark'
-        default:
-          return 'intl.filterUnknown'
-      }
-    }))
-  }));
+    formattedContexts: listFormat().format(
+      filter.context.map((context) => {
+        switch (context) {
+          case 'home':
+            return 'intl.filterHome'
+          case 'notifications':
+            return 'intl.filterNotifications'
+          case 'public':
+            return 'intl.filterPublic'
+          case 'thread':
+            return 'intl.filterThread'
+          case 'spark':
+            return 'intl.filterSpark'
+          default:
+            return 'intl.filterUnknown'
+        }
+      })
+    )
+  }))
 
   async function add() {
     const showWordFilterDialog = await importShowWordFilterDialog()
@@ -57,8 +59,8 @@
         <tr>
           <th>{intl.wordOrPhrase}</th>
           <th>{intl.contexts}</th>
-          <th></th>
-          <th></th>
+          <th />
+          <th />
         </tr>
       </thead>
       <tbody>
@@ -67,10 +69,10 @@
             <td class="word-filters-break">{filter.phrase}</td>
             <td class="word-filters-break">{filter.formattedContexts}</td>
             <td>
-              <IconButton label="{intl.edit}" href="#fa-pencil" on:click="{ () => edit(filter) }" clickListener={true} />
+              <IconButton label={intl.edit} href="#fa-pencil" on:click={() => edit(filter)} clickListener={true} />
             </td>
             <td>
-              <IconButton label="{intl.delete}" href="#fa-trash" on:click="{ () => del(filter) }" clickListener={true} />
+              <IconButton label={intl.delete} href="#fa-trash" on:click={() => del(filter)} clickListener={true} />
             </td>
           </tr>
         {/each}
@@ -79,14 +81,16 @@
   {:else}
     <p class="word-filters-p">{intl.noFilters}</p>
   {/if}
-  <button type="button" on:click="{add}">{intl.addFilter}</button>
+  <button type="button" on:click={add}>{intl.addFilter}</button>
 </div>
 <GenericInstanceSettingsStyle />
+
 <style>
   .word-filters-table {
-    width: 100%
+    width: 100%;
   }
-  p.word-filters-p, .word-filters-table {
+  p.word-filters-p,
+  .word-filters-table {
     margin: 0 0 10px 0;
   }
 
@@ -100,5 +104,4 @@
       table-layout: fixed;
     }
   }
-
 </style>

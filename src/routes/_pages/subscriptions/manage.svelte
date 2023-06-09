@@ -15,20 +15,20 @@
   $: sparksFetcher = () => getBookmarkedSparks($currentInstance, $accessToken, $currentSparkId)
 </script>
 
-{#if $isAuthenticated }
-    <SubscriptionBrowserFilter filter="manage" />
-    <FreeTextLayout>
-        <InfoAside className="new-entity-notice-aside">
-            {intl.featureNotImplemented}
-        </InfoAside>
-    </FreeTextLayout>
-<!--    <SparksListPage {sparksFetcher} >-->
-<!--        <span slot="is-empty">-->
-<!--            <InfoAside>-->
-<!--                {intl.noSubscriptionsYet}-->
-<!--            </InfoAside>-->
-<!--        </span>-->
-<!--    </SparksListPage>-->
+{#if $isAuthenticated}
+  <SubscriptionBrowserFilter filter="manage" />
+  <FreeTextLayout>
+    <InfoAside className="new-entity-notice-aside">
+      {intl.featureNotImplemented}
+    </InfoAside>
+  </FreeTextLayout>
+  <!--    <SparksListPage {sparksFetcher} >-->
+  <!--        <span slot="is-empty">-->
+  <!--            <InfoAside>-->
+  <!--                {intl.noSubscriptionsYet}-->
+  <!--            </InfoAside>-->
+  <!--        </span>-->
+  <!--    </SparksListPage>-->
 {:else}
-    <RestrictedPageWarning />
+  <RestrictedPageWarning />
 {/if}

@@ -11,12 +11,12 @@
   let loading = true
   let worlds = []
 
-  function onClickAction (event) {
+  function onClickAction(event) {
     const { action, worldId } = event
     action.onclick(worldId)
   }
 
-  async function refreshWorlds () {
+  async function refreshWorlds() {
     worlds = await worldsFetcher()
     console.log('WORLDS', worlds)
   }
@@ -42,24 +42,21 @@
   {#if loading}
     <LoadingPage />
   {:else if worlds && worlds.length}
-    <slot name="header"></slot>
+    <slot name="header" />
     <ul class="worlds-results">
       {#each worlds as world}
-        <WorldSearchResult
-          {world}
-          actions={worldActions}
-          on:click="{onClickAction}"
-        />
+        <WorldSearchResult {world} actions={worldActions} on:click={onClickAction} />
       {/each}
     </ul>
-    <slot name="footer"></slot>
+    <slot name="footer" />
   {:else if loadError}
-    <slot name="header"></slot>
+    <slot name="header" />
     <ErrorMessage error={loadError} />
   {:else}
-    <slot name="is-empty"></slot>
+    <slot name="is-empty" />
   {/if}
 </div>
+
 <style>
   .worlds-page {
     padding: 20px 20px;

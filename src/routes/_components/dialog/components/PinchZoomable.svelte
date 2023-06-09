@@ -4,11 +4,11 @@
 
   const ZOOM_INCREMENT = 0.1
 
-  export let className;
+  export let className
 
-  let node;
+  let node
 
-  function zoomBy (increment) {
+  function zoomBy(increment) {
     const scale = node.scale || 1
     node.scaleTo(scale + increment, {
       originX: '50%',
@@ -16,31 +16,32 @@
     })
   }
 
-  function zoomIn () {
+  function zoomIn() {
     zoomBy(ZOOM_INCREMENT)
   }
 
-  function zoomOut () {
+  function zoomOut() {
     zoomBy(-ZOOM_INCREMENT)
   }
 </script>
-<div class="pinch-zoom {className ? className : ''}" >
+
+<div class="pinch-zoom {className ? className : ''}">
   <pinch-zoom class="pinch-zoom-inner" bind:this={node}>
-    <slot></slot>
+    <slot />
   </pinch-zoom>
   <IconButton
-          className="pinch-zoom-button pinch-zoom-button-zoom-out"
-          muted={true}
-          label="{intl.zoomOut}"
-          href="#fa-search-minus"
-          on:click="{zoomOut}"
+    className="pinch-zoom-button pinch-zoom-button-zoom-out"
+    muted={true}
+    label={intl.zoomOut}
+    href="#fa-search-minus"
+    on:click={zoomOut}
   />
   <IconButton
-          className="pinch-zoom-button pinch-zoom-button-zoom-in"
-          muted={true}
-          label="{intl.zoomIn}"
-          href="#fa-search-plus"
-          on:click="{zoomIn}"
+    className="pinch-zoom-button pinch-zoom-button-zoom-in"
+    muted={true}
+    label={intl.zoomIn}
+    href="#fa-search-plus"
+    on:click={zoomIn}
   />
 </div>
 

@@ -1,3 +1,1 @@
-export const importDatabase = () => import(
-  '../../_database/api.js'
-)
+export const importDatabase = () => import('../../_database/api.js')

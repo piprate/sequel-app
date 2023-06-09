@@ -25,7 +25,7 @@
 
     template = {
       name: world.name,
-      summary: world.summary,
+      summary: world.summary
     }
 
     clearComposeData(realm)
@@ -41,11 +41,12 @@
     }
   })
 </script>
-<DynamicPageBanner title="{intl.editWorld}" />
-{#if $isAuthenticated }
-    {#if template}
-        <WorldEdit {realm} newWorld={false} worldId={params.worldId} {template} />
-    {/if}
+
+<DynamicPageBanner title={intl.editWorld} />
+{#if $isAuthenticated}
+  {#if template}
+    <WorldEdit {realm} newWorld={false} worldId={params.worldId} {template} />
+  {/if}
 {:else}
-    <RestrictedPageWarning />
+  <RestrictedPageWarning />
 {/if}

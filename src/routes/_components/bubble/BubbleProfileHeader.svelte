@@ -14,7 +14,7 @@
   let emojis = []
 
   $: avatarSize = $isVeryTinyMobileSize ? 'small' : $isTinyMobileSize ? 'medium' : 'big'
-  $: joined = relationship && (relationship.status === 'active')
+  $: joined = relationship && relationship.status === 'active'
   $: memberType = joined ? relationship.memberType : ''
   $: memberTypeLabel = (() => {
     switch (memberType) {
@@ -31,10 +31,14 @@
   })()
   $: readOnlyLabel = bubble.writerMode === 'none' ? 'intl.readOnly' : ''
   $: inviteOnlyLabel = bubble.membershipMode === 'invite_only' ? 'intl.inviteOnly' : ''
-  $: federationLabel = bubble.federationMode === 'enabled' ? 'intl.federationEnabled' :
-          bubble.federationMode === 'continuous_mirror' ? 'intl.federationAlways' : ''
+  $: federationLabel =
+    bubble.federationMode === 'enabled'
+      ? 'intl.federationEnabled'
+      : bubble.federationMode === 'continuous_mirror'
+      ? 'intl.federationAlways'
+      : ''
 
-  async function onAvatarClick () {
+  async function onAvatarClick() {
     if (!bubble.avatar) {
       return
     }
@@ -70,24 +74,22 @@
 
 <h2 class="sr-only">{intl.nameAndProperties}</h2>
 <div class="bubble-profile-avatar">
-  <button class="bubble-profile-avatar-button"
-          aria-label="{intl.clickToSeeAvatar}"
-          on:click="{onAvatarClick}" >
-    <Avatar entity={bubble} size={avatarSize} showNFT="{true}" />
+  <button class="bubble-profile-avatar-button" aria-label={intl.clickToSeeAvatar} on:click={onAvatarClick}>
+    <Avatar entity={bubble} size={avatarSize} showNFT={true} />
   </button>
 </div>
 <div class="bubble-profile-name">
   <BubbleDisplayName {bubble} />
 </div>
 <div class="bubble-profile-properties">
-  {#if bubble.worldRef }
+  {#if bubble.worldRef}
     <Location world={bubble.worldRef} />
   {/if}
-  <Timestamp value={bubble.createdAt} className={ bubble.worldRef ? 'with-left-margin' : '' } flavour="created" />
+  <Timestamp value={bubble.createdAt} className={bubble.worldRef ? 'with-left-margin' : ''} flavour="created" />
 </div>
 <div class="bubble-profile-relationship">
-  {#if relationship }
-    {#if relationship.managed && memberType !== 'owner' }
+  {#if relationship}
+    {#if relationship.managed && memberType !== 'owner'}
       <span class="bubble-sticker">{intl.managed}</span>
     {/if}
     {#if memberTypeLabel}
@@ -112,6 +114,7 @@
     <span class="bubble-sticker">{federationLabel}</span>
   {/if}
 </div>
+
 <style>
   .bubble-profile-relationship {
     grid-area: relationship;

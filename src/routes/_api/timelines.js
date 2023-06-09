@@ -5,7 +5,7 @@ import { unwrap } from '../_utils/mapper'
 import { isTimelineInReaderMode } from '../_actions/timeline'
 import { getForTimeline, rootLastReaderModeTimelineItem } from '../_store/timeline'
 
-export async function getTimeline (instanceName, accessToken, asSpark, timeline, maxId, since, limit) {
+export async function getTimeline(instanceName, accessToken, asSpark, timeline, maxId, since, limit) {
   let url = `${base(instanceName, accessToken)}/`
 
   const isNotification = timeline.startsWith('notifications')
@@ -72,10 +72,9 @@ export async function getTimeline (instanceName, accessToken, asSpark, timeline,
   url += '?' + paramsString(params)
 
   console.log('Fetching url', url)
-  const {
-    json: items,
-    headers
-  } = await getWithHeaders(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT })
+  const { json: items, headers } = await getWithHeaders(url, sequelAuth(accessToken, asSpark), {
+    timeout: DEFAULT_TIMEOUT
+  })
 
   if (isNotification) {
     for (const notification of items) {

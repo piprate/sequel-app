@@ -1,5 +1,5 @@
 // borrowed from https://github.com/HenrikJoreteg/favicon-setter
-export function setFavicon (href) {
+export function setFavicon(href) {
   const faviconId = 'theFavicon'
   const oldLink = document.getElementById(faviconId)
 

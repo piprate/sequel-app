@@ -1,39 +1,34 @@
 <script>
-  import { mediaAccept } from "../../_static/media";
-  import { doMediaUpload } from "../../_actions/media";
-  import { onMount } from "svelte";
-  import { inBrowser } from "../../_utils/browserOrNode";
+  import { mediaAccept } from '../../_static/media'
+  import { doMediaUpload } from '../../_actions/media'
+  import { onMount } from 'svelte'
+  import { inBrowser } from '../../_utils/browserOrNode'
 
-  export let realm;
-  let fileDrop;
-  
+  export let realm
+  let fileDrop
+
   if (inBrowser()) {
-    import("file-drop-element");
+    import('file-drop-element')
   }
 
   async function onFileDrop(e) {
-    const { files } = e;
+    const { files } = e
     for (const file of files) {
       // upload one at a time to avoid hitting limits
-      await doMediaUpload(realm, "", file, true, "");
+      await doMediaUpload(realm, '', file, true, '')
     }
   }
 
   onMount(() => {
     // this.onFileDrop = this.onFileDrop.bind(this)
-    fileDrop.addEventListener("filedrop", onFileDrop);
+    fileDrop.addEventListener('filedrop', onFileDrop)
     return () => {
-      fileDrop.removeEventListener("filedrop", onFileDrop);
-    };
-  });
+      fileDrop.removeEventListener('filedrop', onFileDrop)
+    }
+  })
 </script>
 
-<file-drop
-  multiple
-  class="file-drop file-drop-realm-{realm}"
-  accept={mediaAccept}
-  bind:this={fileDrop}
->
+<file-drop multiple class="file-drop file-drop-realm-{realm}" accept={mediaAccept} bind:this={fileDrop}>
   <div class="file-drop-info">
     <div class="file-drop-info-text">
       <span class="file-drop-info-text-valid">{intl.dropToUpload}</span>
@@ -84,18 +79,12 @@
     display: none;
   }
 
-  :global(
-      .file-drop.drop-valid .file-drop-info,
-      .file-drop.drop-invalid .file-drop-info
-    ) {
+  :global(.file-drop.drop-valid .file-drop-info, .file-drop.drop-invalid .file-drop-info) {
     display: flex;
     background: var(--file-drop-mask);
   }
 
-  :global(
-      .file-drop.drop-valid .file-drop-info-text-invalid,
-      .file-drop.drop-invalid .file-drop-info-text-valid
-    ) {
+  :global(.file-drop.drop-valid .file-drop-info-text-invalid, .file-drop.drop-invalid .file-drop-info-text-valid) {
     display: none;
   }
 </style>

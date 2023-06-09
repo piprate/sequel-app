@@ -6,7 +6,7 @@ import { currentInstance } from '../_store/local'
 import { get } from 'svelte/store'
 import { accessToken, currentSparkId } from '../_store/instance'
 
-export async function setConversationMuted (postId, mute, toastOnSuccess) {
+export async function setConversationMuted(postId, mute, toastOnSuccess) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   const asSpark = get(currentSparkId)
@@ -24,9 +24,10 @@ export async function setConversationMuted (postId, mute, toastOnSuccess) {
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(mute
-      ? formatIntl('intl.unableToMuteConversation', { error: (e.message || '') })
-      : formatIntl('intl.unableToUnmuteConversation', { error: (e.message || '') })
+    toast.say(
+      mute
+        ? formatIntl('intl.unableToMuteConversation', { error: e.message || '' })
+        : formatIntl('intl.unableToUnmuteConversation', { error: e.message || '' })
     )
   }
 }

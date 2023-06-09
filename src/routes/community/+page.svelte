@@ -4,6 +4,6 @@
   import pageComponent from '../_pages/community/index.svelte'
 </script>
 
-<Title name="{intl.community}" />
+<Title name={intl.community} />
 
 <LazyPage {pageComponent} />

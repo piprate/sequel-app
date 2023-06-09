@@ -6,7 +6,7 @@ import { accessToken, currentSparkId } from '../_store/instance'
 import { deleteSpark } from '../_api/sparks'
 import { setCurrentSpark } from './sparks'
 
-export async function doDeleteSpark (sparkId) {
+export async function doDeleteSpark(sparkId) {
   const _currentInstance = currentInstance.get()
   const _currentSparkId = get(currentSparkId)
   const _accessToken = get(accessToken)
@@ -23,7 +23,7 @@ export async function doDeleteSpark (sparkId) {
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(formatIntl('intl.unableToArchiveSpark', { error: (e.message || '') }))
+    toast.say(formatIntl('intl.unableToArchiveSpark', { error: e.message || '' }))
     throw e
   }
 }

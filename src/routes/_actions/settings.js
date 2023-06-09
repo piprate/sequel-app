@@ -13,12 +13,10 @@ const defaultSettings = {
   general: {
     media: {},
     ui: {
-      disableCustomScrollbars:
-        inBrowser() && /iP(?:hone|ad|od)/.test(navigator.userAgent)
+      disableCustomScrollbars: inBrowser() && /iP(?:hone|ad|od)/.test(navigator.userAgent)
     },
     a11y: {
-      reduceMotion:
-        !inBrowser() || matchMedia('(prefers-reduced-motion: reduce)').matches
+      reduceMotion: !inBrowser() || matchMedia('(prefers-reduced-motion: reduce)').matches
     },
     theme: DEFAULT_THEME
   },
@@ -33,7 +31,7 @@ const defaultSettings = {
   }
 }
 
-export function getSettingsFromLocal (section, group = undefined) {
+export function getSettingsFromLocal(section, group = undefined) {
   const _currentInstance = currentInstance.get()
 
   if (_currentInstance) {
@@ -61,7 +59,7 @@ export function getSettingsFromLocal (section, group = undefined) {
   return settings
 }
 
-export function getSectionSettingsFromLocal (section, group = undefined) {
+export function getSectionSettingsFromLocal(section, group = undefined) {
   const savedSettings = localStorage.getItem(`${section}_settings`)
   const parsedSettings = saveSettings ? JSON.parse(savedSettings) : null
 
@@ -72,7 +70,7 @@ export function getSectionSettingsFromLocal (section, group = undefined) {
   return null
 }
 
-export async function getSettingsFromRemote () {
+export async function getSettingsFromRemote() {
   const _accessToken = storeGet(accessToken)
   const _currentInstance = currentInstance.get()
 
@@ -89,10 +87,10 @@ export async function getSettingsFromRemote () {
   }
 }
 
-export async function getSettings (section, group) {
+export async function getSettings(section, group) {
   try {
     const localSettings = getSettingsFromLocal()
-    const settings = localSettings || await getSettingsFromRemote()
+    const settings = localSettings || (await getSettingsFromRemote())
 
     if (section) {
       const sectionSettings = getSectionSettingsFromLocal(section)
@@ -105,11 +103,11 @@ export async function getSettings (section, group) {
   }
 }
 
-export function getStoreSettings (...keys) {
+export function getStoreSettings(...keys) {
   return get(userSettings.get(), keys)
 }
 
-export async function saveSettingsToLocal (settings, section) {
+export async function saveSettingsToLocal(settings, section) {
   const { settings: _settings, ...settingsMeta } = settings
   const sectionSettings = _settings[section]
 
@@ -126,7 +124,7 @@ export async function saveSettingsToLocal (settings, section) {
   }
 }
 
-export async function saveSettingsToRemote (settings) {
+export async function saveSettingsToRemote(settings) {
   const _accessToken = storeGet(accessToken)
   const _currentInstance = currentInstance.get()
 
@@ -147,7 +145,7 @@ export async function saveSettingsToRemote (settings) {
  * @example
  * saveSettings({ darkBackground: 'sequel' }, 'instances', 'theme')
  */
-export async function saveSettings (settings, section, group = undefined, overwrite = true, localOnly = false) {
+export async function saveSettings(settings, section, group = undefined, overwrite = true, localOnly = false) {
   const _settings = userSettings.get()
 
   if (group) {
@@ -170,11 +168,11 @@ export async function saveSettings (settings, section, group = undefined, overwr
   }
 }
 
-export function parseSettings (settings) {
+export function parseSettings(settings) {
   return JSON.parse(JSON.stringify(settings).replaceAll('"on"', 'true'))
 }
 
-export function deleteSettings () {
+export function deleteSettings() {
   userSettings.set(null)
   localStorage.removeItem('settings_meta')
 

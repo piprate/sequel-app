@@ -6,7 +6,7 @@
   import { isMobile } from '../../_utils/userAgent/isMobile'
   import { on } from '../../_utils/eventBus'
   import { reduceMotion } from '../../_store/local'
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte'
 
   // In Svelte's implementation of lists, these VirtualListLazyItems can be
   // created in any order. By default in fact it seems to do it in reverse
@@ -17,13 +17,13 @@
   // are called by index, in ascending order.
   const priorityQueue = createPriorityQueue()
 
-  export let component;
-  export let offset;
-  export let makeProps;
-  export let key;
-  export let index;
+  export let component
+  export let offset
+  export let makeProps
+  export let key
+  export let index
 
-  let props = undefined;
+  let props = undefined
 
   function refetch() {
     if (makeProps) {
@@ -33,7 +33,7 @@
         const _props = await makeProps(key)
         const setProps = () => {
           mark('VirtualListLazyItem set props')
-          props = _props;
+          props = _props
           stop('VirtualListLazyItem set props')
         }
         // On desktop, if prefers-reduced-motion is enabled, avoid using scheduleIdleTask
@@ -51,16 +51,11 @@
   }
 
   onMount(() => {
-    refetch();
-    return on('postUpdated', refetch);
-  });
+    refetch()
+    return on('postUpdated', refetch)
+  })
 </script>
 
 {#if props}
-  <VirtualListItem {component}
-                   {offset}
-                   {props}
-                   {key}
-                   {index}
-  />
+  <VirtualListItem {component} {offset} {props} {key} {index} />
 {/if}

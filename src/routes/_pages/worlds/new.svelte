@@ -9,12 +9,13 @@
   params = undefined
   const intl = {}
 </script>
-<DynamicPageBanner title="{intl.newWorld}" />
+
+<DynamicPageBanner title={intl.newWorld} />
 
 {#if $currentSpark}
-    <WorldEdit realm="new_world" newWorld={true} />
+  <WorldEdit realm="new_world" newWorld={true} />
 {:else}
-    <InfoAside>
-        {intl.selectSparkBeforeCreatingWorld}
-    </InfoAside>
+  <InfoAside>
+    {intl.selectSparkBeforeCreatingWorld}
+  </InfoAside>
 {/if}

@@ -22,8 +22,10 @@
   $: currentSparkId = spark ? unwrap(spark.id) : ''
   $: showInductionNotice = currentSparkId && $currentInductionLevel <= 1
   $: publicBubblesFetcher = () => getBubbleList($currentInstance, $accessToken)
-  $: bubblesFetcher = () => currentSparkId ? getSparkBubbleList($currentInstance, $accessToken, currentSparkId, true) : []
-  $: worldsFetcher = () => currentSparkId ? getSparkWorldList($currentInstance, $accessToken, currentSparkId, true) : []
+  $: bubblesFetcher = () =>
+    currentSparkId ? getSparkBubbleList($currentInstance, $accessToken, currentSparkId, true) : []
+  $: worldsFetcher = () =>
+    currentSparkId ? getSparkWorldList($currentInstance, $accessToken, currentSparkId, true) : []
 
   let loaded = false
 
@@ -31,53 +33,64 @@
     loaded = true
   })
 </script>
-{#if $isAuthenticated }
+
+{#if $isAuthenticated}
   {#if $currentSpark}
     <FreeTextLayout>
-      <h1>{formatIntl('intl.homePageGreeting', {spark: $currentSpark.name}) }</h1>
+      <h1>{formatIntl('intl.homePageGreeting', { spark: $currentSpark.name })}</h1>
       <h3>{intl.feelingDifferent} <a data-sveltekit-preload-data href="/switch">{intl.switchAction}</a>.</h3>
-      <a class="button primary profile-button" data-sveltekit-preload-data href="/sparks/{currentSparkId}">{intl.profileButton}</a>
+      <a class="button primary profile-button" data-sveltekit-preload-data href="/sparks/{currentSparkId}"
+        >{intl.profileButton}</a
+      >
       {#if showInductionNotice}
         <div class="induction-notice">
           {intl.inductionLevelOneNotice}
         </div>
       {/if}
-      <BubblesListPage {bubblesFetcher} >
+      <BubblesListPage {bubblesFetcher}>
         <span slot="header">
-           <h2>{intl.yourBubbles}</h2>
+          <h2>{intl.yourBubbles}</h2>
         </span>
         <span slot="is-empty">
-          <a class="button primary new-entity-button" data-sveltekit-preload-data href="/bubbles/new">{intl.createNewBubble}</a>
+          <a class="button primary new-entity-button" data-sveltekit-preload-data href="/bubbles/new"
+            >{intl.createNewBubble}</a
+          >
           <InfoAside className="new-entity-notice-aside">
-              {intl.firstBubbleNotice}
+            {intl.firstBubbleNotice}
           </InfoAside>
         </span>
         <span slot="footer">
-          <a class="button primary new-entity-button" data-sveltekit-preload-data href="/bubbles/new">{intl.createNewBubble}</a>
+          <a class="button primary new-entity-button" data-sveltekit-preload-data href="/bubbles/new"
+            >{intl.createNewBubble}</a
+          >
         </span>
       </BubblesListPage>
-      <WorldsListPage {worldsFetcher} >
+      <WorldsListPage {worldsFetcher}>
         <span slot="header">
-           <h2>{intl.yourWorlds}</h2>
+          <h2>{intl.yourWorlds}</h2>
         </span>
         <span slot="is-empty">
-           <a class="button primary new-entity-button" data-sveltekit-preload-data href="/worlds/new">{intl.createNewWorld}</a>
+          <a class="button primary new-entity-button" data-sveltekit-preload-data href="/worlds/new"
+            >{intl.createNewWorld}</a
+          >
           <InfoAside className="new-entity-notice-aside">
-              {intl.firstWorldNotice}
+            {intl.firstWorldNotice}
           </InfoAside>
         </span>
         <span slot="footer">
-           <a class="button primary new-entity-button" data-sveltekit-preload-data href="/worlds/new">{intl.createNewWorld}</a>
+          <a class="button primary new-entity-button" data-sveltekit-preload-data href="/worlds/new"
+            >{intl.createNewWorld}</a
+          >
         </span>
       </WorldsListPage>
     </FreeTextLayout>
   {:else}
-    <SparkSelectionPage/>
+    <SparkSelectionPage />
   {/if}
 {:else if loaded}
-  <RestrictedPageWarning showLogo={true} message="{intl.homeDescription}" />
+  <RestrictedPageWarning showLogo={true} message={intl.homeDescription} />
 {:else}
-  <LoadingPage/>
+  <LoadingPage />
 {/if}
 
 <style>

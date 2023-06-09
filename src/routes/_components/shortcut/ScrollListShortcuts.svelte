@@ -1,40 +1,30 @@
 <script>
-  import {
-    isVisible,
-    firstVisibleElementIndex,
-    scrollIntoViewIfNeeded
-} from '../../_utils/scrollIntoView'
-  import {
-    addShortcutFallback,
-    removeShortcutFallback,
-    onKeyDownInShortcutScope
-} from '../../_utils/shortcuts'
+  import { isVisible, firstVisibleElementIndex, scrollIntoViewIfNeeded } from '../../_utils/scrollIntoView'
+  import { addShortcutFallback, removeShortcutFallback, onKeyDownInShortcutScope } from '../../_utils/shortcuts'
   import { smoothScroll } from '../../_utils/smoothScroll'
   import { getScrollContainer } from '../../_utils/scrollContainer'
   import { currentTimeline } from '../../_store/local'
   import { emit } from '../../_utils/eventBus'
-  import {onMount} from "svelte";
+  import { onMount } from 'svelte'
 
   const VISIBILITY_CHECK_DELAY_MS = 600
 
-  const keyToElement = key => document.getElementById(key)
-  const elementToKey = element => element.getAttribute('id')
+  const keyToElement = (key) => document.getElementById(key)
+  const elementToKey = (element) => element.getAttribute('id')
   const scope = 'global'
 
-  const shouldIgnoreEvent = event => {
+  const shouldIgnoreEvent = (event) => {
     // For accessibility reasons, do not override the arrowup/arrowdown behavior for radio buttons
     // (e.g. in a poll). Up/down is supposed to change the radio value, not the current post.
     const { target, key } = event
-    const isRadio = target &&
-    target.tagName === 'INPUT' &&
-    target.type === 'radio'
+    const isRadio = target && target.tagName === 'INPUT' && target.type === 'radio'
     const isArrow = key === 'ArrowUp' || key === 'ArrowDown'
     return isRadio && isArrow
   }
 
-  let activeItemChangeTime = 0;
-  let elements = document.getElementsByClassName('shortcut-list-item');
-  let spoilersShown = false;
+  let activeItemChangeTime = 0
+  let elements = document.getElementsByClassName('shortcut-list-item')
+  let spoilersShown = false
 
   let __this = {
     onKeyDown: function (event) {
@@ -46,7 +36,7 @@
         event.stopPropagation()
         event.preventDefault()
         emit('toggleAllSpoilers', !spoilersShown)
-        spoilersShown = !spoilersShown;
+        spoilersShown = !spoilersShown
         return
       }
       if (event.key === 'j' || event.key === 'ArrowDown') {
@@ -72,7 +62,7 @@
         onKeyDownInShortcutScope(activeItemKey, event)
       }
     }
-  };
+  }
 
   function changeActiveItem(movement, timeStamp) {
     let index = -1
@@ -95,7 +85,7 @@
     }
     if (index === -1) {
       const { first, firstComplete } = firstVisibleElementIndex(elements)
-      index = (movement > 0) ? firstComplete : first
+      index = movement > 0 ? firstComplete : first
     } else {
       index += movement
     }
@@ -115,8 +105,7 @@
     if (!activeItem) {
       return null
     }
-    if ((timeStamp - activeItemChangeTime) > VISIBILITY_CHECK_DELAY_MS &&
-      !isVisible(keyToElement(activeItem))) {
+    if (timeStamp - activeItemChangeTime > VISIBILITY_CHECK_DELAY_MS && !isVisible(keyToElement(activeItem))) {
       setActiveItem(null, 0)
       return null
     }
@@ -124,7 +113,7 @@
   }
 
   function setActiveItem(key, timeStamp) {
-    activeItemChangeTime = timeStamp;
+    activeItemChangeTime = timeStamp
     try {
       keyToElement(key).focus({
         preventScroll: true
@@ -135,9 +124,9 @@
   }
 
   onMount(() => {
-    addShortcutFallback(scope, __this);
+    addShortcutFallback(scope, __this)
     return () => {
-      removeShortcutFallback(scope, __this);
+      removeShortcutFallback(scope, __this)
     }
-  });
+  })
 </script>

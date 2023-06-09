@@ -1,3 +1,1 @@
-export const importArrowKeyNavigation = () => import(
-  'arrow-key-navigation'
-)
+export const importArrowKeyNavigation = () => import('arrow-key-navigation')

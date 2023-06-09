@@ -8,7 +8,7 @@ import { isMobile } from './userAgent/isMobile'
 // Run a task that doesn't need to be processed immediately, but should
 // probably be delayed if we're on a mobile device. Also run it sooner
 // if we're in a hidden tab, since browsers throttle or don't run setTimeout/rAF/etc.
-export function runMediumPriorityTask (fn) {
+export function runMediumPriorityTask(fn) {
   if (pageVisibilityHidden.get()) {
     fn()
   } else if (isMobile()) {

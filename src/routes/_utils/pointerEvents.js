@@ -11,9 +11,9 @@ let pointerUp
 let pointerLeave
 let pointerMove
 
-function createEventListener (event) {
+function createEventListener(event) {
   return (node, callback) => {
-    const listener = e => {
+    const listener = (e) => {
       // lightweight polyfill for clientX/clientY in pointer events,
       // which is slightly different in touch events
       if (typeof e.clientX !== 'number') {
@@ -27,7 +27,7 @@ function createEventListener (event) {
 
     node.addEventListener(event, listener)
     return {
-      destroy () {
+      destroy() {
         node.removeEventListener(event, listener)
       }
     }

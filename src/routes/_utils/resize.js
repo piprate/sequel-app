@@ -10,16 +10,19 @@ if (inBrowser()) {
 }
 
 if (inBrowser()) {
-  window.addEventListener('resize', debounce(() => {
-    console.log('resize')
-    listeners.forEach(listener => listener())
-  }, DEBOUNCE_DELAY))
+  window.addEventListener(
+    'resize',
+    debounce(() => {
+      console.log('resize')
+      listeners.forEach((listener) => listener())
+    }, DEBOUNCE_DELAY)
+  )
 }
 
-export function registerResizeListener (listener) {
+export function registerResizeListener(listener) {
   listeners.add(listener)
 }
 
-export function unregisterResizeListener (listener) {
+export function unregisterResizeListener(listener) {
   listeners.delete(listener)
 }

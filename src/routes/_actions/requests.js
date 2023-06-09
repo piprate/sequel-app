@@ -6,7 +6,7 @@ import { currentInstance } from '../_store/local'
 import { get } from 'svelte/store'
 import { accessToken } from '../_store/instance'
 
-export async function setSubRequestApprovedOrRejected (sparkId, approved, toastOnSuccess) {
+export async function setSubRequestApprovedOrRejected(sparkId, approved, toastOnSuccess) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   try {
@@ -23,9 +23,10 @@ export async function setSubRequestApprovedOrRejected (sparkId, approved, toastO
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(approved
-      ? formatIntl('intl.unableToApproveSubscriptionRequest', { error: (e.message || '') })
-      : formatIntl('intl.unableToRejectSubscriptionRequest', { error: (e.message || '') })
+    toast.say(
+      approved
+        ? formatIntl('intl.unableToApproveSubscriptionRequest', { error: e.message || '' })
+        : formatIntl('intl.unableToRejectSubscriptionRequest', { error: e.message || '' })
     )
   }
 }

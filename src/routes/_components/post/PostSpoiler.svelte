@@ -19,7 +19,7 @@
   export let spoilerText
   export let postEmojis
 
-  function toggleSpoilers (shown) {
+  function toggleSpoilers(shown) {
     $spoilersShown[uuid] = typeof shown === 'undefined' ? !$spoilersShown[uuid] : !!shown
     requestAnimationFrame(() => {
       mark('clickSpoilerButton')
@@ -46,17 +46,22 @@
   })
 </script>
 
-<div class="post-spoiler {isPostInNotification ? 'post-in-notification' : ''} {isPostInOwnThread ? 'post-in-own-thread' : ''}">
+<div
+  class="post-spoiler {isPostInNotification ? 'post-in-notification' : ''} {isPostInOwnThread
+    ? 'post-in-own-thread'
+    : ''}"
+>
   <p>{@html massagedSpoilerText}</p>
 </div>
 <div class="post-spoiler-button {isPostInOwnThread ? 'post-in-own-thread' : ''}">
-  <button id={elementId} type="button" >
+  <button id={elementId} type="button">
     {spoilerShown ? 'intl.showLess' : 'intl.showMore'}
   </button>
 </div>
 {#if enableShortcuts}
-<Shortcut scope={shortcutScope} key="x" on:pressed="{toggleSpoilers}"/>
+  <Shortcut scope={shortcutScope} key="x" on:pressed={toggleSpoilers} />
 {/if}
+
 <style>
   .post-spoiler {
     grid-area: spoiler;
@@ -92,5 +97,4 @@
   :global(.underline-links .post-spoiler a) {
     text-decoration: underline;
   }
-
 </style>

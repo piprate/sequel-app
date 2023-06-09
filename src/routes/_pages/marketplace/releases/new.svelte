@@ -10,12 +10,11 @@
   const intl = {}
 </script>
 
-<DynamicPageBanner title="{intl.newRelease}" />
+<DynamicPageBanner title={intl.newRelease} />
 {#if $currentSpark}
-    <ReleaseEdit realm="new_release"  />
+  <ReleaseEdit realm="new_release" />
 {:else}
-    <InfoAside>
-        {intl.selectSparkBeforeCreatingRelease}
-    </InfoAside>
+  <InfoAside>
+    {intl.selectSparkBeforeCreatingRelease}
+  </InfoAside>
 {/if}
-    

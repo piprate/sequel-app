@@ -10,6 +10,6 @@ $toast-bg: lighten($body-bg-color, 4%);
 $focus-outline: darken($main-theme-color, 10%);
 $compose-background: darken($main-theme-color, 12%);
 
-@import "_base.scss";
-@import "_dark.scss";
-@import "_dark_scrollbars.scss";
+@import '_base.scss';
+@import '_dark.scss';
+@import '_dark_scrollbars.scss';

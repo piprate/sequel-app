@@ -1,18 +1,18 @@
 import { close, del, get, set } from '../_thirdparty/idb-keyval/idb-keyval'
 import { WEB_SHARE_TARGET_DATA_IDB_KEY } from '../_static/share'
 
-export function deleteWebShareData () {
+export function deleteWebShareData() {
   return del(WEB_SHARE_TARGET_DATA_IDB_KEY)
 }
 
-export function setWebShareData (data) {
+export function setWebShareData(data) {
   return set(WEB_SHARE_TARGET_DATA_IDB_KEY, data)
 }
 
-export function getWebShareData () {
+export function getWebShareData() {
   return get(WEB_SHARE_TARGET_DATA_IDB_KEY)
 }
 
-export function closeKeyValIDBConnection () {
+export function closeKeyValIDBConnection() {
   return close()
 }

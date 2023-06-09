@@ -2,21 +2,22 @@
   import { virtualListStore } from './virtualListStore'
   import { doubleRAF } from '../../_utils/doubleRAF'
   import { mark, stop } from '../../_utils/marks'
-  import {onMount} from "svelte";
+  import { onMount } from 'svelte'
 
-  export let component;
-  export let virtualProps;
-  export let shown;
+  export let component
+  export let virtualProps
+  export let shown
 
-  let fadedIn = false;
-  let heightCalculated = false;
-  let node;
+  let fadedIn = false
+  let heightCalculated = false
+  let node
 
   function doCalculateHeight() {
-    if (heightCalculated) { // only need to calculate once, it never changes
+    if (heightCalculated) {
+      // only need to calculate once, it never changes
       return
     }
-    heightCalculated = true;
+    heightCalculated = true
     requestAnimationFrame(() => {
       mark('VirtualListHeader gBCR')
       const rect = node.getBoundingClientRect()
@@ -28,9 +29,11 @@
   $: {
     if (shown) {
       doCalculateHeight()
-      doubleRAF(() => { fadedIn = true }); //  animate in
+      doubleRAF(() => {
+        fadedIn = true
+      }) //  animate in
     } else {
-      fadedIn = false;
+      fadedIn = false
     }
   }
 
@@ -46,10 +49,10 @@
   })
 </script>
 
-<div class="virtual-list-header {shown ? 'shown' : ''} {fadedIn ? 'faded-in' : ''}"
-     bind:this={node} >
+<div class="virtual-list-header {shown ? 'shown' : ''} {fadedIn ? 'faded-in' : ''}" bind:this={node}>
   <svelte:component this={component} {virtualProps} />
 </div>
+
 <style>
   .virtual-list-header {
     position: absolute;

@@ -20,7 +20,7 @@
 
   $: composeData = $currentComposeData[originalPostId] || {}
 
-  function onPublishedPost (realm) {
+  function onPublishedPost(realm) {
     if (realm !== originalPostId) {
       return
     }
@@ -35,17 +35,21 @@
     composeDataObserver(composeData)
   }
 
-  function setupRecalculateHeightListener () {
+  function setupRecalculateHeightListener() {
     const recalc = () => requestAnimationFrame(() => dispatch('recalculateHeight'))
     // debounce AND throttle due to 333ms content warning animation
     const debounced = debounce(recalc, DEBOUNCE_DELAY)
-    composeDataObserver = throttle(() => {
-      debounced()
-      recalc()
-    }, THROTTLE_DELAY, {
-      leading: true,
-      trailing: true
-    })
+    composeDataObserver = throttle(
+      () => {
+        debounced()
+        recalc()
+      },
+      THROTTLE_DELAY,
+      {
+        leading: true,
+        trailing: true
+      }
+    )
   }
 
   onMount(() => {
@@ -57,16 +61,18 @@
 </script>
 
 <div class="post-article-compose-box">
-  <ComposeBox realm={originalPostId}
-              autoFocus="true"
-              hideBottomBorder="true"
-              isReply="true"
-              bubbleId={bubbleId}
-              replyVisibility={visibility}
-              replySpoiler={spoilerText}
-              inReplyToUuid={uuid}
+  <ComposeBox
+    realm={originalPostId}
+    autoFocus="true"
+    hideBottomBorder="true"
+    isReply="true"
+    {bubbleId}
+    replyVisibility={visibility}
+    replySpoiler={spoilerText}
+    inReplyToUuid={uuid}
   />
 </div>
+
 <style>
   .post-article-compose-box {
     grid-area: compose;

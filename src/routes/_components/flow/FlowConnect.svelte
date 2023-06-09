@@ -1,10 +1,5 @@
 <script>
-  import {
-    currentInstance,
-    flowLoggedInAccount,
-    instanceUsers,
-    isUserLoggedIn
-  } from '../../_store/local'
+  import { currentInstance, flowLoggedInAccount, instanceUsers, isUserLoggedIn } from '../../_store/local'
   import { onMount } from 'svelte'
   import * as fcl from '@onflow/fcl'
   import { updateUserForInstance } from '../../_actions/instances'
@@ -20,7 +15,7 @@
   $: flowAddress = (user && user.flow && user.flow.addr) || ''
   $: flowAddressMismatch = $flowLoggedInAccount && flowAddress && $flowLoggedInAccount !== flowAddress
 
-  async function signUpWithFlow () {
+  async function signUpWithFlow() {
     let out = await fcl.authenticate()
 
     if (!user.flow) {
@@ -35,11 +30,11 @@
     }
   }
 
-  async function logInWithFlow () {
+  async function logInWithFlow() {
     await fcl.authenticate()
   }
 
-  async function switchFlowAccount () {
+  async function switchFlowAccount() {
     fcl.unauthenticate()
     await signUpWithFlow()
   }
@@ -53,46 +48,46 @@
 </script>
 
 {#if $userOperationError}
-    <ErrorMessage error={$userOperationError} />
+  <ErrorMessage error={$userOperationError} />
 {/if}
 
-<div class="{className}">
-    <p>
-        {intl.flowDescription}
-    </p>
+<div class={className}>
+  <p>
+    {intl.flowDescription}
+  </p>
 
-    {#if flowAddressMismatch}
-        <div class="error-box" role="alert">
-            {intl.flowMismatchWarning}
-        </div>
-        <button class="primary flow-setup-button" type="button" on:click={switchFlowAccount}>
-            {intl.flowSwitchButton}
-        </button>
-    {/if}
+  {#if flowAddressMismatch}
+    <div class="error-box" role="alert">
+      {intl.flowMismatchWarning}
+    </div>
+    <button class="primary flow-setup-button" type="button" on:click={switchFlowAccount}>
+      {intl.flowSwitchButton}
+    </button>
+  {/if}
 
-    {#if !flowAddress && !$userOperationInProgress }
-        <button class="primary flow-setup-button" type="button" on:click={signUpWithFlow}>
-            {intl.flowSignUpButton}
-        </button>
-    {/if}
-    {#if flowAddress && !$flowLoggedInAccount }
-        <button class="primary flow-setup-button" type="button" on:click={logInWithFlow}>
-            {intl.flowLogInButton}
-        </button>
-    {/if}
+  {#if !flowAddress && !$userOperationInProgress}
+    <button class="primary flow-setup-button" type="button" on:click={signUpWithFlow}>
+      {intl.flowSignUpButton}
+    </button>
+  {/if}
+  {#if flowAddress && !$flowLoggedInAccount}
+    <button class="primary flow-setup-button" type="button" on:click={logInWithFlow}>
+      {intl.flowLogInButton}
+    </button>
+  {/if}
 </div>
 
 <style>
-    .error-box {
-        border: 2px solid var(--warn-color);
-        border-radius: 2px;
-        padding: 10px;
-        font-size: 1.3em;
-        margin: 5px;
-        background-color: var(--main-bg);
-    }
+  .error-box {
+    border: 2px solid var(--warn-color);
+    border-radius: 2px;
+    padding: 10px;
+    font-size: 1.3em;
+    margin: 5px;
+    background-color: var(--main-bg);
+  }
 
-    .flow-setup-button {
-        margin: 20px 5px;
-    }
+  .flow-setup-button {
+    margin: 20px 5px;
+  }
 </style>

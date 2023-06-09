@@ -1,18 +1,19 @@
 <script>
-  export let label = undefined;
+  export let label = undefined
 </script>
 
 <div class="settings-list-wrapper">
   {#if label}
-  <ul class="settings-list" aria-label={label}>
-    <slot></slot>
-  </ul>
+    <ul class="settings-list" aria-label={label}>
+      <slot />
+    </ul>
   {:else}
-  <ul class="settings-list">
-    <slot></slot>
-  </ul>
+    <ul class="settings-list">
+      <slot />
+    </ul>
   {/if}
 </div>
+
 <style>
   .settings-list-wrapper {
     margin: 20px 20px;

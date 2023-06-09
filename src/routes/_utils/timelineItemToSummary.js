@@ -3,12 +3,12 @@ import { unexpiredInstanceFilterRegexes } from '../_store/wordFilter'
 import { get } from 'svelte/store'
 
 class TimelineSummary {
-  constructor (item, instanceName) {
+  constructor(item, instanceName) {
     this.id = item.id
     this.timelineId = item.timelineID || item.id
     this.sparkId = item.attributedTo || (item.actor && item.actor.id)
     this.bubbleId = item.bubble
-    this.replyId = (item.inReplyTo) || undefined
+    this.replyId = item.inReplyTo || undefined
     this.createdAt = item.createdAt
     this.type = item.type || undefined
 
@@ -21,6 +21,6 @@ class TimelineSummary {
   }
 }
 
-export function timelineItemToSummary (item, instanceName) {
+export function timelineItemToSummary(item, instanceName) {
   return new TimelineSummary(item, instanceName)
 }

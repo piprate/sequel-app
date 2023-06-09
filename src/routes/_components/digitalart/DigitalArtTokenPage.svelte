@@ -27,7 +27,7 @@
 
   onMount(async () => {
     try {
-        token = await getDigitalArtToken(instanceName, $accessToken, id, $currentSparkId)
+      token = await getDigitalArtToken(instanceName, $accessToken, id, $currentSparkId)
     } catch (e) {
       if (e.status === 404) {
         notFound = true
@@ -36,19 +36,19 @@
       }
       console.error(e)
     }
-    console.log("LOADED TOKEN", token)
+    console.log('LOADED TOKEN', token)
   })
 </script>
 
 {#if token}
-    <!--        <DynamicPageBanner title="" {ariaTitle} />-->
-    <DigitalArtToken {token} ourSpark={$currentSpark} />
+  <!--        <DynamicPageBanner title="" {ariaTitle} />-->
+  <DigitalArtToken {token} ourSpark={$currentSpark} />
 {:else if notFound}
-    <FreeTextLayout>
-        <h2>{intl.tokenNotFound}</h2>
-    </FreeTextLayout>
+  <FreeTextLayout>
+    <h2>{intl.tokenNotFound}</h2>
+  </FreeTextLayout>
 {:else if loadError}
-    <ErrorMessage error={loadError} />
+  <ErrorMessage error={loadError} />
 {:else}
-    <LoadingPage />
+  <LoadingPage />
 {/if}

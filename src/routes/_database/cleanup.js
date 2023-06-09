@@ -28,8 +28,8 @@ import { inBrowser } from '../_utils/browserOrNode'
 
 const BATCH_SIZE = 20
 
-function batchedGetAll (callGetAll, callback) {
-  function nextBatch () {
+function batchedGetAll(callGetAll, callback) {
+  function nextBatch() {
     callGetAll().onsuccess = function (e) {
       const results = e.target.result
       callback(results)
@@ -42,32 +42,24 @@ function batchedGetAll (callGetAll, callback) {
   nextBatch()
 }
 
-function cleanupPosts (postsStore, postTimelinesStore, threadsStore, cutoff) {
+function cleanupPosts(postsStore, postTimelinesStore, threadsStore, cutoff) {
   batchedGetAll(
     () => postsStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
-    results => {
-      results.forEach(postId => {
+    (results) => {
+      results.forEach((postId) => {
         postsStore.delete(postId)
-        deleteAll(
-          postTimelinesStore,
-          postTimelinesStore.index(mergeKeyWithSparkId('postId')),
-          IDBKeyRange.only(postId)
-        )
-        deleteAll(
-          threadsStore,
-          threadsStore,
-          createThreadKeyRange(postId)
-        )
+        deleteAll(postTimelinesStore, postTimelinesStore.index(mergeKeyWithSparkId('postId')), IDBKeyRange.only(postId))
+        deleteAll(threadsStore, threadsStore, createThreadKeyRange(postId))
       })
     }
   )
 }
 
-function cleanupNotifications (notificationsStore, notificationTimelinesStore, cutoff) {
+function cleanupNotifications(notificationsStore, notificationTimelinesStore, cutoff) {
   batchedGetAll(
     () => notificationsStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
-    results => {
-      results.forEach(notificationId => {
+    (results) => {
+      results.forEach((notificationId) => {
         notificationsStore.delete(notificationId)
         deleteAll(
           notificationTimelinesStore,
@@ -79,100 +71,96 @@ function cleanupNotifications (notificationsStore, notificationTimelinesStore, c
   )
 }
 
-function cleanupSparks (sparksStore, pinnedPostsStore, cutoff) {
+function cleanupSparks(sparksStore, pinnedPostsStore, cutoff) {
   batchedGetAll(
     () => sparksStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
-    results => {
-      results.forEach(sparkId => {
+    (results) => {
+      results.forEach((sparkId) => {
         sparksStore.delete(sparkId)
-        deleteAll(
-          pinnedPostsStore,
-          pinnedPostsStore,
-          createPinnedPostKeyRange(sparkId)
-        )
+        deleteAll(pinnedPostsStore, pinnedPostsStore, createPinnedPostKeyRange(sparkId))
       })
     }
   )
 }
 
-function cleanupSparkRelationships (sparkRelationshipsStore, cutoff) {
+function cleanupSparkRelationships(sparkRelationshipsStore, cutoff) {
   batchedGetAll(
     () => sparkRelationshipsStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
-    results => {
-      results.forEach(relationshipId => {
+    (results) => {
+      results.forEach((relationshipId) => {
         sparkRelationshipsStore.delete(relationshipId)
       })
     }
   )
 }
 
-function cleanupWorlds (worldsStore, cutoff) {
+function cleanupWorlds(worldsStore, cutoff) {
   batchedGetAll(
     () => worldsStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
-    results => {
-      results.forEach(worldId => {
+    (results) => {
+      results.forEach((worldId) => {
         worldsStore.delete(worldId)
       })
     }
   )
 }
 
-function cleanupWorldRelationships (worldRelationshipsStore, cutoff) {
+function cleanupWorldRelationships(worldRelationshipsStore, cutoff) {
   batchedGetAll(
     () => worldRelationshipsStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
-    results => {
-      results.forEach(relationshipId => {
+    (results) => {
+      results.forEach((relationshipId) => {
         worldRelationshipsStore.delete(relationshipId)
       })
     }
   )
 }
 
-function cleanupBubbles (bubblesStore, cutoff) {
+function cleanupBubbles(bubblesStore, cutoff) {
   batchedGetAll(
     () => bubblesStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
-    results => {
-      results.forEach(bubbleId => {
+    (results) => {
+      results.forEach((bubbleId) => {
         bubblesStore.delete(bubbleId)
       })
     }
   )
 }
 
-function cleanupBubbleRelationships (bubbleRelationshipsStore, cutoff) {
+function cleanupBubbleRelationships(bubbleRelationshipsStore, cutoff) {
   batchedGetAll(
     () => bubbleRelationshipsStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
-    results => {
-      results.forEach(relationshipId => {
+    (results) => {
+      results.forEach((relationshipId) => {
         bubbleRelationshipsStore.delete(relationshipId)
       })
     }
   )
 }
 
-function cleanupListings (listingsStore, cutoff) {
+function cleanupListings(listingsStore, cutoff) {
   batchedGetAll(
     () => listingsStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
-    results => {
-      results.forEach(index => {
+    (results) => {
+      results.forEach((index) => {
         listingsStore.delete(index)
       })
     }
   )
 }
 
-function cleanupDigitalArts (digitalArtsStore, cutoff) {
+function cleanupDigitalArts(digitalArtsStore, cutoff) {
   batchedGetAll(
     () => digitalArtsStore.index(TIMESTAMP).getAllKeys(IDBKeyRange.upperBound(cutoff), BATCH_SIZE),
-    results => {
-      results.forEach(index => {
+    (results) => {
+      results.forEach((index) => {
         digitalArtsStore.delete(index)
       })
     }
   )
 }
 
-export async function cleanup (instanceName) {
+export async function cleanup(instanceName) {
   console.log('cleanup', instanceName)
   mark(`cleanup:${instanceName}`)
   const db = await getDatabase(instanceName)
@@ -226,11 +214,11 @@ export async function cleanup (instanceName) {
   stop(`cleanup:${instanceName}`)
 }
 
-function doCleanup (instanceName) {
+function doCleanup(instanceName) {
   scheduleIdleTask(() => cleanup(instanceName))
 }
 
-async function scheduledCleanup () {
+async function scheduledCleanup() {
   console.log('scheduledCleanup')
   const knownInstances = await getKnownInstances()
   for (const instance of knownInstances) {

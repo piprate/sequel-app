@@ -2,28 +2,26 @@
   import { classname } from '../_utils/classname'
   import SvgIcon from './SvgIcon.svelte'
 
-  export let href;
-  export let className = undefined;
-  export let normalIconColor = false;
-  export let ariaLabel = '';
-  export let showIcon = false;
+  export let href
+  export let className = undefined
+  export let normalIconColor = false
+  export let ariaLabel = ''
+  export let showIcon = false
 
-  $: computedClass = (classname(
-          'external-link',
-          className,
-          showIcon && 'external-link-with-icon',
-          normalIconColor && 'normal-icon-color'
-  ))
+  $: computedClass = classname(
+    'external-link',
+    className,
+    showIcon && 'external-link-with-icon',
+    normalIconColor && 'normal-icon-color'
+  )
 </script>
 
-<a rel="nofollow noopener"
-   target="_blank"
-   {href}
-   aria-label={ariaLabel}
-   class={computedClass}>
-  <slot></slot>{#if showIcon}
+<a rel="nofollow noopener" target="_blank" {href} aria-label={ariaLabel} class={computedClass}>
+  <slot />{#if showIcon}
     <SvgIcon className="external-link-svg" href="#fa-external-link" />
-  {/if}</a>
+  {/if}</a
+>
+
 <style>
   .external-link-with-icon {
     display: inline-flex;
@@ -39,4 +37,3 @@
     fill: var(--body-text-color);
   }
 </style>
-

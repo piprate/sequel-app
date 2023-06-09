@@ -12,7 +12,8 @@
   $: massagedEntityName = (() => {
     const entityNameVal = escapeHtml(entityName)
 
-    if ($omitEmojiInDisplayNames) { // display name emoji are annoying to some screenreader users
+    if ($omitEmojiInDisplayNames) {
+      // display name emoji are annoying to some screenreader users
       const emojiFreeDisplayName = removeEmoji(entityNameVal, [])
       if (emojiFreeDisplayName) {
         return emojiFreeDisplayName
@@ -23,7 +24,8 @@
   })()
 </script>
 
-<span class="entity-display-name">{@html massagedEntityName }</span>
+<span class="entity-display-name">{@html massagedEntityName}</span>
+
 <style>
   .entity-display-name {
     pointer-events: none; /* allows focus to work correctly, focus on the parent only */

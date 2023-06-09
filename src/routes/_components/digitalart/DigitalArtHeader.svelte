@@ -15,6 +15,7 @@
 <div class="digital-art-name">
   <EntityDisplayName entity={digitalArt} />
 </div>
+
 <style>
   .digital-art-name {
     grid-area: name;

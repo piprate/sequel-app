@@ -7,7 +7,7 @@ import { emit } from './eventBus'
 if (inBrowser()) {
   const globalFetch = window.fetch
 
-  window.__forceOnline = onlineVal => {
+  window.__forceOnline = (onlineVal) => {
     online.set(onlineVal)
 
     if (onlineVal) {

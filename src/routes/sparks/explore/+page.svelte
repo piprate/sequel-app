@@ -4,6 +4,6 @@
   import pageComponent from '../../_pages/sparks/explore.svelte'
 </script>
 
-<Title name="{intl.sparkExploreTitle}" />
+<Title name={intl.sparkExploreTitle} />
 
 <LazyPage {pageComponent} />

@@ -1,4 +1,4 @@
-export function roleName (role, description) {
+export function roleName(role, description) {
   if (description) {
     return description
   } else if (role === 'ClimateAction') {
@@ -8,7 +8,7 @@ export function roleName (role, description) {
   }
 }
 
-export function paymentRoleName (role, evergreenProfile) {
+export function paymentRoleName(role, evergreenProfile) {
   if (evergreenProfile) {
     for (const profileRole of evergreenProfile.roles) {
       if (profileRole.id === role) {

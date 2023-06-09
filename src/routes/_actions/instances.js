@@ -31,7 +31,7 @@ import { configureFlow, disconnectFromFlow } from './flow'
 import { get } from 'svelte/store'
 import { deleteSettings } from './settings'
 
-export function switchToInstance (instanceName) {
+export function switchToInstance(instanceName) {
   const theme = userSettings.get()?.instance[instanceName].theme
   currentInstance.set(instanceName)
   searchResults.set(null)
@@ -40,7 +40,7 @@ export function switchToInstance (instanceName) {
   configureFlow(instanceName)
 }
 
-export async function logOutOfInstance (instanceName, message) {
+export async function logOutOfInstance(instanceName, message) {
   message = message || formatIntl('intl.loggedOutOfInstance', { instance: instanceName })
   const _currentInstance = currentInstance.get()
   const instancesInOrder = loggedInInstancesInOrder.get()
@@ -83,28 +83,28 @@ export async function logOutOfInstance (instanceName, message) {
   goto('/')
 }
 
-function setStoreUser (instanceName, user) {
+function setStoreUser(instanceName, user) {
   const _instanceUsers = instanceUsers.get()
   _instanceUsers[instanceName] = user
   instanceUsers.set(_instanceUsers)
 }
 
-export async function updateUserForInstance (instanceName) {
+export async function updateUserForInstance(instanceName) {
   const accessToken = loggedInInstances.get()[instanceName].access_token
   await cacheFirstUpdateAfter(
     () => getUser(instanceName, accessToken).catch(logOutOnUnauthorized(instanceName)),
     () => database.getUser(instanceName),
-    user => database.setUser(instanceName, user),
-    user => setStoreUser(instanceName, user)
+    (user) => database.setUser(instanceName, user),
+    (user) => setStoreUser(instanceName, user)
   )
 }
 
-export async function updateInstanceInfo (instanceName) {
+export async function updateInstanceInfo(instanceName) {
   await cacheFirstUpdateAfter(
     () => getInstanceInfo(instanceName),
     () => database.getInstanceInfo(instanceName),
-    info => database.setInstanceInfo(instanceName, info),
-    info => {
+    (info) => database.setInstanceInfo(instanceName, info),
+    (info) => {
       const infos = instanceInfos.get()
       infos[instanceName] = info
       instanceInfos.set(infos)
@@ -112,8 +112,8 @@ export async function updateInstanceInfo (instanceName) {
   )
 }
 
-export function logOutOnUnauthorized (instanceName) {
-  return async error => {
+export function logOutOnUnauthorized(instanceName) {
+  return async (error) => {
     if (error.status && error.status === 401) {
       await logOutOfInstance(instanceName, formatIntl('intl.accessTokenRevoked', { instance: instanceName }))
     }

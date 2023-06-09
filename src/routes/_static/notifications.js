@@ -37,25 +37,24 @@ const NOTIFICATION_TYPES = {
 
 const DEFAULT_ICON = '#fa-star'
 
-export function notificationIcon (notificationType) {
+export function notificationIcon(notificationType) {
   const val = NOTIFICATION_TYPES[notificationType]
   return val ? val.icon : DEFAULT_ICON
 }
 
-export function notificationActionText (notificationType) {
+export function notificationActionText(notificationType) {
   const val = NOTIFICATION_TYPES[notificationType]
   return val ? val.actionText : ''
 }
 
-export function notificationLabel (notification, omitEmojiInDisplayNames) {
+export function notificationLabel(notification, omitEmojiInDisplayNames) {
   const val = NOTIFICATION_TYPES[notification.type]
 
   if (!val) {
     return ''
   }
 
-  const params = {
-  }
+  const params = {}
 
   if (notification.type !== 'comment') {
     params.name = getSparkAccessibleName(notification.actor, omitEmojiInDisplayNames)

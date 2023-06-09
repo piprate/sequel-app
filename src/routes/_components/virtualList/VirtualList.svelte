@@ -37,11 +37,11 @@
   scrollToItem = undefined
 
   $: distanceFromBottom = $scrollHeight - $scrollTop - $offsetHeight
-  $: visibleItemKeys = ($visibleItems || []).map(_ => _.key)
+  $: visibleItemKeys = ($visibleItems || []).map((_) => _.key)
 
   let node
 
-  function calculateListOffset () {
+  function calculateListOffset() {
     // TODO: better way to get the offset top?
     if (!node) {
       return
@@ -77,7 +77,7 @@
 
   let oldItems
 
-  function observeItems (items) {
+  function observeItems(items) {
     if (!items || isEqual(items, oldItems)) {
       return
     }
@@ -96,10 +96,7 @@
   }
 
   $: if (componentMounted) {
-    if (
-      distanceFromBottom >= 0 &&
-      distanceFromBottom <= DISTANCE_FROM_BOTTOM_TO_FIRE
-    ) {
+    if (distanceFromBottom >= 0 && distanceFromBottom <= DISTANCE_FROM_BOTTOM_TO_FIRE) {
       fireScrollToBottom()
     }
   }
@@ -119,11 +116,7 @@
 
 <VirtualListContainer {realm} on:initialized on:noNeedToScroll>
   <div class="virtual-list" style="height: {$height}px;" bind:this={node}>
-    <VirtualListHeader
-      component={headerComponent}
-      virtualProps={headerProps}
-      shown={showHeader}
-    />
+    <VirtualListHeader component={headerComponent} virtualProps={headerProps} shown={showHeader} />
     {#if $visibleItems}
       {#each $visibleItems as visibleItem (visibleItem.key)}
         <VirtualListLazyItem

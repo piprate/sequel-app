@@ -39,40 +39,41 @@
 </script>
 
 {#if $isUserLoggedIn}
-    {#if $observedWorld}
-        {#if !newWorld}
-            <DynamicPageBanner title="" {ariaTitle} />
-        {/if}
-        <TimelinePage {timeline} >
-            <WorldProfile world={$observedWorld}
-                          relationship={$observedWorldRelationship}
-                          ourSpark={$currentSpark}
-                          {filter}
-            />
-            {#if $observedWorld.postCount }
-                <InfoAside className="post-note">
-                    {intl.postInBubble}
-                </InfoAside>
-            {/if}
-        </TimelinePage>
-    {:else if notFound}
-        <FreeTextLayout>
-            <h2>{intl.worldNotFound}</h2>
-        </FreeTextLayout>
-    {:else if loadError}
-        <ErrorMessage error={loadError} />
-    {:else}
-        <LoadingPage />
+  {#if $observedWorld}
+    {#if !newWorld}
+      <DynamicPageBanner title="" {ariaTitle} />
     {/if}
+    <TimelinePage {timeline}>
+      <WorldProfile
+        world={$observedWorld}
+        relationship={$observedWorldRelationship}
+        ourSpark={$currentSpark}
+        {filter}
+      />
+      {#if $observedWorld.postCount}
+        <InfoAside className="post-note">
+          {intl.postInBubble}
+        </InfoAside>
+      {/if}
+    </TimelinePage>
+  {:else if notFound}
+    <FreeTextLayout>
+      <h2>{intl.worldNotFound}</h2>
+    </FreeTextLayout>
+  {:else if loadError}
+    <ErrorMessage error={loadError} />
+  {:else}
+    <LoadingPage />
+  {/if}
 {:else}
-    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+  <RestrictedPageWarning message={intl.loginToAccess} offerVisitorMode={true} />
 {/if}
 
 <style>
-    :global(.post-note) {
-        margin: 20px;
-    }
-    :global(.post-note span) {
-        font-size: 0.9em;
-    }
+  :global(.post-note) {
+    margin: 20px;
+  }
+  :global(.post-note span) {
+    font-size: 0.9em;
+  }
 </style>

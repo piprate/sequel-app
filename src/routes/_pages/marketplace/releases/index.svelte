@@ -7,9 +7,9 @@
   import { currentInstance, isUserLoggedIn, observedRelationship } from '../../../_store/local'
   import { accessToken, currentSparkId } from '../../../_store/instance'
   import { getMarketplaceReleases } from '../../../_api/releases'
-  import { onMount } from 'svelte';
-  import { updateProfileAndRelationship } from '../../../_actions/sparks';
-  import { unwrap } from '../../../_utils/mapper';
+  import { onMount } from 'svelte'
+  import { updateProfileAndRelationship } from '../../../_actions/sparks'
+  import { unwrap } from '../../../_utils/mapper'
 
   export let params
   params = undefined
@@ -17,42 +17,41 @@
   // suppress warnings
   const intl = {}
 
-  
   onMount(async () => {
-      await updateProfileAndRelationship(unwrap($currentSparkId))
-    })
-    
-    $: releasesFetcher = () => getMarketplaceReleases($currentInstance, $accessToken, $currentSparkId)
-    $: isTokenCreator = $observedRelationship?.tokenCreator
+    await updateProfileAndRelationship(unwrap($currentSparkId))
+  })
+
+  $: releasesFetcher = () => getMarketplaceReleases($currentInstance, $accessToken, $currentSparkId)
+  $: isTokenCreator = $observedRelationship?.tokenCreator
 </script>
 
-{#if $isUserLoggedIn }
-    <DynamicPageBanner title="{intl.marketplaceTitle}" icon="#nft-diamond" />
-    <MarketplaceFilter filter="releases" />
-    <ReleasesPage {releasesFetcher}>
-        <div slot="header" class="releases-header">
-            {#if isTokenCreator}
-                <a href='/marketplace/releases/new' class="button primary">
-                    {intl.newRelease}
-                </a>
-            {/if}
-        </div>
-        <span slot="is-empty">
-            <InfoAside className="empty-releases-notice-aside">
-              {intl.releasesEmpty}
-          </InfoAside>
-        </span>
-    </ReleasesPage>
+{#if $isUserLoggedIn}
+  <DynamicPageBanner title={intl.marketplaceTitle} icon="#nft-diamond" />
+  <MarketplaceFilter filter="releases" />
+  <ReleasesPage {releasesFetcher}>
+    <div slot="header" class="releases-header">
+      {#if isTokenCreator}
+        <a href="/marketplace/releases/new" class="button primary">
+          {intl.newRelease}
+        </a>
+      {/if}
+    </div>
+    <span slot="is-empty">
+      <InfoAside className="empty-releases-notice-aside">
+        {intl.releasesEmpty}
+      </InfoAside>
+    </span>
+  </ReleasesPage>
 {:else}
-    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+  <RestrictedPageWarning message={intl.loginToAccess} offerVisitorMode={true} />
 {/if}
 
 <style>
-    :global(.empty-releases-notice-aside) {
-        margin: 10px 10px 0 0;
-    }
+  :global(.empty-releases-notice-aside) {
+    margin: 10px 10px 0 0;
+  }
 
-    .releases-header {
-        margin-bottom: 1.5rem;
-    }
+  .releases-header {
+    margin-bottom: 1.5rem;
+  }
 </style>

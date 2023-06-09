@@ -4,6 +4,6 @@
   import pageComponent from '../../_pages/notifications/mentions.svelte'
 </script>
 
-<Title name="{intl.notifications}" />
+<Title name={intl.notifications} />
 
 <LazyPage {pageComponent} />

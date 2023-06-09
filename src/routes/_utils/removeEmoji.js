@@ -1,7 +1,7 @@
 import { replaceAll } from './strings'
 import { replaceEmoji } from './replaceEmoji'
 
-export function removeEmoji (text, emojis) {
+export function removeEmoji(text, emojis) {
   // remove custom emoji
   if (emojis) {
     for (const emoji of emojis) {

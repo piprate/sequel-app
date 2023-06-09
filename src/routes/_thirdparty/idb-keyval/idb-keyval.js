@@ -5,24 +5,27 @@ import { inBrowser } from '../../_utils/browserOrNode'
 import { lifecycle } from '../../_utils/lifecycle'
 
 class Store {
-  constructor (dbName = 'keyval-store', storeName = 'keyval') {
+  constructor(dbName = 'keyval-store', storeName = 'keyval') {
     this.storeName = storeName
     this._dbName = dbName
     this._storeName = storeName
     this._init()
   }
 
-  _withIDBStore (type, callback) {
+  _withIDBStore(type, callback) {
     this._init()
-    return this._dbp.then(db => new Promise((resolve, reject) => {
-      const transaction = db.transaction(this.storeName, type)
-      transaction.oncomplete = () => resolve()
-      transaction.onabort = transaction.onerror = () => reject(transaction.error)
-      callback(transaction.objectStore(this.storeName))
-    }))
+    return this._dbp.then(
+      (db) =>
+        new Promise((resolve, reject) => {
+          const transaction = db.transaction(this.storeName, type)
+          transaction.oncomplete = () => resolve()
+          transaction.onabort = transaction.onerror = () => reject(transaction.error)
+          callback(transaction.objectStore(this.storeName))
+        })
+    )
   }
 
-  _init () {
+  _init() {
     if (this._dbp) {
       return
     }
@@ -37,9 +40,9 @@ class Store {
     })
   }
 
-  _close () {
+  _close() {
     this._init()
-    return this._dbp.then(db => {
+    return this._dbp.then((db) => {
       db.close()
       this._dbp = undefined
     })
@@ -48,66 +51,71 @@ class Store {
 
 let store
 
-function getDefaultStore () {
+function getDefaultStore() {
   if (!store) {
     store = new Store()
   }
   return store
 }
 
-function get (key) {
+function get(key) {
   const store = getDefaultStore()
   let req
-  return store._withIDBStore('readonly', store => {
-    req = store.get(key)
-  }).then(() => req.result)
+  return store
+    ._withIDBStore('readonly', (store) => {
+      req = store.get(key)
+    })
+    .then(() => req.result)
 }
 
-function set (key, value) {
+function set(key, value) {
   const store = getDefaultStore()
-  return store._withIDBStore('readwrite', store => {
+  return store._withIDBStore('readwrite', (store) => {
     store.put(value, key)
   })
 }
 
-function del (key) {
+function del(key) {
   const store = getDefaultStore()
-  return store._withIDBStore('readwrite', store => {
+  return store._withIDBStore('readwrite', (store) => {
     store.delete(key)
   })
 }
 
-function clear () {
+function clear() {
   const store = getDefaultStore()
-  return store._withIDBStore('readwrite', store => {
+  return store._withIDBStore('readwrite', (store) => {
     store.clear()
   })
 }
 
-function keys () {
+function keys() {
   const store = getDefaultStore()
   const keys = []
-  return store._withIDBStore('readonly', store => {
-    // This would be store.getAllKeys(), but it isn't supported by Edge or Safari.
-    // And openKeyCursor isn't supported by Safari.
-    (store.openKeyCursor || store.openCursor).call(store).onsuccess = function () {
-      if (!this.result) {
-        return
+  return store
+    ._withIDBStore('readonly', (store) => {
+      // This would be store.getAllKeys(), but it isn't supported by Edge or Safari.
+      // And openKeyCursor isn't supported by Safari.
+      ;(store.openKeyCursor || store.openCursor).call(store).onsuccess = function () {
+        if (!this.result) {
+          return
+        }
+        keys.push(this.result.key)
+        this.result.continue()
       }
-      keys.push(this.result.key)
-      this.result.continue()
-    }
-  }).then(() => keys)
+    })
+    .then(() => keys)
 }
 
-function close () {
+function close() {
   const store = getDefaultStore()
   return store._close()
 }
 
 if (inBrowser()) {
-  lifecycle.addEventListener('statechange', async event => {
-    if (event.newState === 'frozen') { // page is frozen, close IDB connections
+  lifecycle.addEventListener('statechange', async (event) => {
+    if (event.newState === 'frozen') {
+      // page is frozen, close IDB connections
       await close()
       console.log('closed keyval DB')
     }

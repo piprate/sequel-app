@@ -5,7 +5,7 @@ import { eventBus } from '../../_utils/eventBus'
 import { safeParse } from '../../_utils/safeParse'
 
 export class TimelineStream extends EventsLight.EventEmitter {
-  constructor (streamingApi, accessToken, timeline, asSpark) {
+  constructor(streamingApi, accessToken, timeline, asSpark) {
     super()
     this._streamingApi = streamingApi
     this._accessToken = accessToken
@@ -19,7 +19,7 @@ export class TimelineStream extends EventsLight.EventEmitter {
     this._setupEvents()
   }
 
-  switchTimeline (timeline, asSpark, firstItemId) {
+  switchTimeline(timeline, asSpark, firstItemId) {
     this._timeline = timeline
     this._asSpark = asSpark
     if (timeline) {
@@ -31,14 +31,14 @@ export class TimelineStream extends EventsLight.EventEmitter {
     this.emit('switchTimeline', timeline, asSpark, firstItemId)
   }
 
-  switchSpark (asSpark) {
+  switchSpark(asSpark) {
     this._timeline = ''
     this._asSpark = asSpark
     this._sendSwitchSparkMessage()
     this.emit('switchSpark', asSpark)
   }
 
-  close () {
+  close() {
     this._closed = true
     this._closeWebSocket()
     this._teardownEvents()
@@ -49,44 +49,50 @@ export class TimelineStream extends EventsLight.EventEmitter {
     }
   }
 
-  isClosed () {
+  isClosed() {
     return this._closed
   }
 
-  _sendSubscribeMessage () {
+  _sendSubscribeMessage() {
     if (!this._opened) {
       console.log("websocket isn't open yet. Ignoring subscribe message")
       return
     }
-    this._ws.send(JSON.stringify({
-      type: 'subscribe',
-      timeline: this._timeline,
-      asSpark: this._asSpark
-    }))
+    this._ws.send(
+      JSON.stringify({
+        type: 'subscribe',
+        timeline: this._timeline,
+        asSpark: this._asSpark
+      })
+    )
   }
 
-  _sendUnsubscribeMessage () {
+  _sendUnsubscribeMessage() {
     if (!this._opened) {
       console.log("websocket isn't open yet. Ignoring unsubscribe message")
       return
     }
-    this._ws.send(JSON.stringify({
-      type: 'unsubscribe'
-    }))
+    this._ws.send(
+      JSON.stringify({
+        type: 'unsubscribe'
+      })
+    )
   }
 
-  _sendSwitchSparkMessage () {
+  _sendSwitchSparkMessage() {
     if (!this._opened) {
       console.log("websocket isn't open yet. Ignoring switchSpark message")
       return
     }
-    this._ws.send(JSON.stringify({
-      type: 'switchSpark',
-      asSpark: this._asSpark
-    }))
+    this._ws.send(
+      JSON.stringify({
+        type: 'switchSpark',
+        asSpark: this._asSpark
+      })
+    )
   }
 
-  _closeWebSocket () {
+  _closeWebSocket() {
     if (this._ws) {
       this.emit('close')
       this._ws.onopen = null
@@ -97,7 +103,7 @@ export class TimelineStream extends EventsLight.EventEmitter {
     }
   }
 
-  _setupWebSocket () {
+  _setupWebSocket() {
     const url = this._streamingApi // getStreamUrl(this._streamingApi, this._accessToken, this._timeline)
     const ws = new WebSocketClient(url, 'sequel')
 
@@ -110,11 +116,13 @@ export class TimelineStream extends EventsLight.EventEmitter {
         // and we want to fire "reconnect" rather than "open" in that case
         this.emit('reconnect', this._timeline, this._asSpark)
       }
-      this._ws.send(JSON.stringify({
-        type: 'authenticate',
-        token: this._accessToken,
-        asSpark: this._asSpark
-      }))
+      this._ws.send(
+        JSON.stringify({
+          type: 'authenticate',
+          token: this._accessToken,
+          asSpark: this._asSpark
+        })
+      )
       if (this._timeline) {
         this._sendSubscribeMessage()
       }
@@ -128,28 +136,28 @@ export class TimelineStream extends EventsLight.EventEmitter {
     this._ws = ws
   }
 
-  _setupEvents () {
+  _setupEvents() {
     lifecycle.addEventListener('statechange', this._onStateChange)
     eventBus.on('forcedOnline', this._onForcedOnlineStateChange) // only happens in tests
     window.addEventListener('online', this._onOnline)
     window.addEventListener('offline', this._onOffline)
   }
 
-  _teardownEvents () {
+  _teardownEvents() {
     lifecycle.removeEventListener('statechange', this._onStateChange)
     eventBus.removeListener('forcedOnline', this._onForcedOnlineStateChange) // only happens in tests
     window.removeEventListener('online', this._onOnline)
     window.removeEventListener('offline', this._onOffline)
   }
 
-  _pause () {
+  _pause() {
     if (this._closed) {
       return
     }
     this._closeWebSocket()
   }
 
-  _unpause () {
+  _unpause() {
     if (this._closed) {
       return
     }
@@ -157,33 +165,36 @@ export class TimelineStream extends EventsLight.EventEmitter {
     this._setupWebSocket()
   }
 
-  _onStateChange (event) {
+  _onStateChange(event) {
     // when the page enters or exits a frozen state, pause or resume websocket polling
-    if (event.newState === 'frozen') { // page is frozen
+    if (event.newState === 'frozen') {
+      // page is frozen
       console.log('frozen')
       this._pause()
-    } else if (event.oldState === 'frozen') { // page is unfrozen
+    } else if (event.oldState === 'frozen') {
+      // page is unfrozen
       console.log('unfrozen')
       this._unpause()
     }
-    if (event.newState === 'active') { // page is reopened from a background tab
+    if (event.newState === 'active') {
+      // page is reopened from a background tab
       console.log('active')
       this._tryToReconnect()
     }
   }
 
-  _onOnline () {
+  _onOnline() {
     console.log('online')
     this._unpause() // if we're not paused, then this is a no-op
     this._tryToReconnect() // to be safe, try to reset and reconnect
   }
 
-  _onOffline () {
+  _onOffline() {
     console.log('offline')
     this._pause() // in testing, it seems to work better to stop polling when we get this event
   }
 
-  _onForcedOnlineStateChange (online) {
+  _onForcedOnlineStateChange(online) {
     if (online) {
       console.log('online forced')
       this._unpause()
@@ -193,7 +204,7 @@ export class TimelineStream extends EventsLight.EventEmitter {
     }
   }
 
-  _tryToReconnect () {
+  _tryToReconnect() {
     console.log('websocket readyState', this._ws && this._ws.readyState)
     if (this._ws && this._ws.readyState !== WebSocketClient.OPEN) {
       // if a websocket connection is not currently open, then reset the

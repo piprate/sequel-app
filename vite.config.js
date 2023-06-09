@@ -41,9 +41,9 @@ const config = {
     })
     // Don't polyfill packages when in test mode because vitest requires node packages to run tests
   ].concat(process.env.NODE_ENV === 'test' ? [] : [nodePolyfills()]),
-  resolve:{
-    alias:{
-      "node-fetch": "./node_modules/node-fetch/browser.js"
+  resolve: {
+    alias: {
+      'node-fetch': './node_modules/node-fetch/browser.js'
     }
   },
   build: {

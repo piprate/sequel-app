@@ -7,7 +7,7 @@ import {
 } from './asyncPolyfills'
 import { mark, stop } from '../marks'
 
-async function loadIntlPolyfillsIfNecessary () {
+async function loadIntlPolyfillsIfNecessary() {
   // Have to chain these so that they load in the proper order.
   // Luckily these requests aren't done in serial, because we're using the same Webpack
   // chunk name for each one.
@@ -23,7 +23,7 @@ async function loadIntlPolyfillsIfNecessary () {
   ])
 }
 
-export async function loadPolyfills () {
+export async function loadPolyfills() {
   mark('loadPolyfills')
   await Promise.all([
     typeof requestIdleCallback !== 'function' && importRequestIdleCallback(),

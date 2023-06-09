@@ -11,7 +11,7 @@
     {
       name: inReaderMode ? 'reader_mode' : '',
       label: 'Posts',
-      href: `/bubbles/${id}${inReaderMode ? '/reader_mode' : ''}` 
+      href: `/bubbles/${id}${inReaderMode ? '/reader_mode' : ''}`
     },
     {
       name: inReaderMode ? 'with_comments/reader_mode' : 'with_comments',
@@ -26,14 +26,10 @@
   ]
 </script>
 
-<TabSet
-        label="{intl.filters}"
-        currentTabName={filter}
-        {tabs}
-        className="bubble-profile-filters"
-/>
+<TabSet label={intl.filters} currentTabName={filter} {tabs} className="bubble-profile-filters" />
+
 <style>
-    :global(.bubble-profile-filters) {
-        background: var(--bubble-profile-bg);
-    }
+  :global(.bubble-profile-filters) {
+    background: var(--bubble-profile-bg);
+  }
 </style>

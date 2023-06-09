@@ -10,7 +10,14 @@ import { grayscaleObservers } from './grayscaleObservers'
 import { focusRingObservers } from './focusRingObservers'
 import { leftRightFocusObservers } from './leftRightFocusObservers'
 
-export function setupObservers (alwaysShowFocusRing, isUserLoggedIn, online, pageVisibilityHidden, enableGrayscale, leftRightChangesFocus) {
+export function setupObservers(
+  alwaysShowFocusRing,
+  isUserLoggedIn,
+  online,
+  pageVisibilityHidden,
+  enableGrayscale,
+  leftRightChangesFocus
+) {
   onlineObservers(online)
   nowObservers()
   // navObservers();

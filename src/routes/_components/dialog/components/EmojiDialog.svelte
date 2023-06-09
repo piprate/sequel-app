@@ -12,28 +12,30 @@
   import { supportsFocusVisible } from '../../../_utils/supportsFocusVisible'
   import { importFocusVisible } from '../../../_utils/polyfills/asyncPolyfills'
   import { getEmojiPickerI18n, emojiPickerDataSource, emojiPickerLocale } from '../../../_static/emojiPickerIntl'
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte'
 
-  export let id;
-  export let label;
-  export let title;
-  export let realm;
+  export let id
+  export let label
+  export let title
+  export let realm
 
-  $: darkMode = isDarkTheme($currentTheme);
-  $: customEmoji =  convertCustomEmojiToEmojiPickerFormat($currentCustomEmoji, $autoplayGifs);
+  $: darkMode = isDarkTheme($currentTheme)
+  $: customEmoji = convertCustomEmojiToEmojiPickerFormat($currentCustomEmoji, $autoplayGifs)
 
-  let picker;
+  let picker
 
-  function onEmojiSelected (event) {
-    insertEmoji(realm, event.detail.emoji);
-    close(id);
+  function onEmojiSelected(event) {
+    insertEmoji(realm, event.detail.emoji)
+    close(id)
   }
 
-  function onPickerKeydown (event) {
+  function onPickerKeydown(event) {
     // workaround for shortcuts -- see acceptShortcutEvent() in shortcuts.js
-    if (event.key === 'Backspace' &&
-            event.target.shadowRoot.activeElement &&
-            event.target.shadowRoot.activeElement.tagName === 'INPUT') {
+    if (
+      event.key === 'Backspace' &&
+      event.target.shadowRoot.activeElement &&
+      event.target.shadowRoot.activeElement.tagName === 'INPUT'
+    ) {
       event.stopPropagation() // prevent our hotkeys from activating when pressing backspace in the input
     }
   }
@@ -52,8 +54,10 @@
       picker.shadowRoot.appendChild(style)
     }
     registerShadowRoot(picker.shadowRoot)
-    if (!$isUserTouching) { // auto focus the input on desktop
-      doubleRAF(() => { // triple rAF because a11y tries to focus as well
+    if (!$isUserTouching) {
+      // auto focus the input on desktop
+      doubleRAF(() => {
+        // triple rAF because a11y tries to focus as well
         requestAnimationFrame(() => {
           picker.shadowRoot.querySelector('input').focus()
         })
@@ -65,29 +69,24 @@
       applyFocusVisiblePolyfill(picker.shadowRoot)
     }
     return () => {
-      unregisterShadowRoot(picker.shadowRoot);
+      unregisterShadowRoot(picker.shadowRoot)
     }
-  });
+  })
 </script>
 
-<ModalDialog
-        {id}
-        {label}
-        {title}
-        shrinkWidthToFit={true}
-        background="var(--main-bg)"
->
+<ModalDialog {id} {label} {title} shrinkWidthToFit={true} background="var(--main-bg)">
   <div class="emoji-container">
     <emoji-picker
-            bind:this={picker}
-            locale={emojiPickerLocale}
-            data-source={emojiPickerDataSource}
-            class={darkMode ? 'dark' : 'light'}
-            on:emoji-click="{onEmojiSelected}"
-            on:keydown="{onPickerKeydown}"
-    ></emoji-picker>
+      bind:this={picker}
+      locale={emojiPickerLocale}
+      data-source={emojiPickerDataSource}
+      class={darkMode ? 'dark' : 'light'}
+      on:emoji-click={onEmojiSelected}
+      on:keydown={onPickerKeydown}
+    />
   </div>
 </ModalDialog>
+
 <style>
   emoji-picker {
     --indicator-color: var(--main-theme-color);
@@ -95,7 +94,8 @@
   }
 
   @media (max-width: 479px) {
-    .emoji-container, emoji-picker {
+    .emoji-container,
+    emoji-picker {
       width: 100%;
     }
   }

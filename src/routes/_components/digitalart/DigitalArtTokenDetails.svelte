@@ -17,7 +17,7 @@
   })
   $: sparkSelected = !!ourSpark
 
-  async function onMoreOptionsClick () {
+  async function onMoreOptionsClick() {
     const showOptionsDialog = await importShowDigitalArtTokenOptionsDialog()
     showOptionsDialog(token, null, ourSpark)
   }
@@ -45,19 +45,13 @@
     <span class="digital-art-details-item-title">
       {intl.tokenType}
     </span>
-    <span class="digital-art-details-item-datum">
-      Digital Art
-    </span>
+    <span class="digital-art-details-item-datum"> Digital Art </span>
   </div>
   <div class="digital-art-more-options">
-    <IconButton
-      label="{intl.moreOptions}"
-      href="#fa-bars"
-      muted="true"
-      on:click="{onMoreOptionsClick}"
-    />
+    <IconButton label={intl.moreOptions} href="#fa-bars" muted="true" on:click={onMoreOptionsClick} />
   </div>
 </div>
+
 <style>
   .digital-art-details {
     grid-area: details;

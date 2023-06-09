@@ -5,7 +5,7 @@
   import LazyComposeBox from './compose/LazyComposeBox.svelte'
   import { onMount } from 'svelte'
   import { currentSparkId } from '../_store/instance'
-  import { isTimelineInReaderMode } from '../_actions/timeline';
+  import { isTimelineInReaderMode } from '../_actions/timeline'
 
   export let timeline
   export let showCompose = false
@@ -25,10 +25,10 @@
     <LoadingPage />
   {/if}
   <div class="timeline-slot-reveal-container {hidePage ? 'hidden' : ''}">
-    <slot></slot>
+    <slot />
   </div>
   {#if showCompose && !isTimelineInReaderMode(timeline)}
-    <LazyComposeBox realm={bubbleId} {bubbleId} asSpark={$currentSparkId} hidden={hidePage}/>
+    <LazyComposeBox realm={bubbleId} {bubbleId} asSpark={$currentSparkId} hidden={hidePage} />
   {/if}
   <div class="timeline-anchor-container">
     {#if !hidePage && hideTimeline}
@@ -39,11 +39,14 @@
     </div>
   </div>
 </div>
+
 <style>
-  .timeline-page, .timeline-anchor-container {
+  .timeline-page,
+  .timeline-anchor-container {
     position: relative;
   }
-  .timeline-reveal-container, .timeline-slot-reveal-container {
+  .timeline-reveal-container,
+  .timeline-slot-reveal-container {
     transition: opacity 0.2s linear; /* main page reveal */
   }
 </style>

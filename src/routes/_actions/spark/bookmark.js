@@ -6,7 +6,7 @@ import { accessToken } from '../../_store/instance'
 import { bookmarkSpark, unbookmarkSpark } from '../../_api/bookmarkSpark'
 import { updateLocalRelationship } from '../sparks'
 
-export async function setSparkBookmarked (sparkId, bookmarked, asSpark, toastOnSuccess) {
+export async function setSparkBookmarked(sparkId, bookmarked, asSpark, toastOnSuccess) {
   if (!online.get()) {
     /* no await */
     toast.say(bookmarked ? 'intl.cannotBookmarkOffline' : 'intl.cannotUnbookmarkOffline')
@@ -36,8 +36,8 @@ export async function setSparkBookmarked (sparkId, bookmarked, asSpark, toastOnS
     /* no await */
     toast.say(
       bookmarked
-        ? formatIntl('intl.unableToBookmark', { error: (e.message || '') })
-        : formatIntl('intl.unableToUnbookmark', { error: (e.message || '') })
+        ? formatIntl('intl.unableToBookmark', { error: e.message || '' })
+        : formatIntl('intl.unableToUnbookmark', { error: e.message || '' })
     )
   }
 }

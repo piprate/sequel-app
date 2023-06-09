@@ -6,7 +6,7 @@
     largeInlineMedia,
     markMediaAsSensitive,
     neverMarkMediaAsSensitive,
-    sensitivesShown,
+    sensitivesShown
   } from '../../_store/local'
   import { registerClickDelegate } from '../../_utils/delegate'
   import { classname } from '../../_utils/classname'
@@ -24,17 +24,15 @@
   let showSensitiveMedia
 
   $: computedClass = classname(
-          'post-sensitive-media-container',
-          sensitiveShown ? 'post-sensitive-media-shown' : 'post-sensitive-media-hidden',
-          oddCols && 'odd-cols',
-          twoCols && 'two-cols',
-          $largeInlineMedia ? 'not-grouped-images' : 'grouped-images'
+    'post-sensitive-media-container',
+    sensitiveShown ? 'post-sensitive-media-shown' : 'post-sensitive-media-hidden',
+    oddCols && 'odd-cols',
+    twoCols && 'two-cols',
+    $largeInlineMedia ? 'not-grouped-images' : 'grouped-images'
   )
   $: mediaAttachments = post.media
   $: sensitiveShown = !!$sensitivesShown[uuid]
-  $: sensitive = (
-          !$neverMarkMediaAsSensitive && ($markMediaAsSensitive || post.sensitive)
-  )
+  $: sensitive = !$neverMarkMediaAsSensitive && ($markMediaAsSensitive || post.sensitive)
   $: elementId = `sensitive-${uuid}`
   $: customSize = (() => {
     if ($largeInlineMedia || !mediaAttachments || mediaAttachments.length < 5) {
@@ -42,16 +40,16 @@
     }
     return `padding-bottom: ${Math.ceil(mediaAttachments.length / 2) * 29}%;`
   })()
-  $: nCols = (!$largeInlineMedia && mediaAttachments.length > 1) ? 2 : 1
-  $: oddCols = (mediaAttachments.length > 1 && (mediaAttachments.length % 2))
-  $: twoCols = (mediaAttachments.length === 2)
+  $: nCols = !$largeInlineMedia && mediaAttachments.length > 1 ? 2 : 1
+  $: oddCols = mediaAttachments.length > 1 && mediaAttachments.length % 2
+  $: twoCols = mediaAttachments.length === 2
 
-  async function showFirstMedia () {
+  async function showFirstMedia() {
     const showMediaDialog = await importShowMediaDialog()
     showMediaDialog(mediaAttachments, 0)
   }
 
-  function toggleSensitiveMedia (changeFocus) {
+  function toggleSensitiveMedia(changeFocus) {
     $sensitivesShown[uuid] = !sensitivesShown[uuid]
     dispatch('recalculateHeight')
     // Only change focus for clicks, not for hotkeys. It's weird if, when the entire toot
@@ -74,51 +72,52 @@
   })
 </script>
 
-{#if sensitive }
-<div class={computedClass} style={customSize}>
-  <div class="post-sensitive-inner-div">
-    {#if sensitiveShown}
-      <button id={elementId}
-              type="button"
-              class="post-sensitive-media-button"
-              aria-label="{intl.hideSensitiveMedia}"
-              bind:this={hideSensitiveMedia}
-      >
-        <div class="svg-wrapper">
-          <SvgIcon className="post-sensitive-media-svg"
-                   href="#fa-eye-slash" />
-        </div>
-      </button>
-    {:else}
-      <button id={elementId}
-              type="button"
-              class="post-sensitive-media-button"
-              aria-label="{intl.showSensitiveMedia}"
-              bind:this={showSensitiveMedia}
-      >
-
-        <div class="post-sensitive-media-warning">
-          <div class="post-sensitive-media-warning-text">
-            {intl.clickToShowSensitive}
+{#if sensitive}
+  <div class={computedClass} style={customSize}>
+    <div class="post-sensitive-inner-div">
+      {#if sensitiveShown}
+        <button
+          id={elementId}
+          type="button"
+          class="post-sensitive-media-button"
+          aria-label={intl.hideSensitiveMedia}
+          bind:this={hideSensitiveMedia}
+        >
+          <div class="svg-wrapper">
+            <SvgIcon className="post-sensitive-media-svg" href="#fa-eye-slash" />
           </div>
-        </div>
-        <div class="svg-wrapper">
-          <SvgIcon className="post-sensitive-media-svg" href="#fa-eye" />
-        </div>
-      </button>
-    {/if}
-    <MediaAttachments {mediaAttachments} {sensitive} {sensitiveShown} {uuid} />
+        </button>
+      {:else}
+        <button
+          id={elementId}
+          type="button"
+          class="post-sensitive-media-button"
+          aria-label={intl.showSensitiveMedia}
+          bind:this={showSensitiveMedia}
+        >
+          <div class="post-sensitive-media-warning">
+            <div class="post-sensitive-media-warning-text">
+              {intl.clickToShowSensitive}
+            </div>
+          </div>
+          <div class="svg-wrapper">
+            <SvgIcon className="post-sensitive-media-svg" href="#fa-eye" />
+          </div>
+        </button>
+      {/if}
+      <MediaAttachments {mediaAttachments} {sensitive} {sensitiveShown} {uuid} />
+    </div>
   </div>
-</div>
-{#if enableShortcuts}
-  <Shortcut scope={shortcutScope} key="y" on:pressed="{ () => toggleSensitiveMedia(false) }"/>
-{/if}
+  {#if enableShortcuts}
+    <Shortcut scope={shortcutScope} key="y" on:pressed={() => toggleSensitiveMedia(false)} />
+  {/if}
 {:else}
   <MediaAttachments {mediaAttachments} {sensitive} {sensitiveShown} {uuid} />
 {/if}
 {#if enableShortcuts}
-  <Shortcut scope={shortcutScope} key="i" on:pressed="{showFirstMedia}" />
+  <Shortcut scope={shortcutScope} key="i" on:pressed={showFirstMedia} />
 {/if}
+
 <style>
   .post-sensitive-media-container {
     grid-area: media;
@@ -178,7 +177,7 @@
     margin: 10px auto;
   }
   .post-sensitive-media-container.post-sensitive-media-hidden.not-grouped-images {
-      height: 250px;
+    height: 250px;
   }
 
   .post-sensitive-media-container .post-sensitive-media-warning {

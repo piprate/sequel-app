@@ -76,7 +76,7 @@ const HTML_HEADERS = {
   'cross-origin-opener-policy': 'same-origin'
 }
 
-async function main () {
+async function main() {
   const json = cloneDeep(JSON_TEMPLATE)
 
   const exportDir = path.resolve(__dirname, '../__sapper__/export')
@@ -88,15 +88,18 @@ async function main () {
     }
 
     // remove all the regexy stuff in the regex
-    const filename = pattern.source.replace(/^\^\\\//, '').replace(/(\\\/)?\?\$$/, '').replace(/\\\//g, '/')
+    const filename = pattern.source
+      .replace(/^\^\\\//, '')
+      .replace(/(\\\/)?\?\$$/, '')
+      .replace(/\\\//g, '/')
 
     // try two different possible paths
-    const filePath = [
-      `${filename}.html`,
-      path.join(filename, 'index.html')
-    ].map(_ => path.resolve(exportDir, _)).find(_ => fs.existsSync(_))
+    const filePath = [`${filename}.html`, path.join(filename, 'index.html')]
+      .map((_) => path.resolve(exportDir, _))
+      .find((_) => fs.existsSync(_))
 
-    if (!filePath) { // dynamic route, e.g. /accounts/<accountId/
+    if (!filePath) {
+      // dynamic route, e.g. /accounts/<accountId/
       // serve calls to dynamic routes via the generic "service worker" index.html,
       // since we can't generate the dynamic content using Zeit's static server
       route.dest = 'service-worker-index.html'
@@ -113,7 +116,7 @@ async function main () {
   await writeFile(path.resolve(__dirname, '../vercel.json'), JSON.stringify(json, null, '  '), 'utf8')
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(err)
   process.exit(1)
 })

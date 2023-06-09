@@ -17,7 +17,7 @@
   import { setCurrentSpark } from '../../../_actions/sparks'
   import { currentInstance } from '../../../_store/local'
   import { toast } from '../../toast/toast'
-  import { isTimelineInReaderMode } from '../../../_actions/timeline';
+  import { isTimelineInReaderMode } from '../../../_actions/timeline'
 
   export let id
   export let label
@@ -42,26 +42,20 @@
     if (typeof subscribed === 'undefined' || !spark) {
       return ''
     }
-    return (subscribed || requestedSubscription)
-            ? formatIntl('intl.unsubSpark', { spark: sparkName })
-            : formatIntl('intl.subSpark', { spark: sparkName })
+    return subscribed || requestedSubscription
+      ? formatIntl('intl.unsubSpark', { spark: sparkName })
+      : formatIntl('intl.subSpark', { spark: sparkName })
   })()
   $: subscribeIcon = subscribed ? '#fa-user-times' : requestedSubscription ? '#fa-hourglass' : '#fa-user-plus'
-  $: bookmarkLabel = bookmarked
-          ? 'intl.removeBookmark'
-          : formatIntl('intl.addSparkBookmark', { spark: sparkName })
+  $: bookmarkLabel = bookmarked ? 'intl.removeBookmark' : formatIntl('intl.addSparkBookmark', { spark: sparkName })
   $: bookmarkIcon = bookmarked ? '#fa-bookmark-o' : '#fa-bookmark'
-  $: blockLabel = (
-          blocking
-                  ? formatIntl('intl.unblockSpark', { spark: sparkName })
-                  : formatIntl('intl.blockSpark', { spark: sparkName })
-  )
+  $: blockLabel = blocking
+    ? formatIntl('intl.unblockSpark', { spark: sparkName })
+    : formatIntl('intl.blockSpark', { spark: sparkName })
   $: blockIcon = blocking ? '#fa-unlock' : '#fa-ban'
-  $: muteLabel = (
-          muting
-                  ? formatIntl('intl.unmuteSpark', { spark: sparkName })
-                  : formatIntl('intl.muteSpark', { spark: sparkName })
-  )
+  $: muteLabel = muting
+    ? formatIntl('intl.unmuteSpark', { spark: sparkName })
+    : formatIntl('intl.muteSpark', { spark: sparkName })
   $: muteIcon = muting ? '#fa-volume-up' : '#fa-volume-off'
   $: isUser = sparkId === ourSparkId
   //
@@ -69,11 +63,9 @@
   //
   $: domain = '' //acct.split('@')[1];
   $: instanceBlocked = relationship && relationship.instanceBlocked
-  $: blockDomainLabel = (
-          instanceBlocked
-                  ? formatIntl('intl.showDomain', { domain })
-                  : formatIntl('intl.hideDomain', { domain })
-  )
+  $: blockDomainLabel = instanceBlocked
+    ? formatIntl('intl.showDomain', { domain })
+    : formatIntl('intl.hideDomain', { domain })
   $: reportLabel = formatIntl('intl.reportSpark', { spark: sparkName })
   $: archiveLabel = formatIntl('intl.archiveSpark', { spark: sparkName })
   $: isInReaderMode = isTimelineInReaderMode()
@@ -85,21 +77,27 @@
     //   label: formatIntl('intl.mentionSpark', { spark: sparkName }),
     //   icon: '#fa-comments'
     // },
-    activeSpark && isUser && isManaged && {
-      key: 'edit',
-      label: 'intl.editSpark',
-      icon: '#fa-edit'
-    },
-    activeSpark && !isUser && isManaged && {
-      key: 'switchAndEdit',
-      label: 'intl.switchAndEditSpark',
-      icon: '#fa-edit'
-    },
-    activeSpark && !isUser && !blocking && {
-      key: 'subscribe',
-      label: subscribeLabel,
-      icon: subscribeIcon
-    },
+    activeSpark &&
+      isUser &&
+      isManaged && {
+        key: 'edit',
+        label: 'intl.editSpark',
+        icon: '#fa-edit'
+      },
+    activeSpark &&
+      !isUser &&
+      isManaged && {
+        key: 'switchAndEdit',
+        label: 'intl.switchAndEditSpark',
+        icon: '#fa-edit'
+      },
+    activeSpark &&
+      !isUser &&
+      !blocking && {
+        key: 'subscribe',
+        label: subscribeLabel,
+        icon: subscribeIcon
+      },
     !isUser && {
       key: 'bookmark',
       label: bookmarkLabel,
@@ -125,11 +123,13 @@
     //   label: blockDomainLabel,
     //   icon: '#fa-ban'
     // },
-    activeSpark && !isUser && !isManaged && {
-      key: 'report',
-      label: reportLabel,
-      icon: '#fa-flag'
-    },
+    activeSpark &&
+      !isUser &&
+      !isManaged && {
+        key: 'report',
+        label: reportLabel,
+        icon: '#fa-flag'
+      },
     {
       key: 'copy',
       label: 'intl.copyLinkToSpark',
@@ -142,7 +142,7 @@
     }
   ].filter(Boolean)
 
-  function onClick (event) {
+  function onClick(event) {
     switch (event.detail.key) {
       case 'mention':
         return onMentionClicked()
@@ -171,61 +171,61 @@
     }
   }
 
-  async function onMentionClicked () {
+  async function onMentionClicked() {
     close(id)
     await composeNewPostMentioning(spark)
   }
 
-  async function onSubscribeClicked () {
+  async function onSubscribeClicked() {
     close(id)
     await setSparkSubscribed(sparkId, !subscribed, null, ourSparkId, true)
   }
 
-  async function onBookmarkClicked () {
+  async function onBookmarkClicked() {
     close(id)
     await setSparkBookmarked(sparkId, !bookmarked, ourSparkId, true)
   }
 
-  async function onBlockClicked () {
+  async function onBlockClicked() {
     close(id)
     await setSparkBlocked(sparkId, !blocking, true)
   }
 
-  async function onMuteClicked () {
+  async function onMuteClicked() {
     close(id)
     await toggleMute(spark, !muting)
   }
 
-  async function onBlockDomainClicked () {
+  async function onBlockDomainClicked() {
     close(id)
     await setDomainBlocked(sparkId, domain, !instanceBlocked, true)
   }
 
-  async function onArchiveClicked () {
+  async function onArchiveClicked() {
     close(id)
     await doDeleteSpark(sparkId)
     goto('/')
   }
 
-  async function onCopyClicked () {
+  async function onCopyClicked() {
     const url = `${location.origin}${location.pathname}`
     close(id)
     await copyText(url)
   }
 
-  async function onReport () {
+  async function onReport() {
     close(id)
     await reportPostOrSpark({ spark })
   }
 
-  function onEdit () {
+  function onEdit() {
     close(id)
     setTimeout(() => {
       goto(`/sparks/${unwrap(sparkId)}/edit`)
     }, gotoDelay)
   }
 
-  function onSwitchAndEdit () {
+  function onSwitchAndEdit() {
     close(id)
     setCurrentSpark($currentInstance, spark)
     /* no await */
@@ -235,21 +235,14 @@
     }, gotoDelay)
   }
 
-  
-  async function onToggleReaderMode () {
+  async function onToggleReaderMode() {
     const readerModeUrl = `${location.pathname}/reader_mode`
     goto(isTimelineInReaderMode() ? location.pathname.replace('/reader_mode', '') : readerModeUrl)
-    
+
     close(id)
   }
 </script>
 
-<ModalDialog
-  {id}
-  {label}
-  {title}
-  shrinkWidthToFit={true}
-  background="var(--main-bg)"
->
-  <GenericDialogList selectable={false} {items} on:click="{onClick}"/>
+<ModalDialog {id} {label} {title} shrinkWidthToFit={true} background="var(--main-bg)">
+  <GenericDialogList selectable={false} {items} on:click={onClick} />
 </ModalDialog>

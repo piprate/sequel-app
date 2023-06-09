@@ -1,21 +1,23 @@
 <script>
-  export let id;
-  export let className = '';
-  export let label;
-  export let checked;
-  export let index;
+  export let id
+  export let className = ''
+  export let label
+  export let checked
+  export let index
 </script>
 
-<button id="radio-group-button-{id}-{index}"
-        class="radio-group-button {checked ? 'checked' : 'not-checked'} {className}"
-        role="radio"
-        aria-label={label}
-        title={label}
-        aria-checked={checked}
-        on:click
+<button
+  id="radio-group-button-{id}-{index}"
+  class="radio-group-button {checked ? 'checked' : 'not-checked'} {className}"
+  role="radio"
+  aria-label={label}
+  title={label}
+  aria-checked={checked}
+  on:click
 >
-  <slot></slot>
+  <slot />
 </button>
+
 <style>
   .radio-group-button {
     display: flex;

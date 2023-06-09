@@ -16,23 +16,23 @@ import {
 import { createThreadId, createThreadKeyRange, createTimelineId, mergeKeyWithSparkId } from '../keys'
 import { cachePost, sparkSpecificPostId } from './cachePost'
 
-export function putPost (postsStore, post, asSpark) {
+export function putPost(postsStore, post, asSpark) {
   postsStore.put(cloneForStorage(post), sparkSpecificPostId(post.id, asSpark))
 }
 
-export function putSpark (sparksStore, spark) {
+export function putSpark(sparksStore, spark) {
   sparksStore.put(cloneForStorage(spark))
 }
 
-export function putBubble (bubblesStore, bubble) {
+export function putBubble(bubblesStore, bubble) {
   bubblesStore.put(cloneForStorage(bubble))
 }
 
-export function putNotification (notificationsStore, notification) {
+export function putNotification(notificationsStore, notification) {
   notificationsStore.put(cloneForStorage(notification))
 }
 
-export function storePost (postsStore, sparksStore, bubblesStore, post, asSpark) {
+export function storePost(postsStore, sparksStore, bubblesStore, post, asSpark) {
   putPost(postsStore, post, asSpark)
   if (post.authorRef) {
     putSpark(sparksStore, post.authorRef)
@@ -42,7 +42,7 @@ export function storePost (postsStore, sparksStore, bubblesStore, post, asSpark)
   }
 }
 
-export function storeNotification (notificationsStore, postsStore, sparksStore, bubblesStore, notification, asSpark) {
+export function storeNotification(notificationsStore, postsStore, sparksStore, bubblesStore, notification, asSpark) {
   if (notification.subjectPost) {
     storePost(postsStore, sparksStore, bubblesStore, notification.subjectPost, asSpark)
   }
@@ -55,7 +55,7 @@ export function storeNotification (notificationsStore, postsStore, sparksStore, 
   putNotification(notificationsStore, notification)
 }
 
-async function insertTimelineNotifications (instanceName, timeline, notifications, asSpark) {
+async function insertTimelineNotifications(instanceName, timeline, notifications, asSpark) {
   for (const notification of notifications) {
     setInCache(notificationsCache, instanceName, notification.id, notification)
     if (notification.actor) {
@@ -76,7 +76,7 @@ async function insertTimelineNotifications (instanceName, timeline, notification
   })
 }
 
-async function insertTimelinePosts (instanceName, timeline, posts, asSpark) {
+async function insertTimelinePosts(instanceName, timeline, posts, asSpark) {
   for (const post of posts) {
     cachePost(post, instanceName, asSpark)
   }
@@ -91,7 +91,7 @@ async function insertTimelinePosts (instanceName, timeline, posts, asSpark) {
   })
 }
 
-async function insertPostThread (instanceName, postId, posts, asSpark) {
+async function insertPostThread(instanceName, postId, posts, asSpark) {
   for (const post of posts) {
     cachePost(post, instanceName, asSpark)
   }
@@ -99,9 +99,9 @@ async function insertPostThread (instanceName, postId, posts, asSpark) {
   const storeNames = [THREADS_STORE, POSTS_STORE, SPARKS_STORE, BUBBLES_STORE]
   await dbPromise(db, storeNames, 'readwrite', (stores) => {
     const [threadsStore, postsStore, sparksStore, bubblesStore] = stores
-    threadsStore.getAllKeys(createThreadKeyRange(postId)).onsuccess = e => {
+    threadsStore.getAllKeys(createThreadKeyRange(postId)).onsuccess = (e) => {
       const existingKeys = e.target.result
-      const newKeys = times(posts.length, i => createThreadId(postId, i))
+      const newKeys = times(posts.length, (i) => createThreadId(postId, i))
       const keysToDelete = difference(existingKeys, newKeys)
       for (const key of keysToDelete) {
         threadsStore.delete(key)
@@ -114,7 +114,7 @@ async function insertPostThread (instanceName, postId, posts, asSpark) {
   })
 }
 
-export async function insertTimelineItems (instanceName, timeline, timelineItems, asSpark) {
+export async function insertTimelineItems(instanceName, timeline, timelineItems, asSpark) {
   console.log('insertTimelineItems', instanceName, timeline, timelineItems, asSpark)
   /* no await */
   scheduleCleanup()
@@ -128,10 +128,15 @@ export async function insertTimelineItems (instanceName, timeline, timelineItems
   }
 }
 
-export async function insertPost (instanceName, post, asSpark) {
+export async function insertPost(instanceName, post, asSpark) {
   cachePost(post, instanceName, asSpark)
   const db = await getDatabase(instanceName)
-  await dbPromise(db, [POSTS_STORE, SPARKS_STORE, BUBBLES_STORE], 'readwrite', ([postsStore, sparksStore, bubblesStore]) => {
-    storePost(postsStore, sparksStore, bubblesStore, post, asSpark)
-  })
+  await dbPromise(
+    db,
+    [POSTS_STORE, SPARKS_STORE, BUBBLES_STORE],
+    'readwrite',
+    ([postsStore, sparksStore, bubblesStore]) => {
+      storePost(postsStore, sparksStore, bubblesStore, post, asSpark)
+    }
+  )
 }

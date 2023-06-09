@@ -1,29 +1,27 @@
 <script>
   import { coordsToPercent } from '../_utils/coordsToPercent'
   import { largeInlineMedia } from '../_store/local'
-  import { onMount } from "svelte";
-  import { loadSecureMedia } from "../_api/media";
-  import { accessToken } from "../_store/instance";
+  import { onMount } from 'svelte'
+  import { loadSecureMedia } from '../_api/media'
+  import { accessToken } from '../_store/instance'
 
-  export let ariaHidden = false;
-  export let forceSize = false;
-  export let title = '';
-  export let alt = '';
-  export let src;
-  export let width = undefined;
-  export let height = undefined;
-  export let fallback = undefined;
-  export let blurhash = undefined;
-  export let focus = undefined;
-  export let background = '';
+  export let ariaHidden = false
+  export let forceSize = false
+  export let title = ''
+  export let alt = ''
+  export let src
+  export let width = undefined
+  export let height = undefined
+  export let fallback = undefined
+  export let blurhash = undefined
+  export let focus = undefined
+  export let background = ''
 
-  let error = false;
+  let error = false
 
-  $: computedStyle = [
-    background && `background: ${background};`
-  ].filter(Boolean).join('')
+  $: computedStyle = [background && `background: ${background};`].filter(Boolean).join('')
 
-  let image;
+  let image
 
   $: focusStyle = ((focus) => {
     // Here we do a pure css version instead of using
@@ -33,26 +31,26 @@
       return 'background-position: center;'
     }
     return `object-position: ${coordsToPercent(focus.x)}% ${100 - coordsToPercent(focus.y)}%;`
-  })(focus);
+  })(focus)
 
-  $: fillFixSize = !$largeInlineMedia && !forceSize;
-  $: displaySrc = blurhash || (error && fallback) || image || fallback;
+  $: fillFixSize = !$largeInlineMedia && !forceSize
+  $: displaySrc = blurhash || (error && fallback) || image || fallback
 
-  let node;
+  let node
 
   onMount(async () => {
     try {
-      image = await loadSecureMedia($accessToken, src);
+      image = await loadSecureMedia($accessToken, src)
     } catch (e) {
       console.error('Image loading error', src, e)
-      error = true;
+      error = true
     }
-  });
+  })
 </script>
 
-<div class="lazy-image {fillFixSize ? 'lazy-image-fixed-size': ''}" style={computedStyle} >
+<div class="lazy-image {fillFixSize ? 'lazy-image-fixed-size' : ''}" style={computedStyle}>
   <img
-    class="{fillFixSize ? 'fixed-size-img': ''}"
+    class={fillFixSize ? 'fixed-size-img' : ''}
     aria-hidden={ariaHidden}
     {alt}
     {title}
@@ -63,6 +61,7 @@
     bind:this={node}
   />
 </div>
+
 <style>
   .lazy-image {
     margin: 0;

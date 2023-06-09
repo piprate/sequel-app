@@ -1,32 +1,32 @@
 <script>
-  import Avatar from '../Avatar.svelte';
-  import SearchResult from './SearchResult.svelte';
-  import IconButton from '../IconButton.svelte';
-  import BubbleDisplayName from '../bubble/BubbleDisplayName.svelte';
-  import { createEventDispatcher } from "svelte";
-  import { unwrap } from "../../_utils/mapper";
+  import Avatar from '../Avatar.svelte'
+  import SearchResult from './SearchResult.svelte'
+  import IconButton from '../IconButton.svelte'
+  import BubbleDisplayName from '../bubble/BubbleDisplayName.svelte'
+  import { createEventDispatcher } from 'svelte'
+  import { unwrap } from '../../_utils/mapper'
 
-  export let bubble;
-  export let actions = undefined;
+  export let bubble
+  export let actions = undefined
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
-  $: id = unwrap(bubble.id);
-  $: croppedSummary = bubble.summary ?
-          bubble.summary.length > 250 ?
-                  bubble.summary.substring(0, 250) + "..." : bubble.summary
-          :
-          '';
+  $: id = unwrap(bubble.id)
+  $: croppedSummary = bubble.summary
+    ? bubble.summary.length > 250
+      ? bubble.summary.substring(0, 250) + '...'
+      : bubble.summary
+    : ''
   $: postCount = bubble.postCount || 0
   $: memberCount = bubble.memberCount || 0
 
-  function onButtonClick (event, action, bubbleId) {
-    event.preventDefault();
-    event.stopPropagation();
+  function onButtonClick(event, action, bubbleId) {
+    event.preventDefault()
+    event.stopPropagation()
     dispatch('click', {
       action,
       bubbleId
-    });
+    })
   }
 </script>
 
@@ -49,7 +49,7 @@
         {#each actions as action}
           <IconButton
             label={action.label}
-            on:click="{ (event) => onButtonClick(event, action, bubble.id) }"
+            on:click={(event) => onButtonClick(event, action, bubble.id)}
             href={action.icon}
             big="true"
           />
@@ -58,13 +58,14 @@
     {/if}
   </div>
 </SearchResult>
+
 <style>
   .search-result-bubble {
     display: grid;
     grid-template-areas:
-      "avatar    name     buttons"
-      "avatar    stats    buttons"
-      "summary   summary  buttons";
+      'avatar    name     buttons'
+      'avatar    stats    buttons'
+      'summary   summary  buttons';
     grid-column-gap: 20px;
     grid-template-columns: max-content 1fr max-content;
     align-items: center;

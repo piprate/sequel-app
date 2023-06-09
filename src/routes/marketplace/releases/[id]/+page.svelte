@@ -5,6 +5,6 @@
   import { page } from '$app/stores'
 </script>
 
-<Title name="{intl.release}" />
+<Title name={intl.release} />
 
 <LazyPage {pageComponent} params={$page.params} />

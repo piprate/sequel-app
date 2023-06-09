@@ -8,7 +8,7 @@ import { get } from 'svelte/store'
 import { accessToken, currentSparkId } from '../_store/instance'
 import { store } from '../_store/store'
 
-export async function setPostPinnedOrUnpinned (postId, pinned, toastOnSuccess) {
+export async function setPostPinnedOrUnpinned(postId, pinned, toastOnSuccess) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   const asSpark = get(currentSparkId)
@@ -28,9 +28,10 @@ export async function setPostPinnedOrUnpinned (postId, pinned, toastOnSuccess) {
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(pinned
-      ? formatIntl('intl.unableToPinPost', { error: (e.message || '') })
-      : formatIntl('intl.unableToUnpinPost', { error: (e.message || '') })
+    toast.say(
+      pinned
+        ? formatIntl('intl.unableToPinPost', { error: e.message || '' })
+        : formatIntl('intl.unableToUnpinPost', { error: e.message || '' })
     )
   }
 }

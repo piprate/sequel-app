@@ -8,33 +8,33 @@
   import { getPinnedPosts } from '../_api/pinnedPosts'
   import { updateUserForInstance } from '../_actions/instances'
   import { formatIntl } from '../_utils/formatIntl'
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte'
 
   // suppress warnings
-  export let params;
-  params = undefined;
+  export let params
+  params = undefined
 
-  let loading = true;
-  let posts = undefined;
+  let loading = true
+  let posts = undefined
 
   onMount(async () => {
     try {
-      await updateUserForInstance($currentInstance);
-      posts = await getPinnedPosts($currentInstance, $accessToken, $currentSpark.id, $currentSpark.id);
+      await updateUserForInstance($currentInstance)
+      posts = await getPinnedPosts($currentInstance, $accessToken, $currentSpark.id, $currentSpark.id)
     } catch (e) {
       /* no await */ toast.say(formatIntl('intl.error', { error: (e.name || '') + ' ' + (e.message || '') }))
     } finally {
-      loading = false;
+      loading = false
     }
-  });
+  })
 </script>
 
-<DynamicPageBanner title="{intl.pinnedPosts}" icon="#fa-thumb-tack" />
-{#if $isUserLoggedIn }
+<DynamicPageBanner title={intl.pinnedPosts} icon="#fa-thumb-tack" />
+{#if $isUserLoggedIn}
   <div class="pinned-toots-page">
     {#if loading}
       <LoadingPage />
-      {:else if posts && posts.length}
+    {:else if posts && posts.length}
       <ul class="pinned-toots-results">
         {#each posts as post, index}
           <PostSearchResult {post} {index} length={posts.length} />
@@ -43,6 +43,7 @@
     {/if}
   </div>
 {/if}
+
 <style>
   .pinned-toots-page {
     padding: 20px 20px;

@@ -17,22 +17,22 @@
   $: listingsFetcher = () => getMarketplaceHistory($currentInstance, $accessToken, $currentSparkId)
 </script>
 
-{#if $isUserLoggedIn }
-    <DynamicPageBanner title="{intl.marketplaceTitle}" icon="#nft-diamond" />
-    <MarketplaceFilter filter="history" />
-    <ListingsPage {listingsFetcher}>
-        <span slot="is-empty">
-            <InfoAside className="empty-marketplace-notice-aside">
-              {intl.marketplaceEmpty}
-          </InfoAside>
-        </span>
-    </ListingsPage>
+{#if $isUserLoggedIn}
+  <DynamicPageBanner title={intl.marketplaceTitle} icon="#nft-diamond" />
+  <MarketplaceFilter filter="history" />
+  <ListingsPage {listingsFetcher}>
+    <span slot="is-empty">
+      <InfoAside className="empty-marketplace-notice-aside">
+        {intl.marketplaceEmpty}
+      </InfoAside>
+    </span>
+  </ListingsPage>
 {:else}
-    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+  <RestrictedPageWarning message={intl.loginToAccess} offerVisitorMode={true} />
 {/if}
 
 <style>
-    :global(.empty-marketplace-notice-aside) {
-        margin: 10px 10px 0 0;
-    }
+  :global(.empty-marketplace-notice-aside) {
+    margin: 10px 10px 0 0;
+  }
 </style>

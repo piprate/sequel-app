@@ -11,13 +11,13 @@
   params = undefined
   const intl = {}
 
-  $: worldsFetcher = () => $isUserLoggedIn ? getWorldList($currentInstance, $accessToken) : []
+  $: worldsFetcher = () => ($isUserLoggedIn ? getWorldList($currentInstance, $accessToken) : [])
 </script>
 
-{#if $isUserLoggedIn }
-    {#if $pinnedPages !== '/worlds'}
-        <DynamicPageBanner title="{intl.worlds}" icon="#fa-globe"/>
-    {/if}
-    <WorldBrowserFilter filter="explore" />
-    <WorldsListPage {worldsFetcher} />
+{#if $isUserLoggedIn}
+  {#if $pinnedPages !== '/worlds'}
+    <DynamicPageBanner title={intl.worlds} icon="#fa-globe" />
+  {/if}
+  <WorldBrowserFilter filter="explore" />
+  <WorldsListPage {worldsFetcher} />
 {/if}

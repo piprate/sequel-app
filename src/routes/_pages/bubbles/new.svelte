@@ -9,11 +9,12 @@
   params = undefined
   const intl = {}
 </script>
-<DynamicPageBanner title="{intl.newBubble}" />
+
+<DynamicPageBanner title={intl.newBubble} />
 {#if $currentSpark}
-    <BubbleEdit realm="new_bubble" newBubble={true} />
+  <BubbleEdit realm="new_bubble" newBubble={true} />
 {:else}
-    <InfoAside>
-        {intl.selectSparkBeforeCreatingBubble}
-    </InfoAside>
+  <InfoAside>
+    {intl.selectSparkBeforeCreatingBubble}
+  </InfoAside>
 {/if}

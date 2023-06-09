@@ -3,20 +3,20 @@
 // for a good breakdown of the concepts behind this.
 
 import Queue from 'tiny-queue'
-import { inBrowser } from './browserOrNode';
+import { inBrowser } from './browserOrNode'
 import { mark, stop } from './marks'
 
 const taskQueue = new Queue()
 let runningRequestIdleCallback = false
 
-const liteRIC = cb => setTimeout(() => cb({ timeRemaining: () => Infinity })); // eslint-disable-line
+const liteRIC = (cb) => setTimeout(() => cb({ timeRemaining: () => Infinity })) // eslint-disable-line
 
-function getRIC () {
+function getRIC() {
   // we load polyfills asynchronously, so there's a tiny chance this is not defined
   return typeof requestIdleCallback !== 'undefined' ? requestIdleCallback : liteRIC
 }
 
-function getIsInputPending () {
+function getIsInputPending() {
   return inBrowser() && navigator.scheduling && navigator.scheduling.isInputPending
     ? () => navigator.scheduling.isInputPending()
     : () => false // just assume input is not pending on browsers that don't support this
@@ -24,7 +24,7 @@ function getIsInputPending () {
 
 const isInputPending = getIsInputPending()
 
-function runTasks (deadline) {
+function runTasks(deadline) {
   mark('scheduleIdleTask:runTasks()')
   // Bail out early if our deadline has passed (probably ~50ms) or if there is input pending
   // See https://web.dev/isinputpending/
@@ -45,7 +45,7 @@ function runTasks (deadline) {
   stop('scheduleIdleTask:runTasks()')
 }
 
-export function scheduleIdleTask (task) {
+export function scheduleIdleTask(task) {
   taskQueue.push(task)
   if (!runningRequestIdleCallback) {
     runningRequestIdleCallback = true

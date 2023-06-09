@@ -29,12 +29,11 @@ export const autosuggestType = deriveForAutosuggest(rootAutosuggestType, null)
 export const rootAutosuggestSelecting = transientStore({})
 export const autosuggestSelecting = deriveForAutosuggest(rootAutosuggestSelecting, false)
 
-function deriveForAutosuggest (rootStore, defaultValue) {
+function deriveForAutosuggest(rootStore, defaultValue) {
   return derived(
     [currentInstance, currentComposeRealm, rootStore],
-    ([$currentInstance, $currentComposeRealm, $rootStore]) => (
+    ([$currentInstance, $currentComposeRealm, $rootStore]) =>
       get($rootStore, [$currentInstance, $currentComposeRealm], defaultValue)
-    )
   )
 }
 
@@ -59,14 +58,13 @@ export const autosuggestSearchText = derived(
 
 export const autosuggestShown = derived(
   [composeFocused, autosuggestSearchText, autosuggestSearchResults],
-  ([$composeFocused, $autosuggestSearchText, $autosuggestNumSearchResults]) => (
+  ([$composeFocused, $autosuggestSearchText, $autosuggestNumSearchResults]) =>
     !!($composeFocused && $autosuggestSearchText && $autosuggestNumSearchResults.length)
-  )
 )
 
 export const setForAutosuggest = function (store, instanceName, realm, val) {
   const storeVal = storeGet(store)
-  const instanceData = storeVal[instanceName] = storeVal[instanceName] || {}
+  const instanceData = (storeVal[instanceName] = storeVal[instanceName] || {})
   instanceData[realm] = val
   store.set(storeVal)
 }
@@ -74,7 +72,7 @@ export const setForAutosuggest = function (store, instanceName, realm, val) {
 export const setForCurrentAutosuggest = function (store, val) {
   const storeVal = storeGet(store)
   const instanceName = currentInstance.get()
-  const instanceData = storeVal[instanceName] = storeVal[instanceName] || {}
+  const instanceData = (storeVal[instanceName] = storeVal[instanceName] || {})
   instanceData[currentComposeRealm.get()] = val
   store.set(storeVal)
 }
@@ -84,15 +82,15 @@ export const getForCurrentAutosuggest = function (store) {
   return get(storeVal, [currentInstance.get(), currentComposeRealm.get()])
 }
 
-export function clearAutosuggestDataForInstance (instanceName) {
-  [
+export function clearAutosuggestDataForInstance(instanceName) {
+  ;[
     rootComposeFocused,
     rootComposeSelectionStart,
     rootAutosuggestSelected,
     rootAutosuggestSearchResults,
     rootAutosuggestType,
     rootAutosuggestSelecting
-  ].forEach(store => {
+  ].forEach((store) => {
     store.delKey(instanceName)
   })
 }

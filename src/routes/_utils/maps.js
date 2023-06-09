@@ -1,6 +1,6 @@
 // utilities for working with Maps
 
-export function mapBy (items, func) {
+export function mapBy(items, func) {
   const map = new Map()
   for (const item of items) {
     map.set(func(item), item)
@@ -8,7 +8,7 @@ export function mapBy (items, func) {
   return map
 }
 
-export function multimapBy (items, func) {
+export function multimapBy(items, func) {
   const map = new Map()
   for (const item of items) {
     const key = func(item)

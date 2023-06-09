@@ -34,17 +34,22 @@
   $: homeWorldName = homeWorld ? homeWorld.name : ''
   $: homeWorldSelectorLabel = template.homeWorld ? 'intl.changeWorld' : 'intl.selectWorld'
 
-  async function onHomeWorldSelectorClick () {
+  async function onHomeWorldSelectorClick() {
     const showDialog = await importShowWorldSelectionDialog()
-    showDialog(template.homeWorld, function (event) {
-      homeWorld = event.detail
-      template.homeWorld = (homeWorld && homeWorld.id) || ''
-    }, '', 'intl.homeWorldSelectionTitle')
+    showDialog(
+      template.homeWorld,
+      function (event) {
+        homeWorld = event.detail
+        template.homeWorld = (homeWorld && homeWorld.id) || ''
+      },
+      '',
+      'intl.homeWorldSelectionTitle'
+    )
   }
 
   let summaryTextarea
 
-  async function onSubmitSpark (event) {
+  async function onSubmitSpark(event) {
     event.preventDefault()
     event.stopPropagation()
 
@@ -77,109 +82,129 @@
 </script>
 
 <FreeTextLayout>
-    <InfoAside className="notice-aside">
-        {intl.newSparkNotice}
-    </InfoAside>
-    <div class="spark-form-box">
-        <form on:submit='{onSubmitSpark}' aria-labelledby="new-spark-h1">
+  <InfoAside className="notice-aside">
+    {intl.newSparkNotice}
+  </InfoAside>
+  <div class="spark-form-box">
+    <form on:submit={onSubmitSpark} aria-labelledby="new-spark-h1">
+      <ErrorMessage error={$sparkOperationError} />
 
-            <ErrorMessage error={$sparkOperationError} />
+      <label for="name">{intl.sparkNameColon}</label>
+      <input
+        type="text"
+        autocapitalize="none"
+        id="name"
+        bind:value={template.name}
+        placeholder={intl.enterSparkName}
+        required
+      />
+      <label for="handle">{intl.sparkHandleColon}</label>
+      <input
+        type="text"
+        autocapitalize="none"
+        spellcheck="false"
+        id="handle"
+        bind:value={template.handle}
+        placeholder={intl.enterSparkHandle}
+      />
+      <label for="world">{intl.homeWorldColon}</label>
+      <div class="world-selector">
+        {#if homeWorldName}
+          <div class="world-name">{homeWorldName}</div>
+        {/if}
+        <button id="world" type="button" on:click={onHomeWorldSelectorClick}>{homeWorldSelectorLabel}</button>
+      </div>
+      <label for="summary">{intl.sparkSummaryColon}</label>
+      <textarea
+        id="summary"
+        class="compose-summary-input"
+        placeholder={intl.enterSparkSummary}
+        bind:this={summaryTextarea}
+        bind:value={template.summary}
+      />
+      <label for="avatar">{intl.avatarColon}</label>
+      <MediaField
+        {realm}
+        field="avatar"
+        elementId="avatar"
+        buttonLabel={intl.addAvatarImage}
+        enableNFT={true}
+        mediaProfile="avatar"
+      />
+      <InfoAside className="notice-aside">
+        {'intl.avatarCroppingNotice'}
+      </InfoAside>
+      <label for="header">{intl.headerColon}</label>
+      <MediaField {realm} field="header" elementId="header" buttonLabel={intl.addHeaderImage} enableNFT={true} />
 
-            <label for="name">{intl.sparkNameColon}</label>
-            <input type="text" autocapitalize="none" id="name"
-                   bind:value='{template.name}' placeholder="{intl.enterSparkName}" required
-            >
-            <label for="handle">{intl.sparkHandleColon}</label>
-            <input type="text" autocapitalize="none" spellcheck="false" id="handle"
-                   bind:value='{template.handle}' placeholder="{intl.enterSparkHandle}"
-            >
-            <label for="world">{intl.homeWorldColon}</label>
-            <div class="world-selector">
-                {#if homeWorldName}
-                    <div class="world-name">{homeWorldName}</div>
-                {/if}
-                <button id="world" type="button" on:click={onHomeWorldSelectorClick}>{homeWorldSelectorLabel}</button>
-            </div>
-            <label for="summary">{intl.sparkSummaryColon}</label>
-            <textarea id="summary"
-                      class="compose-summary-input"
-                      placeholder="{intl.enterSparkSummary}"
-                      bind:this={summaryTextarea}
-                      bind:value={template.summary}
-            ></textarea>
-            <label for="avatar">{intl.avatarColon}</label>
-            <MediaField {realm} field="avatar" elementId="avatar" buttonLabel="{intl.addAvatarImage}" enableNFT="{true}" mediaProfile="avatar" />
-            <InfoAside className="notice-aside">
-                {'intl.avatarCroppingNotice'}
-            </InfoAside>
-            <label for="header">{intl.headerColon}</label>
-            <MediaField {realm} field="header" elementId="header" buttonLabel="{intl.addHeaderImage}" enableNFT="{true}" />
-
-            <button class="primary" type="submit" id="submitButton" disabled={buttonDisabled}>
-                {buttonLabel}
-            </button>
-        </form>
-    </div>
+      <button class="primary" type="submit" id="submitButton" disabled={buttonDisabled}>
+        {buttonLabel}
+      </button>
+    </form>
+  </div>
 </FreeTextLayout>
 
 <style>
-    .spark-form-box {
-        background: var(--form-bg);
-        padding: 5px 10px 15px;
-        margin: 20px auto;
-        border: 1px solid var(--form-border);
-        border-radius: 4px;
-    }
+  .spark-form-box {
+    background: var(--form-bg);
+    padding: 5px 10px 15px;
+    margin: 20px auto;
+    border: 1px solid var(--form-border);
+    border-radius: 4px;
+  }
 
-    input[type="text"] {
-        min-width: 75%;
-        max-width: 100%;
-        background-color: var(--input-bg);
-    }
+  input[type='text'] {
+    min-width: 75%;
+    max-width: 100%;
+    background-color: var(--input-bg);
+  }
 
-    .compose-summary-input {
-        min-width: 95%;
-        font-size: 1.3em;
-        background: var(--alt-input-bg);
-        color: var(--body-text-color);
-        min-height: 150px;
-        max-height: 300px;
-        border: 1px solid var(--input-border);
-        resize: none;
-    }
+  .compose-summary-input {
+    min-width: 95%;
+    font-size: 1.3em;
+    background: var(--alt-input-bg);
+    color: var(--body-text-color);
+    min-height: 150px;
+    max-height: 300px;
+    border: 1px solid var(--input-border);
+    resize: none;
+  }
 
-    .compose-summary-input:focus {
-        background: var(--main-bg);
-    }
+  .compose-summary-input:focus {
+    background: var(--main-bg);
+  }
 
-    label, input, textarea, button, :global(.spark-form-box-aside) {
-        display: block;
-        margin: 20px 5px;
-    }
+  label,
+  input,
+  textarea,
+  button,
+  :global(.spark-form-box-aside) {
+    display: block;
+    margin: 20px 5px;
+  }
 
-    .world-selector {
-        display: flex;
-        align-items: center;
-    }
+  .world-selector {
+    display: flex;
+    align-items: center;
+  }
 
-    .world-selector #world {
-        margin: 0 0;
-    }
+  .world-selector #world {
+    margin: 0 0;
+  }
 
-    .world-name {
-        font-size: 1.2em;
-        padding-left: 5px;
-        padding-right: 10px;
-    }
+  .world-name {
+    font-size: 1.2em;
+    padding-left: 5px;
+    padding-right: 10px;
+  }
 
-    :global(.notice-aside) {
-        margin: 10px 10px 0 0;
-    }
+  :global(.notice-aside) {
+    margin: 10px 10px 0 0;
+  }
 
-    @media (max-width: 767px) {
-        input[type="text"] {
-            min-width: 95%;
-        }
+  @media (max-width: 767px) {
+    input[type='text'] {
+      min-width: 95%;
     }
-
+  }
 </style>

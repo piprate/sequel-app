@@ -10,7 +10,6 @@
     newWorld: $page.url.searchParams.get('new') === ''
   }
   $: worldName = $observedWorld?.name || 'intl.worldProfile'
-
 </script>
 
 <Title name={worldName} />

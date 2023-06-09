@@ -4,36 +4,36 @@
   import { mark, stop } from '../../_utils/marks'
   import { requestPostAnimationFrame } from '../../_utils/requestPostAnimationFrame'
   import { doubleRAF } from '../../_utils/doubleRAF'
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte'
 
-  export let component;
-  export let offset;
-  export let props;
-  export let key;
-  export let index;
+  export let component
+  export let offset
+  export let props
+  export let key
+  export let index
 
-  let shown = false;
+  let shown = false
 
-  $: shownBeforeRaf = $itemHeights[key] > 0;
+  $: shownBeforeRaf = $itemHeights[key] > 0
 
-  let node;
+  let node
 
-  function doRecalculateHeight () {
+  function doRecalculateHeight() {
     // Recalculate immediately because this is done on-demand, e.g.
     // when clicking the "More" button on a spoiler.
     const rect = node.getBoundingClientRect()
-    let _itemHeights = $itemHeights;
+    let _itemHeights = $itemHeights
     _itemHeights[key] = rect.height
     virtualListStore.setForRealm({ itemHeights: _itemHeights })
   }
 
   // this RAF delay is necessary in order to get the fade-in animation
   // to consistently show
-  $: (shownBeforeRaf => {
+  $: ((shownBeforeRaf) => {
     doubleRAF(() => {
-      shown = shownBeforeRaf;
+      shown = shownBeforeRaf
     })
-  })(shownBeforeRaf);
+  })(shownBeforeRaf)
 
   onMount(() => {
     requestPostAnimationFrame(() => {
@@ -60,16 +60,21 @@
   })
 </script>
 
-<div class="virtual-list-item list-item {shown ? 'shown' : ''}"
-     aria-hidden={!shown}
-     bind:this={node}
-     style="top: {offset}px;" >
-  <svelte:component this={component}
-                    virtualProps={props}
-                    virtualIndex={index}
-                    virtualLength={$length}
-                    on:recalculateHeight="{doRecalculateHeight}"/>
+<div
+  class="virtual-list-item list-item {shown ? 'shown' : ''}"
+  aria-hidden={!shown}
+  bind:this={node}
+  style="top: {offset}px;"
+>
+  <svelte:component
+    this={component}
+    virtualProps={props}
+    virtualIndex={index}
+    virtualLength={$length}
+    on:recalculateHeight={doRecalculateHeight}
+  />
 </div>
+
 <style>
   .virtual-list-item {
     position: absolute;

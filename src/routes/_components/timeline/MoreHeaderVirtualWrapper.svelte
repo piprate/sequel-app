@@ -1,9 +1,7 @@
 <script>
   import MoreHeader from './MoreHeader.svelte'
 
-  export let virtualProps;
+  export let virtualProps
 </script>
 
-<MoreHeader count={virtualProps.count}
-            onClick={virtualProps.onClick}
-/>
+<MoreHeader count={virtualProps.count} onClick={virtualProps.onClick} />

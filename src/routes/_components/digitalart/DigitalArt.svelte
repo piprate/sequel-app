@@ -10,16 +10,13 @@
   import SparkRole from '../SparkRole.svelte'
   import Timestamp from '../Timestamp.svelte'
   import EvergreenProfile from '../marketplace/EvergreenProfile.svelte'
-  import DigitalArtOffer from './DigitalArtOffer.svelte';
+  import DigitalArtOffer from './DigitalArtOffer.svelte'
 
   export let digitalArt
   export let ourSpark
 
   $: name = (digitalArt && digitalArt.name) || ''
-  $: className = classname(
-          'digital-art',
-          $underlineLinks && 'underline-links'
-  )
+  $: className = classname('digital-art', $underlineLinks && 'underline-links')
   $: profileForListing = name
   $: displayArtist = false
   $: isSealed = !!digitalArt.sealRecord
@@ -32,8 +29,7 @@
 </script>
 
 <h1 class="sr-only">{profileForListing}</h1>
-<div class={className}
-     bind:this={digitalArtProfile}>
+<div class={className} bind:this={digitalArtProfile}>
   <div class="digital-art-grid-wrapper">
     <div class="digital-art-grid">
       <DigitalArtHeader {digitalArt} />
@@ -41,7 +37,7 @@
       <div class="digital-art-created">
         <Timestamp value={digitalArt.createdAt} flavour="created" />
       </div>
-      {#if displayArtist }
+      {#if displayArtist}
         <div class="artist-panel">
           <SparkRole spark={digitalArt.artistRef} roleLabel="Creator" />
         </div>
@@ -54,6 +50,7 @@
     </div>
   </div>
 </div>
+
 <style>
   .digital-art {
     position: relative;
@@ -64,15 +61,15 @@
   .digital-art-grid {
     display: grid;
     grid-template-areas:
-            "image     image"
-            "name      name"
-            "label     label"
-            "summary   summary"
-            "created   created"
-            "artist    artist"
-            "details   details"
-            "offer     offer"   
-            "evergreen evergreen";
+      'image     image'
+      'name      name'
+      'label     label'
+      'summary   summary'
+      'created   created'
+      'artist    artist'
+      'details   details'
+      'offer     offer'
+      'evergreen evergreen';
     grid-template-rows: repeat(8, min-content);
     grid-column-gap: 10px;
     grid-row-gap: 5px;
@@ -118,20 +115,20 @@
     .digital-art-grid {
       display: grid;
       grid-template-areas:
-            "image     image"
-            "name      name"
-            "label     label"
-            "summary   summary"
-            "created   created"
-            "artist    artist"
-            "details   details"
-            "offer     offer"   
-            "evergreen evergreen";
+        'image     image'
+        'name      name'
+        'label     label'
+        'summary   summary'
+        'created   created'
+        'artist    artist'
+        'details   details'
+        'offer     offer'
+        'evergreen evergreen';
       grid-template-rows: repeat(8, min-content);
       padding: 10px;
     }
     .digital-art-created {
-      font-size: 1.0em;
+      font-size: 1em;
       align-self: flex-start;
     }
   }
@@ -142,15 +139,15 @@
   @media (max-width: 240px) {
     .digital-art-grid {
       grid-template-areas:
-              "image"
-              "name"
-              "label"
-              "created"
-              "summary"
-              "artist"
-              "details"
-              "offer"   
-              "evergreen";
+        'image'
+        'name'
+        'label'
+        'created'
+        'summary'
+        'artist'
+        'details'
+        'offer'
+        'evergreen';
       grid-template-rows: repeat(8, min-content);
       grid-column-gap: 5px;
       grid-row-gap: 0;

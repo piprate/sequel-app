@@ -3,10 +3,10 @@
   import { themes } from '../../../_static/themes'
   import { DEFAULT_THEME, switchToTheme } from '../../../_utils/themeEngine'
   import { formatIntl } from '../../../_utils/formatIntl'
-  import { currentInstance, selectedTheme, userSettings } from "../../../_store/local";
-  import { get } from '../../../_utils/lodash-lite';
-  import { onMount } from 'svelte';
-  import { parseSettings, saveSettings } from '../../../_actions/settings';
+  import { currentInstance, selectedTheme, userSettings } from '../../../_store/local'
+  import { get } from '../../../_utils/lodash-lite'
+  import { onMount } from 'svelte'
+  import { parseSettings, saveSettings } from '../../../_actions/settings'
 
   let currentTheme
   let isGeneral = false
@@ -14,14 +14,14 @@
   let themeGroups = [
     {
       dark: true,
-      themes: themes.filter(_ => _.dark)
+      themes: themes.filter((_) => _.dark)
     },
     {
       dark: false,
-      themes: themes.filter(_ => !_.dark)
+      themes: themes.filter((_) => !_.dark)
     }
   ]
-  
+
   $: generalTheme = get($userSettings, ['general', 'theme'])
 
   onMount(() => {
@@ -30,49 +30,58 @@
     currentTheme = isGeneral ? generalTheme : $selectedTheme
   })
 
-  function createThemeLabel (theme) {
+  function createThemeLabel(theme) {
     return formatIntl('intl.themeLabel', {
       label: theme.label,
       default: theme.name === DEFAULT_THEME
     })
   }
 
-  function previewTheme (event) {
+  function previewTheme(event) {
     const selectedTheme = event.target.value
     switchToTheme(selectedTheme)
     saveSettings(parseSettings({ theme: selectedTheme }), 'instance', $currentInstance, false, true)
-    
+
     if (isGeneral) {
       saveSettings(parseSettings({ theme: selectedTheme }), 'general', undefined, false, true)
     }
   }
 </script>
 
-<form id="theme-settings" class="generic-instance-settings" aria-label="{intl.chooseTheme}">
+<form id="theme-settings" class="generic-instance-settings" aria-label={intl.chooseTheme}>
   <div class="theme-groups">
     {#each themeGroups as themeGroup}
-    <div class="theme-group">
-      <h3>
-        {themeGroup.dark ? 'intl.darkBackground' : 'intl.lightBackground' }
-      </h3>
-      {#each themeGroup.themes as theme}
-      <div class="theme-picker">
-        <input name='theme' type="radio" id="choice-theme-{theme.name}" value={theme.name} checked={currentTheme === theme.name} on:change={previewTheme}>
-        <label class="theme-picker-label" for="choice-theme-{theme.name}">
-          <div class="theme-preview theme-preview-{themeGroup.dark ? 'dark' : 'light'}"
-               style="background-color: {theme.color};" >
+      <div class="theme-group">
+        <h3>
+          {themeGroup.dark ? 'intl.darkBackground' : 'intl.lightBackground'}
+        </h3>
+        {#each themeGroup.themes as theme}
+          <div class="theme-picker">
+            <input
+              name="theme"
+              type="radio"
+              id="choice-theme-{theme.name}"
+              value={theme.name}
+              checked={currentTheme === theme.name}
+              on:change={previewTheme}
+            />
+            <label class="theme-picker-label" for="choice-theme-{theme.name}">
+              <div
+                class="theme-preview theme-preview-{themeGroup.dark ? 'dark' : 'light'}"
+                style="background-color: {theme.color};"
+              />
+              <span class="theme-picker-label-span">
+                {createThemeLabel(theme)}
+              </span>
+            </label>
           </div>
-          <span class="theme-picker-label-span">
-            {createThemeLabel(theme)}
-          </span>
-        </label>
+        {/each}
       </div>
-      {/each}
-    </div>
     {/each}
   </div>
 </form>
-<GenericInstanceSettingsStyle/>
+<GenericInstanceSettingsStyle />
+
 <style>
   .theme-groups {
     display: grid;

@@ -6,7 +6,7 @@ import { currentInstance } from '../_store/local'
 import { get } from 'svelte/store'
 import { accessToken } from '../_store/instance'
 
-export async function setDomainBlocked (sparkId, domain, block, toastOnSuccess) {
+export async function setDomainBlocked(sparkId, domain, block, toastOnSuccess) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   try {
@@ -23,9 +23,10 @@ export async function setDomainBlocked (sparkId, domain, block, toastOnSuccess) 
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(block
-      ? formatIntl('intl.unableToHideDomain', { error: (e.message || '') })
-      : formatIntl('intl.unableToUnhideDomain', { error: (e.message || '') })
+    toast.say(
+      block
+        ? formatIntl('intl.unableToHideDomain', { error: e.message || '' })
+        : formatIntl('intl.unableToUnhideDomain', { error: e.message || '' })
     )
   }
 }

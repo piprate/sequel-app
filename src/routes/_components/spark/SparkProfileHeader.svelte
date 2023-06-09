@@ -20,7 +20,7 @@
   $: label = bot ? 'bot' : ''
   $: avatarSize = $isVeryTinyMobileSize ? 'small' : $isTinyMobileSize ? 'medium' : 'big'
 
-  async function onAvatarClick () {
+  async function onAvatarClick() {
     if (!spark.avatar) {
       return
     }
@@ -56,10 +56,8 @@
 
 <h2 class="sr-only">{intl.nameAndProperties}</h2>
 <div class="spark-profile-avatar">
-  <button class="spark-profile-avatar-button"
-          aria-label="{intl.clickToSeeAvatar}"
-          on:click="{onAvatarClick}" >
-    <Avatar entity={spark} size={avatarSize} showNFT="{true}" />
+  <button class="spark-profile-avatar-button" aria-label={intl.clickToSeeAvatar} on:click={onAvatarClick}>
+    <Avatar entity={spark} size={avatarSize} showNFT={true} />
   </button>
 </div>
 <div class="spark-profile-name">
@@ -72,10 +70,10 @@
   {handle}
 </div>
 <div class="spark-profile-properties">
-  {#if spark.homeWorldRef }
+  {#if spark.homeWorldRef}
     <Location world={spark.homeWorldRef} />
   {/if}
-  <Timestamp value={spark.createdAt} className={ spark.homeWorldRef ? 'with-left-margin' : '' } flavour="joined" />
+  <Timestamp value={spark.createdAt} className={spark.homeWorldRef ? 'with-left-margin' : ''} flavour="joined" />
 </div>
 <div class="spark-profile-relationship">
   {#if relationship && relationship.managed}
@@ -94,6 +92,7 @@
     <span class="spark-profile-relationship-span">{intl.isSubscriber}</span>
   {/if}
 </div>
+
 <style>
   .spark-profile-relationship {
     grid-area: relationship;
@@ -179,7 +178,8 @@
     .spark-profile-username {
       font-size: 1.1em;
     }
-    .spark-profile-name, .spark-profile-username {
+    .spark-profile-name,
+    .spark-profile-username {
       align-self: flex-start;
     }
   }

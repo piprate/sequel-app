@@ -4,6 +4,6 @@
   import pageComponent from '../../_pages/marketplace/history.svelte'
 </script>
 
-<Title name="{intl.marketplaceHistory}" />
+<Title name={intl.marketplaceHistory} />
 
-  <LazyPage {pageComponent} />
+<LazyPage {pageComponent} />

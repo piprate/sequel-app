@@ -5,7 +5,7 @@ const domParser = inBrowser() && new DOMParser()
 
 // paragraphs should be separated by double newlines
 // single <br/>s should become single newlines
-function innerTextRetainingNewlines (doc) {
+function innerTextRetainingNewlines(doc) {
   let res = ''
   const paragraphs = doc.querySelectorAll('p')
   for (let i = 0; i < paragraphs.length; i++) {
@@ -20,7 +20,7 @@ function innerTextRetainingNewlines (doc) {
   return res
 }
 
-export function postBodyToPlainText (post) {
+export function postBodyToPlainText(post) {
   const body = post.body || ''
   if (post.bodyFormat === 'txt') {
     return body

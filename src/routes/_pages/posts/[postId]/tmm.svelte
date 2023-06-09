@@ -5,11 +5,11 @@
   import { accessToken } from '../../../_store/instance'
   import DynamicPageBanner from '../../../_components/DynamicPageBanner.svelte'
 
-  export let params;
+  export let params
 
-  $: postId = params.postId;
+  $: postId = params.postId
   $: sparksFetcher = () => [] //getTMMs($currentInstance, $accessToken, postId);
 </script>
 
-<DynamicPageBanner title="{intl.tellMeMores}" icon="#fa-fire" />
+<DynamicPageBanner title={intl.tellMeMores} icon="#fa-fire" />
 <SparksListPage {sparksFetcher} />

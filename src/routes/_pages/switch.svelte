@@ -1,16 +1,17 @@
 <script>
-  import RestrictedPageWarning from '../_components/RestrictedPageWarning.svelte';
-  import { isAuthenticated, isUserLoggedIn } from '../_store/local';
-  import SparkSelectionPage from "../_components/SparkSelectionPage.svelte";
+  import RestrictedPageWarning from '../_components/RestrictedPageWarning.svelte'
+  import { isAuthenticated, isUserLoggedIn } from '../_store/local'
+  import SparkSelectionPage from '../_components/SparkSelectionPage.svelte'
 
   // suppress warnings
-  export let params;
-  params = undefined;
+  export let params
+  params = undefined
 </script>
+
 {#if $isUserLoggedIn}
   {#if $isAuthenticated}
-    <SparkSelectionPage/>
+    <SparkSelectionPage />
   {/if}
 {:else}
-  <RestrictedPageWarning/>
+  <RestrictedPageWarning />
 {/if}

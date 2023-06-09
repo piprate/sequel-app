@@ -12,7 +12,7 @@
     return ($pinnedPosts[$currentInstance] && $pinnedPosts[$currentInstance][sparkId]) || []
   })()
 
-  async function updatePinnedPosts () {
+  async function updatePinnedPosts() {
     await updatePinnedPostsForSpark(sparkId, $currentSparkId)
   }
 
@@ -23,23 +23,25 @@
   })
 </script>
 
-{#if pinnedPostsList.length }
+{#if pinnedPostsList.length}
   <h1 class="sr-only">{intl.pinnedPosts}</h1>
-  <div role="feed" aria-label="{intl.pinnedPosts}" class="pinned-posts">
+  <div role="feed" aria-label={intl.pinnedPosts} class="pinned-posts">
     {#each pinnedPostsList as post, index (post.id)}
       <div class="pinned-post-wrapper">
         <!-- empty div used because we assume the parent of the <article> gets the focus outline -->
-        <Post {post}
-                timelineType="pinned"
-                timelineValue={sparkId}
-                {index}
-                length={pinnedPostsList.length}
-                enableShortcuts={true}
+        <Post
+          {post}
+          timelineType="pinned"
+          timelineValue={sparkId}
+          {index}
+          length={pinnedPostsList.length}
+          enableShortcuts={true}
         />
       </div>
     {/each}
   </div>
 {/if}
+
 <style>
   .pinned-post-wrapper:first-child {
     margin: 2px 0; /* gives room for the focus outline */

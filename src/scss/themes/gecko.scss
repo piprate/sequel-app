@@ -10,8 +10,8 @@ $toast-bg: #333;
 $focus-outline: lighten($main-theme-color, 30%);
 $compose-background: lighten($main-theme-color, 32%);
 
-@import "_base.scss";
-@import "_light_scrollbars.scss";
+@import '_base.scss';
+@import '_light_scrollbars.scss';
 
 :root {
   accent-color: #{darken($main-theme-color, 5%)};

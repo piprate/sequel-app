@@ -18,18 +18,18 @@
   })()
 </script>
 
-<a id={elementId}
-   class="post-sidebar size-{size}"
-   data-sveltekit-preload-data
-   href="/sparks/{unwrap(postAuthorId)}"
-   aria-hidden="true"
-   tabindex="-1"
+<a
+  id={elementId}
+  class="post-sidebar size-{size}"
+  data-sveltekit-preload-data
+  href="/sparks/{unwrap(postAuthorId)}"
+  aria-hidden="true"
+  tabindex="-1"
 >
   <!-- the avatar is duplicated information, so hide from tab order and screenreaders -->
-  <Avatar entity={postAuthor}
-          isLink="true"
-          {size} />
+  <Avatar entity={postAuthor} isLink="true" {size} />
 </a>
+
 <style>
   .post-sidebar {
     grid-area: sidebar;

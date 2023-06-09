@@ -1,4 +1,3 @@
-
 // For perf reasons, this script is run inline to quickly set certain styles.
 // To allow CSP to work correctly, we also calculate a sha256 hash during
 // the build process and write it to checksum.js.
@@ -12,12 +11,7 @@ import { isMac } from '../routes/_utils/userAgent/isMac'
 
 window.__themeColors = import.meta.env?.THEME_COLORS
 
-const {
-  currentInstance,
-  disableCustomScrollbars,
-  enableGrayscale,
-  centerNav
-} = storeLite.get()
+const { currentInstance, disableCustomScrollbars, enableGrayscale, centerNav } = storeLite.get()
 
 if (currentInstance) {
   // Do preconnect if we're logged in, so we can connect faster to the other origin.
@@ -29,8 +23,7 @@ if (currentInstance) {
 }
 
 if (enableGrayscale) {
-  document.getElementById('theGrayscaleStyle')
-    .setAttribute('media', 'all') // enables the style
+  document.getElementById('theGrayscaleStyle').setAttribute('media', 'all') // enables the style
 }
 
 if (!currentInstance) {
@@ -39,13 +32,11 @@ if (!currentInstance) {
 }
 
 if (disableCustomScrollbars) {
-  document.getElementById('theScrollbarStyle')
-    .setAttribute('media', 'only x') // disables the style
+  document.getElementById('theScrollbarStyle').setAttribute('media', 'only x') // disables the style
 }
 
 if (centerNav) {
-  document.getElementById('theCenterNavStyle')
-    .setAttribute('media', 'all') // enables the style
+  document.getElementById('theCenterNavStyle').setAttribute('media', 'all') // enables the style
 }
 
 // hack to make the scrollbars rounded only on macOS

@@ -5,7 +5,7 @@ import { get } from 'svelte/store'
 import { accessToken } from '../_store/instance'
 import { deleteBubble } from '../_api/bubbles'
 
-export async function doDeleteBubble (bubbleId, asSpark) {
+export async function doDeleteBubble(bubbleId, asSpark) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   try {
@@ -17,7 +17,7 @@ export async function doDeleteBubble (bubbleId, asSpark) {
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(formatIntl('intl.unableToArchiveBubble', { error: (e.message || '') }))
+    toast.say(formatIntl('intl.unableToArchiveBubble', { error: e.message || '' }))
     throw e
   }
 }

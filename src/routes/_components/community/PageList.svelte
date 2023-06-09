@@ -1,18 +1,19 @@
 <script>
-  export let label;
+  export let label
 </script>
 
 <div class="page-list-wrapper">
   {#if label}
-  <ul class="page-list" aria-label={label}>
-    <slot></slot>
-  </ul>
+    <ul class="page-list" aria-label={label}>
+      <slot />
+    </ul>
   {:else}
-  <ul class="page-list">
-    <slot></slot>
-  </ul>
+    <ul class="page-list">
+      <slot />
+    </ul>
   {/if}
 </div>
+
 <style>
   .page-list-wrapper {
     margin: 20px 20px;

@@ -2,8 +2,9 @@
 </script>
 
 <li class="settings-list-item">
-  <slot></slot>
+  <slot />
 </li>
+
 <style>
   .settings-list-item {
     display: flex;

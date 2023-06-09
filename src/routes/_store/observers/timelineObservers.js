@@ -5,16 +5,16 @@ import { accessToken, currentSpark, currentSparkId } from '../instance'
 import { getFirstTimelineItemId } from '../timeline'
 import { inBrowser, inNode } from '../../_utils/browserOrNode'
 
-export function timelineObservers () {
-  function shouldObserveTimeline (timeline) {
-    return timeline &&
-      (
-        timeline.startsWith('world/') ||
+export function timelineObservers() {
+  function shouldObserveTimeline(timeline) {
+    return (
+      timeline &&
+      (timeline.startsWith('world/') ||
         timeline.startsWith('spark/') ||
         timeline.startsWith('bubble/') ||
         timeline.startsWith('post/') ||
-        timeline.startsWith('tag/')
-      )
+        timeline.startsWith('tag/'))
+    )
   }
 
   currentTimeline.subscribe(async (_currentTimeline) => {
@@ -38,8 +38,7 @@ export function timelineObservers () {
     const currentTimelineIsUnchanged = () => {
       const newCurrentInstance = currentInstance.get()
       const newCurrentTimeline = currentTimeline.get()
-      return newCurrentInstance === _currentInstance &&
-        newCurrentTimeline === _currentTimeline
+      return newCurrentInstance === _currentInstance && newCurrentTimeline === _currentTimeline
     }
 
     if (!currentTimelineIsUnchanged()) {
@@ -84,8 +83,7 @@ export function timelineObservers () {
     const currentSparkIsUnchanged = () => {
       const newCurrentInstance = currentInstance.get()
       const newCurrentSpark = get(currentSpark)
-      return newCurrentInstance === _currentInstance &&
-        newCurrentSpark && newCurrentSpark.id === _currentSpark.id
+      return newCurrentInstance === _currentInstance && newCurrentSpark && newCurrentSpark.id === _currentSpark.id
     }
 
     if (!currentSparkIsUnchanged()) {

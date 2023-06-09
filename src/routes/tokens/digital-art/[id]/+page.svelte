@@ -6,7 +6,6 @@
   import { observedDigitalArt } from '../../../_store/local'
 
   $: tokenName = $observedDigitalArt?.name || 'intl.tokenPageTitle'
-
 </script>
 
 <Title name={tokenName} />

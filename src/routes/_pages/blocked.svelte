@@ -7,8 +7,8 @@
   import { setSparkBlocked } from '../_actions/spark/block'
 
   // suppress warnings
-  export let params;
-  params = undefined;
+  export let params
+  params = undefined
 
   let sparkActions = [
     {
@@ -16,12 +16,12 @@
       label: 'intl.unblock',
       onclick: (sparkId) => setSparkBlocked(sparkId, false, true)
     }
-  ];
+  ]
 
-  $: sparksFetcher = () => getBlockedSparks($currentInstance, $accessToken);
+  $: sparksFetcher = () => getBlockedSparks($currentInstance, $accessToken)
 </script>
 
-<DynamicPageBanner title="{intl.blockedSparks}" icon="#fa-ban" />
-{#if $isUserLoggedIn }
+<DynamicPageBanner title={intl.blockedSparks} icon="#fa-ban" />
+{#if $isUserLoggedIn}
   <SparksListPage {sparksFetcher} {sparkActions} />
 {/if}

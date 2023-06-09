@@ -11,7 +11,7 @@
   }
 </script>
 
-<Title name="{intl.connectWithFlow}" settingsPage={true} />
+<Title name={intl.connectWithFlow} settingsPage={true} />
 
 {#if $isUserLoggedIn}
   <LazyPage {pageComponent} {params} />

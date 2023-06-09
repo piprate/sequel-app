@@ -9,10 +9,10 @@
   params = undefined
 </script>
 
-{#if $isAuthenticated }
-    <TimelinePage timeline="subscriptions/exclusive">
-        <SubscriptionBrowserFilter filter="exclusive" />
-    </TimelinePage>
+{#if $isAuthenticated}
+  <TimelinePage timeline="subscriptions/exclusive">
+    <SubscriptionBrowserFilter filter="exclusive" />
+  </TimelinePage>
 {:else}
-    <RestrictedPageWarning />
+  <RestrictedPageWarning />
 {/if}

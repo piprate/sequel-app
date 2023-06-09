@@ -5,16 +5,18 @@ import { inBrowser } from './browserOrNode'
 
 let database
 
-function applySkinToneToEmoji (emoji, skinTone) {
-  if (!emoji || emoji.url) { // nonexistent or custom emoji
+function applySkinToneToEmoji(emoji, skinTone) {
+  if (!emoji || emoji.url) {
+    // nonexistent or custom emoji
     return emoji
   }
   const res = {
     unicode: emoji.unicode,
     shortcodes: emoji.shortcodes
   }
-  if (skinTone > 0 && emoji.skins) { // non-default skin tone
-    const tone = emoji.skins.find(_ => _.tone === skinTone)
+  if (skinTone > 0 && emoji.skins) {
+    // non-default skin tone
+    const tone = emoji.skins.find((_) => _.tone === skinTone)
     if (tone) {
       res.unicode = tone.unicode
     }
@@ -22,7 +24,7 @@ function applySkinToneToEmoji (emoji, skinTone) {
   return res
 }
 
-export function init () {
+export function init() {
   if (!database) {
     database = new Database({
       locale: emojiPickerLocale,
@@ -31,12 +33,12 @@ export function init () {
   }
 }
 
-export function setCustomEmoji (customEmoji) {
+export function setCustomEmoji(customEmoji) {
   init()
   database.customEmoji = customEmoji
 }
 
-export async function findByUnicodeOrName (unicodeOrName) {
+export async function findByUnicodeOrName(unicodeOrName) {
   init()
   const [emoji, skinTone] = await Promise.all([
     database.getEmojiByUnicodeOrName(unicodeOrName),
@@ -45,18 +47,16 @@ export async function findByUnicodeOrName (unicodeOrName) {
   return applySkinToneToEmoji(emoji, skinTone)
 }
 
-export async function findBySearchQuery (query) {
+export async function findBySearchQuery(query) {
   init()
-  const [emojis, skinTone] = await Promise.all([
-    database.getEmojiBySearchQuery(query),
-    database.getPreferredSkinTone()
-  ])
-  return emojis.map(emoji => applySkinToneToEmoji(emoji, skinTone))
+  const [emojis, skinTone] = await Promise.all([database.getEmojiBySearchQuery(query), database.getPreferredSkinTone()])
+  return emojis.map((emoji) => applySkinToneToEmoji(emoji, skinTone))
 }
 
 if (inBrowser()) {
-  lifecycle.addEventListener('statechange', event => {
-    if (event.newState === 'frozen' && database) { // page is frozen, close IDB connections
+  lifecycle.addEventListener('statechange', (event) => {
+    if (event.newState === 'frozen' && database) {
+      // page is frozen, close IDB connections
       console.log('closed emoji DB')
       database.close()
     }

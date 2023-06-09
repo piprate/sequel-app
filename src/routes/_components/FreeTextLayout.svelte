@@ -1,6 +1,7 @@
 <div class="free-text">
-  <slot></slot>
+  <slot />
 </div>
+
 <style>
   :global(.free-text) {
     margin: 20px;

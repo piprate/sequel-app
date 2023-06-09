@@ -47,12 +47,14 @@
 
   let icon
 
-  async function onSubscribeButtonClick (e) {
+  async function onSubscribeButtonClick(e) {
     e.preventDefault()
     e.stopPropagation()
-    if (blocked) { // unblock
+    if (blocked) {
+      // unblock
       await setSparkBlocked(sparkId, false)
-    } else { // subscribe/unsubscribe
+    } else {
+      // subscribe/unsubscribe
       const newSubscribedValue = !(subscribed || requestedSubscription)
       await setSparkSubscribed(sparkId, newSubscribedValue, null, ourSpark.id, false, (val) => {
         overrideSubscribed = val
@@ -73,17 +75,18 @@
        a different icon.
   -->
   <IconButton
-          className="spark-profile-subscribe-icon-button"
-          {label}
-          {pressedLabel}
-          {href}
-          {pressable}
-          {pressed}
-          big={!$isVeryTinyMobileSize}
-          on:click="{onSubscribeButtonClick}"
-          bind:this={icon}
+    className="spark-profile-subscribe-icon-button"
+    {label}
+    {pressedLabel}
+    {href}
+    {pressable}
+    {pressed}
+    big={!$isVeryTinyMobileSize}
+    on:click={onSubscribeButtonClick}
+    bind:this={icon}
   />
 </div>
+
 <style>
   .spark-profile-subscribe {
     grid-area: subscription;

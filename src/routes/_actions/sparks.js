@@ -15,27 +15,27 @@ import { prepareMediaItem } from './media'
 import { unwrap, wrap } from '../_utils/mapper'
 import { displayError } from './errors'
 
-export function setCurrentSpark (instanceName, spark) {
+export function setCurrentSpark(instanceName, spark) {
   const _instanceCurrentSparks = instanceCurrentSparks.get()
   _instanceCurrentSparks[instanceName] = spark
   instanceCurrentSparks.set(_instanceCurrentSparks)
 }
 
-async function _updateSpark (sparkId, instanceName, accessToken) {
+async function _updateSpark(sparkId, instanceName, accessToken) {
   const localPromise = database.getSpark(instanceName, wrap(sparkId))
-  const remotePromise = getSpark(instanceName, accessToken, sparkId).then(spark => {
+  const remotePromise = getSpark(instanceName, accessToken, sparkId).then((spark) => {
     /* no await */
     database.setSpark(instanceName, spark)
     return spark
   })
 
   try {
-    observedSpark.set((await localPromise))
+    observedSpark.set(await localPromise)
   } catch (e) {
     console.error(e)
   }
   try {
-    observedSpark.set((await remotePromise))
+    observedSpark.set(await remotePromise)
   } catch (e) {
     if (e.status === 404) {
       observedSpark.set(null)
@@ -46,7 +46,7 @@ async function _updateSpark (sparkId, instanceName, accessToken) {
   }
 }
 
-async function _updateRelationship (sparkId, instanceName, accessToken, asSpark) {
+async function _updateRelationship(sparkId, instanceName, accessToken, asSpark) {
   if (!asSpark) {
     // relationship can only be retrieved for a specific spark
     observedRelationship.set(null)
@@ -54,7 +54,7 @@ async function _updateRelationship (sparkId, instanceName, accessToken, asSpark)
   }
 
   const localPromise = database.getRelationship(instanceName, wrap(sparkId))
-  const remotePromise = getRelationship(instanceName, accessToken, sparkId, asSpark).then(relationship => {
+  const remotePromise = getRelationship(instanceName, accessToken, sparkId, asSpark).then((relationship) => {
     /* no await */
     database.setRelationship(instanceName, relationship)
     return relationship
@@ -68,7 +68,7 @@ async function _updateRelationship (sparkId, instanceName, accessToken, asSpark)
     console.error(e)
   }
   try {
-    observedRelationship.set((await remotePromise))
+    observedRelationship.set(await remotePromise)
   } catch (e) {
     if (e.status === 404) {
       observedRelationship.set(null)
@@ -79,7 +79,7 @@ async function _updateRelationship (sparkId, instanceName, accessToken, asSpark)
   }
 }
 
-export async function updateLocalRelationship (instanceName, sparkId, relationship) {
+export async function updateLocalRelationship(instanceName, sparkId, relationship) {
   await database.setRelationship(instanceName, relationship)
   try {
     observedRelationship.set(relationship)
@@ -88,12 +88,12 @@ export async function updateLocalRelationship (instanceName, sparkId, relationsh
   }
 }
 
-export async function clearProfileAndRelationship () {
+export async function clearProfileAndRelationship() {
   observedSpark.set(null)
   observedRelationship.set(null)
 }
 
-export async function updateProfileAndRelationship (sparkId) {
+export async function updateProfileAndRelationship(sparkId) {
   const _currentInstance = currentInstance.get()
   const token = get(accessToken)
   await Promise.all([
@@ -102,23 +102,26 @@ export async function updateProfileAndRelationship (sparkId) {
   ])
 }
 
-export async function updateRelationship (sparkId) {
+export async function updateRelationship(sparkId) {
   await _updateRelationship(sparkId, currentInstance.get(), get(accessToken), get(currentSparkId))
 }
 
 export const sparkOperationInProgress = writable(false)
 export const sparkOperationError = writable(null)
 
-export async function saveSpark (realm, sparkId, template) {
+export async function saveSpark(realm, sparkId, template) {
   sparkOperationInProgress.set(true)
   sparkOperationError.set(null)
 
   let spark
 
   try {
-    const submission = Object.assign({
-      summaryFormat: 'txt'
-    }, template)
+    const submission = Object.assign(
+      {
+        summaryFormat: 'txt'
+      },
+      template
+    )
 
     submission.name = submission.name.trim()
 
@@ -157,6 +160,6 @@ export async function saveSpark (realm, sparkId, template) {
   return spark
 }
 
-export async function loadSpark (sparkId) {
+export async function loadSpark(sparkId) {
   return getSpark(currentInstance.get(), get(accessToken), sparkId)
 }

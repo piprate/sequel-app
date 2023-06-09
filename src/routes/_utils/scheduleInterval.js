@@ -7,21 +7,21 @@ import { lifecycle } from './lifecycle'
  * @param delay - how many milliseconds between callback calls
  * @param runOnActive - whether to run immediately when the page switches to an "active" state
  */
-export function scheduleInterval (callback, delay, runOnActive) {
+export function scheduleInterval(callback, delay, runOnActive) {
   let interval
 
-  function startPolling () {
+  function startPolling() {
     interval = setInterval(callback, delay)
   }
 
-  function stopPolling () {
+  function stopPolling() {
     if (interval) {
       clearInterval(interval)
       interval = null
     }
   }
 
-  function restartPolling () {
+  function restartPolling() {
     stopPolling()
     if (runOnActive) {
       try {
@@ -36,7 +36,7 @@ export function scheduleInterval (callback, delay, runOnActive) {
   if (inBrowser()) {
     startPolling()
 
-    lifecycle.addEventListener('statechange', e => {
+    lifecycle.addEventListener('statechange', (e) => {
       if (e.newState === 'passive') {
         console.log('pausing interval...')
         stopPolling()

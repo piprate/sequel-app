@@ -4,6 +4,6 @@
   import pageComponent from '../_pages/bookmarks.svelte'
 </script>
 
-<Title name="{intl.bookmarks}" />
+<Title name={intl.bookmarks} />
 
 <LazyPage {pageComponent} />

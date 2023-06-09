@@ -7,7 +7,7 @@ export const isSmallMobileSize = transientStore(false)
 export const isTinyMobileSize = transientStore(false)
 export const isVeryTinyMobileSize = transientStore(false)
 
-export function resizeObservers () {
+export function resizeObservers() {
   if (inNode()) {
     return
   }

@@ -1,9 +1,12 @@
-export function getInstanceName (instance) {
-  const instanceName = instance.replace(/^https?:\/\//, '').replace(/\/+$/, '').toLowerCase()
+export function getInstanceName(instance) {
+  const instanceName = instance
+    .replace(/^https?:\/\//, '')
+    .replace(/\/+$/, '')
+    .toLowerCase()
   return instanceName
 }
 
-export function processURI (uri) {
+export function processURI(uri) {
   if (uri.startsWith('https+insecure:')) {
     uri = uri.replace('https+insecure:', 'https:')
   }

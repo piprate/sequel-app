@@ -1,107 +1,150 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{process.env.LOCALE}" dir="{process.env.LOCALE_DIRECTION}">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <meta id="theThemeColor" name="theme-color" content="#4169e1">
-  <meta name="description" content="{intl.appDescription}">
-  <link id="theManifest" rel="manifest" href="/manifest.json">
-  <link id="theFavicon" rel="icon" type="image/png" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/apple-icon.png">
-  <link href=https://mastodon.social/@sequel rel="me">
-  <!-- both of these *-web-app-capable are required, for Chrome on Android and Safari on iOS
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta id="theThemeColor" name="theme-color" content="#4169e1" />
+    <meta name="description" content="{intl.appDescription}" />
+    <link id="theManifest" rel="manifest" href="/manifest.json" />
+    <link id="theFavicon" rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-icon.png" />
+    <link href=https://mastodon.social/@sequel rel="me">
+    <!-- both of these *-web-app-capable are required, for Chrome on Android and Safari on iOS
        https://developers.google.com/web/fundamentals/native-hardware/fullscreen/ -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="{intl.appName}">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <!-- splashscreen for iOS -->
-  <link href="/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
-  <link href="/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
-  <link href="/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
-  <link href="/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="{intl.appName}" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- splashscreen for iOS -->
+    <link
+      href="/iphone5_splash.png"
+      media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="/iphone6_splash.png"
+      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="/iphoneplus_splash.png"
+      media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="/iphonex_splash.png"
+      media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="/iphonexr_splash.png"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="/iphonexsmax_splash.png"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="/ipad_splash.png"
+      media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="/ipadpro1_splash.png"
+      media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="/ipadpro3_splash.png"
+      media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
+    <link
+      href="/ipadpro2_splash.png"
+      media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image"
+    />
 
-  <!-- inline CSS -->
+    <!-- inline CSS -->
 
-  <style id="theGrayscaleStyle" media="only x">
-    /* Firefox doesn't seem to like applying filter: grayscale() to
+    <style id="theGrayscaleStyle" media="only x">
+      /* Firefox doesn't seem to like applying filter: grayscale() to
      * the entire body, so we apply individually.
      */
-    img, svg, video,
-    input[type="checkbox"], input[type="radio"],
-    .inline-emoji, .theme-preview {
-      filter: grayscale(100%);
-    }
-  </style>
-
-  <style id="theFocusVisiblePolyfillStyle" media="only x">
-    /* polyfill */
-    /* Note we have to use [data-focus-visible-added] rather than .focus-visible because
-     * Svelte overrides classes */
-    .js-focus-visible :focus:not([data-focus-visible-added]) {
-      outline: none !important; /* important to win the specificity war */
-    }
-    .js-focus-visible :focus:not([data-focus-visible-added]).focus-after::after {
-      display: none;
-    }
-  </style>
-  <style id="theFocusVisibleStyle" media="only x">
-    /* standard version */
-    :focus:not(:focus-visible) {
-      outline: none !important; /* important to win the specificity war */
-    }
-    :focus:not(:focus-visible).focus-after::after {
-      display: none;
-    }
-  </style>
-  <style id="theCenterNavStyle" media="only x">
-    @media (min-width: 992px) {
-      .main-nav-ul {
-        justify-content: center;
-      }
-    }
-  </style>
-
-  <noscript>
-    <style>
-      .hidden-from-ssr {
-        opacity: 1 !important;
+      img,
+      svg,
+      video,
+      input[type='checkbox'],
+      input[type='radio'],
+      .inline-emoji,
+      .theme-preview {
+        filter: grayscale(100%);
       }
     </style>
-  </noscript>
 
-  <!-- This contains the contents of the <svelte:head> component, if
+    <style id="theFocusVisiblePolyfillStyle" media="only x">
+      /* polyfill */
+      /* Note we have to use [data-focus-visible-added] rather than .focus-visible because
+     * Svelte overrides classes */
+      .js-focus-visible :focus:not([data-focus-visible-added]) {
+        outline: none !important; /* important to win the specificity war */
+      }
+      .js-focus-visible :focus:not([data-focus-visible-added]).focus-after::after {
+        display: none;
+      }
+    </style>
+    <style id="theFocusVisibleStyle" media="only x">
+      /* standard version */
+      :focus:not(:focus-visible) {
+        outline: none !important; /* important to win the specificity war */
+      }
+      :focus:not(:focus-visible).focus-after::after {
+        display: none;
+      }
+    </style>
+    <style id="theCenterNavStyle" media="only x">
+      @media (min-width: 992px) {
+        .main-nav-ul {
+          justify-content: center;
+        }
+      }
+    </style>
+
+    <noscript>
+      <style>
+        .hidden-from-ssr {
+          opacity: 1 !important;
+        }
+      </style>
+    </noscript>
+
+    <!-- This contains the contents of the <svelte:head> component, if
        the current page has one -->
-  %sveltekit.head%
-</head>
-<body>
-  <script>
-    if(typeof global === 'undefined') {
-      global = window
-    }
-  </script>
-  <!-- inline JS -->
+    %sveltekit.head%
+  </head>
+  <body>
+    <script>
+      if (typeof global === 'undefined') {
+        global = window
+      }
+    </script>
+    <!-- inline JS -->
 
-  <!-- The application will be rendered inside this element,
+    <!-- The application will be rendered inside this element,
        because `src/client.js` references it -->
-  <div id="sveltekit">%sveltekit.body%</div>
+    <div id="sveltekit">%sveltekit.body%</div>
 
-  <!-- Toast.svelte gets rendered here -->
-  <div id="theToast"></div>
+    <!-- Toast.svelte gets rendered here -->
+    <div id="theToast"></div>
 
-  <!-- Snackbar.svelte gets rendered here -->
-  <div id="theSnackbar"></div>
+    <!-- Snackbar.svelte gets rendered here -->
+    <div id="theSnackbar"></div>
 
-  <!-- LoadingMask.svelte gets rendered here -->
-  <div id="loading-mask" aria-hidden="true"></div>
+    <!-- LoadingMask.svelte gets rendered here -->
+    <div id="loading-mask" aria-hidden="true"></div>
 
-  <!-- inline SVG -->
-
-</body>
+    <!-- inline SVG -->
+  </body>
 </html>

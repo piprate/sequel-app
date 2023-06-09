@@ -3,7 +3,7 @@ import { importToast } from '../../_utils/asyncModules/importToast.js'
 let toast
 
 const lazyToast = {
-  async say (text) {
+  async say(text) {
     if (!toast) {
       const Toast = await importToast()
       if (!toast) {

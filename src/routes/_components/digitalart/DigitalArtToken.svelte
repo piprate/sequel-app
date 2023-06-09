@@ -15,10 +15,7 @@
   export let ourSpark
 
   $: name = (token && token.object.name) || ''
-  $: className = classname(
-          'digital-art',
-          $underlineLinks && 'underline-links'
-  )
+  $: className = classname('digital-art', $underlineLinks && 'underline-links')
   $: profileForListing = name
   $: displayArtist = token.object.attributedTo !== token.object.artist
 
@@ -30,8 +27,7 @@
 </script>
 
 <h1 class="sr-only">{profileForListing}</h1>
-<div class={className}
-     bind:this={tokenProfile}>
+<div class={className} bind:this={tokenProfile}>
   <div class="digital-art-grid-wrapper">
     <div class="digital-art-grid">
       <DigitalArtHeader digitalArt={token.object} />
@@ -39,7 +35,7 @@
       <div class="digital-art-created">
         <Timestamp value={token.object.createdAt} flavour="created" />
       </div>
-      {#if displayArtist }
+      {#if displayArtist}
         <div class="artist-panel">
           <SparkRole spark={token.artistRef} roleLabel="Attribution" />
         </div>
@@ -49,6 +45,7 @@
     </div>
   </div>
 </div>
+
 <style>
   .digital-art {
     position: relative;
@@ -59,14 +56,14 @@
   .digital-art-grid {
     display: grid;
     grid-template-areas:
-            "image     image"
-            "name      name"
-            "label     label"
-            "summary   summary"
-            "created   created"
-            "artist    artist"
-            "details   details"
-            "evergreen evergreen";
+      'image     image'
+      'name      name'
+      'label     label'
+      'summary   summary'
+      'created   created'
+      'artist    artist'
+      'details   details'
+      'evergreen evergreen';
     grid-template-rows: repeat(9, min-content);
     grid-column-gap: 10px;
     grid-row-gap: 5px;
@@ -107,19 +104,19 @@
     .digital-art-grid {
       display: grid;
       grid-template-areas:
-            "image     image"
-            "name      name"
-            "label     label"
-            "summary   summary"
-            "created   created"
-            "artist    artist"
-            "details   details"
-            "evergreen evergreen";
+        'image     image'
+        'name      name'
+        'label     label'
+        'summary   summary'
+        'created   created'
+        'artist    artist'
+        'details   details'
+        'evergreen evergreen';
       grid-template-rows: repeat(7, min-content);
       padding: 10px;
     }
     .digital-art-created {
-      font-size: 1.0em;
+      font-size: 1em;
       align-self: flex-start;
     }
   }
@@ -130,14 +127,14 @@
   @media (max-width: 240px) {
     .digital-art-grid {
       grid-template-areas:
-              "image"
-              "name"
-              "label"
-              "created"
-              "summary"
-              "artist"
-              "details"
-              "evergreen";
+        'image'
+        'name'
+        'label'
+        'created'
+        'summary'
+        'artist'
+        'details'
+        'evergreen';
       grid-template-rows: repeat(7, min-content);
       grid-column-gap: 5px;
       grid-row-gap: 0;

@@ -4,6 +4,6 @@
   import pageComponent from '../_pages/search.svelte'
 </script>
 
-<Title name="{intl.search}" />
+<Title name={intl.search} />
 
 <LazyPage {pageComponent} />

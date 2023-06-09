@@ -20,7 +20,7 @@
   import { onMount } from 'svelte'
   import { currentTimeline, observedBubble, observedBubbleRelationship } from '../../_store/local'
   import { unwrap } from '../../_utils/mapper'
-  import ComposeMentions from './ComposeMentions.svelte';
+  import ComposeMentions from './ComposeMentions.svelte'
 
   export let realm
   export let bubbleId
@@ -32,7 +32,7 @@
   export let isReply = false
   export let replyVisibility = undefined
   export let replySpoiler = undefined
-  export let inReplyToUuid = undefined  // typical replies, using App-specific uuid
+  export let inReplyToUuid = undefined // typical replies, using App-specific uuid
 
   // suppress warnings
   replySpoiler = undefined
@@ -46,37 +46,31 @@
     overLimit && 'over-char-limit',
     isReply && postPrivacyKey === 'subscribers' && 'subscriber-reply'
   )
-  $: hideAndFadeIn = classname(
-    'compose-box-fade-in',
-    hidden && 'hidden'
-  )
+  $: hideAndFadeIn = classname('compose-box-fade-in', hidden && 'hidden')
   $: showSticky = realm !== 'dialog'
   $: composeData = $currentComposeData[realm] || {}
   $: text = composeData.text || ''
   $: textFormatKey = composeData.postInputFormat || 'txt'
-  $: textFormat = POST_INPUT_FORMATS.find(_ => _.key === textFormatKey)
+  $: textFormat = POST_INPUT_FORMATS.find((_) => _.key === textFormatKey)
   $: media = composeData.media || []
   $: mentions = composeData.mentions || []
-  $: inReplyToId = composeData.inReplyToId  // delete-and-redraft replies, using standard id
+  $: inReplyToId = composeData.inReplyToId // delete-and-redraft replies, using standard id
   $: federationMode = $observedBubble?.federationMode
-  $: defaultVisibility = (
-    ($observedBubbleRelationship?.defaultVisibility) || 'private'
-  )
+  $: defaultVisibility = $observedBubbleRelationship?.defaultVisibility || 'private'
   $: defaultPostPrivacyKey = federationMode === 'continuous_mirror' ? 'fediverse' : defaultVisibility
   $: postPrivacyKey = composeData.postPrivacy || defaultPostPrivacyKey
-  $: postPrivacy = POST_PRIVACY_OPTIONS.find(_ => _.key === postPrivacyKey)
+  $: postPrivacy = POST_PRIVACY_OPTIONS.find((_) => _.key === postPrivacyKey)
   $: textLength = measureText(text)
   $: contentWarningLength = measureText(contentWarning)
-  $: length = (
-    textLength + (contentWarningShown ? contentWarningLength : 0)
-  )
+  $: length = textLength + (contentWarningShown ? contentWarningLength : 0)
   $: overLimit = length > MAX_POST_LENGTH
   $: contentWarningShown = composeData.contentWarningShown
   $: contentWarning = composeData.contentWarning || ''
   $: sensitive = !!composeData.sensitive
 
-  async function doPublishPost () {
-    if (aboutToPublishPost || $publishingPost) { // do nothing if the user rapidly taps the Ctrl-Enter key
+  async function doPublishPost() {
+    if (aboutToPublishPost || $publishingPost) {
+      // do nothing if the user rapidly taps the Ctrl-Enter key
       console.log('ignored post command', { aboutToPublishPost, $publishingPost })
       return
     }
@@ -95,7 +89,7 @@
     })
   }
 
-  function doPublishPostAfterDelay () {
+  function doPublishPostAfterDelay() {
     const inReplyTo = inReplyToId
 
     if (overLimit || (!text && !media.length)) {
@@ -107,9 +101,21 @@
     }
 
     /* no await */
-    publishPost(realm, bubbleId, asSpark, text, composeData.originalPostId, inReplyTo, media, postPrivacyKey, inReplyToUuid, textFormatKey, mentions)
+    publishPost(
+      realm,
+      bubbleId,
+      asSpark,
+      text,
+      composeData.originalPostId,
+      inReplyTo,
+      media,
+      postPrivacyKey,
+      inReplyToUuid,
+      textFormatKey,
+      mentions
+    )
 
-    if (inReplyTo && ($currentTimeline !== `post/${unwrap(inReplyTo)}`)) {
+    if (inReplyTo && $currentTimeline !== `post/${unwrap(inReplyTo)}`) {
       // we published a comment. Navigate to the comment's ancestor to display the conversation
       goto(`/posts/${unwrap(inReplyTo)}`)
     }
@@ -137,31 +143,27 @@
 {#if realm === 'home'}
   <h1 class="sr-only">{intl.composePost}</h1>
 {/if}
-<ComposeFileDrop {realm} >
+<ComposeFileDrop {realm}>
   <div class="{computedClassName} {hideAndFadeIn}">
     <ComposeAuthor {realm} {dialogId} />
     {#if contentWarningShown}
-      <div class="compose-content-warning-wrapper"
-           transition:slide="{{duration: 333}}">
+      <div class="compose-content-warning-wrapper" transition:slide={{ duration: 333 }}>
         <ComposeContentWarning {realm} {contentWarning} />
       </div>
     {/if}
-    <ComposeInput {realm} {text} {autoFocus} on:publishAction="{doPublishPost}" />
+    <ComposeInput {realm} {text} {autoFocus} on:publishAction={doPublishPost} />
     <ComposeLengthGauge {length} {overLimit} />
     <ComposeAutosuggest {realm} {dialogId} />
     <ComposeMentions {realm} />
-    <ComposeToolbar {realm} {postPrivacy} {media} {contentWarningShown} enableNFT=true {textFormat} />
+    <ComposeToolbar {realm} {postPrivacy} {media} {contentWarningShown} enableNFT="true" {textFormat} />
     <ComposeLengthIndicator {length} {overLimit} />
     <ComposeMedia {realm} {media} />
     <!--    <ComposeMediaSensitive {realm} {media} {sensitive} {contentWarning} {contentWarningShown} />-->
   </div>
 </ComposeFileDrop>
-<ComposeStickyButton {showSticky}
-{overLimit}
-{hideAndFadeIn}
-on:publishAction="{doPublishPost}" />
+<ComposeStickyButton {showSticky} {overLimit} {hideAndFadeIn} on:publishAction={doPublishPost} />
 {#if !hideBottomBorder}
-<div class="compose-box-border-bottom {hideAndFadeIn}"></div>
+  <div class="compose-box-border-bottom {hideAndFadeIn}" />
 {/if}
 
 <style>
@@ -171,16 +173,16 @@ on:publishAction="{doPublishPost}" />
     display: grid;
     align-items: flex-start;
     grid-template-areas:
-      "avatar name        handle      handle"
-      "avatar cw          cw          cw"
-      "avatar input       input       input"
-      "avatar gauge       gauge       gauge"
-      "avatar autosuggest autosuggest autosuggest"
-      "avatar mentions    mentions    mentions"
-      "avatar toolbar     toolbar     length"
-      "avatar warning     warning     warning"
-      "avatar media       media       media"
-      "avatar sensitive   sensitive   sensitive";
+      'avatar name        handle      handle'
+      'avatar cw          cw          cw'
+      'avatar input       input       input'
+      'avatar gauge       gauge       gauge'
+      'avatar autosuggest autosuggest autosuggest'
+      'avatar mentions    mentions    mentions'
+      'avatar toolbar     toolbar     length'
+      'avatar warning     warning     warning'
+      'avatar media       media       media'
+      'avatar sensitive   sensitive   sensitive';
     grid-template-columns: min-content minmax(0, max-content) 1fr 1fr;
     position: relative;
   }

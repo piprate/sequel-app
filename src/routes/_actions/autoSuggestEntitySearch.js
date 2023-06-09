@@ -20,29 +20,33 @@ import { populateEntityMediaURLs } from '../_api/media'
 
 const DATABASE_SEARCH_RESULTS_LIMIT = 30
 
-function sortByName (a, b) {
+function sortByName(a, b) {
   const nameA = a.name?.toLowerCase()
   const nameB = b.name?.toLowerCase()
 
   return nameA < nameB ? -1 : nameA === nameB ? 0 : 1
 }
 
-function sortById (a) {
+function sortById(a) {
   return a.id
 }
 
-export async function searchEntitiesByName (instanceName, namePrefix, limit) {
+export async function searchEntitiesByName(instanceName, namePrefix, limit) {
   limit = limit || 20
   const db = await getDatabase(instanceName)
-  return Promise.all([WORLDS_STORE, BUBBLES_STORE, SPARKS_STORE].map(entityStore => dbPromise(db, entityStore, 'readonly', (store, callback) => {
-    const keyRange = createNamePrefixKeyRange(namePrefix.toLowerCase())
-    store.index(TIMESTAMP).getAll(keyRange, limit).onsuccess = e => {
-      callback(e.target.result)
-    }
-  })))
+  return Promise.all(
+    [WORLDS_STORE, BUBBLES_STORE, SPARKS_STORE].map((entityStore) =>
+      dbPromise(db, entityStore, 'readonly', (store, callback) => {
+        const keyRange = createNamePrefixKeyRange(namePrefix.toLowerCase())
+        store.index(TIMESTAMP).getAll(keyRange, limit).onsuccess = (e) => {
+          callback(e.target.result)
+        }
+      })
+    )
+  )
 }
 
-export function doEntitySearch (searchText) {
+export function doEntitySearch(searchText) {
   let canceled = false
   let localResults
   let remoteResults
@@ -50,20 +54,17 @@ export function doEntitySearch (searchText) {
   const _accessToken = get(accessToken)
   const requestThrottler = new RequestThrottler(doSearchEntitiesRemotely)
 
-  async function searchEntitiesLocally () {
-    localResults = await searchEntitiesByName(
-      _currentInstance, searchText.substring(1), DATABASE_SEARCH_RESULTS_LIMIT)
+  async function searchEntitiesLocally() {
+    localResults = await searchEntitiesByName(_currentInstance, searchText.substring(1), DATABASE_SEARCH_RESULTS_LIMIT)
     localResults = localResults.flat()
   }
 
-  async function searchEntitiesRemotely () {
+  async function searchEntitiesRemotely() {
     remoteResults = await requestThrottler.request()
   }
 
-  async function doSearchEntitiesRemotely (signal) {
-    const results = (await search(
-      _currentInstance, _accessToken, searchText, false, SEARCH_RESULTS_LIMIT, false, signal
-    ))
+  async function doSearchEntitiesRemotely(signal) {
+    const results = await search(_currentInstance, _accessToken, searchText, false, SEARCH_RESULTS_LIMIT, false, signal)
 
     delete results.posts
 
@@ -74,18 +75,13 @@ export function doEntitySearch (searchText) {
     return Object.values(results).flat().filter(Boolean)
   }
 
-  function mergeAndTruncateResults () {
+  function mergeAndTruncateResults() {
     // Always include local results; they are more likely to be relevant
     // because the user has seen their content before. Otherwise, sort by username.
-    let results = (localResults || [])
-      .slice()
-      .sort(sortByName)
-      .slice(0, SEARCH_RESULTS_LIMIT)
+    let results = (localResults || []).slice().sort(sortByName).slice(0, SEARCH_RESULTS_LIMIT)
 
     if (results.length < SEARCH_RESULTS_LIMIT) {
-      const topRemoteResults = (remoteResults || [])
-        .sort(sortByName)
-        .slice(0, SEARCH_RESULTS_LIMIT - results.length)
+      const topRemoteResults = (remoteResults || []).sort(sortByName).slice(0, SEARCH_RESULTS_LIMIT - results.length)
       results = concat(results, topRemoteResults)
       results = uniqBy(results, sortById)
     }
@@ -93,7 +89,7 @@ export function doEntitySearch (searchText) {
     return results
   }
 
-  function onNewResults () {
+  function onNewResults() {
     if (canceled) {
       return
     }
@@ -103,7 +99,7 @@ export function doEntitySearch (searchText) {
     setForCurrentAutosuggest(rootAutosuggestSearchResults, results)
   }
 
-  function onError (err) {
+  function onError(err) {
     console.warn('ignored autosuggest error', err)
   }
 

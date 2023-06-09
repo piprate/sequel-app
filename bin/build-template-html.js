@@ -42,12 +42,12 @@ const builders = [
 // array of strings and builder functions, we build this on-the-fly
 const partials = buildPartials()
 
-function buildPartials () {
+function buildPartials() {
   const rawTemplate = fs.readFileSync(path.resolve(__dirname, '../src/build/app.html'), 'utf8')
 
   const partials = [rawTemplate]
 
-  builders.forEach(builder => {
+  builders.forEach((builder) => {
     for (let i = 0; i < partials.length; i++) {
       const partial = partials[i]
       if (typeof partial !== 'string') {
@@ -55,13 +55,7 @@ function buildPartials () {
       }
       const idx = partial.indexOf(builder.comment)
       if (idx !== -1) {
-        partials.splice(
-          i,
-          1,
-          partial.substring(0, idx),
-          builder,
-          partial.substring(idx + builder.comment.length)
-        )
+        partials.splice(i, 1, partial.substring(0, idx), builder, partial.substring(idx + builder.comment.length))
         break
       }
     }
@@ -70,32 +64,40 @@ function buildPartials () {
   return partials
 }
 
-function doWatch () {
+function doWatch() {
   // rebuild each of the partials on-the-fly if something changes
-  partials.forEach(partial => {
+  partials.forEach((partial) => {
     if (typeof partial === 'string') {
       return
     }
 
-    chokidar.watch(partial.watch).on('change', debounce(path => {
-      console.log(`Detected change in ${path}...`)
-      delete partial.result
-      buildAll()
-    }), DEBOUNCE)
+    chokidar.watch(partial.watch).on(
+      'change',
+      debounce((path) => {
+        console.log(`Detected change in ${path}...`)
+        delete partial.result
+        buildAll()
+      }),
+      DEBOUNCE
+    )
   })
 }
 
-async function buildAll () {
+async function buildAll() {
   const start = performance.now()
-  let html = (await Promise.all(partials.map(async partial => {
-    if (typeof partial === 'string') {
-      return partial
-    }
-    if (!partial.result) {
-      partial.result = partial.comment + '\n' + (await partial.rebuild())
-    }
-    return partial.result
-  }))).join('')
+  let html = (
+    await Promise.all(
+      partials.map(async (partial) => {
+        if (typeof partial === 'string') {
+          return partial
+        }
+        if (!partial.result) {
+          partial.result = partial.comment + '\n' + (await partial.rebuild())
+        }
+        return partial.result
+      })
+    )
+  ).join('')
 
   html = applyIntl(html)
     .replace('{process.env.LOCALE}', LOCALE)
@@ -105,7 +107,7 @@ async function buildAll () {
   console.log(`Built template.html in ${(end - start).toFixed(2)}ms`)
 }
 
-async function main () {
+async function main() {
   if (process.argv.includes('--watch')) {
     doWatch()
   } else {
@@ -113,7 +115,7 @@ async function main () {
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(err)
   process.exit(1)
 })

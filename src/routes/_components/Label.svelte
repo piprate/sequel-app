@@ -1,6 +1,6 @@
 <script>
-  export let label;
-  export let className = undefined;
+  export let label
+  export let className = undefined
 </script>
 
 <div class="generic-label {className || ''}">
@@ -8,6 +8,7 @@
     {label}
   </span>
 </div>
+
 <style>
   .generic-label {
     display: flex;

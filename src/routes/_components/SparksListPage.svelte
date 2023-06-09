@@ -1,40 +1,40 @@
 <script>
-  import LoadingPage from './LoadingPage.svelte';
-  import SparkSearchResult from './search/SparkSearchResult.svelte';
-  import { toast } from './toast/toast';
-  import { on } from '../_utils/eventBus';
-  import { formatIntl } from '../_utils/formatIntl';
-  import { onMount } from "svelte";
+  import LoadingPage from './LoadingPage.svelte'
+  import SparkSearchResult from './search/SparkSearchResult.svelte'
+  import { toast } from './toast/toast'
+  import { on } from '../_utils/eventBus'
+  import { formatIntl } from '../_utils/formatIntl'
+  import { onMount } from 'svelte'
   import { displayError } from '../_actions/errors'
 
-  export let sparksFetcher;
-  export let sparkActions = undefined;
+  export let sparksFetcher
+  export let sparkActions = undefined
 
-  let loading = true;
-  let sparks = [];
+  let loading = true
+  let sparks = []
 
-  function onClickAction (event) {
-    const { action, sparkId } = event;
-    action.onclick(sparkId);
+  function onClickAction(event) {
+    const { action, sparkId } = event
+    action.onclick(sparkId)
   }
 
-  async function refreshSparks () {
-    sparks = await sparksFetcher() || [];
-    console.log("SPARKS", sparks);
+  async function refreshSparks() {
+    sparks = (await sparksFetcher()) || []
+    console.log('SPARKS', sparks)
   }
 
   // TODO: paginate
 
   onMount(async () => {
     try {
-      await refreshSparks();
+      await refreshSparks()
     } catch (e) {
       displayError(e)
     } finally {
-      loading = false;
+      loading = false
     }
-    return on('refreshSparksList', () => refreshSparks());
-  });
+    return on('refreshSparksList', () => refreshSparks())
+  })
 </script>
 
 <div class="sparks-page">
@@ -43,18 +43,15 @@
   {:else if sparks && sparks.length}
     <ul class="sparks-results">
       {#each sparks as spark}
-        <SparkSearchResult
-          {spark}
-          actions={sparkActions}
-          on:click="{onClickAction}"
-        />
-        {/each}
-      </ul>
-    <slot name="footer"></slot>
+        <SparkSearchResult {spark} actions={sparkActions} on:click={onClickAction} />
+      {/each}
+    </ul>
+    <slot name="footer" />
   {:else}
-    <slot name="is-empty"></slot>
+    <slot name="is-empty" />
   {/if}
 </div>
+
 <style>
   .sparks-page {
     padding: 20px 20px;

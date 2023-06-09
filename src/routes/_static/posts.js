@@ -43,31 +43,24 @@ export const POST_INPUT_FORMATS = [
   }
 ]
 
-export const POST_PRIVACY_OPTIONS_PRIVATE = [
-  privacyOptionPrivate
-]
+export const POST_PRIVACY_OPTIONS_PRIVATE = [privacyOptionPrivate]
 
-export function postPrivacyOptions (defaultVisibility, federationMode) {
+export function postPrivacyOptions(defaultVisibility, federationMode) {
   if (defaultVisibility === 'private') {
     return POST_PRIVACY_OPTIONS_PRIVATE
   }
   if (federationMode === 'disabled') {
-    return POST_PRIVACY_OPTIONS.filter(option => option.key !== 'fediverse')
+    return POST_PRIVACY_OPTIONS.filter((option) => option.key !== 'fediverse')
   }
   return POST_PRIVACY_OPTIONS
 }
 
-export function commentPrivacyOptions (originalPostPrivacy) {
+export function commentPrivacyOptions(originalPostPrivacy) {
   if (originalPostPrivacy !== 'subscribers') {
-    const defaultOption = POST_PRIVACY_OPTIONS.find(_ => _.key === originalPostPrivacy)
-    return [
-      defaultOption,
-      privacyOptionSubscribersOnly
-    ]
+    const defaultOption = POST_PRIVACY_OPTIONS.find((_) => _.key === originalPostPrivacy)
+    return [defaultOption, privacyOptionSubscribersOnly]
   } else {
-    return [
-      privacyOptionSubscribersOnly
-    ]
+    return [privacyOptionSubscribersOnly]
   }
 }
 

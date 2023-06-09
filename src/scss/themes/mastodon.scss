@@ -1,6 +1,6 @@
 $main-theme-color: #313543;
-$body-bg-color: #17191F;
-$main-bg-color: #282C37;
+$body-bg-color: #17191f;
+$main-bg-color: #282c37;
 $anchor-color: #d9e1e8;
 $main-text-color: #ffffff;
 $border-color: #393f4f;
@@ -10,9 +10,9 @@ $toast-bg: lighten($body-bg-color, 4%);
 $focus-outline: darken($main-theme-color, 10%);
 $compose-background: darken($main-theme-color, 12%);
 
-@import "_base.scss";
-@import "_dark.scss";
-@import "_dark_scrollbars.scss";
+@import '_base.scss';
+@import '_dark.scss';
+@import '_dark_scrollbars.scss';
 
 :root {
   --settings-list-item-text: #9baec8;

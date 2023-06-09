@@ -1,6 +1,6 @@
 // modeled after https://github.com/andrewiggins/afterframe
 
-import { inBrowser } from "./browserOrNode"
+import { inBrowser } from './browserOrNode'
 
 // see also https://github.com/WICG/requestPostAnimationFrame
 const channel = inBrowser() && new MessageChannel()
@@ -10,7 +10,7 @@ if (inBrowser()) {
   channel.port1.onmessage = onMessage
 }
 
-function runCallback (callback) {
+function runCallback(callback) {
   try {
     callback()
   } catch (e) {
@@ -18,18 +18,18 @@ function runCallback (callback) {
   }
 }
 
-function onMessage () {
+function onMessage() {
   for (const callback of callbacks) {
     runCallback(callback)
   }
   callbacks.length = 0
 }
 
-function postMessage () {
+function postMessage() {
   channel.port2.postMessage(undefined)
 }
 
-export const requestPostAnimationFrame = callback => {
+export const requestPostAnimationFrame = (callback) => {
   if (callbacks.push(callback) === 1) {
     requestAnimationFrame(postMessage)
   }

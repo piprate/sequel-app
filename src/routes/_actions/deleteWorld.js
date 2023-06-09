@@ -5,7 +5,7 @@ import { get } from 'svelte/store'
 import { accessToken } from '../_store/instance'
 import { deleteWorld } from '../_api/worlds'
 
-export async function doDeleteWorld (worldId, asSpark) {
+export async function doDeleteWorld(worldId, asSpark) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   try {
@@ -17,7 +17,7 @@ export async function doDeleteWorld (worldId, asSpark) {
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(formatIntl('intl.unableToArchiveWorld', { error: (e.message || '') }))
+    toast.say(formatIntl('intl.unableToArchiveWorld', { error: e.message || '' }))
     throw e
   }
 }

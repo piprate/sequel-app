@@ -19,26 +19,20 @@
     }
   ].filter(Boolean)
 
-  function onClick (event) {
+  function onClick(event) {
     switch (event.detail.key) {
       case 'copy':
         return onCopyClicked()
     }
   }
 
-  async function onCopyClicked () {
+  async function onCopyClicked() {
     const url = `${location.origin}${location.pathname}`
     close(id)
     await copyText(url)
   }
 </script>
 
-<ModalDialog
-  {id}
-  {label}
-  {title}
-  shrinkWidthToFit={true}
-  background="var(--main-bg)"
->
-  <GenericDialogList selectable={false} {items} on:click="{onClick}"/>
+<ModalDialog {id} {label} {title} shrinkWidthToFit={true} background="var(--main-bg)">
+  <GenericDialogList selectable={false} {items} on:click={onClick} />
 </ModalDialog>

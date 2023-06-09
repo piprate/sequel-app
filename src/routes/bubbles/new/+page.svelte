@@ -4,6 +4,6 @@
   import pageComponent from '../../_pages/bubbles/new.svelte'
 </script>
 
-<Title name="{intl.newBubble}" />
+<Title name={intl.newBubble} />
 
-  <LazyPage {pageComponent} />
+<LazyPage {pageComponent} />

@@ -12,7 +12,7 @@
   import { onMount } from 'svelte'
   import { loadSecureMedia } from '../_api/media'
   import { accessToken } from '../_store/instance'
-  import { inBrowser } from '../_utils/browserOrNode';
+  import { inBrowser } from '../_utils/browserOrNode'
 
   const updateMediaInStore = throttleTimer(scheduleIdleTask)
   const resizeTextarea = inBrowser() && throttleTimer(requestAnimationFrame)
@@ -29,11 +29,10 @@
 
   $: type = mediaItem.data.type
   $: mediaId = mediaItem.data.id
-  $: shortName = (
-          // sometimes we no longer have the file, e.g. in a delete and redraft situation,
-          // so fall back to the description if it was provided
-          get(mediaItem, ['file', 'name']) || get(mediaItem, ['description']) || 'media'
-  )
+  $: shortName =
+    // sometimes we no longer have the file, e.g. in a delete and redraft situation,
+    // so fall back to the description if it was provided
+    get(mediaItem, ['file', 'name']) || get(mediaItem, ['description']) || 'media'
   $: uuid = `${realm}-${mediaItem.data.uploadID}`
   $: objectPosition = (() => {
     if (!focusX && !focusY) {
@@ -44,7 +43,7 @@
 
   let textarea
 
-  function mediaObserver (mediaItem) {
+  function mediaObserver(mediaItem) {
     const text = mediaItem.description || ''
     if (rawText !== text) {
       rawText = text
@@ -58,7 +57,7 @@
 
   let previousMediaId = mediaItem.data.id
 
-  async function previewObserver (id) {
+  async function previewObserver(id) {
     // reload preview if new media has been uploaded
     if (previousMediaId !== mediaId) {
       previousMediaId = mediaId
@@ -69,7 +68,7 @@
 
   $: previewObserver(mediaId)
 
-  function rawTextObserver (rawText) {
+  function rawTextObserver(rawText) {
     updateMediaInStore(() => {
       if (mediaItem.description !== rawText) {
         mediaItem.description = rawText
@@ -84,19 +83,19 @@
 
   $: rawTextObserver(rawText)
 
-  function setupAutosize () {
+  function setupAutosize() {
     autosize(textarea)
   }
 
-  function teardownAutosize () {
+  function teardownAutosize() {
     autosize.destroy(textarea)
   }
 
-  function onDeleteMedia () {
+  function onDeleteMedia() {
     deleteMedia(realm, field, index)
   }
 
-  async function onEdit (e) {
+  async function onEdit(e) {
     e.preventDefault()
     e.stopPropagation()
 
@@ -106,7 +105,7 @@
 
   let preview = ONE_TRANSPARENT_PIXEL
 
-  async function loadPreview (mediaItem) {
+  async function loadPreview(mediaItem) {
     if (type !== 'Audio') {
       try {
         preview = await loadSecureMedia($accessToken, mediaItem.previewUrl)
@@ -127,38 +126,44 @@
 
 <li class="compose-media compose-media-realm-{realm}" aria-label={shortName}>
   <img
-          alt=""
-          class="{type === 'audio' ? 'audio-preview' : ''}"
-          style="object-position: {objectPosition};"
-          src={preview}
-          aria-hidden="true"
+    alt=""
+    class={type === 'audio' ? 'audio-preview' : ''}
+    style="object-position: {objectPosition};"
+    src={preview}
+    aria-hidden="true"
   />
   <div class="compose-media-buttons">
-    <button class="compose-media-button compose-media-focal-button"
-            aria-label="{intl.edit}"
-            title="{intl.edit}"
-            on:click="{onEdit}">
-      <SvgIcon className="compose-media-button-svg" href="#fa-pencil"/>
+    <button
+      class="compose-media-button compose-media-focal-button"
+      aria-label={intl.edit}
+      title={intl.edit}
+      on:click={onEdit}
+    >
+      <SvgIcon className="compose-media-button-svg" href="#fa-pencil" />
     </button>
-    <button class="compose-media-button compose-media-delete-button"
-            aria-label="{intl.delete}"
-            title="{intl.delete}"
-            on:click="{onDeleteMedia}">
-      <SvgIcon className="compose-media-button-svg" href="#fa-times"/>
+    <button
+      class="compose-media-button compose-media-delete-button"
+      aria-label={intl.delete}
+      title={intl.delete}
+      on:click={onDeleteMedia}
+    >
+      <SvgIcon className="compose-media-button-svg" href="#fa-times" />
     </button>
   </div>
   <div class="compose-media-alt">
-    <textarea id="compose-media-input-{uuid}"
-              class="compose-media-alt-input"
-              placeholder="{intl.description}"
-              bind:this={textarea}
-              bind:value={rawText}
-    ></textarea>
+    <textarea
+      id="compose-media-input-{uuid}"
+      class="compose-media-alt-input"
+      placeholder={intl.description}
+      bind:this={textarea}
+      bind:value={rawText}
+    />
     <label for="compose-media-input-{uuid}" class="sr-only">
       {intl.descriptionLabel}
     </label>
   </div>
 </li>
+
 <style>
   .compose-media {
     margin: 0;

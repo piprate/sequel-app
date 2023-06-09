@@ -1,12 +1,12 @@
 import { DEFAULT_TIMEOUT, get, post, WRITE_TIMEOUT } from '../_utils/ajax'
 import { auth, basename } from './utils'
 
-export async function getPoll (instanceName, accessToken, pollId) {
+export async function getPoll(instanceName, accessToken, pollId) {
   const url = `${basename(instanceName)}/api/v1/polls/${pollId}`
   return get(url, auth(accessToken), { timeout: DEFAULT_TIMEOUT })
 }
 
-export async function voteOnPoll (instanceName, accessToken, pollId, choices) {
+export async function voteOnPoll(instanceName, accessToken, pollId, choices) {
   const url = `${basename(instanceName)}/api/v1/polls/${pollId}/votes`
   return post(url, { choices }, auth(accessToken), { timeout: WRITE_TIMEOUT })
 }

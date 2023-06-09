@@ -25,7 +25,7 @@
       name: spark.name,
       handle: spark.handle,
       homeWorld: spark.homeWorld,
-      summary: spark.summary,
+      summary: spark.summary
     }
 
     homeWorld = spark.homeWorldRef
@@ -43,11 +43,12 @@
     }
   })
 </script>
-<DynamicPageBanner title="{intl.editSpark}" />
-{#if $isAuthenticated }
-    {#if template}
-        <SparkEdit {realm} newSpark={false} sparkId={params.sparkId} {template} {homeWorld} />
-    {/if}
+
+<DynamicPageBanner title={intl.editSpark} />
+{#if $isAuthenticated}
+  {#if template}
+    <SparkEdit {realm} newSpark={false} sparkId={params.sparkId} {template} {homeWorld} />
+  {/if}
 {:else}
-    <RestrictedPageWarning />
+  <RestrictedPageWarning />
 {/if}

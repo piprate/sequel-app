@@ -1,5 +1,5 @@
 <script>
-  import { goto } from '$app/navigation';
+  import { goto } from '$app/navigation'
   import { page } from '$app/stores'
   import { onMount } from 'svelte'
   import { updateDigitalArt } from '../../../_actions/digitalArt'
@@ -10,7 +10,7 @@
   import { currentInstance } from '../../../_store/local'
   import { formatIntl } from '../../../_utils/formatIntl'
   import ErrorMessage from '../../ErrorMessage.svelte'
-    import EvergreenProfile from '../../marketplace/EvergreenProfile.svelte';
+  import EvergreenProfile from '../../marketplace/EvergreenProfile.svelte'
   import SelectorControl from '../../SelectorControl.svelte'
   import { toast } from '../../toast/toast'
   import { importShowSparkSelectionDialog } from '../asyncDialogs/importShowSparkSelectionDialog'
@@ -64,7 +64,7 @@
 
   $: {
     if (selectedTemplate?.id !== payload.evergreenProfile) {
-      evergreenTemplates.forEach(template => {
+      evergreenTemplates.forEach((template) => {
         if (template.id === payload.evergreenProfile) {
           selectedTemplate = template
 
@@ -74,9 +74,7 @@
             roles: template.roles
           }
 
-          const roles = template.roles.filter(
-            role => !['Artist', 'Platform'].includes(role.id)
-          )
+          const roles = template.roles.filter((role) => !['Artist', 'Platform'].includes(role.id))
 
           if (roles.length) {
             for (const role of roles) {
@@ -96,20 +94,17 @@
   }
 
   onMount(() => {
-    getMarketplaceReleases(
-      $currentInstance,
-      $accessToken,
-      $currentSparkId
-    ).then(res => { releases = res })
+    getMarketplaceReleases($currentInstance, $accessToken, $currentSparkId).then((res) => {
+      releases = res
+    })
 
-    getEvergreenTemplates($currentInstance, $accessToken, $currentSparkId).then(
-      res => {
-        evergreenTemplates = res
-        payload.evergreenProfile = evergreenTemplates[0].id
-      })
+    getEvergreenTemplates($currentInstance, $accessToken, $currentSparkId).then((res) => {
+      evergreenTemplates = res
+      payload.evergreenProfile = evergreenTemplates[0].id
+    })
   })
 
-  async function onSparkSelectorClick () {
+  async function onSparkSelectorClick() {
     const showDialog = await importShowSparkSelectionDialog()
     showDialog(
       payload.scopeSubject,
@@ -126,13 +121,7 @@
   const finalise = async () => {
     try {
       loading = true
-      const response = await finaliseOffer(
-        $currentInstance,
-        $accessToken,
-        digitalArtId,
-        payload,
-        $currentSparkId
-      )
+      const response = await finaliseOffer($currentInstance, $accessToken, digitalArtId, payload, $currentSparkId)
       updateDigitalArt(digitalArtId)
       toast.say(formatIntl('intl.offerAvailable', { digitalArt: digitalArt.name }))
       goto(`/marketplace/${response.id}`)
@@ -145,15 +134,9 @@
   }
 </script>
 
-<ModalDialog
-  {id}
-  {label}
-  {title}
-  shrinkWidthToFit={false}
-  background="var(--main-bg)"
->
+<ModalDialog {id} {label} {title} shrinkWidthToFit={false} background="var(--main-bg)">
   <form method="post" on:submit|preventDefault={finalise}>
-    <ErrorMessage error={error} />
+    <ErrorMessage {error} />
     <div id="unit-price" class="field">
       <label for="unit-price-input">Unit Price</label>
       <input
@@ -176,11 +159,7 @@
     </div>
     <div id="max-editions" class="field">
       <label for="max-editions-input">Max Editions</label>
-      <select
-        name="maxEditions"
-        id="max-editions-input"
-        bind:value={payload.maxEditions}
-      >
+      <select name="maxEditions" id="max-editions-input" bind:value={payload.maxEditions}>
         {#each Array(editions) as _, index}
           <option value={index + 1}>{index + 1}</option>
         {/each}
@@ -190,7 +169,7 @@
       <label for="release-input">Release</label>
       <select name="release" id="release-input" bind:value={payload.release}>
         <option value>No Release</option>
-        {#each releases as {id, name}}
+        {#each releases as { id, name }}
           <option value={id}>{name}</option>
         {/each}
       </select>
@@ -198,57 +177,49 @@
     {#if digitalArt.sealRecord === '' || !digitalArt.sealRecord}
       <div id="evergreen-profile" class="field">
         <label for="evergreen-profile-input">Evergreen Profile</label>
-        <select
-          name="evergreenProfile"
-          id="evergreen-profile-input"
-          bind:value={payload.evergreenProfile}
-        >
+        <select name="evergreenProfile" id="evergreen-profile-input" bind:value={payload.evergreenProfile}>
           {#each evergreenTemplates as { id, name }}
             <option value={id}>{name}</option>
           {/each}
         </select>
         {#if payload.evergreenProfile}
-          <EvergreenProfile profile={customEvergreenProfile} title='' />
+          <EvergreenProfile profile={customEvergreenProfile} title="" />
         {/if}
       </div>
     {/if}
     {#if payload.roleMapping}
       <fieldset id="role-mapping" class="field">
         <legend>Role Mapping</legend>
-            {#each Object.entries(payload.roleMapping) as [id, role]}
-              <div class="role">
-                <p>{id}</p>
-                  <div class="field">
-                    <label for="address-input">Address</label>
-                    <input
-                    type="text"
-                      id="address-input"
-                      aria-labelledby="role-address-heading"
-                      bind:value={payload.roleMapping[id].addr}
-                      />
-                    </div>
-                  <div class="field">
-                    <label for="address-input">Description</label>
-                    <textarea
-                      id="description-input"
-                      aria-labelledby="role-description-heading"
-                      minlength="1"
-                      maxlength="120"
-                      rows="4"
-                      bind:value={payload.roleMapping[id].description}
-                    />
-                </div>
-              </div>
-            {/each}
+        {#each Object.entries(payload.roleMapping) as [id, role]}
+          <div class="role">
+            <p>{id}</p>
+            <div class="field">
+              <label for="address-input">Address</label>
+              <input
+                type="text"
+                id="address-input"
+                aria-labelledby="role-address-heading"
+                bind:value={payload.roleMapping[id].addr}
+              />
+            </div>
+            <div class="field">
+              <label for="address-input">Description</label>
+              <textarea
+                id="description-input"
+                aria-labelledby="role-description-heading"
+                minlength="1"
+                maxlength="120"
+                rows="4"
+                bind:value={payload.roleMapping[id].description}
+              />
+            </div>
+          </div>
+        {/each}
       </fieldset>
     {/if}
     <div id="exclusivity-scope" class="field">
       <label for="exclusivity-scope-input">Audience</label>
-      <select
-        name="scope"
-        id="exclusivity-scope-input"
-        bind:value={payload.scope}
-      >
+      <select name="scope" id="exclusivity-scope-input" bind:value={payload.scope}>
         <option value="public">Public</option>
         <option value="spark">Spark</option>
       </select>
@@ -271,13 +242,12 @@
 </ModalDialog>
 
 <style lang="scss">
-
   form {
     padding: 2rem 1rem;
     max-height: 80vh;
     overflow: auto;
   }
-  
+
   @media (min-width: 768px) {
     form {
       padding: 2rem 3rem;
@@ -299,7 +269,7 @@
       background-color: transparent;
       padding: 0.5rem;
       font-size: 1rem;
-    
+
       option {
         background-color: var(--main-bg);
         font-size: 1rem;
@@ -312,7 +282,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 1rem
+    gap: 1rem;
   }
 
   #role-mapping {
@@ -320,18 +290,18 @@
     display: block;
     background-color: #ffffff08;
     border: 1px solid var(--form-border);
-    
 
     legend {
       font-size: 1.127rem;
       margin: 1rem 0;
     }
-    
+
     label {
       font-size: 0.875rem;
     }
 
-    input, textarea {
+    input,
+    textarea {
       font-size: 0.875rem;
     }
 
@@ -340,15 +310,14 @@
     }
 
     .role {
-
       p {
         margin-bottom: 1rem;
       }
-      
+
       &:not(:first-of-type) {
         margin-top: 1rem;
       }
-      
+
       &:not(:last-of-type) {
         border-bottom: 1px solid var(--form-border);
         margin-bottom: 1rem;

@@ -1,6 +1,5 @@
-export const isFullscreen = () => !!(document.fullscreenElement ||
-  document.webkitFullscreenElement ||
-  document.mozFullScreenElement)
+export const isFullscreen = () =>
+  !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement)
 
 export const attachFullscreenListener = (listener) => {
   if ('onfullscreenchange' in document) {

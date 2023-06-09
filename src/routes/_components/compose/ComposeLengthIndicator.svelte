@@ -7,8 +7,8 @@
 </script>
 
 <LengthIndicator
-        {length}
-        {overLimit}
-        max={MAX_POST_LENGTH}
-        style="grid-area: length; justify-self: right; align-self: center;"
+  {length}
+  {overLimit}
+  max={MAX_POST_LENGTH}
+  style="grid-area: length; justify-self: right; align-self: center;"
 />

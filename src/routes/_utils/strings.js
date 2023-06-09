@@ -1,4 +1,4 @@
-export function replaceAll (string, replacee, replacement) {
+export function replaceAll(string, replacee, replacement) {
   if (!string.length || !replacee.length) {
     return string
   }

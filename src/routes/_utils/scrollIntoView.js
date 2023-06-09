@@ -3,14 +3,14 @@ import { smoothScroll } from './smoothScroll'
 
 let mainNavElement
 
-function getTopOverlay () {
+function getTopOverlay() {
   if (!mainNavElement) {
     mainNavElement = document.getElementById('main-nav')
   }
   return mainNavElement.clientHeight
 }
 
-export function isVisible (element) {
+export function isVisible(element) {
   if (!element) {
     return false
   }
@@ -20,7 +20,7 @@ export function isVisible (element) {
   return rect.top < offsetHeight && rect.bottom >= topOverlay
 }
 
-export function firstVisibleElementIndex (elements) {
+export function firstVisibleElementIndex(elements) {
   const offsetHeight = getOffsetHeight()
   const topOverlay = getTopOverlay()
   let first = -1
@@ -35,14 +35,14 @@ export function firstVisibleElementIndex (elements) {
     const rect = element.getBoundingClientRect()
     if (rect.top < offsetHeight && rect.bottom >= topOverlay) {
       first = i
-      firstComplete = (rect.top < topOverlay && i < (len - 1)) ? i + 1 : i
+      firstComplete = rect.top < topOverlay && i < len - 1 ? i + 1 : i
       break
     }
   }
   return { first, firstComplete }
 }
 
-export function scrollIntoViewIfNeeded (element) {
+export function scrollIntoViewIfNeeded(element) {
   const rect = element.getBoundingClientRect()
   const topOverlay = getTopOverlay()
   const offsetHeight = getOffsetHeight()
@@ -51,7 +51,7 @@ export function scrollIntoViewIfNeeded (element) {
     scrollY = topOverlay
   } else if (rect.bottom > offsetHeight) {
     const height = rect.bottom - rect.top
-    if ((offsetHeight - topOverlay) > height) {
+    if (offsetHeight - topOverlay > height) {
       scrollY = offsetHeight - height
     } else {
       // if element height is too great to fit,

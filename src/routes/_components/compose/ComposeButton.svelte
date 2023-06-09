@@ -1,34 +1,33 @@
 <script>
   import SvgIcon from '../SvgIcon.svelte'
-  import { publishingPost } from "../../_actions/compose";
+  import { publishingPost } from '../../_actions/compose'
 
-  export let overLimit;
-  export let sticky;
+  export let overLimit
+  export let sticky
 
-  $: disabled = $publishingPost || overLimit;
+  $: disabled = $publishingPost || overLimit
 </script>
 
 <div class="compose-box-button-halo {sticky ? 'compose-box-button-halo-sticky' : ''}">
-  <button class="primary compose-box-button"
-          {disabled}
-          aria-label={sticky ? '{intl.composePost}' : '{intl.publishPost}'}
-          on:click>
+  <button
+    class="primary compose-box-button"
+    {disabled}
+    aria-label={sticky ? '{intl.composePost}' : '{intl.publishPost}'}
+    on:click
+  >
     <span class={$publishingPost || sticky ? 'hidden' : ''}>
       {intl.publishPost}
     </span>
-    <div class="compose-box-button-spinner"
-         aria-hidden="true">
-      <SvgIcon className="compose-box-button-svg {$publishingPost ? 'spin' : 'hidden'}"
-               href="#fa-spinner" />
+    <div class="compose-box-button-spinner" aria-hidden="true">
+      <SvgIcon className="compose-box-button-svg {$publishingPost ? 'spin' : 'hidden'}" href="#fa-spinner" />
     </div>
 
-    <div class="compose-box-button-compose {sticky ? '' : 'hidden'}"
-         aria-hidden="true">
-      <SvgIcon className="compose-box-button-svg"
-               href="#fa-pencil" />
+    <div class="compose-box-button-compose {sticky ? '' : 'hidden'}" aria-hidden="true">
+      <SvgIcon className="compose-box-button-svg" href="#fa-pencil" />
     </div>
   </button>
 </div>
+
 <style>
   .compose-box-button-halo {
     border-radius: 12px;
@@ -46,7 +45,8 @@
     margin: 5px;
     pointer-events: auto;
   }
-  .compose-box-button-spinner, .compose-box-button-compose {
+  .compose-box-button-spinner,
+  .compose-box-button-compose {
     position: absolute;
     display: flex;
     justify-content: center;

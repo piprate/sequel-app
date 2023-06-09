@@ -7,16 +7,17 @@ import { toast } from '../_components/toast/toast'
 import { formatIntl } from '../_utils/formatIntl'
 import { emit } from '../_utils/eventBus'
 
-async function syncFilters (instanceName, syncMethod) {
+async function syncFilters(instanceName, syncMethod) {
   const accessToken = loggedInInstances.get()[instanceName].access_token
 
   await syncMethod(
     () => getFilters(instanceName, accessToken),
     () => database.getFilters(instanceName),
-    filters => database.setFilters(instanceName, filters),
-    filters => {
+    (filters) => database.setFilters(instanceName, filters),
+    (filters) => {
       const instanceFiltersVal = instanceFilters.get()
-      if (!isEqual(instanceFiltersVal[instanceName], filters)) { // avoid re-render if nothing changed
+      if (!isEqual(instanceFiltersVal[instanceName], filters)) {
+        // avoid re-render if nothing changed
         instanceFiltersVal[instanceName] = filters
         instanceFilters.set(instanceFiltersVal)
       }
@@ -24,15 +25,15 @@ async function syncFilters (instanceName, syncMethod) {
   )
 }
 
-export async function updateFiltersForInstance (instanceName) {
+export async function updateFiltersForInstance(instanceName) {
   await syncFilters(instanceName, cacheFirstUpdateAfter)
 }
 
-export async function setupFiltersForInstance (instanceName) {
+export async function setupFiltersForInstance(instanceName) {
   await syncFilters(instanceName, cacheFirstUpdateOnlyIfNotInCache)
 }
 
-export async function createOrUpdateFilter (instanceName, filter) {
+export async function createOrUpdateFilter(instanceName, filter) {
   const accessToken = loggedInInstances.get()[instanceName].access_token
   try {
     if (filter.id) {
@@ -51,7 +52,7 @@ export async function createOrUpdateFilter (instanceName, filter) {
   }
 }
 
-export async function deleteFilter (instanceName, id) {
+export async function deleteFilter(instanceName, id) {
   const accessToken = loggedInInstances.get()[instanceName].access_token
   try {
     await doDeleteFilter(instanceName, accessToken, id)

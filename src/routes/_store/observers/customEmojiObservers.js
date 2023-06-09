@@ -5,12 +5,12 @@ import { convertCustomEmojiToEmojiPickerFormat } from '../../_utils/convertCusto
 import { get } from 'svelte/store'
 import { inNode } from '../../_utils/browserOrNode'
 
-export function customEmojiObservers () {
+export function customEmojiObservers() {
   if (inNode()) {
     return
   }
 
-  function setEmoji (currentEmoji, autoplayGifs) {
+  function setEmoji(currentEmoji, autoplayGifs) {
     // FIXME: the if statement is there to avoid a console warning. Review after re-enabling custom emoji.
     if (currentEmoji && currentEmoji.length) {
       const customEmojiInEmojiPickerFormat = convertCustomEmojiToEmojiPickerFormat(currentEmoji, autoplayGifs)
@@ -18,11 +18,11 @@ export function customEmojiObservers () {
     }
   }
 
-  currentCustomEmoji.subscribe(_currentCustomEmoji => {
+  currentCustomEmoji.subscribe((_currentCustomEmoji) => {
     setEmoji(_currentCustomEmoji, get(autoplayGifs))
   })
 
-  autoplayGifs.subscribe(_autoplayGifs => {
+  autoplayGifs.subscribe((_autoplayGifs) => {
     setEmoji(get(currentCustomEmoji), _autoplayGifs)
   })
 }

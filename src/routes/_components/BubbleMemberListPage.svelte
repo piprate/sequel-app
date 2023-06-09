@@ -11,12 +11,12 @@
   let loading = true
   let members = []
 
-  function onClickAction (event) {
+  function onClickAction(event) {
     const { action, sparkId } = event
     action.onclick(sparkId)
   }
 
-  async function refreshSparks () {
+  async function refreshSparks() {
     members = await memberFetcher()
     console.log('MEMBERS', members)
   }
@@ -45,12 +45,13 @@
           spark={member.sparkRef}
           role={member.memberType === 'owner' ? 'owner' : ''}
           actions={memberActions}
-          on:click="{onClickAction}"
+          on:click={onClickAction}
         />
-        {/each}
-      </ul>
+      {/each}
+    </ul>
   {/if}
 </div>
+
 <style>
   .sparks-page {
     padding: 20px 20px;

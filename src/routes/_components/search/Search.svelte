@@ -1,12 +1,18 @@
 <script>
-  import { focusSearchInput, searchLoading, searchResults, searchResultsForQuery, queryInSearch } from '../../_store/local'
+  import {
+    focusSearchInput,
+    searchLoading,
+    searchResults,
+    searchResultsForQuery,
+    queryInSearch
+  } from '../../_store/local'
   import LoadingPage from '../LoadingPage.svelte'
   import { doSearch } from '../../_actions/search'
   import SearchResults from './SearchResults.svelte'
   import SvgIcon from '../SvgIcon.svelte'
   import { on } from '../../_utils/eventBus'
   import { tryToFocusElement } from '../../_utils/tryToFocusElement'
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte'
 
   function onSubmit(e) {
     e.preventDefault()
@@ -21,24 +27,27 @@
 
   onMount(() => {
     on('focusSearchInput', () => doFocusSearchInput()) // user typed hotkey on this page itself
-    if ($focusSearchInput) { // we arrived here from a goto via the search hotkey
-      $focusSearchInput = false; // reset
-      doFocusSearchInput();
+    if ($focusSearchInput) {
+      // we arrived here from a goto via the search hotkey
+      $focusSearchInput = false // reset
+      doFocusSearchInput()
     }
-  });
+  })
 </script>
 
-<form class="search-input-form" on:submit="{onSubmit}">
+<form class="search-input-form" on:submit={onSubmit}>
   <label class="sr-only" for="the-search-input">{intl.search}</label>
   <div class="search-input-wrapper">
-    <input id="the-search-input"
-           type="search"
-           class="search-input"
-           placeholder="{intl.search}"
-           required
-           bind:value={$queryInSearch}>
+    <input
+      id="the-search-input"
+      type="search"
+      class="search-input"
+      placeholder={intl.search}
+      required
+      bind:value={$queryInSearch}
+    />
   </div>
-  <button type="submit" class="primary search-button" aria-label="{intl.search}" disabled={$searchLoading}>
+  <button type="submit" class="primary search-button" aria-label={intl.search} disabled={$searchLoading}>
     <SvgIcon className="search-button-svg" href="#fa-search" />
   </button>
 </form>
@@ -51,6 +60,7 @@
     <SearchResults />
   </div>
 {/if}
+
 <style>
   .search-input-form {
     display: grid;

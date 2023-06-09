@@ -5,11 +5,11 @@
   import RadioGroupButton from '../../_components/radio/RadioGroupButton.svelte'
   import { formatIntl } from '../../_utils/formatIntl'
 
-  export let href;
-  export let label;
-  export let icon;
-  export let pinnable = false;
-  export let pinIndex = undefined;
+  export let href
+  export let label
+  export let icon
+  export let pinnable = false
+  export let pinIndex = undefined
 
   $: ariaLabel = (() => {
     return formatIntl('intl.pinLabel', {
@@ -17,12 +17,12 @@
       pinnable,
       pinned: $pinnedPage === href
     })
-  })();
-  $: pinLabel = formatIntl('intl.pinPage', { label });
+  })()
+  $: pinLabel = formatIntl('intl.pinPage', { label })
 
   function onPinClick(e) {
-    e.preventDefault();
-    $pinnedPages[$currentInstance] = href;
+    e.preventDefault()
+    $pinnedPages[$currentInstance] = href
   }
 </script>
 
@@ -39,13 +39,14 @@
         checked={$pinnedPage === href}
         label={pinLabel}
         index={pinIndex}
-        on:click="{onPinClick}"
+        on:click={onPinClick}
       >
         <SvgIcon className="pinnable-svg" href="#fa-thumb-tack" />
-    </RadioGroupButton>
+      </RadioGroupButton>
     {/if}
   </a>
 </li>
+
 <style>
   .page-list-item {
     border: 1px solid var(--settings-list-item-border);
@@ -60,7 +61,8 @@
     grid-template-columns: min-content 1fr min-content;
     align-items: center;
   }
-  .page-list-item a, .page-list-item a:visited {
+  .page-list-item a,
+  .page-list-item a:visited {
     color: var(--body-text-color);
   }
   .page-list-item a:hover {
@@ -141,5 +143,4 @@
       padding: 6px 5px;
     }
   }
-
 </style>

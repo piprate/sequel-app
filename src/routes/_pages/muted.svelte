@@ -7,24 +7,22 @@
   import { setSparkMuted } from '../_actions/mute'
 
   // suppress warnings
-  export let params;
-  params = undefined;
+  export let params
+  params = undefined
 
   let sparkActions = [
     {
       icon: '#fa-volume-up',
       label: 'intl.unmute',
-      onclick: (sparkId) => setSparkMuted(sparkId,
-              /* mute */ false,
-              /* notifications */ false,
-              /* toastOnSuccess */ true)
+      onclick: (sparkId) =>
+        setSparkMuted(sparkId, /* mute */ false, /* notifications */ false, /* toastOnSuccess */ true)
     }
-  ];
+  ]
 
-  $: sparksFetcher = () => $isUserLoggedIn ? getMutedSparks($currentInstance, $accessToken) : [];
+  $: sparksFetcher = () => ($isUserLoggedIn ? getMutedSparks($currentInstance, $accessToken) : [])
 </script>
 
-<DynamicPageBanner title="{intl.mutedSparks}" icon="#fa-volume-off" />
-{#if $isUserLoggedIn }
+<DynamicPageBanner title={intl.mutedSparks} icon="#fa-volume-off" />
+{#if $isUserLoggedIn}
   <SparksListPage {sparksFetcher} {sparkActions} />
 {/if}

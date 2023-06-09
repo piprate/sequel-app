@@ -21,19 +21,19 @@
   export let postEmojis
   export let shown
 
-  async function doAsyncActionWithDelay (func) {
+  async function doAsyncActionWithDelay(func) {
     const start = Date.now()
     const res = await func()
     const timeElapsed = Date.now() - start
     if (timeElapsed < REFRESH_MIN_DELAY) {
       // If less than five seconds, then continue to show the loading animation
       // so it's clear that something happened.
-      await new Promise(resolve => setTimeout(resolve, REFRESH_MIN_DELAY - timeElapsed))
+      await new Promise((resolve) => setTimeout(resolve, REFRESH_MIN_DELAY - timeElapsed))
     }
     return res
   }
 
-  function getChoices (form, options) {
+  function getChoices(form, options) {
     const res = []
     for (let i = 0; i < options.length; i++) {
       if (form.elements[i].checked) {
@@ -48,43 +48,35 @@
 
   $: pollId = post.poll.id
   $: poll = $polls[pollId] || post.poll
-  $: options = (
-          poll.options.map(({ title, votes_count: votesCount }) => ({
-            title: emojifyText(escapeHtml(title), postEmojis, $autoplayGifs),
-            share: poll.votes_count ? Math.round(votesCount / poll.votes_count * 100) : 0
-          }))
-  )
+  $: options = poll.options.map(({ title, votes_count: votesCount }) => ({
+    title: emojifyText(escapeHtml(title), postEmojis, $autoplayGifs),
+    share: poll.votes_count ? Math.round((votesCount / poll.votes_count) * 100) : 0
+  }))
   $: votesCount = poll.votes_count
   $: voted = poll.voted
   $: multiple = poll.multiple
   $: expired = poll.expired
   $: expiresAt = poll.expires_at
   $: expiresAtTS = new Date(expiresAt).getTime()
-  $: expiresAtTimeagoFormatted = (
-          expired ? formatTimeagoDate(expiresAtTS, $now) : formatTimeagoFutureDate(expiresAtTS, $now)
-  )
+  $: expiresAtTimeagoFormatted = expired
+    ? formatTimeagoDate(expiresAtTS, $now)
+    : formatTimeagoFutureDate(expiresAtTS, $now)
   $: expiresAtAbsoluteFormatted = absoluteDateFormatter().format(expiresAtTS)
   $: expiryText = expired ? 'intl.expired' : 'intl.expires'
   $: refreshElementId = `poll-refresh-${uuid}`
-  $: useNarrowSize = (
-          !isPostInOwnThread && $isMobileSize && !expired
-  )
+  $: useNarrowSize = !isPostInOwnThread && $isMobileSize && !expired
   $: formDisabled = !choices.length
-  $: votesText = (
-          formatIntl('intl.voteCount', { count: votesCount })
-  )
-  $: computedClass = (
-          classname(
-                  'poll',
-                  isPostInNotification && 'post-in-notification',
-                  isPostInOwnThread && 'post-in-own-thread',
-                  loading && 'poll-loading',
-                  shown && 'shown'
-          )
+  $: votesText = formatIntl('intl.voteCount', { count: votesCount })
+  $: computedClass = classname(
+    'poll',
+    isPostInNotification && 'post-in-notification',
+    isPostInOwnThread && 'post-in-own-thread',
+    loading && 'poll-loading',
+    shown && 'shown'
   )
 
-  function onRefreshClick () {
-    (async () => {
+  function onRefreshClick() {
+    ;(async () => {
       loading = true
       try {
         const poll = await doAsyncActionWithDelay(() => getPoll(pollId))
@@ -100,7 +92,7 @@
 
   let form
 
-  async function onSubmit (e) {
+  async function onSubmit(e) {
     e.preventDefault()
     e.stopPropagation()
     if (formDisabled) {
@@ -118,11 +110,11 @@
     }
   }
 
-  function onChange () {
+  function onChange() {
     choices = getChoices(form, options)
   }
 
-  function cleanTitle (title) {
+  function cleanTitle(title) {
     // Remove newlines and tabs.
     // Mastodon UI doesn't care because in CSS it's formatted to be single-line, but we care
     // if people somehow insert newlines, because it can really mess up the formatting.
@@ -134,9 +126,9 @@
   })
 </script>
 
-<div class={computedClass} aria-busy={loading} >
-  {#if voted || expired }
-    <ul class="poll-choices" aria-label="{intl.pollResults}">
+<div class={computedClass} aria-busy={loading}>
+  {#if voted || expired}
+    <ul class="poll-choices" aria-label={intl.pollResults}>
       {#each options as option}
         <li class="poll-choice option">
           <div class="option-text">
@@ -149,16 +141,12 @@
       {/each}
     </ul>
   {:else}
-    <form class="poll-form" aria-label="{intl.voteOnPoll}" on:submit="{onSubmit}" bind:this={form}>
-      <ul class="poll-choices" aria-label="{intl.pollChoices}">
+    <form class="poll-form" aria-label={intl.voteOnPoll} on:submit={onSubmit} bind:this={form}>
+      <ul class="poll-choices" aria-label={intl.pollChoices}>
         {#each options as option, i}
           <li class="poll-choice poll-form-option">
             <label>
-              <input type="{multiple ? 'checkbox' : 'radio'}"
-                     name="poll-choice-{uuid}"
-                     value="{i}"
-                     on:change="{onChange}"
-              >
+              <input type={multiple ? 'checkbox' : 'radio'} name="poll-choice-{uuid}" value={i} on:change={onChange} />
               <span>{@html cleanTitle(option.title)}</span>
             </label>
           </li>
@@ -167,7 +155,7 @@
       <button disabled={formDisabled} type="submit">{intl.vote}</button>
     </form>
   {/if}
-  <ul class="poll-details" aria-label="{intl.pollDetails}">
+  <ul class="poll-details" aria-label={intl.pollDetails}>
     <li class="poll-stat {notification ? 'is-notification' : ''}">
       <SvgIcon className="poll-icon" href="#fa-bar-chart" />
       <span class="poll-stat-text">{votesText}</span>
@@ -175,16 +163,14 @@
     <li class="poll-stat {notification ? 'is-notification' : ''}">
       <SvgIcon className="poll-icon" href="#fa-clock" />
       <span class="poll-stat-text poll-stat-expiry">
-        <span class="{useNarrowSize ? 'sr-only' : ''}">{expiryText}</span>
+        <span class={useNarrowSize ? 'sr-only' : ''}>{expiryText}</span>
         <time datetime={expiresAt} title={expiresAtAbsoluteFormatted}>
           {expiresAtTimeagoFormatted}
         </time>
       </span>
     </li>
     <li class="poll-stat {notification ? 'is-notification' : ''} {expired ? 'poll-expired' : ''}">
-      <button id={refreshElementId}
-              class="focus-fix"
-              aria-label="{intl.refresh}">
+      <button id={refreshElementId} class="focus-fix" aria-label={intl.refresh}>
         <SvgIcon className="poll-icon" href="#fa-refresh" />
         <span class="poll-stat-text poll-stat-text-refresh" aria-hidden="true">
           {intl.refresh}
@@ -193,6 +179,7 @@
     </li>
   </ul>
 </div>
+
 <style>
   .poll {
     grid-area: poll;
@@ -307,7 +294,8 @@
     margin: 0;
   }
 
-  .poll-stat.is-notification, .poll-stat.is-notification .poll-stat-text {
+  .poll-stat.is-notification,
+  .poll-stat.is-notification .poll-stat-text {
     color: var(--very-deemphasized-text-color);
   }
 

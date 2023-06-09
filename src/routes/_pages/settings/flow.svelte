@@ -13,7 +13,7 @@
   import { updateUserForInstance } from '../../_actions/instances'
   import { saveUser, userOperationError, userOperationInProgress } from '../../_actions/users'
   import {
-  configureFlow,
+    configureFlow,
     disconnectFromFlow,
     getFlowBalance,
     getFUSDBalance,
@@ -42,7 +42,7 @@
   $: flowAddressMismatch = $flowLoggedInAccount && flowAddress && $flowLoggedInAccount !== flowAddress
   $: nextStepLabel = $flowLoggedInAccount ? 'intl.flowFinish' : 'intl.flowSkipStep'
 
-  async function signUpWithFlow () {
+  async function signUpWithFlow() {
     let out = await fcl.authenticate()
 
     if (!user.flow) {
@@ -57,16 +57,16 @@
     }
   }
 
-  async function logInWithFlow () {
+  async function logInWithFlow() {
     await fcl.authenticate()
   }
 
-  async function switchFlowAccount () {
+  async function switchFlowAccount() {
     fcl.unauthenticate()
     await signUpWithFlow()
   }
 
-  async function loadAccountInfo (addr) {
+  async function loadAccountInfo(addr) {
     if (!addr) {
       return
     }
@@ -79,10 +79,10 @@
     royaltyReceiverVaults = []
     vaultTypes.forEach((vaultType) => {
       if (vaultType.typeID.includes('FlowToken')) {
-        royaltyReceiverVaults.push("Flow")
+        royaltyReceiverVaults.push('Flow')
       }
       if (vaultType.typeID.includes('FUSD')) {
-        royaltyReceiverVaults.push("FUSD")
+        royaltyReceiverVaults.push('FUSD')
       }
     })
   }
@@ -101,7 +101,7 @@
     }
   }
 
-  function nextStep () {
+  function nextStep() {
     const _redirectToPage = $redirectToPage
     if (_redirectToPage) {
       $redirectToPage = ''
@@ -112,8 +112,7 @@
   }
 
   $: {
-    if(flowAddress)
-    loadAccountInfo(flowAddress)
+    if (flowAddress) loadAccountInfo(flowAddress)
   }
 
   onMount(async () => {
@@ -124,16 +123,16 @@
   })
 </script>
 
-<SettingsLayout page='settings/flow' label="{intl.flow}">
+<SettingsLayout page="settings/flow" label={intl.flow}>
   <h1 id="sign-up-h1">{intl.flowSettings}</h1>
 
   {#if $userOperationError}
     <ErrorMessage error={$userOperationError} />
   {/if}
 
-  {#if flowAddress }
+  {#if flowAddress}
     <div class="flow-account">
-      <div class="flow-account-border"></div>
+      <div class="flow-account-border" />
       <div class="acct-field-cell acct-field-name">
         {intl.flowAddress}
       </div>
@@ -164,7 +163,7 @@
       <div class="acct-field-cell acct-field-value">
         {royaltyReceivers}
       </div>
-      <div class="flow-account-border"></div>
+      <div class="flow-account-border" />
     </div>
   {:else}
     <p>
@@ -180,33 +179,34 @@
     </button>
   {/if}
 
-  {#if $flowLoggedInAccount && royaltyReceiverVaults.length === 0 }
+  {#if $flowLoggedInAccount && royaltyReceiverVaults.length === 0}
     <button class="primary flow-setup-button" type="button" on:click={executeSetupRoyaltyReceiver}>
       {intl.flowSetupRoyaltyReceiver}
     </button>
   {/if}
 
-  {#if !flowAddress && !$userOperationInProgress }
+  {#if !flowAddress && !$userOperationInProgress}
     <button class="primary flow-setup-button" type="button" on:click={signUpWithFlow}>
       {intl.flowSignUpButton}
     </button>
   {/if}
-  {#if flowAddress && !$flowLoggedInAccount }
+  {#if flowAddress && !$flowLoggedInAccount}
     <button class="primary flow-setup-button" type="button" on:click={logInWithFlow}>
       {intl.flowLogInButton}
     </button>
   {/if}
-  {#if $flowLoggedInAccount }
+  {#if $flowLoggedInAccount}
     <button class="primary flow-setup-button" type="button" on:click={disconnectFromFlow}>
       {intl.flowDisconnectButton}
     </button>
   {/if}
-  {#if newUser }
+  {#if newUser}
     <button class="primary flow-setup-button" type="button" on:click={nextStep}>
       {nextStepLabel}
     </button>
   {/if}
 </SettingsLayout>
+
 <style>
   .error-box {
     border: 2px solid var(--warn-color);
@@ -273,5 +273,4 @@
       padding: 5px 10px 5px 10px;
     }
   }
-
 </style>

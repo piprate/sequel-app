@@ -10,22 +10,22 @@ export const DELETE_AFTER = 604800000 // 7 days
 
 let deleteAfter = DELETE_AFTER
 
-function keyToData (key) {
+function keyToData(key) {
   key = key.substring(PREFIX.length)
   const index = key.indexOf(DELIMITER)
   // avoiding str.split() to not have to worry about ids containing the delimiter string somehow
   return [key.substring(0, index), key.substring(index + DELIMITER.length)]
 }
 
-function dataToKey (timestamp, id) {
+function dataToKey(timestamp, id) {
   return `${PREFIX}${timestamp}${DELIMITER}${id}`
 }
 
-async function getAllKeys () {
-  return (await keys()).filter(key => key.startsWith(PREFIX)).sort()
+async function getAllKeys() {
+  return (await keys()).filter((key) => key.startsWith(PREFIX)).sort()
 }
 
-export async function getCachedMediaFile (id) {
+export async function getCachedMediaFile(id) {
   const allKeys = await getAllKeys()
 
   for (const key of allKeys) {
@@ -36,10 +36,15 @@ export async function getCachedMediaFile (id) {
   }
 }
 
-export async function setCachedMediaFile (id, file) {
+export async function setCachedMediaFile(id, file) {
   const allKeys = await getAllKeys()
 
-  if (allKeys.map(keyToData).map(_ => _[1]).includes(id)) {
+  if (
+    allKeys
+      .map(keyToData)
+      .map((_) => _[1])
+      .includes(id)
+  ) {
     return // do nothing, it's already in there
   }
 
@@ -61,7 +66,7 @@ export async function setCachedMediaFile (id, file) {
   await set(key, file)
 }
 
-export async function deleteCachedMediaFile (id) {
+export async function deleteCachedMediaFile(id) {
   const allKeys = await getAllKeys()
 
   for (const key of allKeys) {
@@ -74,10 +79,10 @@ export async function deleteCachedMediaFile (id) {
 
 // The following are only used in tests
 
-export async function getAllCachedFileIds () {
-  return (await getAllKeys()).map(keyToData).map(_ => _[1])
+export async function getAllCachedFileIds() {
+  return (await getAllKeys()).map(keyToData).map((_) => _[1])
 }
 
-export function setDeleteCachedMediaFilesAfter (newDeleteAfter) {
+export function setDeleteCachedMediaFilesAfter(newDeleteAfter) {
   deleteAfter = newDeleteAfter
 }

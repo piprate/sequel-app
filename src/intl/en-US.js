@@ -5,9 +5,12 @@ const intl = {
   appName: 'Sequel',
   appDescription: 'An official web client for Sequel.',
   ogDescription: 'A social platform from a parallel universe',
-  homeDescription: `
+  homeDescription:
+    `
     <p>
-      ` + oneLiner + `
+      ` +
+    oneLiner +
+    `
     </p>
     <p>
        Expand your imagination and express your playful self through sharing creative content beyond the limits of reality.
@@ -16,7 +19,8 @@ const intl = {
   signUp: 'Sign Up',
   copy: 'Copy',
   betaNotice: 'Sequel is in private beta mode. Please contact us to get a registration code.',
-  betaNoticeNoCode: 'Sequel is in beta mode. Early adopters will acquire superpowers and receive enormous gratitude from the Sequel team.',
+  betaNoticeNoCode:
+    'Sequel is in beta mode. Early adopters will acquire superpowers and receive enormous gratitude from the Sequel team.',
   signUpLegalNotice: `
       By signing up you agree to our <a rel="noopener" target="_blank" href="https://sequel.space/home/code-of-conduct/">Code of Conduct</a>
       and <a rel="noopener" target="_blank" href="https://sequel.space/home/application-privacy-policy/">Privacy Policy</a>,
@@ -210,8 +214,8 @@ const intl = {
   worldExploreTitle: 'Explore',
   exploreSequelWorlds: 'Explore Sequel worlds',
   worldMembersNotLoggedIn: 'You need to be logged in to see world members.',
-  worldBubblesNotLoggedIn: 'You need to be logged in to see the world\'s bubbles.',
-  postInBubble: 'This is a read-only timeline. You may add posts through one of this world\'s bubbles.',
+  worldBubblesNotLoggedIn: "You need to be logged in to see the world's bubbles.",
+  postInBubble: "This is a read-only timeline. You may add posts through one of this world's bubbles.",
   // sparks page
   yourSparksTitle: 'Your sparks',
   sparkBookmarksTitle: 'Bookmarks',
@@ -541,10 +545,14 @@ const intl = {
   createNewWorld: 'Create new world',
   editDigitalArt: 'Edit digital art',
   createNewDigitalArt: 'New Digital Art',
-  selectSparkBeforeCreatingWorld: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating worlds.',
-  selectSparkBeforeCreatingBubble: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating bubbles.',
-  selectSparkBeforeCreatingDigitalArt: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating digital arts.',
-  selectSparkBeforeCreatingRelease: 'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating release.',
+  selectSparkBeforeCreatingWorld:
+    'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating worlds.',
+  selectSparkBeforeCreatingBubble:
+    'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating bubbles.',
+  selectSparkBeforeCreatingDigitalArt:
+    'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating digital arts.',
+  selectSparkBeforeCreatingRelease:
+    'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating release.',
   fields: 'Fields',
   profilePageForSpark: 'Profile page for {spark}',
   // World home page
@@ -667,7 +675,8 @@ const intl = {
   flowBalance: 'Balance (Flow)',
   fusdBalance: 'Balance (FUSD)',
   royaltyReceivers: 'Royalty Receivers',
-  flowMismatchWarning: 'WARNING: the Flow account you are using differs from the account recorded in Sequel. Please switch to the account mentioned above.',
+  flowMismatchWarning:
+    'WARNING: the Flow account you are using differs from the account recorded in Sequel. Please switch to the account mentioned above.',
   flowSwitchButton: 'Switch account',
   flowSignUpButton: 'Sign Up with Flow',
   flowLogInButton: 'Log in with Flow',
@@ -689,7 +698,8 @@ const intl = {
   hideUnread: 'Hide unread notifications count (i.e. the red dot)',
   // The quality that makes something seem important or interesting because it seems to be happening now
   immediacy: 'Immediacy',
-  showAbsoluteTimestamps: 'Show absolute timestamps (e.g. "March 3rd") instead of relative timestamps (e.g. "5 minutes ago")',
+  showAbsoluteTimestamps:
+    'Show absolute timestamps (e.g. "March 3rd") instead of relative timestamps (e.g. "5 minutes ago")',
   ui: 'UI',
   grayscaleMode: 'Grayscale mode',
   wellnessFooter: `These settings are partly based on guidelines from the
@@ -729,7 +739,7 @@ const intl = {
   enterRegistrationCode: 'Enter registration code',
   registrationCodeColon: 'Registration Code:',
   invalidEmail: 'Invalid email',
-  passwordMismatch: 'Passwords don\'t match',
+  passwordMismatch: "Passwords don't match",
   forgotPassword: 'Forgot Password?',
   recoveryPhraseWarning: 'Recovery Phrase',
   saveRecoveryPhrase: 'Write down these words in the right order and save them somewhere safe.',
@@ -976,7 +986,7 @@ const intl = {
   updateAvailable: 'App update available.',
   // Word/phrase filters
   wordFilters: 'Word filters',
-  noFilters: 'You don\'t have any word filters.',
+  noFilters: "You don't have any word filters.",
   wordOrPhrase: 'Word or phrase',
   contexts: 'Contexts',
   addFilter: 'Add filter',
@@ -1004,9 +1014,11 @@ const intl = {
   marketplaceListingOptions: 'Listing options',
   marketplaceReleaseOptions: 'Release options',
   activate: 'Activate',
-  activateContent: 'Are you sure you want to activate this release? Once activated, the tokens in this release will be available for sale.',
+  activateContent:
+    'Are you sure you want to activate this release? Once activated, the tokens in this release will be available for sale.',
   announce: 'Announce',
-  announceContent: 'Are you sure you want this release to be announced to the general public? Once announced, everyone will be able to see the enclosed tokens, but won\'t be able to purchase it.',
+  announceContent:
+    "Are you sure you want this release to be announced to the general public? Once announced, everyone will be able to see the enclosed tokens, but won't be able to purchase it.",
   confirmCancel: 'Are you sure you want to cancel this release?',
   digitalArtOptions: 'Digital art options',
   tokenOptions: 'Token options',
@@ -1035,7 +1047,7 @@ const intl = {
   switchToNameOfPlan: 'Switch to {plan}',
   selectPlanFromList: 'Select subscription plan',
   planList: 'Subscription plans',
-  subscribeLater: 'I\'ll subscribe later',
+  subscribeLater: "I'll subscribe later",
   postInputFormat: 'Select Input Format',
   yes: 'Yes',
   no: 'No',
@@ -1056,19 +1068,25 @@ const intl = {
   digitalArtNotFound: 'Digital Art not found',
   tokenNotFound: 'Token not found',
   accessRestricted: 'Access restricted. You need to be logged in to see this page.',
-  invalidExternalRequest: `
+  invalidExternalRequest:
+    `
     <h2>
         The page you asked for doesn't exist.
     </h2>
     <p>
-      ` + oneLiner + `
+      ` +
+    oneLiner +
+    `
     </p>
     <p>
         Please stay and explore.
     </p>`,
-  loginToFollowLink: `
+  loginToFollowLink:
+    `
     <p>
-      ` + oneLiner + `
+      ` +
+    oneLiner +
+    `
     </p>
     <p>
        Please log in to see the requested Sequel resource.
@@ -1098,7 +1116,8 @@ const intl = {
   inviteToRead: 'Timeline visible to members only.',
   inviteToPost: 'You need to be a member to post.',
   joinBubbleButton: 'Join',
-  avatarCroppingNotice: 'PNG, GIF or JPG. Please use square shaped images, 300x300px or larger. Rectangular images will be cropped.',
+  avatarCroppingNotice:
+    'PNG, GIF or JPG. Please use square shaped images, 300x300px or larger. Rectangular images will be cropped.',
   // Marketplace
   marketplace: 'Marketplace',
   marketplaceHistory: 'Sold Listings',
@@ -1120,7 +1139,8 @@ const intl = {
   releaseEndsAtColon: 'Ends At (optional)',
   enterReleaseName: 'Enter Name',
   enterReleaseSummary: 'Enter Summary',
-  marketplaceEmpty: 'Marketplace is empty. Please come back soon to buy and sell digital art produced from original Sequel content.',
+  marketplaceEmpty:
+    'Marketplace is empty. Please come back soon to buy and sell digital art produced from original Sequel content.',
   releasesEmpty: 'There are no active releases. Please come back again soon.',
   listing: 'Marketplace Listing',
   listingPage: 'Marketplace Listing for {listing}',
@@ -1138,15 +1158,17 @@ const intl = {
   sold: 'Sold',
   priceInformation: 'Price information',
   realisedPrice: 'Realised price',
-  listingNotActive: 'This listing isn\'t active yet. Please come back later.',
+  listingNotActive: "This listing isn't active yet. Please come back later.",
   listingClosed: 'This listing is closed.',
   evergreenHeaderRole: 'Role',
   evergreenHeaderAddress: 'Address',
   evergreenHeaderPrimary: 'Mint',
   evergreenHeaderSecondary: 'Trade',
-  confirmationNotice: 'You are seconds away from purchasing <strong>{token}</strong>.<br/><br/>' +
+  confirmationNotice:
+    'You are seconds away from purchasing <strong>{token}</strong>.<br/><br/>' +
     'Please review order details before proceeding to your Flow wallet.',
-  modSparkNotSelected: 'You need to select a spark to buy tokens.<br/>Don\'t have a spark? Create <a href="/sparks/new">here</a>.',
+  modSparkNotSelected:
+    'You need to select a spark to buy tokens.<br/>Don\'t have a spark? Create <a href="/sparks/new">here</a>.',
   confirmButton: 'Confirm',
   confirmWithdraw: 'Are you sure you want to withdraw the listing?',
   buyTokenTitle: 'Buy Digital Art',
@@ -1166,7 +1188,8 @@ const intl = {
   purchaseSuccessful: 'Your purchase has been completed successfully.',
   // Assets pages
   assetsPageTitle: 'Assets',
-  collectionEmpty: 'Your collection is empty. Visit <a href="/marketplace" data-sveltekit-preload-data>Marketplace</a> to buy digital art.',
+  collectionEmpty:
+    'Your collection is empty. Visit <a href="/marketplace" data-sveltekit-preload-data>Marketplace</a> to buy digital art.',
   // Token page
   tokenPageTitle: 'Token',
   tokenID: 'ID',

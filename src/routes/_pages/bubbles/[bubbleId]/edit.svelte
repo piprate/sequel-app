@@ -29,7 +29,7 @@
       membershipMode: bubble.membershipMode,
       observerMode: bubble.observerMode,
       writerMode: bubble.writerMode,
-      federationMode: bubble.federationMode || 'disabled',
+      federationMode: bubble.federationMode || 'disabled'
     }
 
     world = bubble.worldRef
@@ -47,11 +47,12 @@
     }
   })
 </script>
-<DynamicPageBanner title="{intl.editBubble}" />
-{#if $isAuthenticated }
-    {#if template}
-        <BubbleEdit {realm} newBubble={false} bubbleId={params.bubbleId} {template} {world} />
-    {/if}
+
+<DynamicPageBanner title={intl.editBubble} />
+{#if $isAuthenticated}
+  {#if template}
+    <BubbleEdit {realm} newBubble={false} bubbleId={params.bubbleId} {template} {world} />
+  {/if}
 {:else}
-    <RestrictedPageWarning />
+  <RestrictedPageWarning />
 {/if}

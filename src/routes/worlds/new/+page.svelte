@@ -8,4 +8,4 @@
 
 <Title name={titleName} />
 
-  <LazyPage {pageComponent} />
+<LazyPage {pageComponent} />

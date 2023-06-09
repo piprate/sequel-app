@@ -13,21 +13,21 @@ import { get, writable } from 'svelte/store'
 import { unwrap, wrap } from '../_utils/mapper'
 import { displayError } from './errors'
 
-async function _updateWorld (worldId, instanceName, accessToken) {
+async function _updateWorld(worldId, instanceName, accessToken) {
   const localPromise = database.getWorld(instanceName, wrap(worldId))
-  const remotePromise = getWorld(instanceName, accessToken, worldId).then(world => {
+  const remotePromise = getWorld(instanceName, accessToken, worldId).then((world) => {
     /* no await */
     database.setWorld(instanceName, world)
     return world
   })
 
   try {
-    observedWorld.set((await localPromise))
+    observedWorld.set(await localPromise)
   } catch (e) {
     console.error(e)
   }
   try {
-    observedWorld.set((await remotePromise))
+    observedWorld.set(await remotePromise)
   } catch (e) {
     if (e.status === 404) {
       observedWorld.set(null)
@@ -38,7 +38,7 @@ async function _updateWorld (worldId, instanceName, accessToken) {
   }
 }
 
-async function _updateWorldRelationship (worldId, instanceName, accessToken, asSpark) {
+async function _updateWorldRelationship(worldId, instanceName, accessToken, asSpark) {
   if (!asSpark) {
     // relationship can only be retrieved for a specific spark
     observedWorldRelationship.set(null)
@@ -46,7 +46,7 @@ async function _updateWorldRelationship (worldId, instanceName, accessToken, asS
   }
 
   const localPromise = database.getWorldRelationship(instanceName, wrap(worldId))
-  const remotePromise = getWorldRelationship(instanceName, accessToken, worldId, asSpark).then(relationship => {
+  const remotePromise = getWorldRelationship(instanceName, accessToken, worldId, asSpark).then((relationship) => {
     /* no await */
     database.setWorldRelationship(instanceName, relationship)
     return relationship
@@ -60,7 +60,7 @@ async function _updateWorldRelationship (worldId, instanceName, accessToken, asS
     console.error(e)
   }
   try {
-    observedWorldRelationship.set((await remotePromise))
+    observedWorldRelationship.set(await remotePromise)
   } catch (e) {
     if (e.status === 404) {
       observedWorldRelationship.set(null)
@@ -71,7 +71,7 @@ async function _updateWorldRelationship (worldId, instanceName, accessToken, asS
   }
 }
 
-export async function updateLocalWorldRelationship (instanceName, worldId, relationship) {
+export async function updateLocalWorldRelationship(instanceName, worldId, relationship) {
   await database.setWorldRelationship(instanceName, relationship)
   try {
     observedWorldRelationship.set(relationship)
@@ -80,12 +80,12 @@ export async function updateLocalWorldRelationship (instanceName, worldId, relat
   }
 }
 
-export async function clearWorldProfileAndRelationship () {
+export async function clearWorldProfileAndRelationship() {
   observedWorld.set(null)
   observedWorldRelationship.set(null)
 }
 
-export async function updateWorldProfileAndRelationship (worldId) {
+export async function updateWorldProfileAndRelationship(worldId) {
   const _currentInstance = currentInstance.get()
   const token = get(accessToken)
   await Promise.all([
@@ -94,23 +94,26 @@ export async function updateWorldProfileAndRelationship (worldId) {
   ])
 }
 
-export async function updateWorldRelationship (worldId) {
+export async function updateWorldRelationship(worldId) {
   await _updateWorldRelationship(worldId, currentInstance.get(), get(accessToken), get(currentSparkId))
 }
 
 export const worldOperationInProgress = writable(false)
 export const worldOperationError = writable(null)
 
-export async function saveWorld (realm, worldId, template) {
+export async function saveWorld(realm, worldId, template) {
   worldOperationInProgress.set(true)
   worldOperationError.set(null)
 
   let world
 
   try {
-    const submission = Object.assign({
-      summaryFormat: 'txt'
-    }, template)
+    const submission = Object.assign(
+      {
+        summaryFormat: 'txt'
+      },
+      template
+    )
 
     submission.name = submission.name.trim()
 
@@ -151,6 +154,6 @@ export async function saveWorld (realm, worldId, template) {
   return world
 }
 
-export async function loadWorld (worldId) {
+export async function loadWorld(worldId) {
   return getWorld(currentInstance.get(), get(accessToken), worldId)
 }

@@ -11,7 +11,7 @@
   import { intrinsicScale } from '../../../_thirdparty/intrinsic-scale/intrinsicScale'
   import { get } from '../../../_utils/lodash-lite'
   import { formatIntl } from '../../../_utils/formatIntl'
-  import {onMount} from "svelte";
+  import { onMount } from 'svelte'
 
   // padding for .media-scroll-item-image-area
   const IMAGE_AREA_PADDING = {
@@ -21,23 +21,23 @@
     bottom: 5
   }
 
-  export let id;
-  export let label;
-  export let mediaItems;
-  export let scrolledItem;
+  export let id
+  export let label
+  export let mediaItems
+  export let scrolledItem
 
-  let pinchZoomMode = false;
+  let pinchZoomMode = false
 
-  $: length = mediaItems.length;
-  $: dots = times(length, i => ({ i }));
-  $: canPinchZoom = !mediaItems.some(media => ['Video', 'Audio'].includes(media.type));
-  $: mediaItem = mediaItems[scrolledItem];
-  $: nativeWidth = get(mediaItem, ['meta', 'original', 'width'], 300); // TODO: Pleroma placeholder
-  $: nativeHeight = get(mediaItem, ['meta', 'original', 'height'], 200); // TODO: Pleroma placeholder
+  $: length = mediaItems.length
+  $: dots = times(length, (i) => ({ i }))
+  $: canPinchZoom = !mediaItems.some((media) => ['Video', 'Audio'].includes(media.type))
+  $: mediaItem = mediaItems[scrolledItem]
+  $: nativeWidth = get(mediaItem, ['meta', 'original', 'width'], 300) // TODO: Pleroma placeholder
+  $: nativeHeight = get(mediaItem, ['meta', 'original', 'height'], 200) // TODO: Pleroma placeholder
 
-  let scroller;
+  let scroller
 
-  function createLabel (i, current) {
+  function createLabel(i, current) {
     return formatIntl('intl.showMedia', { index: i + 1, current })
   }
 
@@ -49,35 +49,35 @@
     scrolledItem = Math.round((scrollLeft / scrollWidth) * length)
   }
 
-  let onScroll;
+  let onScroll
 
-  function setupScroll () {
+  function setupScroll() {
     scroller.addEventListener('scroll', onScroll)
   }
 
-  function teardownScroll () {
+  function teardownScroll() {
     scroller.removeEventListener('scroll', onScroll)
   }
 
-  function onButtonClick (i) {
+  function onButtonClick(i) {
     if (scrolledItem !== i) {
       scrollToItem(i, true)
     }
   }
 
-  function next () {
+  function next() {
     if (scrolledItem < length - 1) {
       scrollToItem(scrolledItem + 1, true)
     }
   }
 
-  function prev () {
+  function prev() {
     if (scrolledItem > 0) {
       scrollToItem(scrolledItem - 1, true)
     }
   }
 
-  function onShow () {
+  function onShow() {
     if (scrolledItem) {
       requestAnimationFrame(() => {
         scrollToItem(scrolledItem, false)
@@ -88,8 +88,8 @@
     }
   }
 
-  function scrollToItem (_scrolledItem, smooth) {
-    scrolledItem = _scrolledItem;
+  function scrollToItem(_scrolledItem, smooth) {
+    scrolledItem = _scrolledItem
     const { scrollWidth } = scroller
     const scrollLeft = Math.floor(scrollWidth * (_scrolledItem / length))
     if (smooth) {
@@ -106,11 +106,11 @@
     }
   }
 
-  function togglePinchZoomMode () {
-    pinchZoomMode = !pinchZoomMode;
+  function togglePinchZoomMode() {
+    pinchZoomMode = !pinchZoomMode
   }
 
-  function onImageClick (e) {
+  function onImageClick(e) {
     if (pinchZoomMode) {
       return
     }
@@ -125,7 +125,7 @@
     const scale = intrinsicScale(rect.width, rect.height, nativeWidth, nativeHeight)
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    const insideImage = x >= scale.x && x <= (scale.x + scale.width) && y >= scale.y && y <= (scale.y + scale.height)
+    const insideImage = x >= scale.x && x <= scale.x + scale.width && y >= scale.y && y <= scale.y + scale.height
     if (!insideImage) {
       // close dialog when clicking outside of image
       e.preventDefault()
@@ -134,7 +134,7 @@
     }
   }
 
-  function onMediaControlsClick (e) {
+  function onMediaControlsClick(e) {
     if (pinchZoomMode) {
       return
     }
@@ -149,11 +149,11 @@
   }
 
   onMount(() => {
-    onScroll = debounce(rawOnScroll, 50, { leading: false, trailing: true });
+    onScroll = debounce(rawOnScroll, 50, { leading: false, trailing: true })
     return () => {
-      teardownScroll();
+      teardownScroll()
     }
-  });
+  })
 </script>
 
 <ModalDialog
@@ -163,27 +163,27 @@
   muted="true"
   clickHeaderToClose={true}
   className="media-modal-dialog"
-  on:show="{onShow}"
+  on:show={onShow}
 >
   <div class="media-container">
-    <ul class="media-scroll" bind:this={scroller}  on:click="{onImageClick}">
+    <ul class="media-scroll" bind:this={scroller} on:click={onImageClick}>
       {#each mediaItems as media}
         <li class="media-scroll-item">
           <div class="media-scroll-item-inner">
             <div class="media-scroll-item-image-area">
-                {#if canPinchZoom && pinchZoomMode}
-                  <PinchZoomable className='media-pinch-zoom' >
-                    <MediaInDialog {media} />
-                  </PinchZoomable>
-                {:else}
+              {#if canPinchZoom && pinchZoomMode}
+                <PinchZoomable className="media-pinch-zoom">
                   <MediaInDialog {media} />
-                {/if}
+                </PinchZoomable>
+              {:else}
+                <MediaInDialog {media} />
+              {/if}
             </div>
           </div>
         </li>
       {/each}
     </ul>
-    <div class="media-controls-outside" on:click="{onMediaControlsClick}">
+    <div class="media-controls-outside" on:click={onMediaControlsClick}>
       {#if canPinchZoom}
         <IconButton
           className="media-control-button media-control-button-dummy-spacer"
@@ -197,42 +197,44 @@
         <!-- Roughly based on https://www.w3.org/WAI/tutorials/carousels/functionality/
              Since this toolbar contains a mix of left/right/first/second/third/fourth buttons,
              just list them and explicitly label the current one as "current." -->
-        <ul class="media-controls" aria-label="{intl.navigateMedia}">
+        <ul class="media-controls" aria-label={intl.navigateMedia}>
+          <li class="media-control">
+            <IconButton
+              className="media-control-button"
+              svgClassName="media-control-button-svg"
+              disabled={scrolledItem === 0}
+              label={intl.showPreviousMedia}
+              href="#fa-angle-left"
+              on:click={prev}
+            />
+          </li>
+          {#each dots as dot, i (dot.i)}
             <li class="media-control">
               <IconButton
                 className="media-control-button"
                 svgClassName="media-control-button-svg"
-                disabled={scrolledItem === 0}
-                label="{intl.showPreviousMedia}"
-                href="#fa-angle-left"
-                on:click="{prev}"
+                pressable={true}
+                label={createLabel(i, false)}
+                pressedLabel={createLabel(i, true)}
+                pressed={i === scrolledItem}
+                href={i === scrolledItem ? '#fa-circle' : '#fa-circle-o'}
+                sameColorWhenPressed={true}
+                on:click={() => {
+                  onButtonClick(i)
+                }}
               />
             </li>
-            {#each dots as dot, i (dot.i)}
-              <li class="media-control">
-                <IconButton
-                  className="media-control-button"
-                  svgClassName="media-control-button-svg"
-                  pressable={true}
-                  label="{createLabel(i, false)}"
-                  pressedLabel="{createLabel(i, true)}"
-                  pressed={i === scrolledItem}
-                  href={i === scrolledItem ? '#fa-circle' : '#fa-circle-o'}
-                  sameColorWhenPressed={true}
-                  on:click="{ () => { onButtonClick(i) } }"
-                />
-              </li>
-            {/each}
-            <li class="media-control">
-              <IconButton
-                className="media-control-button"
-                svgClassName="media-control-button-svg"
-                disabled={scrolledItem === length - 1}
-                label="{intl.showNextMedia}"
-                href="#fa-angle-right"
-                on:click="{next}"
-              />
-            </li>
+          {/each}
+          <li class="media-control">
+            <IconButton
+              className="media-control-button"
+              svgClassName="media-control-button-svg"
+              disabled={scrolledItem === length - 1}
+              label={intl.showNextMedia}
+              href="#fa-angle-right"
+              on:click={next}
+            />
+          </li>
         </ul>
       {/if}
       {#if canPinchZoom}
@@ -241,20 +243,21 @@
           svgClassName="media-control-button-svg"
           pressable={true}
           pressed={pinchZoomMode}
-          label="{intl.enterPinchZoom}"
-          pressedLabel="{intl.exitPinchZoom}"
+          label={intl.enterPinchZoom}
+          pressedLabel={intl.exitPinchZoom}
           href="#fa-search"
-          on:click="{togglePinchZoomMode}"
+          on:click={togglePinchZoomMode}
         />
       {/if}
     </div>
   </div>
 </ModalDialog>
 
-{#if !$leftRightChangesFocus }
-  <Shortcut scope='modal-{id}' key="ArrowLeft" on:pressed="{prev}" />
-  <Shortcut scope='modal-{id}' key="ArrowRight" on:pressed="{next}" />
+{#if !$leftRightChangesFocus}
+  <Shortcut scope="modal-{id}" key="ArrowLeft" on:pressed={prev} />
+  <Shortcut scope="modal-{id}" key="ArrowRight" on:pressed={next} />
 {/if}
+
 <style>
   :global(.media-modal-dialog) {
     max-width: 100%;
@@ -367,11 +370,11 @@
     /* old scroll snap points spec */
     .media-scroll {
       -webkit-scroll-snap-type: mandatory;
-              scroll-snap-type: mandatory;
+      scroll-snap-type: mandatory;
       -webkit-scroll-snap-destination: 0% center;
-              scroll-snap-destination: 0% center;
+      scroll-snap-destination: 0% center;
       -webkit-scroll-snap-points-x: repeat(100%);
-              scroll-snap-points-x: repeat(100%);
+      scroll-snap-points-x: repeat(100%);
     }
 
     .media-scroll-item {
@@ -384,6 +387,4 @@
       height: calc(100vh - 64px);
     }
   }
-
-
 </style>

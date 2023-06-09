@@ -1,5 +1,5 @@
 $main-theme-color: #a75fcf;
-$main-bg-color: #28252E;
+$main-bg-color: #28252e;
 $body-bg-color: darken($main-bg-color, 5%);
 $anchor-color: $main-theme-color;
 $main-text-color: #dfdfdf;
@@ -10,7 +10,7 @@ $toast-bg: #333;
 $focus-outline: lighten($main-theme-color, 50%);
 $compose-background: lighten($main-theme-color, 52%);
 
-@import "_base.scss";
-@import "_dark.scss";
-@import "_dark_navbar.scss";
-@import "_dark_scrollbars.scss";
+@import '_base.scss';
+@import '_dark.scss';
+@import '_dark_navbar.scss';
+@import '_dark_scrollbars.scss';

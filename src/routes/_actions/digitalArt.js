@@ -6,21 +6,21 @@ import { wrap } from '../_utils/mapper'
 import { editDigitalArt, getDigitalArt, newDigitalArt } from '../_api/studio'
 import { prepareMediaItem } from './media.js'
 
-async function _updateDigitalArt (id, instanceName, accessToken, asSpark) {
+async function _updateDigitalArt(id, instanceName, accessToken, asSpark) {
   const localPromise = database.getDigitalArt(instanceName, wrap(id))
-  const remotePromise = getDigitalArt(instanceName, accessToken, id, asSpark).then(digitalArt => {
+  const remotePromise = getDigitalArt(instanceName, accessToken, id, asSpark).then((digitalArt) => {
     /* no await */
     database.setDigitalArt(instanceName, digitalArt)
     return digitalArt
   })
 
   try {
-    observedDigitalArt.set((await localPromise))
+    observedDigitalArt.set(await localPromise)
   } catch (e) {
     console.error(e)
   }
   try {
-    observedDigitalArt.set((await remotePromise))
+    observedDigitalArt.set(await remotePromise)
   } catch (e) {
     if (e.status === 404) {
       observedDigitalArt.set(null)
@@ -31,14 +31,14 @@ async function _updateDigitalArt (id, instanceName, accessToken, asSpark) {
   }
 }
 
-export async function clearDigitalArt () {
+export async function clearDigitalArt() {
   observedDigitalArt.set(null)
 }
 
 export const digitalArtOperationInProgress = writable(false)
 export const digitalArtOperationError = writable(null)
 
-export async function saveDigitalArt (realm, digitalArtId, submission) {
+export async function saveDigitalArt(realm, digitalArtId, submission) {
   digitalArtOperationInProgress.set(true)
   digitalArtOperationError.set(null)
 
@@ -85,13 +85,13 @@ export async function saveDigitalArt (realm, digitalArtId, submission) {
   return digitalArt
 }
 
-export async function updateDigitalArt (id) {
+export async function updateDigitalArt(id) {
   const _currentInstance = currentInstance.get()
   const token = get(accessToken)
   const asSpark = get(currentSparkId)
   await _updateDigitalArt(id, _currentInstance, token, asSpark)
 }
 
-export async function loadDigitalArt (id) {
+export async function loadDigitalArt(id) {
   return getDigitalArt(currentInstance.get(), get(accessToken), id, get(currentSparkId))
 }

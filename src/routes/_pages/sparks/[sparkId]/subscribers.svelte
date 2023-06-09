@@ -13,14 +13,14 @@
   $: sparksFetcher = () => getSubscribers($currentInstance, $accessToken, sparkId)
 </script>
 
-{#if $isAuthenticated }
-    <DynamicPageBanner title="{intl.subscribers}" />
-    <FreeTextLayout>
-        <InfoAside className="new-entity-notice-aside">
-            {intl.featureNotImplemented}
-        </InfoAside>
-    </FreeTextLayout>
-    <!--<SparksListPage {sparksFetcher} />-->
+{#if $isAuthenticated}
+  <DynamicPageBanner title={intl.subscribers} />
+  <FreeTextLayout>
+    <InfoAside className="new-entity-notice-aside">
+      {intl.featureNotImplemented}
+    </InfoAside>
+  </FreeTextLayout>
+  <!--<SparksListPage {sparksFetcher} />-->
 {:else}
-    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+  <RestrictedPageWarning message={intl.loginToAccess} offerVisitorMode={true} />
 {/if}

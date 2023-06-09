@@ -2,10 +2,9 @@ import { inBrowser } from './browserOrNode'
 import { isChrome } from './userAgent/isChrome'
 
 // via https://github.com/tootsuite/mastodon/blob/f59ed3a4fafab776b4eeb92f805dfe1fecc17ee3/app/javascript/mastodon/scroll.js
-const easingOutQuint = (x, t, b, c, d) =>
-  c * ((t = t / d - 1) * t * t * t * t + 1) + b
+const easingOutQuint = (x, t, b, c, d) => c * ((t = t / d - 1) * t * t * t * t + 1) + b
 
-function smoothScrollPolyfill (node, key, target) {
+function smoothScrollPolyfill(node, key, target) {
   const startTime = Date.now()
   const offset = node[key]
   const gap = target - offset
@@ -47,25 +46,24 @@ function smoothScrollPolyfill (node, key, target) {
   return cancel
 }
 
-function testSupportsSmoothScroll () {
+function testSupportsSmoothScroll() {
   let supports = false
   try {
     const div = document.createElement('div')
     div.scrollTo({
       top: 0,
-      get behavior () {
+      get behavior() {
         supports = true
         return 'smooth'
       }
     })
-  } catch (err) {
-  } // Edge throws an error
+  } catch (err) {} // Edge throws an error
   return supports
 }
 
 export const hasNativeSmoothScroll = inBrowser() && testSupportsSmoothScroll()
 
-export function smoothScroll (node, topOrLeft, horizontal, preferFast, reduceMotion) {
+export function smoothScroll(node, topOrLeft, horizontal, preferFast, reduceMotion) {
   if (reduceMotion) {
     console.log('smooth scroll: disabled')
     // Don't do smooth-scroll at all for users who prefer reduced motion.

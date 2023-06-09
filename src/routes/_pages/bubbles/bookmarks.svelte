@@ -12,19 +12,20 @@
   params = undefined
   const intl = {}
 
-  $: bubblesFetcher = () => $isUserLoggedIn ? getBookmarkedBubbles($currentInstance, $accessToken, $currentSparkId) : []
+  $: bubblesFetcher = () =>
+    $isUserLoggedIn ? getBookmarkedBubbles($currentInstance, $accessToken, $currentSparkId) : []
 </script>
 
-{#if $isUserLoggedIn }
-    {#if $pinnedPages !== '/bubbles'}
-        <DynamicPageBanner title="{intl.bubbles}" icon="#fa-comments"/>
-    {/if}
-    <BubbleBrowserFilter filter="bookmarks" />
-    <BubblesListPage {bubblesFetcher} >
-        <span slot="is-empty">
-            <InfoAside>
-                {intl.noBubbleBookmarksYet}
-            </InfoAside>
-        </span>
-    </BubblesListPage>
+{#if $isUserLoggedIn}
+  {#if $pinnedPages !== '/bubbles'}
+    <DynamicPageBanner title={intl.bubbles} icon="#fa-comments" />
+  {/if}
+  <BubbleBrowserFilter filter="bookmarks" />
+  <BubblesListPage {bubblesFetcher}>
+    <span slot="is-empty">
+      <InfoAside>
+        {intl.noBubbleBookmarksYet}
+      </InfoAside>
+    </span>
+  </BubblesListPage>
 {/if}

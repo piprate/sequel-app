@@ -1,17 +1,17 @@
 <script>
-  import { importShowDigitalArtOptionsDialog } from '../dialog/asyncDialogs/importShowDigitalArtOptionsDialog';
+  import { importShowDigitalArtOptionsDialog } from '../dialog/asyncDialogs/importShowDigitalArtOptionsDialog'
   import IconButton from '../IconButton.svelte'
 
   export let digitalArt
   export let ourSpark
 
   $: id = digitalArt.id
-  $: status = !!digitalArt.sealRecord ? "Sealed": "Draft"
+  $: status = !!digitalArt.sealRecord ? 'Sealed' : 'Draft'
   $: editionsDisplay = digitalArt.maxEdition
   $: soldDisplay = 0
   $: sparkSelected = !!ourSpark
 
-  async function onMoreOptionsClick () {
+  async function onMoreOptionsClick() {
     const showOptionsDialog = await importShowDigitalArtOptionsDialog()
     showOptionsDialog(digitalArt, ourSpark)
   }
@@ -44,16 +44,12 @@
     </span>
   </div>
   {#if sparkSelected}
-  <div class="digital-art-more-options">
-    <IconButton
-      label="{intl.moreOptions}"
-      href="#fa-bars"
-      muted="true"
-      on:click="{onMoreOptionsClick}"
-    />
-  </div>
+    <div class="digital-art-more-options">
+      <IconButton label={intl.moreOptions} href="#fa-bars" muted="true" on:click={onMoreOptionsClick} />
+    </div>
   {/if}
 </div>
+
 <style>
   .digital-art-details {
     grid-area: details;

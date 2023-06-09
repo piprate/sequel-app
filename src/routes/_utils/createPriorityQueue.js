@@ -2,12 +2,12 @@
 // and executes the resolve() functions in priority order
 import { queueMicrotask } from './queueMicrotask'
 
-export function createPriorityQueue () {
+export function createPriorityQueue() {
   const tasks = []
 
-  function flush () {
+  function flush() {
     if (tasks.length) {
-      const sortedTasks = tasks.sort((a, b) => a.priority < b.priority ? -1 : 1)
+      const sortedTasks = tasks.sort((a, b) => (a.priority < b.priority ? -1 : 1))
       for (const task of sortedTasks) {
         task.resolve()
       }
@@ -15,8 +15,8 @@ export function createPriorityQueue () {
     }
   }
 
-  return function next (priority) {
-    return new Promise(resolve => {
+  return function next(priority) {
+    return new Promise((resolve) => {
       tasks.push({ priority, resolve })
       queueMicrotask(flush)
     })

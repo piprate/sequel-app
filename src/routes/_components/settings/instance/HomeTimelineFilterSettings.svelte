@@ -18,8 +18,4 @@
   ]
 </script>
 
-<GenericInstanceSettings
-        {instanceName}
-        {options}
-        label="{intl.homeTimelineFilterSettings}"
-/>
+<GenericInstanceSettings {instanceName} {options} label={intl.homeTimelineFilterSettings} />

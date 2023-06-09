@@ -9,9 +9,10 @@
 <aside class="info-aside {selectedClass}">
   <SvgIcon href="#fa-info-circle" className="aside-icon" />
   <span>
-    <slot></slot>
+    <slot />
   </span>
 </aside>
+
 <style>
   .info-aside {
     font-size: 1.2em;
@@ -37,4 +38,3 @@
     margin: 10px 10px 10px 10px;
   }
 </style>
-

@@ -9,7 +9,7 @@ const RENDER_BUFFER_FACTOR = 2.5
 export const virtualListStore = realmStore(/* maxSize */ 10)
 
 // TODO: this is hacky
-export function clearRealmByPrefix (store, prefix) {
+export function clearRealmByPrefix(store, prefix) {
   const { currentRealm, realms } = store.get()
   if (!realms) {
     return
@@ -55,13 +55,13 @@ export const rawVisibleItems = derived(
       const height = $itemHeights[key] || 0
       const currentOffset = totalOffset
       totalOffset += height
-      const isAboveViewport = (currentOffset < effectiveScrollTop)
+      const isAboveViewport = currentOffset < effectiveScrollTop
       if (isAboveViewport) {
-        if ((effectiveScrollTop - height - renderBuffer) > currentOffset) {
+        if (effectiveScrollTop - height - renderBuffer > currentOffset) {
           continue // above the area we want to render
         }
       } else {
-        if (currentOffset > (effectiveScrollTop + $offsetHeight + renderBuffer)) {
+        if (currentOffset > effectiveScrollTop + $offsetHeight + renderBuffer) {
           break // below the area we want to render
         }
       }
@@ -97,29 +97,23 @@ export const heightWithoutFooter = derived(
 export const height = derived(
   [heightWithoutFooter, showFooter, footerHeight],
   ([$heightWithoutFooter, $showFooter, $footerHeight]) => {
-    return $showFooter ? ($heightWithoutFooter + $footerHeight) : $heightWithoutFooter
+    return $showFooter ? $heightWithoutFooter + $footerHeight : $heightWithoutFooter
   }
 )
 
-export const length = derived(
-  items,
-  $items => $items ? $items.length : 0
-)
+export const length = derived(items, ($items) => ($items ? $items.length : 0))
 
-export const allVisibleItemsHaveHeight = derived(
-  [visibleItems, itemHeights],
-  ([$visibleItems, $itemHeights]) => {
-    if (!$visibleItems) {
+export const allVisibleItemsHaveHeight = derived([visibleItems, itemHeights], ([$visibleItems, $itemHeights]) => {
+  if (!$visibleItems) {
+    return false
+  }
+  for (const visibleItem of $visibleItems) {
+    if (!$itemHeights[visibleItem.key]) {
       return false
     }
-    for (const visibleItem of $visibleItems) {
-      if (!$itemHeights[visibleItem.key]) {
-        return false
-      }
-    }
-    return true
   }
-)
+  return true
+})
 
 // if (typeof window !== "undefined") {
 //   window.__virtualListStore = virtualListStore // for debugging

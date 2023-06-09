@@ -4,6 +4,6 @@
   import pageComponent from '../../_pages/bubbles/bookmarks.svelte'
 </script>
 
-<Title name="{intl.bubbleBookmarksTitle}" />
+<Title name={intl.bubbleBookmarksTitle} />
 
 <LazyPage {pageComponent} />

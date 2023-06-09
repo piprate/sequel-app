@@ -1,4 +1,4 @@
-export function decodeImage (img) {
+export function decodeImage(img) {
   if (typeof img.decode === 'function' && !img.src.startsWith('data:image/png;base64,')) {
     return img.decode()
   }

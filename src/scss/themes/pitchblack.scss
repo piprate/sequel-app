@@ -10,9 +10,9 @@ $toast-bg: lighten($body-bg-color, 4%);
 $focus-outline: lighten($main-theme-color, 50%);
 $compose-background: darken($main-theme-color, 12%);
 
-@import "_base.scss";
-@import "_dark.scss";
-@import "_dark_scrollbars.scss";
+@import '_base.scss';
+@import '_dark.scss';
+@import '_dark_scrollbars.scss';
 
 :root {
   --settings-list-item-text: #{$anchor-color};

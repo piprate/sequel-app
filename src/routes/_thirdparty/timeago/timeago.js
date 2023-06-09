@@ -6,7 +6,7 @@ const IndexMapEn = ['second', 'minute', 'hour', 'day', 'week', 'month', 'year']
 const SEC_ARRAY = [60, 60, 24, 7, 365 / 7 / 12, 12]
 const intlFormat = thunk(() => new Intl.RelativeTimeFormat(LOCALE))
 
-function formatRelativeTime (number, index) {
+function formatRelativeTime(number, index) {
   if (index === 0) {
     if (import.meta.env.MODE === 'test') {
       return 'just now'
@@ -18,7 +18,7 @@ function formatRelativeTime (number, index) {
   return intlFormat().format(number, unit)
 }
 
-function formatDiff (seconds) {
+function formatDiff(seconds) {
   let i = 0
 
   const pastDate = seconds < 0
@@ -39,6 +39,6 @@ function formatDiff (seconds) {
   return formatRelativeTime(pastDate ? -seconds : seconds, i)
 }
 
-export function format (milliseconds) {
+export function format(milliseconds) {
   return formatDiff(milliseconds / 1000)
 }

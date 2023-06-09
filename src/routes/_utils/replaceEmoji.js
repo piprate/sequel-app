@@ -4,13 +4,13 @@ import { getEmojiRegex } from './emojiRegex'
 const NON_EMOJI_REGEX = /^(?:[0-9#*]|™|®|\ufe0f)+$/
 
 // replace emoji in HTML with something else, safely skipping HTML tags
-export function replaceEmoji (string, replacer) {
+export function replaceEmoji(string, replacer) {
   let output = ''
   let leftAngleBracketIdx = string.indexOf('<')
   let currentIdx = 0
   const emojiRegex = getEmojiRegex()
 
-  function safeReplacer (substring) {
+  function safeReplacer(substring) {
     // emoji regex matches digits and pound sign https://github.com/mathiasbynens/emoji-regex/issues/33#issuecomment-373674579
     if (substring.match(NON_EMOJI_REGEX)) {
       return substring
@@ -24,7 +24,8 @@ export function replaceEmoji (string, replacer) {
     output += substring.replace(emojiRegex, safeReplacer)
 
     const rightAngleBracketIdx = string.indexOf('>', leftAngleBracketIdx + 1)
-    if (rightAngleBracketIdx === -1) { // broken HTML, abort
+    if (rightAngleBracketIdx === -1) {
+      // broken HTML, abort
       output += string.substring(leftAngleBracketIdx, string.length)
       return output
     }

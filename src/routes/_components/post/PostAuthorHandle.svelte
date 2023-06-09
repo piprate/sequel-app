@@ -2,9 +2,11 @@
   export let isPostInNotification
   export let postAuthor
 </script>
-<span class="post-author-handle {isPostInNotification ? 'post-in-notification' : '' }">
+
+<span class="post-author-handle {isPostInNotification ? 'post-in-notification' : ''}">
   {'@' + postAuthor.username}
 </span>
+
 <style>
   .post-author-handle {
     grid-area: author-handle;

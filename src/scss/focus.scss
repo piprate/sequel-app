@@ -38,20 +38,25 @@
 // For KaiOS, do some additional things to improve the focus styles, which don't show up well
 // for some reason
 @media (max-width: 240px) {
-  a:not(.button):focus, span:focus {
+  a:not(.button):focus,
+  span:focus {
     background: var(--focus-bg) !important;
   }
 
-  button:focus, .button:focus {
+  button:focus,
+  .button:focus {
     opacity: 0.7;
   }
 
-  button.primary:focus, .button.primary:focus {
+  button.primary:focus,
+  .button.primary:focus {
     opacity: 0.8;
   }
 
   // add extremely visible styles for buttons, ala .focus-after
-  button, .button, a.main-nav-link {
+  button,
+  .button,
+  a.main-nav-link {
     position: relative;
 
     &:focus {
@@ -68,6 +73,5 @@
       border: var(--focus-width) solid var(--focus-outline);
       pointer-events: none;
     }
-
   }
 }

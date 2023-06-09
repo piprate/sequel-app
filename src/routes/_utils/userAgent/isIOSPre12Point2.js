@@ -3,6 +3,9 @@ import { inBrowser } from '../browserOrNode'
 import { thunk } from '../thunk'
 import { isIOS } from '../userAgent/isIOS'
 
-export const isIOSPre12Point2 = thunk(() => inBrowser() && isIOS() &&
-  !(typeof IntersectionObserver === 'function' &&
-    IntersectionObserver.toString().includes('[native code]')))
+export const isIOSPre12Point2 = thunk(
+  () =>
+    inBrowser() &&
+    isIOS() &&
+    !(typeof IntersectionObserver === 'function' && IntersectionObserver.toString().includes('[native code]'))
+)

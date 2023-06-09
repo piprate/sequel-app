@@ -2,33 +2,31 @@
   import Shortcut from './shortcut/Shortcut.svelte'
   import SvgIcon from './SvgIcon.svelte'
 
-  export let title;
-  export let icon = undefined;
-  export let ariaTitle = '';
-  export let disableBackButton = false;
+  export let title
+  export let icon = undefined
+  export let ariaTitle = ''
+  export let disableBackButton = false
 
   function onGoBack() {
     window.history.back()
   }
 </script>
 
-<div class="dynamic-page-banner {icon ? 'dynamic-page-with-icon' : ''}"
-     role="navigation" aria-label="{intl.pageHeader}"
->
+<div class="dynamic-page-banner {icon ? 'dynamic-page-with-icon' : ''}" role="navigation" aria-label={intl.pageHeader}>
   {#if icon}
-  <SvgIcon className="dynamic-page-banner-svg" href={icon} />
+    <SvgIcon className="dynamic-page-banner-svg" href={icon} />
   {/if}
   <h1 class="dynamic-page-title" aria-label={ariaTitle}>{title}</h1>
-  {#if !disableBackButton }
-    <button type="button"
-            class="dynamic-page-go-back"
-            aria-label="{intl.goBack}"
-            on:click|preventDefault="{onGoBack}">{intl.back}</button>
+  {#if !disableBackButton}
+    <button type="button" class="dynamic-page-go-back" aria-label={intl.goBack} on:click|preventDefault={onGoBack}
+      >{intl.back}</button
+    >
   {/if}
 </div>
-{#if !disableBackButton }
-<Shortcut key="Backspace" on:pressed="{onGoBack}"/>
+{#if !disableBackButton}
+  <Shortcut key="Backspace" on:pressed={onGoBack} />
 {/if}
+
 <style>
   .dynamic-page-banner {
     display: grid;

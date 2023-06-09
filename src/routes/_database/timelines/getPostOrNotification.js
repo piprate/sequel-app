@@ -5,7 +5,7 @@ import { fetchPost } from './fetchPost'
 import { fetchNotification } from './fetchNotification'
 import { sparkSpecificPostId } from './cachePost'
 
-export async function getPost (instanceName, id, asSpark) {
+export async function getPost(instanceName, id, asSpark) {
   const cacheId = sparkSpecificPostId(id, asSpark)
   if (hasInCache(postsCache, instanceName, cacheId)) {
     return getInCache(postsCache, instanceName, cacheId)
@@ -20,7 +20,7 @@ export async function getPost (instanceName, id, asSpark) {
   return result
 }
 
-export async function getNotification (instanceName, id, asSpark) {
+export async function getNotification(instanceName, id, asSpark) {
   if (hasInCache(notificationsCache, instanceName, id)) {
     return getInCache(notificationsCache, instanceName, id)
   }

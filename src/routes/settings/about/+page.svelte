@@ -4,6 +4,6 @@
   import pageComponent from '../../_pages/settings/about.svelte'
 </script>
 
-<Title name="{intl.about}" settingsPage={true} />
+<Title name={intl.about} settingsPage={true} />
 
-  <LazyPage {pageComponent} />
+<LazyPage {pageComponent} />

@@ -5,7 +5,7 @@ import { inBrowser } from '../browserOrNode'
 import { thunk } from '../thunk'
 import { isChrome } from './isChrome'
 
-function getChromeVersion () {
+function getChromeVersion() {
   try {
     return parseInt(navigator.userAgent.match(/Chrome\/(\d+)/)[1], 10) || undefined
   } catch (e) {

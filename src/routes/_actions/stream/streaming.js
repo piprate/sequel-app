@@ -5,12 +5,12 @@ import { getFirstTimelineItemId } from '../../_store/timeline'
 import { get } from 'svelte/store'
 import { loggedInInstances } from '../../_store/local'
 
-export function createStream (instanceName, timelineName, firstPostId, asSpark) {
-  console.log(`streaming ${instanceName} ${timelineName}: createStream`, 'firstPostId', firstPostId,
-    'asSpark', asSpark)
+export function createStream(instanceName, timelineName, firstPostId, asSpark) {
+  console.log(`streaming ${instanceName} ${timelineName}: createStream`, 'firstPostId', firstPostId, 'asSpark', asSpark)
 
   const _loggedInInstances = get(loggedInInstances)
-  const _accessToken = _loggedInInstances && _loggedInInstances[instanceName] && _loggedInInstances[instanceName].access_token
+  const _accessToken =
+    _loggedInInstances && _loggedInInstances[instanceName] && _loggedInInstances[instanceName].access_token
 
   let firstNotificationId
   if (asSpark) {
@@ -27,7 +27,7 @@ export function createStream (instanceName, timelineName, firstPostId, asSpark) 
     }
   }
 
-  const onMessage = message => {
+  const onMessage = (message) => {
     processMessage(instanceName, _accessToken, message)
   }
 

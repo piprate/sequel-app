@@ -17,7 +17,7 @@
   import { reportPostOrSpark } from '../../../_actions/report'
   import { formatIntl } from '../../../_utils/formatIntl'
   import { unwrap } from '../../../_utils/mapper'
-  import { inBrowser } from '../../../_utils/browserOrNode';
+  import { inBrowser } from '../../../_utils/browserOrNode'
 
   export let id
   export let label
@@ -51,24 +51,18 @@
     if (typeof subscribed === 'undefined' || !author) {
       return ''
     }
-    return (subscribed || requestedSubscription)
-            ? formatIntl('intl.unsubSpark', { spark: authorName })
-            : formatIntl('intl.subSpark', { spark: authorName })
+    return subscribed || requestedSubscription
+      ? formatIntl('intl.unsubSpark', { spark: authorName })
+      : formatIntl('intl.subSpark', { spark: authorName })
   })()
-  $: subscribeIcon = (
-          subscribed ? '#fa-user-times' : requestedSubscription ? '#fa-hourglass' : '#fa-user-plus'
-  )
-  $: blockLabel = (
-          blocking
-                  ? formatIntl('intl.unblockSpark', { spark: authorName })
-                  : formatIntl('intl.blockSpark', { spark: authorName })
-  )
+  $: subscribeIcon = subscribed ? '#fa-user-times' : requestedSubscription ? '#fa-hourglass' : '#fa-user-plus'
+  $: blockLabel = blocking
+    ? formatIntl('intl.unblockSpark', { spark: authorName })
+    : formatIntl('intl.blockSpark', { spark: authorName })
   $: blockIcon = blocking ? '#fa-unlock' : '#fa-ban'
-  $: muteLabel = (
-          muting
-                  ? formatIntl('intl.unmuteSpark', { spark: authorName })
-                  : formatIntl('intl.muteSpark', { spark: authorName })
-  )
+  $: muteLabel = muting
+    ? formatIntl('intl.unmuteSpark', { spark: authorName })
+    : formatIntl('intl.muteSpark', { spark: authorName })
   $: muteIcon = muting ? '#fa-volume-up' : '#fa-volume-off'
   $: isUser = authorId === sparkId
   //
@@ -77,26 +71,23 @@
   $: pinLabel = isUser ? (pinned ? 'intl.unpinFromProfile' : 'intl.pinToProfile') : ''
   $: visibility = post.visibility
   $: mentions = post.mentions || []
-  $: mentionsUser = !!mentions.find(_ => _.id === sparkId)
+  $: mentionsUser = !!mentions.find((_) => _.id === sparkId)
   $: mutingConversation = !!post.muted
-  $: muteConversationLabel = (
-          mutingConversation
-                  ? 'intl.unmuteConversation'
-                  : 'intl.muteConversation'
-  )
+  $: muteConversationLabel = mutingConversation ? 'intl.unmuteConversation' : 'intl.muteConversation'
   $: muteConversationIcon = mutingConversation ? '#fa-volume-up' : '#fa-volume-off'
   $: isPublic = visibility === 'public'
-  $: items = ([
+  $: items = [
     // isPublic && isUser && {
     //   key: 'pin',
     //   label: pinLabel,
     //   icon: '#fa-thumb-tack'
     // },
-    !isUser && !blocking && {
-      key: 'subscribe',
-      label: subscribeLabel,
-      icon: subscribeIcon
-    },
+    !isUser &&
+      !blocking && {
+        key: 'subscribe',
+        label: subscribeLabel,
+        icon: subscribeIcon
+      },
     // !isUser && !isManaged && {
     //   key: 'block',
     //   label: blockLabel,
@@ -122,24 +113,26 @@
       label: 'intl.delete',
       icon: '#fa-trash'
     },
-    !isUser && !isManaged && {
-      key: 'report',
-      label: 'intl.reportPost',
-      icon: '#fa-flag'
-    },
-    isPublic && supportsWebShare && {
-      key: 'share',
-      label: 'intl.sharePost',
-      icon: '#fa-share-square-o'
-    },
+    !isUser &&
+      !isManaged && {
+        key: 'report',
+        label: 'intl.reportPost',
+        icon: '#fa-flag'
+      },
+    isPublic &&
+      supportsWebShare && {
+        key: 'share',
+        label: 'intl.sharePost',
+        icon: '#fa-share-square-o'
+      },
     {
       key: 'copy',
       label: 'intl.copyLinkToPost',
       icon: '#fa-link'
     }
-  ].filter(Boolean))
+  ].filter(Boolean)
 
-  function onClick (event) {
+  function onClick(event) {
     switch (event.detail.key) {
       case 'delete':
         return onDeleteClicked()
@@ -164,64 +157,58 @@
     }
   }
 
-  async function onDeleteClicked () {
+  async function onDeleteClicked() {
     close(id)
     await doDeletePost(post.bubble, postId, sparkId)
   }
 
-  async function onPinClicked () {
+  async function onPinClicked() {
     close(id)
     await setPostPinnedOrUnpinned(postId, !pinned, true)
   }
 
-  async function onSubscribeClicked () {
+  async function onSubscribeClicked() {
     close(id)
     await setSparkSubscribed(authorId, !subscribed, null, sparkId, true)
   }
 
-  async function onBlockClicked () {
+  async function onBlockClicked() {
     close(id)
     await setSparkBlocked(authorId, !blocking, true)
   }
 
-  async function onMuteClicked () {
+  async function onMuteClicked() {
     close(id)
     await toggleMute(author, !muting)
   }
 
-  async function onMuteConversationClicked () {
+  async function onMuteConversationClicked() {
     close(id)
     await setConversationMuted(postId, !mutingConversation, true)
   }
 
-  async function onCopyClicked () {
+  async function onCopyClicked() {
     const url = `${location.origin}/posts/${unwrap(postId)}`
     close(id)
     await copyText(url)
   }
 
-  async function onEdit () {
+  async function onEdit() {
     close(id)
     await editPost(post)
   }
 
-  async function onShare () {
+  async function onShare() {
     close(id)
     await sharePost(post)
   }
 
-  async function onReport () {
+  async function onReport() {
     close(id)
-    await reportPostOrSpark(({ post }))
+    await reportPostOrSpark({ post })
   }
 </script>
 
-<ModalDialog
-        {id}
-        {label}
-        {title}
-        shrinkWidthToFit={true}
-        background="var(--main-bg)"
->
-  <GenericDialogList selectable={false} {items} on:click="{onClick}"/>
+<ModalDialog {id} {label} {title} shrinkWidthToFit={true} background="var(--main-bg)">
+  <GenericDialogList selectable={false} {items} on:click={onClick} />
 </ModalDialog>

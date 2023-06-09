@@ -3,35 +3,35 @@
   import { listStore } from './listStore'
   import { getScrollContainer } from '../../_utils/scrollContainer'
   import { mark, stop } from '../../_utils/marks'
-  import { onMount, createEventDispatcher } from "svelte";
+  import { onMount, createEventDispatcher } from 'svelte'
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
   function getScrollTopOffset() {
     return document.getElementById('main-nav').getBoundingClientRect().height
   }
 
-  export let component;
-  export let realm;
-  export let makeProps;
-  export let items;
-  export let scrollToItem;
+  export let component
+  export let realm
+  export let makeProps
+  export let items
+  export let scrollToItem
 
   // stop warnings
-  export let showFooter;
-  export let footerComponent;
-  export let showHeader;
-  export let headerComponent;
-  export let headerProps;
-  showFooter = footerComponent = showHeader = headerComponent = headerProps = undefined;
+  export let showFooter
+  export let footerComponent
+  export let showHeader
+  export let headerComponent
+  export let headerProps
+  showFooter = footerComponent = showHeader = headerComponent = headerProps = undefined
 
-  $: safeItems = items || [];
-  $: length = safeItems.length;
+  $: safeItems = items || []
+  $: length = safeItems.length
 
-  let initializedCount = 0;
+  let initializedCount = 0
 
   function itemInitialized() {
-    initializedCount++;
+    initializedCount++
     if (initializedCount === length) {
       initialize()
     }
@@ -56,7 +56,7 @@
   }
 
   onMount(() => {
-    listStore.setCurrentRealm(realm);
+    listStore.setCurrentRealm(realm)
 
     // if (!import.meta.env.PROD) {
     //   this.observe('safeItems', safeItems => {
@@ -67,23 +67,17 @@
     // }
 
     return () => {
-      listStore.setCurrentRealm(null);
+      listStore.setCurrentRealm(null)
     }
-  });
+  })
 </script>
 
 <div class="the-list" on:initialized>
   {#each safeItems as item, i (item)}
-    <ListLazyItem
-            {component}
-            index={i}
-            {length}
-            {makeProps}
-            key={item}
-            on:initialized="{itemInitialized}"
-    />
+    <ListLazyItem {component} index={i} {length} {makeProps} key={item} on:initialized={itemInitialized} />
   {/each}
 </div>
+
 <style>
   .the-list {
     position: relative;

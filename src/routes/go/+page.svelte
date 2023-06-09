@@ -1,6 +1,6 @@
 <script>
   import RestrictedPageWarning from '../_components/RestrictedPageWarning.svelte'
-  import LoadingPage from "../_components/LoadingPage.svelte";
+  import LoadingPage from '../_components/LoadingPage.svelte'
   import { goto } from '$app/navigation'
   import { page } from '$app/stores'
   import { onMount } from 'svelte'
@@ -22,10 +22,11 @@
     }
   })
 </script>
+
 {#if badUrl}
-    <RestrictedPageWarning showLogo="true" message="{intl.invalidExternalRequest}" />
-{:else if loading }
-    <LoadingPage/>
+  <RestrictedPageWarning showLogo="true" message={intl.invalidExternalRequest} />
+{:else if loading}
+  <LoadingPage />
 {:else if !$isUserLoggedIn}
-    <RestrictedPageWarning showLogo="true" message="{intl.loginToFollowLink}" />
+  <RestrictedPageWarning showLogo="true" message={intl.loginToFollowLink} />
 {/if}

@@ -5,7 +5,7 @@ import { emit } from '../_utils/eventBus'
 
 // Go to the search page, and also focus the search input. For accessibility
 // and usability reasons, this only happens on pressing these particular hotkeys.
-export async function goToSearch () {
+export async function goToSearch() {
   if (currentPage.get() === 'search') {
     emit('focusSearchInput')
   } else {

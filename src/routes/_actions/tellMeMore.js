@@ -7,7 +7,7 @@ import { get } from 'svelte/store'
 import { accessToken, currentSparkId } from '../_store/instance'
 import { store } from '../_store/store'
 
-export async function setTMM (postId, tellMeMored) {
+export async function setTMM(postId, tellMeMored) {
   if (!online.get()) {
     /* no await */
     toast.say(tellMeMored ? 'intl.cannotTMMOffline' : 'intl.cannotUnTMMOffline')
@@ -26,9 +26,10 @@ export async function setTMM (postId, tellMeMored) {
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(tellMeMored
-      ? formatIntl('intl.failedToTMM', { error: (e.message || '') })
-      : formatIntl('intl.failedToUnTMM', { error: (e.message || '') })
+    toast.say(
+      tellMeMored
+        ? formatIntl('intl.failedToTMM', { error: e.message || '' })
+        : formatIntl('intl.failedToUnTMM', { error: e.message || '' })
     )
     store.setPostTellMeMored(_currentInstance, postId, !tellMeMored, asSpark) // undo optimistic update
   }

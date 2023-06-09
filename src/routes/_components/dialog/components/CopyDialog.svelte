@@ -4,7 +4,7 @@
   import { toast } from '../../toast/toast'
   import { doubleRAF } from '../../../_utils/doubleRAF'
 
-  function copyFromInput (input) {
+  function copyFromInput(input) {
     // workarounds for iOS, via https://stackoverflow.com/a/34046084
     const range = document.createRange()
     range.selectNodeContents(input)
@@ -15,20 +15,20 @@
     document.execCommand('copy')
   }
 
-  export let id;
-  export let label;
-  export let title;
+  export let id
+  export let label
+  export let title
 
-  let text = '';
-  let input;
+  let text = ''
+  let input
 
-  function onClick () {
-    copyFromInput(input);
-    toast.say('intl.copiedToClipboard');
-    close(id);
+  function onClick() {
+    copyFromInput(input)
+    toast.say('intl.copiedToClipboard')
+    close(id)
   }
 
-  function onShow () {
+  function onShow() {
     // double raf is to work around a11y-dialog trying to set the input
     doubleRAF(() => {
       input.focus()
@@ -37,23 +37,13 @@
   }
 </script>
 
-<ModalDialog
-        {id}
-        {label}
-        {title}
-        shrinkWidthToFit={true}
-        background="var(--main-bg)"
-        on:show="{onShow}"
->
+<ModalDialog {id} {label} {title} shrinkWidthToFit={true} background="var(--main-bg)" on:show={onShow}>
   <form class="copy-dialog-form">
-    <input value={text}
-           bind:this={input}
-    >
-    <button type="button" on:click="{onClick}">
-      Copy
-    </button>
+    <input value={text} bind:this={input} />
+    <button type="button" on:click={onClick}> Copy </button>
   </form>
 </ModalDialog>
+
 <style>
   .copy-dialog-form {
     display: grid;

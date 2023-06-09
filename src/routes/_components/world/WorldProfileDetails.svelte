@@ -4,28 +4,28 @@
   import { LOCALE } from '../../_static/intl'
   import { formatIntl } from '../../_utils/formatIntl'
   import { thunk } from '../../_utils/thunk'
-  import { unwrap } from "../../_utils/mapper";
+  import { unwrap } from '../../_utils/mapper'
 
   const numberFormat = thunk(() => new Intl.NumberFormat(LOCALE))
 
-  export let world;
-  export let relationship;
-  export let ourSpark;
+  export let world
+  export let relationship
+  export let ourSpark
 
-  $: worldId = unwrap(world.id);
-  $: numPosts = world.postCount || 0;
-  $: numMembers = world.memberCount || 0;
-  $: numBubbles = world.bubbleCount || 0;
-  $: numPostsDisplay = numberFormat().format(numPosts);
-  $: numMembersDisplay = numberFormat().format(numMembers);
-  $: numBubblesDisplay = numberFormat().format(numBubbles);
-  $: bubblesLabel = formatIntl('intl.bubblesLabel', { count: numBubbles });
-  $: membersLabel = formatIntl('intl.membersLabel', { count: numMembers });
-  $: sparkSelected = !!ourSpark;
+  $: worldId = unwrap(world.id)
+  $: numPosts = world.postCount || 0
+  $: numMembers = world.memberCount || 0
+  $: numBubbles = world.bubbleCount || 0
+  $: numPostsDisplay = numberFormat().format(numPosts)
+  $: numMembersDisplay = numberFormat().format(numMembers)
+  $: numBubblesDisplay = numberFormat().format(numBubbles)
+  $: bubblesLabel = formatIntl('intl.bubblesLabel', { count: numBubbles })
+  $: membersLabel = formatIntl('intl.membersLabel', { count: numMembers })
+  $: sparkSelected = !!ourSpark
 
   async function onMoreOptionsClick() {
-    const showWorldProfileOptionsDialog = await importShowWorldProfileOptionsDialog();
-    showWorldProfileOptionsDialog(world, relationship, ourSpark);
+    const showWorldProfileOptionsDialog = await importShowWorldProfileOptionsDialog()
+    showWorldProfileOptionsDialog(world, relationship, ourSpark)
   }
 </script>
 
@@ -39,10 +39,11 @@
       {numPostsDisplay}
     </span>
   </div>
-  <a class="world-profile-details-item"
-     href='/worlds/{worldId}/members'
-     aria-label={membersLabel}
-     data-sveltekit-preload-data
+  <a
+    class="world-profile-details-item"
+    href="/worlds/{worldId}/members"
+    aria-label={membersLabel}
+    data-sveltekit-preload-data
   >
     <span class="world-profile-details-item-title">
       {intl.members}
@@ -51,10 +52,11 @@
       {numMembersDisplay}
     </span>
   </a>
-  <a class="world-profile-details-item"
-     href='/worlds/{worldId}/bubbles'
-     aria-label={bubblesLabel}
-     data-sveltekit-preload-data
+  <a
+    class="world-profile-details-item"
+    href="/worlds/{worldId}/bubbles"
+    aria-label={bubblesLabel}
+    data-sveltekit-preload-data
   >
     <span class="world-profile-details-item-title">
       {intl.bubbles}
@@ -63,17 +65,13 @@
       {numBubblesDisplay}
     </span>
   </a>
-  {#if sparkSelected }
-  <div class="world-profile-more-options">
-    <IconButton
-      label="{intl.moreOptions}"
-      href="#fa-bars"
-      muted="true"
-      on:click="{onMoreOptionsClick}"
-    />
-  </div>
+  {#if sparkSelected}
+    <div class="world-profile-more-options">
+      <IconButton label={intl.moreOptions} href="#fa-bars" muted="true" on:click={onMoreOptionsClick} />
+    </div>
   {/if}
 </div>
+
 <style>
   .world-profile-details {
     grid-area: details;

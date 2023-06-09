@@ -1,9 +1,9 @@
 <script>
   import Notification from '../post/Notification.svelte'
 
-  export let virtualProps;
-  export let virtualIndex;
-  export let virtualLength;
+  export let virtualProps
+  export let virtualIndex
+  export let virtualLength
 </script>
 
 <Notification
@@ -13,4 +13,5 @@
   enableShortcuts={true}
   index={virtualIndex}
   length={virtualLength}
-  on:recalculateHeight />
+  on:recalculateHeight
+/>

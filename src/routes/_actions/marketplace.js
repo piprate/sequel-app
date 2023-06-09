@@ -7,21 +7,21 @@ import { unwrap } from '../_utils/mapper'
 import { getListing, withdrawMarketplaceListing } from '../_api/marketplace'
 import { goto } from '$app/navigation'
 
-async function _updateListing (id, instanceName, accessToken, asSpark) {
+async function _updateListing(id, instanceName, accessToken, asSpark) {
   const localPromise = database.getListing(instanceName, parseInt(id))
-  const remotePromise = getListing(instanceName, accessToken, id, asSpark).then(listing => {
+  const remotePromise = getListing(instanceName, accessToken, id, asSpark).then((listing) => {
     /* no await */
     database.setListing(instanceName, listing)
     return listing
   })
 
   try {
-    observedListing.set((await localPromise))
+    observedListing.set(await localPromise)
   } catch (e) {
     console.error(e)
   }
   try {
-    observedListing.set((await remotePromise))
+    observedListing.set(await remotePromise)
   } catch (e) {
     if (e.status === 404) {
       observedListing.set(null)
@@ -32,33 +32,38 @@ async function _updateListing (id, instanceName, accessToken, asSpark) {
   }
 }
 
-export async function clearListing () {
+export async function clearListing() {
   observedListing.set(null)
 }
 
-export async function updateListing (id) {
+export async function updateListing(id) {
   const _currentInstance = currentInstance.get()
   const token = get(accessToken)
   const asSpark = get(currentSparkId)
   await _updateListing(id, _currentInstance, token, asSpark)
 }
 
-export async function loadListing (id) {
+export async function loadListing(id) {
   return getListing(currentInstance.get(), get(accessToken), id, get(currentSparkId))
 }
 
-export async function updateRelease (id, newRelease = undefined) {
+export async function updateRelease(id, newRelease = undefined) {
   if (newRelease) {
     observedRelease.set(newRelease)
     return newRelease
   } else {
-    const release = await getMarketplaceRelease(currentInstance.get(), get(accessToken), unwrap(id), get(currentSparkId))
+    const release = await getMarketplaceRelease(
+      currentInstance.get(),
+      get(accessToken),
+      unwrap(id),
+      get(currentSparkId)
+    )
     if (release) observedRelease.set(release)
     return release
   }
 }
 
-export async function saveRelease (realm, releaseId, payload) {
+export async function saveRelease(realm, releaseId, payload) {
   let release
 
   const submission = { ...payload }
@@ -85,15 +90,20 @@ export async function saveRelease (realm, releaseId, payload) {
   return release
 }
 
-export async function cancelRelease (releaseId) {
+export async function cancelRelease(releaseId) {
   await cancel(currentInstance.get(), get(accessToken), releaseId, get(currentSparkId))
   const release = await updateRelease(releaseId)
 
   return release
 }
 
-export async function withdrawListing (listingId) {
-  const listing = await withdrawMarketplaceListing(currentInstance.get(), get(accessToken), listingId, get(currentSparkId))
+export async function withdrawListing(listingId) {
+  const listing = await withdrawMarketplaceListing(
+    currentInstance.get(),
+    get(accessToken),
+    listingId,
+    get(currentSparkId)
+  )
   await updateListing(listing.id)
   goto('/marketplace')
 }

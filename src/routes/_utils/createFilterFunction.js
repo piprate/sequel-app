@@ -1,9 +1,14 @@
 // create a function for filtering timeline item summaries
 
 export const createFilterFunction = (
-  showTMMs, showSubscribers, showBubbleNotices, showWorldNotices, showMentions, wordFilterContext
+  showTMMs,
+  showSubscribers,
+  showBubbleNotices,
+  showWorldNotices,
+  showMentions,
+  wordFilterContext
 ) => {
-  return item => {
+  return (item) => {
     if (item.filterContexts && item.filterContexts.includes(wordFilterContext)) {
       return false
     }

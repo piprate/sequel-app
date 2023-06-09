@@ -4,62 +4,57 @@
   import { ONE_TRANSPARENT_PIXEL } from '../_static/media'
   import LazyImage from './LazyImage.svelte'
   import AutoplayVideo from './AutoplayVideo.svelte'
-  import { largeInlineMedia } from "../_store/local";
+  import { largeInlineMedia } from '../_store/local'
 
-  export let label;
-  export let poster;
-  export let blurhash;
-  export let blurhashToUse;
-  export let src;
-  export let staticSrc;
-  export let useWidthHeight;
-  export let width;
-  export let height;
-  export let playing = false;
-  export let focus = undefined;
+  export let label
+  export let poster
+  export let blurhash
+  export let blurhashToUse
+  export let src
+  export let staticSrc
+  export let useWidthHeight
+  export let width
+  export let height
+  export let playing = false
+  export let focus = undefined
 
-  let oneTransparentPixel = ONE_TRANSPARENT_PIXEL;
+  let oneTransparentPixel = ONE_TRANSPARENT_PIXEL
 
-  $: style =  useWidthHeight ? `width: ${width}px; height: ${height}px;` : '';
+  $: style = useWidthHeight ? `width: ${width}px; height: ${height}px;` : ''
 
-  let node;
+  let node
 
-  function onMouseOver (mouseOver) {
-    playing = mouseOver;
+  function onMouseOver(mouseOver) {
+    playing = mouseOver
   }
 </script>
 
-<div class="non-autoplay-gifv  {$largeInlineMedia ? '' : 'non-autoplay-gifv-fixed-size'}"
-     {style}
-     use:mouseover={onMouseOver}
-     bind:this={node}
+<div
+  class="non-autoplay-gifv {$largeInlineMedia ? '' : 'non-autoplay-gifv-fixed-size'}"
+  {style}
+  use:mouseover={onMouseOver}
+  bind:this={node}
 >
   {#if playing}
-    <AutoplayVideo
-            ariaLabel={label}
-            {poster}
-            {src}
-            {width}
-            {height}
-            {focus}
-    />
+    <AutoplayVideo ariaLabel={label} {poster} {src} {width} {height} {focus} />
   {:else}
     <LazyImage
-            alt={label || ''}
-            title={label || ''}
-            src={staticSrc}
-            {blurhash}
-            fallback={blurhashToUse || oneTransparentPixel}
-            {width}
-            {height}
-            background="var(--loading-bg)"
-            {focus}
+      alt={label || ''}
+      title={label || ''}
+      src={staticSrc}
+      {blurhash}
+      fallback={blurhashToUse || oneTransparentPixel}
+      {width}
+      {height}
+      background="var(--loading-bg)"
+      {focus}
     />
   {/if}
   {#if !blurhash}
-    <PlayVideoIcon className={playing ? 'hidden' : ''}/>
+    <PlayVideoIcon className={playing ? 'hidden' : ''} />
   {/if}
 </div>
+
 <style>
   .non-autoplay-gifv {
     cursor: zoom-in;
@@ -75,7 +70,6 @@
     height: 100%;
     overflow: hidden;
   }
-
 
   :global(.non-autoplay-gifv .play-video-icon) {
     transition: opacity 0.2s linear;

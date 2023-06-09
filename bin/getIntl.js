@@ -6,11 +6,10 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const { default: intl } = await import(`file:///${(path.join(__dirname, '../src/intl', LOCALE + '.js'))}`)
+const { default: intl } = await import(`file:///${path.join(__dirname, '../src/intl', LOCALE + '.js')}`)
 const { default: defaultIntl } = await import(`file:///${path.join(__dirname, '../src/intl', DEFAULT_LOCALE + '.js')}`)
 
-
-export function warningOrError (message) {
+export function warningOrError(message) {
   // avoid crashing the whole server on `yarn dev`
   if (process.env.NODE_ENV === 'production') {
     throw new Error(message)
@@ -18,7 +17,7 @@ export function warningOrError (message) {
   return '(Placeholder intl string)'
 }
 
-export function getIntl (path) {
+export function getIntl(path) {
   const res = get(intl, path, get(defaultIntl, path))
   if (typeof res !== 'string') {
     return warningOrError('Unknown intl string: ' + JSON.stringify(path))
@@ -26,6 +25,6 @@ export function getIntl (path) {
   return res
 }
 
-export function trimWhitespace (str) {
+export function trimWhitespace(str) {
   return str.trim().replace(/\s+/g, ' ')
 }

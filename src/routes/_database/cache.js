@@ -47,7 +47,7 @@ export const notificationsCache = {
 }
 
 if (inBrowser() && !import.meta.env.PROD) {
-  (typeof self !== 'undefined' ? self : window).cacheStats = {
+  ;(typeof self !== 'undefined' ? self : window).cacheStats = {
     posts: postsCache,
     sparks: sparksCache,
     relationships: relationshipsCache,
@@ -56,7 +56,7 @@ if (inBrowser() && !import.meta.env.PROD) {
   }
 }
 
-function getOrCreateInstanceCache (cache, instanceName) {
+function getOrCreateInstanceCache(cache, instanceName) {
   let cached = cache.caches[instanceName]
   if (!cached) {
     cached = cache.caches[instanceName] = new QuickLRU({ maxSize: cache.maxSize })
@@ -64,28 +64,28 @@ function getOrCreateInstanceCache (cache, instanceName) {
   return cached
 }
 
-export function clearCache (cache, instanceName) {
+export function clearCache(cache, instanceName) {
   delete cache.caches[instanceName]
 }
 
-export function clearAllCaches (instanceName) {
+export function clearAllCaches(instanceName) {
   const allCaches = [postsCache, sparksCache, relationshipsCache, metaCache, notificationsCache]
   for (const cache of allCaches) {
     clearCache(cache, instanceName)
   }
 }
 
-export function setInCache (cache, instanceName, key, value) {
+export function setInCache(cache, instanceName, key, value) {
   const instanceCache = getOrCreateInstanceCache(cache, instanceName)
   return instanceCache.set(key, value)
 }
 
-export function getInCache (cache, instanceName, key) {
+export function getInCache(cache, instanceName, key) {
   const instanceCache = getOrCreateInstanceCache(cache, instanceName)
   return instanceCache.get(key)
 }
 
-export function hasInCache (cache, instanceName, key) {
+export function hasInCache(cache, instanceName, key) {
   const instanceCache = getOrCreateInstanceCache(cache, instanceName)
   const res = instanceCache.has(key)
   if (!import.meta.env.PROD) {
@@ -98,7 +98,7 @@ export function hasInCache (cache, instanceName, key) {
   return res
 }
 
-export function deleteFromCache (cache, instanceName, key) {
+export function deleteFromCache(cache, instanceName, key) {
   const instanceCache = getOrCreateInstanceCache(cache, instanceName)
   instanceCache.delete(key)
 }

@@ -3,8 +3,8 @@ import { centerNav } from '../local'
 
 const centerNavStyle = inBrowser() && document.getElementById('theCenterNavStyle')
 
-export function centerNavObservers () {
-  centerNav.subscribe(_centerNav => {
+export function centerNavObservers() {
+  centerNav.subscribe((_centerNav) => {
     if (inNode()) {
       return
     }

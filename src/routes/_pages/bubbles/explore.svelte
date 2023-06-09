@@ -11,13 +11,13 @@
   params = undefined
   const intl = {}
 
-  $: bubblesFetcher = () => $isUserLoggedIn ? getBubbleList($currentInstance, $accessToken) : []
+  $: bubblesFetcher = () => ($isUserLoggedIn ? getBubbleList($currentInstance, $accessToken) : [])
 </script>
 
-{#if $isUserLoggedIn }
-    {#if $pinnedPages !== '/bubbles'}
-        <DynamicPageBanner title="{intl.bubbles}" icon="#fa-comments"/>
-    {/if}
-    <BubbleBrowserFilter filter="explore" />
-    <BubblesListPage {bubblesFetcher} />
+{#if $isUserLoggedIn}
+  {#if $pinnedPages !== '/bubbles'}
+    <DynamicPageBanner title={intl.bubbles} icon="#fa-comments" />
+  {/if}
+  <BubbleBrowserFilter filter="explore" />
+  <BubblesListPage {bubblesFetcher} />
 {/if}

@@ -1,25 +1,25 @@
 import { registerResizeListener, unregisterResizeListener } from './resize'
 
-export function mouseover (node, callback) {
-  function onMouseEnter () {
-    callback(true); // eslint-disable-line
+export function mouseover(node, callback) {
+  function onMouseEnter() {
+    callback(true) // eslint-disable-line
   }
 
-  function onMouseLeave () {
-    callback(false); // eslint-disable-line
+  function onMouseLeave() {
+    callback(false) // eslint-disable-line
   }
 
   node.addEventListener('mouseenter', onMouseEnter)
   node.addEventListener('mouseleave', onMouseLeave)
   return {
-    destroy () {
+    destroy() {
       node.removeEventListener('mouseenter', onMouseEnter)
       node.removeEventListener('mouseleave', onMouseLeave)
     }
   }
 }
 
-export function selectionChange (node, callback) {
+export function selectionChange(node, callback) {
   const events = ['keyup', 'click', 'focus', 'blur']
   const listener = () => {
     callback(node.selectionStart)
@@ -28,7 +28,7 @@ export function selectionChange (node, callback) {
     node.addEventListener(event, listener)
   }
   return {
-    destroy () {
+    destroy() {
       for (const event of events) {
         node.removeEventListener(event, listener)
       }
@@ -36,20 +36,20 @@ export function selectionChange (node, callback) {
   }
 }
 
-export function resize (node, callback) {
+export function resize(node, callback) {
   registerResizeListener(callback)
 
   return {
-    destroy () {
+    destroy() {
       unregisterResizeListener(callback)
     }
   }
 }
 
-export function documentKeydown (node, callback) {
+export function documentKeydown(node, callback) {
   document.addEventListener('keydown', callback)
   return {
-    destroy () {
+    destroy() {
       document.removeEventListener('keydown', callback)
     }
   }

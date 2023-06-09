@@ -20,7 +20,7 @@
     setupTimeline,
     showMoreItemsForCurrentTimeline,
     showMoreItemsForThread,
-    showMoreItemsForTimeline,
+    showMoreItemsForTimeline
   } from '../../_actions/timeline'
   import { scheduleIdleTask } from '../../_utils/scheduleIdleTask'
   import { mark, stop } from '../../_utils/marks'
@@ -78,14 +78,10 @@
   $: timelineValue = $currentTimelineValue
   // Scroll to the first item if this is a "post in own thread" timeline.
   // Don't scroll to the first item because it obscures the "back" button.
-  $: scrollToItem = (
-          timelineType === 'post' &&
-          $firstTimelineItemId &&
-          timelineValue !== $firstTimelineItemId &&
-          timelineValue
-  )
-  $: itemIds = $filteredTimelineItemSummaries && $filteredTimelineItemSummaries.map(_ => _.id)
-  $: itemIdsToAdd = $filteredTimelineItemSummariesToAdd && $filteredTimelineItemSummariesToAdd.map(_ => _.id)
+  $: scrollToItem =
+    timelineType === 'post' && $firstTimelineItemId && timelineValue !== $firstTimelineItemId && timelineValue
+  $: itemIds = $filteredTimelineItemSummaries && $filteredTimelineItemSummaries.map((_) => _.id)
+  $: itemIdsToAdd = $filteredTimelineItemSummariesToAdd && $filteredTimelineItemSummariesToAdd.map((_) => _.id)
   $: headerProps = {
     count: itemIdsToAdd ? itemIdsToAdd.length : 0,
     onClick: showMoreItemsForCurrentTimeline
@@ -98,18 +94,14 @@
   // Here we lazy-load both the virtual list component itself as well as the component
   // it renders.
   $: componentsPromise = Promise.all([
-    timelineType === 'post'
-            ? importList()
-            : importVirtualList(),
-    timelineType === 'notifications'
-            ? importNotificationVirtualListItem()
-            : importPostVirtualListItem()
-  ]).then(results => ({
+    timelineType === 'post' ? importList() : importVirtualList(),
+    timelineType === 'notifications' ? importNotificationVirtualListItem() : importPostVirtualListItem()
+  ]).then((results) => ({
     listComponent: results[0],
     listItemComponent: results[1]
   }))
 
-  async function loadTimelineComponents (componentsPromise) {
+  async function loadTimelineComponents(componentsPromise) {
     console.log('loading timeline components')
     const _components = await componentsPromise
     console.log('loaded timeline components')
@@ -147,10 +139,8 @@
   let observeItemIdsToAddEnabled = false
   let oldItemIdsToAdd
 
-  function observeItemIdsToAdd (itemIdsToAdd) {
-    if (!itemIdsToAdd ||
-            !itemIdsToAdd.length ||
-            isEqual(itemIdsToAdd, oldItemIdsToAdd)) {
+  function observeItemIdsToAdd(itemIdsToAdd) {
+    if (!itemIdsToAdd || !itemIdsToAdd.length || isEqual(itemIdsToAdd, oldItemIdsToAdd)) {
       return
     }
     oldItemIdsToAdd = itemIdsToAdd
@@ -162,13 +152,13 @@
     observeItemIdsToAdd(itemIdsToAdd)
   }
 
-  function setupStreaming () {
+  function setupStreaming() {
     observeItemIdsToAddEnabled = true
   }
 
   let initializeStarted = false
 
-  function initialize () {
+  function initialize() {
     if (initializeStarted) {
       return
     }
@@ -181,7 +171,7 @@
     })
   }
 
-  function onNoNeedToScroll () {
+  function onNoNeedToScroll() {
     // If the timeline doesn't need to scroll, then we can safely "preinitialize,"
     // i.e. render anything above the fold of the timeline. This avoids the affect
     // where the scrollable content appears to jump around if we need to scroll it.
@@ -189,25 +179,23 @@
     $timelinePreinitialized = true
   }
 
-  function onScrollToBottom () {
-    if (!$timelineInitialized ||
-            $runningUpdate ||
-            $disableInfiniteScroll ||
-            timelineType === 'post') { // for post contexts, we've already fetched the whole thread
+  function onScrollToBottom() {
+    if (!$timelineInitialized || $runningUpdate || $disableInfiniteScroll || timelineType === 'post') {
+      // for post contexts, we've already fetched the whole thread
       return
     }
     /* no await */
     fetchMoreItemsAtBottomOfTimeline($currentInstance, timeline)
   }
 
-  function onScrollToTop () {
+  function onScrollToTop() {
     if ($shouldShowHeader) {
       setForTimeline(rootShowHeader, $currentInstance, $currentTimeline, true, asSpark)
       setForTimeline(rootShouldShowHeader, $currentInstance, $currentTimeline, false, asSpark)
     }
   }
 
-  function onScrollTopChanged (e) {
+  function onScrollTopChanged(e) {
     scrollTop = e.detail
   }
 
@@ -226,25 +214,26 @@
 <FocusRestoration realm={focusRealm}>
   <div class="timeline" role="feed">
     {#if components}
-      <svelte:component this={components.listComponent}
-                  component={components.listItemComponent}
-                  realm="{$currentInstance + '/' + asSpark + '/' + timeline}"
-                  {makeProps}
-                  items={itemIds}
-                  showFooter={true}
-                  footerComponent={LoadingFooter}
-                  showHeader={$showHeader}
-                  headerComponent={MoreHeaderVirtualWrapper}
-                  {headerProps}
-                  {scrollToItem}
-                  on:scrollToBottom="{onScrollToBottom}"
-                  on:scrollToTop="{onScrollToTop}"
-                  on:scrollTopChanged="{onScrollTopChanged}"
-                  on:initialized="{initialize}"
-                  on:noNeedToScroll="{onNoNeedToScroll}"
+      <svelte:component
+        this={components.listComponent}
+        component={components.listItemComponent}
+        realm={$currentInstance + '/' + asSpark + '/' + timeline}
+        {makeProps}
+        items={itemIds}
+        showFooter={true}
+        footerComponent={LoadingFooter}
+        showHeader={$showHeader}
+        headerComponent={MoreHeaderVirtualWrapper}
+        {headerProps}
+        {scrollToItem}
+        on:scrollToBottom={onScrollToBottom}
+        on:scrollToTop={onScrollToTop}
+        on:scrollTopChanged={onScrollTopChanged}
+        on:initialized={initialize}
+        on:noNeedToScroll={onNoNeedToScroll}
       />
     {/if}
   </div>
 </FocusRestoration>
-<Shortcut scope="global" key="." on:pressed="{showMoreAndScrollToTop}" />
+<Shortcut scope="global" key="." on:pressed={showMoreAndScrollToTop} />
 <ScrollListShortcuts />

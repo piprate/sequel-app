@@ -15,7 +15,7 @@
   $: displayName = world.name
   $: avatarSize = $isVeryTinyMobileSize ? 'small' : $isTinyMobileSize ? 'medium' : 'big'
 
-  async function onAvatarClick () {
+  async function onAvatarClick() {
     if (!world.avatar) {
       return
     }
@@ -51,10 +51,8 @@
 
 <h2 class="sr-only">{intl.nameAndProperties}</h2>
 <div class="world-profile-avatar">
-  <button class="world-profile-avatar-button"
-          aria-label="{intl.clickToSeeAvatar}"
-          on:click="{onAvatarClick}" >
-    <Avatar entity={world} size={avatarSize} showNFT="{true}" />
+  <button class="world-profile-avatar-button" aria-label={intl.clickToSeeAvatar} on:click={onAvatarClick}>
+    <Avatar entity={world} size={avatarSize} showNFT={true} />
   </button>
 </div>
 <div class="world-profile-name">
@@ -64,11 +62,11 @@
   <Timestamp value={world.createdAt} flavour="created" />
 </div>
 <div class="world-profile-relationship">
-  {#if relationship }
-    {#if relationship.managed && !relationship.owned }
+  {#if relationship}
+    {#if relationship.managed && !relationship.owned}
       <span class="world-profile-relationship-span">{intl.managed}</span>
     {/if}
-    {#if relationship.owned }
+    {#if relationship.owned}
       <span class="world-profile-relationship-span">{intl.memberTypeOwner}</span>
     {/if}
     {#if relationship && relationship.blocked}
@@ -82,6 +80,7 @@
     {/if}
   {/if}
 </div>
+
 <style>
   .world-profile-relationship {
     grid-area: relationship;
@@ -158,7 +157,8 @@
     .world-profile-created {
       font-size: 1.1em;
     }
-    .world-profile-name, .world-profile-created {
+    .world-profile-name,
+    .world-profile-created {
       align-self: flex-start;
     }
   }

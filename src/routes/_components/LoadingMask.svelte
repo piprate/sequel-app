@@ -2,16 +2,17 @@
   import LoadingSpinner from './LoadingSpinner.svelte'
   import { logInToInstanceLoading } from '../_store/local'
 
-  $: shown = $logInToInstanceLoading;
+  $: shown = $logInToInstanceLoading
 </script>
 
 <div class="loading-mask-container {shown ? 'loading-mask-container-shown' : ''}">
   {#if shown}
     <div class="loading-mask">
-      <LoadingSpinner maskStyle="true"/>
+      <LoadingSpinner maskStyle="true" />
     </div>
   {/if}
 </div>
+
 <style>
   .loading-mask-container {
     left: 0;

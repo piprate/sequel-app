@@ -26,14 +26,10 @@
   ]
 </script>
 
-<TabSet
-        label="{intl.filters}"
-        currentTabName={filter}
-        {tabs}
-        className="world-profile-filters"
-/>
+<TabSet label={intl.filters} currentTabName={filter} {tabs} className="world-profile-filters" />
+
 <style>
-    :global(.world-profile-filters) {
-        background: var(--world-profile-bg);
-    }
+  :global(.world-profile-filters) {
+    background: var(--world-profile-bg);
+  }
 </style>

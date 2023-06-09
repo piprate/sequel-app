@@ -15,8 +15,8 @@ $scrollbar-face: #{lighten($main-theme-color, 12%)};
 $scrollbar-face-hover: #{lighten($main-theme-color, 14%)};
 $scrollbar-face-active: #{lighten($main-theme-color, 10%)};
 
-@import "_base.scss";
-@import "_light_scrollbars.scss";
+@import '_base.scss';
+@import '_light_scrollbars.scss';
 
 :root {
   accent-color: #{darken($main-theme-color, 5%)};

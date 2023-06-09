@@ -6,7 +6,7 @@
 
   let emojis = []
 
-  $: summary = (listing.object && listing.object.description) || ""
+  $: summary = (listing.object && listing.object.description) || ''
   $: massagedSummary = massageUserText(summary, emojis, $autoplayGifs)
 </script>
 
@@ -14,11 +14,12 @@
 <div class="listing-summary">
   {@html massagedSummary}
 </div>
+
 <style>
   .listing-summary {
     grid-area: summary;
     padding: 10px 0;
-    font-size: 1.0em;
+    font-size: 1em;
     word-wrap: break-word;
     overflow: hidden;
     white-space: pre-wrap;

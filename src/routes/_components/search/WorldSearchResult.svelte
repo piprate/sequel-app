@@ -1,33 +1,33 @@
 <script>
-  import Avatar from '../Avatar.svelte';
-  import SearchResult from './SearchResult.svelte';
-  import IconButton from '../IconButton.svelte';
-  import WorldDisplayName from '../world/WorldDisplayName.svelte';
-  import { createEventDispatcher } from "svelte";
-  import { unwrap } from "../../_utils/mapper";
+  import Avatar from '../Avatar.svelte'
+  import SearchResult from './SearchResult.svelte'
+  import IconButton from '../IconButton.svelte'
+  import WorldDisplayName from '../world/WorldDisplayName.svelte'
+  import { createEventDispatcher } from 'svelte'
+  import { unwrap } from '../../_utils/mapper'
 
-  export let world;
-  export let actions = undefined;
+  export let world
+  export let actions = undefined
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
-  $: id = unwrap(world.id);
-  $: croppedSummary = world.summary ?
-          world.summary.length > 250 ?
-                  world.summary.substring(0, 250) + "..." : world.summary
-          :
-          '';
+  $: id = unwrap(world.id)
+  $: croppedSummary = world.summary
+    ? world.summary.length > 250
+      ? world.summary.substring(0, 250) + '...'
+      : world.summary
+    : ''
   $: postCount = world.postCount || 0
   $: bubbleCount = world.bubbleCount || 0
   $: memberCount = world.memberCount || 0
 
-  function onButtonClick (event, action, worldId) {
-    event.preventDefault();
-    event.stopPropagation();
+  function onButtonClick(event, action, worldId) {
+    event.preventDefault()
+    event.stopPropagation()
     dispatch('click', {
       action,
       worldId
-    });
+    })
   }
 </script>
 
@@ -50,7 +50,7 @@
         {#each actions as action}
           <IconButton
             label={action.label}
-            on:click="{ (event) => onButtonClick(event, action, world.id) }"
+            on:click={(event) => onButtonClick(event, action, world.id)}
             href={action.icon}
             big="true"
           />
@@ -59,13 +59,14 @@
     {/if}
   </div>
 </SearchResult>
+
 <style>
   .search-result-world {
     display: grid;
     grid-template-areas:
-      "avatar    name     buttons"
-      "avatar    stats    buttons"
-      "summary   summary  buttons";
+      'avatar    name     buttons'
+      'avatar    stats    buttons'
+      'summary   summary  buttons';
     grid-column-gap: 20px;
     grid-template-columns: max-content 1fr max-content;
     align-items: center;

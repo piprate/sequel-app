@@ -1,6 +1,6 @@
 import { on, removeListener } from '../../../_utils/eventBus'
 
-function onDestroy (idFromEvent, params) {
+function onDestroy(idFromEvent, params) {
   const { id, component, listener, callbackRemovers } = params
   if (id !== idFromEvent) {
     return
@@ -14,11 +14,13 @@ function onDestroy (idFromEvent, params) {
   component.$destroy()
 }
 
-export function destroyOnEvent (id, component, callbackRemovers) {
+export function destroyOnEvent(id, component, callbackRemovers) {
   const params = {
-    id, component, callbackRemovers
+    id,
+    component,
+    callbackRemovers
   }
-  const listener = idFromEvent => onDestroy(idFromEvent, params)
+  const listener = (idFromEvent) => onDestroy(idFromEvent, params)
   params.listener = listener
   on('destroyDialog', listener)
 }

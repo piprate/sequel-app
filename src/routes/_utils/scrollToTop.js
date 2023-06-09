@@ -1,7 +1,7 @@
 import { getScrollContainer } from './scrollContainer'
 import { smoothScroll } from './smoothScroll'
 
-export function scrollToTop (smooth, reduceMotion) {
+export function scrollToTop(smooth, reduceMotion) {
   const scroller = getScrollContainer()
   const { scrollTop } = scroller
   if (scrollTop === 0) {

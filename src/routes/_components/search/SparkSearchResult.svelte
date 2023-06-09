@@ -1,34 +1,34 @@
 <script>
-  import Avatar from '../Avatar.svelte';
-  import SearchResult from './SearchResult.svelte';
-  import IconButton from '../IconButton.svelte';
-  import SparkDisplayName from '../spark/SparkDisplayName.svelte';
-  import { createEventDispatcher } from "svelte";
-  import { unwrap } from "../../_utils/mapper";
+  import Avatar from '../Avatar.svelte'
+  import SearchResult from './SearchResult.svelte'
+  import IconButton from '../IconButton.svelte'
+  import SparkDisplayName from '../spark/SparkDisplayName.svelte'
+  import { createEventDispatcher } from 'svelte'
+  import { unwrap } from '../../_utils/mapper'
 
-  export let spark;
-  export let role = '';
-  export let actions = undefined;
+  export let spark
+  export let role = ''
+  export let actions = undefined
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
-  $: id = unwrap(spark.id);
-  $: croppedSummary = spark.summary ?
-          spark.summary.length > 250 ?
-                  spark.summary.substring(0, 250) + "..." : spark.summary
-          :
-          '';
+  $: id = unwrap(spark.id)
+  $: croppedSummary = spark.summary
+    ? spark.summary.length > 250
+      ? spark.summary.substring(0, 250) + '...'
+      : spark.summary
+    : ''
   $: postCount = spark.postCount || 0
   $: bubbleCount = spark.bubbleCount || 0
   $: subscriberCount = spark.subscriberCount || 0
 
-  function onButtonClick (event, action, sparkId) {
-    event.preventDefault();
-    event.stopPropagation();
+  function onButtonClick(event, action, sparkId) {
+    event.preventDefault()
+    event.stopPropagation()
     dispatch('click', {
       action,
       sparkId
-    });
+    })
   }
 </script>
 
@@ -51,7 +51,7 @@
         {#each actions as action}
           <IconButton
             label={action.label}
-            on:click="{ (event) => onButtonClick(event, action, spark.id) }"
+            on:click={(event) => onButtonClick(event, action, spark.id)}
             href={action.icon}
             big="true"
           />
@@ -60,13 +60,14 @@
     {/if}
   </div>
 </SearchResult>
+
 <style>
   .search-result-spark {
     display: grid;
     grid-template-areas:
-      "avatar    name     buttons"
-      "avatar    stats    buttons"
-      "summary   summary  buttons";
+      'avatar    name     buttons'
+      'avatar    stats    buttons'
+      'summary   summary  buttons';
     grid-column-gap: 20px;
     grid-template-columns: max-content 1fr max-content;
     align-items: center;

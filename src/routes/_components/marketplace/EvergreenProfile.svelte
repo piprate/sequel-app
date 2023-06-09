@@ -1,16 +1,16 @@
 <script>
   import { roleName } from '../../_utils/evergreen'
 
-  export let profile;
+  export let profile
   export let title = 'intl.evergreenProfile'
 
-  $: roles = profile.roles || [];
-  $: rolesForDisplay = (roles.map(role => ({
+  $: roles = profile.roles || []
+  $: rolesForDisplay = roles.map((role) => ({
     role: roleName(role.id, role.description),
     receiver: `0x${role.addr}`,
-    primaryRate: ((role.initialSaleCommission || 0.0) * 100.0).toFixed(2)+"%",
-    secondaryRate: ((role.secondaryMarketCommission || 0.0) * 100.0).toFixed(2)+"%",
-  })));
+    primaryRate: ((role.initialSaleCommission || 0.0) * 100.0).toFixed(2) + '%',
+    secondaryRate: ((role.secondaryMarketCommission || 0.0) * 100.0).toFixed(2) + '%'
+  }))
 </script>
 
 {#if rolesForDisplay.length}
@@ -19,54 +19,55 @@
       <h2>{title}</h2>
     </div>
     <div
-            id="evergreen-profile-meta-role-head"
-            class="evergreen-profile-meta-cell evergreen-profile-meta-header-name"
-            role="term"
+      id="evergreen-profile-meta-role-head"
+      class="evergreen-profile-meta-cell evergreen-profile-meta-header-name"
+      role="term"
     >
       {intl.evergreenHeaderRole}
     </div>
     <div
-            class="evergreen-profile-meta-cell evergreen-profile-meta-header header-amount"
-            role="definition"
-            aria-labelledby="evergreen-profile-meta-role-head"
+      class="evergreen-profile-meta-cell evergreen-profile-meta-header header-amount"
+      role="definition"
+      aria-labelledby="evergreen-profile-meta-role-head"
     >
       {intl.evergreenHeaderPrimary}
     </div>
     <div
-            class="evergreen-profile-meta-cell evergreen-profile-meta-header header-amount"
-            role="definition"
-            aria-labelledby="evergreen-profile-meta-role-head"
+      class="evergreen-profile-meta-cell evergreen-profile-meta-header header-amount"
+      role="definition"
+      aria-labelledby="evergreen-profile-meta-role-head"
     >
       {intl.evergreenHeaderSecondary}
     </div>
-    <div class="evergreen-profile-meta-border"></div>
+    <div class="evergreen-profile-meta-border" />
     {#each rolesForDisplay as role, i}
       <div
-              id="evergreen-profile-meta-role-{i}"
-              class="evergreen-profile-meta-cell evergreen-profile-meta-role"
-              role="term"
+        id="evergreen-profile-meta-role-{i}"
+        class="evergreen-profile-meta-cell evergreen-profile-meta-role"
+        role="term"
       >
         <div class="evergreen-profile-meta-name">{role.role}</div>
         <div class="evergreen-profile-meta-address">{role.receiver}</div>
       </div>
       <div
-              class="evergreen-profile-meta-cell evergreen-profile-meta-value evergreen-profile-meta-amount"
-              role="definition"
-              aria-labelledby="evergreen-profile-meta-role-{i}"
+        class="evergreen-profile-meta-cell evergreen-profile-meta-value evergreen-profile-meta-amount"
+        role="definition"
+        aria-labelledby="evergreen-profile-meta-role-{i}"
       >
         {role.primaryRate}
       </div>
       <div
-              class="evergreen-profile-meta-cell evergreen-profile-meta-value evergreen-profile-meta-amount"
-              role="definition"
-              aria-labelledby="evergreen-profile-meta-role-{i}"
+        class="evergreen-profile-meta-cell evergreen-profile-meta-value evergreen-profile-meta-amount"
+        role="definition"
+        aria-labelledby="evergreen-profile-meta-role-{i}"
       >
         {role.secondaryRate}
       </div>
     {/each}
-    <div class="evergreen-profile-meta-border"></div>
+    <div class="evergreen-profile-meta-border" />
   </div>
 {/if}
+
 <style>
   .evergreen-profile-meta {
     grid-area: evergreen;
@@ -96,7 +97,7 @@
     word-wrap: break-word;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.0em;
+    font-size: 1em;
   }
 
   .evergreen-profile-meta-role {

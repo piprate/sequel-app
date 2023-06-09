@@ -4,6 +4,6 @@
   import pageComponent from '../_pages/pinned.svelte'
 </script>
 
-<Title name="{intl.pinnedPosts}" />
+<Title name={intl.pinnedPosts} />
 
 <LazyPage {pageComponent} />

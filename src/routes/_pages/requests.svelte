@@ -8,7 +8,7 @@
   import { database } from '../_database/database'
 
   // sneakily update the subscription reqs count in the cache, since we just fetched it
-  function updateSubReqsCount ($currentInstance, subscriptionReqs) {
+  function updateSubReqsCount($currentInstance, subscriptionReqs) {
     /* no await */ database.setSubscriptionRequestCount($currentInstance, subscriptionReqs.length)
     $subscriptionRequestCounts[$currentInstance] = subscriptionReqs.length
   }
@@ -24,7 +24,7 @@
       label: 'intl.reject',
       onclick: (sparkId) => setSubRequestApprovedOrRejected(sparkId, false, true)
     }
-  ];
+  ]
 
   $: sparksFetcher = (async () => {
     if ($isUserLoggedIn) {
@@ -32,12 +32,12 @@
       updateSubReqsCount($currentInstance, subscriptionReqs)
       return subscriptionReqs
     } else {
-      return [];
+      return []
     }
-  })();
+  })()
 </script>
 
-<DynamicPageBanner title="{intl.subRequests}" icon="#fa-user-plus" />
-{#if $isUserLoggedIn }
+<DynamicPageBanner title={intl.subRequests} icon="#fa-user-plus" />
+{#if $isUserLoggedIn}
   <SparksListPage {sparksFetcher} {sparkActions} />
 {/if}

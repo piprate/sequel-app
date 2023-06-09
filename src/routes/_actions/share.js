@@ -3,7 +3,7 @@ import { postBodyToPlainText } from '../_utils/postBodyToPlainText'
 import { formatIntl } from '../_utils/formatIntl'
 import { unwrap } from '../_utils/mapper'
 
-export async function sharePost (post) {
+export async function sharePost(post) {
   try {
     await navigator.share({
       title: post.summary || undefined,
@@ -12,6 +12,6 @@ export async function sharePost (post) {
     })
   } catch (e) {
     /* no await */
-    toast.say(formatIntl('intl.unableToShare', { error: (e.message || '') }))
+    toast.say(formatIntl('intl.unableToShare', { error: e.message || '' }))
   }
 }

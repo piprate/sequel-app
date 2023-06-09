@@ -21,17 +21,13 @@
   export let onJoinButtonClick
 
   $: headerImageIsMissing = !bubble.header
-  $: headerImage = bubble.header ?
-          ($autoplayGifs ?
-                  bubble.header.url :
-                  bubble.header.staticUrl) :
-          ''
+  $: headerImage = bubble.header ? ($autoplayGifs ? bubble.header.url : bubble.header.staticUrl) : ''
   $: headerNft = bubble.header && bubble.header.partOf
   $: bubblename = (bubble && bubble.name) || ''
   $: className = classname(
-          'bubble-profile',
-          headerImageIsMissing && 'header-image-is-missing',
-          $underlineLinks && 'underline-links'
+    'bubble-profile',
+    headerImageIsMissing && 'header-image-is-missing',
+    $underlineLinks && 'underline-links'
   )
   $: profileForBubble = formatIntl('intl.profileForBubble', { bubble: bubblename })
 
@@ -43,9 +39,7 @@
 </script>
 
 <h1 class="sr-only">{profileForBubble}</h1>
-<div class={className}
-     style="background-image: url({headerImage}?id={bubble.header?.id});"
-     bind:this={bubbleProfile}>
+<div class={className} style="background-image: url({headerImage}?id={bubble.header?.id});" bind:this={bubbleProfile}>
   <div class="bubble-profile-grid-wrapper">
     <div class="bubble-profile-grid">
       <BubbleProfileHeader {bubble} {relationship} />
@@ -59,6 +53,7 @@
 {#if headerNft}
   <NFTMediaTag nft={headerNft} position="top" />
 {/if}
+
 <style>
   .bubble-profile {
     position: relative;
@@ -74,11 +69,12 @@
 
   .bubble-profile-grid {
     display: grid;
-    grid-template-areas: "avatar     name         name         relationship  membership"
-                         "avatar     attributes   attributes   attributes    membership"
-                         "avatar     properties   properties   properties    membership"
-                         "summary    summary      summary      summary       summary"
-                         "details    details      details      details       details";
+    grid-template-areas:
+      'avatar     name         name         relationship  membership'
+      'avatar     attributes   attributes   attributes    membership'
+      'avatar     properties   properties   properties    membership'
+      'summary    summary      summary      summary       summary'
+      'details    details      details      details       details';
     grid-template-columns: min-content auto 1fr 1fr min-content;
     grid-column-gap: 10px;
     grid-row-gap: 5px;
@@ -107,12 +103,13 @@
 
     .bubble-profile-grid {
       display: grid;
-      grid-template-areas: "avatar      name          membership"
-                           "avatar      relationship  membership"
-                           "avatar      attributes    membership"
-                           "summary     summary       summary"
-                           "properties  properties    properties"
-                           "details     details       details";
+      grid-template-areas:
+        'avatar      name          membership'
+        'avatar      relationship  membership'
+        'avatar      attributes    membership'
+        'summary     summary       summary'
+        'properties  properties    properties'
+        'details     details       details';
       grid-template-columns: min-content minmax(auto, 1fr) min-content;
       grid-template-rows: min-content min-content 1fr min-content;
       padding: 10px;
@@ -130,14 +127,15 @@
       padding-top: 0;
     }
     .bubble-profile-grid {
-      grid-template-areas: "avatar       name"
-                           "avatar       label"
-                           "relationship relationship"
-                           "attributes   attributes"
-                           "membership   membership"
-                           "summary      summary"
-                           "properties   properties"
-                           "details      details";
+      grid-template-areas:
+        'avatar       name'
+        'avatar       label'
+        'relationship relationship'
+        'attributes   attributes'
+        'membership   membership'
+        'summary      summary'
+        'properties   properties'
+        'details      details';
       grid-template-columns: min-content 1fr;
       grid-column-gap: 5px;
       grid-row-gap: 0;

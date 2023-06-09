@@ -31,26 +31,25 @@
         loadError = err
       }
     }
-    console.log("LOADED LISTING", $observedListing)
+    console.log('LOADED LISTING', $observedListing)
   })
 </script>
 
 {#if $isUserLoggedIn}
-    {#if $observedListing}
-        {#if !newListing}
-            <DynamicPageBanner title="" {ariaTitle} />
-        {/if}
-        <Listing listing={$observedListing} ourSpark={$currentSpark} />
-    {:else if notFound}
-        <FreeTextLayout>
-            <h2>{intl.listingNotFound}</h2>
-        </FreeTextLayout>
-    {:else if loadError}
-        <ErrorMessage error={loadError} />
-    {:else}
-        <LoadingPage />
+  {#if $observedListing}
+    {#if !newListing}
+      <DynamicPageBanner title="" {ariaTitle} />
     {/if}
+    <Listing listing={$observedListing} ourSpark={$currentSpark} />
+  {:else if notFound}
+    <FreeTextLayout>
+      <h2>{intl.listingNotFound}</h2>
+    </FreeTextLayout>
+  {:else if loadError}
+    <ErrorMessage error={loadError} />
+  {:else}
+    <LoadingPage />
+  {/if}
 {:else}
-    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+  <RestrictedPageWarning message={intl.loginToAccess} offerVisitorMode={true} />
 {/if}
-

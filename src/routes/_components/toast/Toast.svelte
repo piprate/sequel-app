@@ -2,9 +2,9 @@
   const TIME_TO_SHOW_TOAST = 5000
   const DELAY_BETWEEN_TOASTS = 1000
 
-  let text = '';
-  let shown = false;
-  let messages = [];
+  let text = ''
+  let shown = false
+  let messages = []
   let _queue = Promise.resolve()
 
   $: {
@@ -14,24 +14,26 @@
     }
   }
 
-  export function say (_text) {
+  export function say(_text) {
     messages.push(_text)
     messages = messages
   }
 
-  function onNewToast (_text) {
-    _queue = _queue.then(() => {
-      text = _text;
-      shown = true;
-      return new Promise(resolve => {
-        setTimeout(resolve, TIME_TO_SHOW_TOAST)
+  function onNewToast(_text) {
+    _queue = _queue
+      .then(() => {
+        text = _text
+        shown = true
+        return new Promise((resolve) => {
+          setTimeout(resolve, TIME_TO_SHOW_TOAST)
+        })
       })
-    }).then(() => {
-      shown = false;
-      return new Promise(resolve => {
-        setTimeout(resolve, DELAY_BETWEEN_TOASTS)
+      .then(() => {
+        shown = false
+        return new Promise((resolve) => {
+          setTimeout(resolve, DELAY_BETWEEN_TOASTS)
+        })
       })
-    })
   }
 </script>
 
@@ -40,6 +42,7 @@
     {text}
   </div>
 </div>
+
 <style>
   .toast-modal {
     position: fixed;

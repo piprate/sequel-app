@@ -1,3 +1,1 @@
-export const importTesseractWorker = () => import(
-  '../../_utils/tesseractWorker.js'
-).then(mod => mod.default)
+export const importTesseractWorker = () => import('../../_utils/tesseractWorker.js').then((mod) => mod.default)

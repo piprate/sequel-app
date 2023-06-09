@@ -1,9 +1,9 @@
 // hacky way to listen for pushState/replaceState changes
 // per https://stackoverflow.com/a/25673911/680742
 
-import { inBrowser } from "./browserOrNode"
+import { inBrowser } from './browserOrNode'
 
-function wrapper (type) {
+function wrapper(type) {
   const orig = history[type]
   return function () {
     const result = orig.apply(this, arguments)

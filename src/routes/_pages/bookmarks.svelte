@@ -9,7 +9,7 @@
 {#if $isUserLoggedIn}
   <TimelinePage timeline="bookmarks">
     {#if $pinnedPage !== '/bookmarks'}
-      <DynamicPageBanner title="{intl.bookmarks}" icon="#fa-bookmark"/>
+      <DynamicPageBanner title={intl.bookmarks} icon="#fa-bookmark" />
     {/if}
   </TimelinePage>
 {:else}

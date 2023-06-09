@@ -4,4 +4,4 @@
   export let params
 </script>
 
-<WorldHomePage worldId={params.worldId} filter={params.withComments ? "with_comments/reader_mode" : "reader_mode"} />
+<WorldHomePage worldId={params.worldId} filter={params.withComments ? 'with_comments/reader_mode' : 'reader_mode'} />

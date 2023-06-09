@@ -1,3 +1,2 @@
-export const importShowRecoverPasswordDialog = () => import(
-  '../creators/showRecoverPasswordDialog'
-).then(mod => mod.default)
+export const importShowRecoverPasswordDialog = () =>
+  import('../creators/showRecoverPasswordDialog').then((mod) => mod.default)

@@ -4,6 +4,6 @@
   import pageComponent from '../../_pages/subscriptions/exclusive.svelte'
 </script>
 
-<Title name="{intl.exclusiveTimeline}" />
+<Title name={intl.exclusiveTimeline} />
 
 <LazyPage {pageComponent} />

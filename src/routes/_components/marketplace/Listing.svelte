@@ -21,10 +21,7 @@
   export let ourSpark
 
   $: listingName = (listing && listing.name) || ''
-  $: className = classname(
-          'listing',
-          $underlineLinks && 'underline-links'
-  )
+  $: className = classname('listing', $underlineLinks && 'underline-links')
   $: profileForListing = formatIntl('intl.listingPage', { listing: listingName })
   $: displaySeller = !(listing.artistRef && listing.sellerRef && listing.artistRef.id === listing.sellerRef.id)
   $: displayBuyer = !!listing.buyerRef
@@ -47,8 +44,7 @@
 </script>
 
 <h1 class="sr-only">{profileForListing}</h1>
-<div class={className}
-     bind:this={listingProfile}>
+<div class={className} bind:this={listingProfile}>
   <div class="listing-grid-wrapper">
     <div class="listing-grid">
       <ListingHeader {listing} />
@@ -56,7 +52,7 @@
       <div class="listing-date listing-created">
         <Timestamp value={listing.createdAt} flavour="created" />
       </div>
-      {#if sold }
+      {#if sold}
         <div class="listing-date listing-sold">
           <Timestamp value={listing.lastUpdatedAt} flavour="sold" />
         </div>
@@ -64,17 +60,17 @@
       <div class="artist-panel">
         <SparkRole spark={listing.artistRef} roleLabel="Creator" />
       </div>
-      {#if displaySeller }
-      <div class="seller-panel">
-        <SparkRole spark={listing.sellerRef} roleLabel="Seller" />
-      </div>
+      {#if displaySeller}
+        <div class="seller-panel">
+          <SparkRole spark={listing.sellerRef} roleLabel="Seller" />
+        </div>
       {/if}
-      {#if displayBuyer }
+      {#if displayBuyer}
         <div class="buyer-panel">
           <SparkRole spark={listing.buyerRef} roleLabel="Buyer" />
         </div>
       {/if}
-      {#if availableForSale }
+      {#if availableForSale}
         <ListingDetails {listing} {ourSpark} />
         <ListingControls {listing} {ourSpark} />
         <Payments {listing} />
@@ -84,7 +80,7 @@
           {intl.listingNotActive}
         </InfoAside>
         <Payments {listing} />
-      {:else if sold && primarySale }
+      {:else if sold && primarySale}
         <ListingDetails {listing} {ourSpark} />
         <InfoAside className="sale-warning">
           {intl.listingClosed}
@@ -98,6 +94,7 @@
     </div>
   </div>
 </div>
+
 <style>
   .listing {
     position: relative;
@@ -108,17 +105,17 @@
   .listing-grid {
     display: grid;
     grid-template-areas:
-            "image     image"
-            "name      name"
-            "label     label"
-            "summary   summary"
-            "created   sold"
-            "artist    seller"
-            "buyer     buyer"
-            "details   details"
-            "controls  controls"
-            "payments  payments"
-            "evergreen evergreen";
+      'image     image'
+      'name      name'
+      'label     label'
+      'summary   summary'
+      'created   sold'
+      'artist    seller'
+      'buyer     buyer'
+      'details   details'
+      'controls  controls'
+      'payments  payments'
+      'evergreen evergreen';
     grid-template-rows: repeat(11, min-content);
     grid-column-gap: 10px;
     grid-row-gap: 5px;
@@ -183,22 +180,22 @@
     .listing-grid {
       display: grid;
       grid-template-areas:
-            "image     image"
-            "name      name"
-            "label     label"
-            "summary   summary"
-            "created   sold"
-            "artist    seller"
-            "buyer     buyer"
-            "details   details"
-            "controls  controls"
-            "payments  payments"
-            "evergreen evergreen";
+        'image     image'
+        'name      name'
+        'label     label'
+        'summary   summary'
+        'created   sold'
+        'artist    seller'
+        'buyer     buyer'
+        'details   details'
+        'controls  controls'
+        'payments  payments'
+        'evergreen evergreen';
       grid-template-rows: repeat(11, min-content);
       padding: 10px;
     }
     .listing-date {
-      font-size: 1.0em;
+      font-size: 1em;
       align-self: flex-start;
     }
   }
@@ -206,19 +203,19 @@
   @media (max-width: 400px) {
     .listing-grid {
       grid-template-areas:
-              "image"
-              "name"
-              "label"
-              "summary"
-              "created"
-              "sold"
-              "artist"
-              "seller"
-              "buyer"
-              "details"
-              "controls"
-              "payments"
-              "evergreen";
+        'image'
+        'name'
+        'label'
+        'summary'
+        'created'
+        'sold'
+        'artist'
+        'seller'
+        'buyer'
+        'details'
+        'controls'
+        'payments'
+        'evergreen';
       grid-template-rows: repeat(13, min-content);
       grid-column-gap: 5px;
       grid-row-gap: 0;

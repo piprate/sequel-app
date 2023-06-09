@@ -3,7 +3,7 @@
   let imageUrl = ''
 
   // Fix a Webpack dependency check error
-  export async function preload (page) {
+  export async function preload(page) {
     const protocol = import.meta.env.PROD ? 'https' : 'http'
     pageUrl = `${protocol}://${page.host}${page.path}`
     imageUrl = `${protocol}://${page.host}/card.jpg`
@@ -11,29 +11,29 @@
 </script>
 
 <script>
-	import Nav from './_components/Nav.svelte'
-	import InformationalFooter from './_components/InformationalFooter.svelte'
-	import { isUserLoggedIn } from './_store/local'
-	import { currentPage } from './_store/navigation'
-    import { beforeNavigate } from '$app/navigation'
-    import { onMount } from 'svelte'
-	import { pwaInfo } from 'virtual:pwa-info'
+  import Nav from './_components/Nav.svelte'
+  import InformationalFooter from './_components/InformationalFooter.svelte'
+  import { isUserLoggedIn } from './_store/local'
+  import { currentPage } from './_store/navigation'
+  import { beforeNavigate } from '$app/navigation'
+  import { onMount } from 'svelte'
+  import { pwaInfo } from 'virtual:pwa-info'
 
-	export let segment = 'home'
+  export let segment = 'home'
 
-	$: infiniteScrollPage = $isUserLoggedIn && segment && !segment.startsWith('settings')
+  $: infiniteScrollPage = $isUserLoggedIn && segment && !segment.startsWith('settings')
 
-    beforeNavigate((navigation) => {
-        segment = navigation.to.route.id.replace('/', '') || 'home'
-        currentPage.set(segment)
-    })
+  beforeNavigate((navigation) => {
+    segment = navigation.to.route.id.replace('/', '') || 'home'
+    currentPage.set(segment)
+  })
 
-	onMount(async () => {
-        const { registerServiceWorker } = await import('./_utils/serviceWorkerClient')
-        registerServiceWorker()
-	})
+  onMount(async () => {
+    const { registerServiceWorker } = await import('./_utils/serviceWorkerClient')
+    registerServiceWorker()
+  })
 
-$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
+  $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 </script>
 
 <svelte:head>

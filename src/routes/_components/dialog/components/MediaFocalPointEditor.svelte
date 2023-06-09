@@ -18,7 +18,7 @@
   export let field = ''
   export let media = undefined
 
-  const parseAndValidateFloat = rawText => {
+  const parseAndValidateFloat = (rawText) => {
     let float = parseFloat(rawText)
     if (Number.isNaN(float)) {
       float = 0
@@ -38,17 +38,12 @@
 
   $: focusX = get(mediaItem, ['focusX'], 0)
   $: focusY = get(mediaItem, ['focusY'], 0)
-  $: nativeWidth = (
-          get(mediaItem, ['data', 'meta', 'width'], 300)
-  )
-  $: nativeHeight = (
-          get(mediaItem, ['data', 'meta', 'height'], 200)
-  )
-  $: shortName = (
-          // sometimes we no longer have the file, e.g. in a delete and redraft situation,
-          // so fall back to the description if it was provided
-          get(mediaItem, ['file', 'name']) || get(mediaItem, ['description']) || 'media'
-  )
+  $: nativeWidth = get(mediaItem, ['data', 'meta', 'width'], 300)
+  $: nativeHeight = get(mediaItem, ['data', 'meta', 'height'], 200)
+  $: shortName =
+    // sometimes we no longer have the file, e.g. in a delete and redraft situation,
+    // so fall back to the description if it was provided
+    get(mediaItem, ['file', 'name']) || get(mediaItem, ['description']) || 'media'
   // intrinsic width/height to avoid layout shifting https://chromestatus.com/feature/5695266130755584
   // note pleroma does not give us intrinsic width/height
   $: intrinsicWidth = get(mediaItem, ['data', 'meta', 'width'])
@@ -58,13 +53,11 @@
   $: scaleHeight = scale.height
   $: scaleX = scale.x
   $: scaleY = scale.y
-  $: indicatorX = (coordsToPercent(focusX) / 100)
-  $: indicatorY = ((100 - coordsToPercent(focusY)) / 100)
-  $: draggableAreaStyle = (
-          `top: ${scaleY}px; left: ${scaleX}px; width: ${scaleWidth}px; height: ${scaleHeight}px;`
-  )
+  $: indicatorX = coordsToPercent(focusX) / 100
+  $: indicatorY = (100 - coordsToPercent(focusY)) / 100
+  $: draggableAreaStyle = `top: ${scaleY}px; left: ${scaleX}px; width: ${scaleWidth}px; height: ${scaleHeight}px;`
 
-  function updateMediaItem () {
+  function updateMediaItem() {
     if (field) {
       setComposeData(realm, { [field]: mediaItem })
     } else {
@@ -88,7 +81,7 @@
     }
   }
 
-  function observeAndSync (rawFocus, key) {
+  function observeAndSync(rawFocus, key) {
     const rawFocusDecimal = parseAndValidateFloat(rawFocus)
     if (mediaItem[key] !== rawFocusDecimal) {
       mediaItem[key] = rawFocusDecimal
@@ -99,11 +92,11 @@
   $: observeAndSync(rawFocusX, 'focusX')
   $: observeAndSync(rawFocusY, 'focusY')
 
-  function onDraggableChange (e) {
+  function onDraggableChange(e) {
     const { x, y } = e.detail
     scheduleIdleTask(() => {
       const focusX = parseAndValidateFloat(percentToCoords(x * 100))
-      const focusY = parseAndValidateFloat(percentToCoords(100 - (y * 100)))
+      const focusY = parseAndValidateFloat(percentToCoords(100 - y * 100))
       if (mediaItem.focusX !== focusX || mediaItem.focusY !== focusY) {
         mediaItem.focusX = focusX
         mediaItem.focusY = focusY
@@ -112,15 +105,15 @@
     })
   }
 
-  function onDragStart () {
+  function onDragStart() {
     dragging = true
   }
 
-  function onDragEnd () {
+  function onDragEnd() {
     dragging = false
   }
 
-  export function measure () {
+  export function measure() {
     requestAnimationFrame(() => {
       if (!container) {
         return
@@ -144,72 +137,63 @@
   })
 </script>
 
-<form class="media-focal-point-container {className}"
-      aria-label="{intl.enterFocalPoint}"
-      use:resize={measure}
->
+<form class="media-focal-point-container {className}" aria-label={intl.enterFocalPoint} use:resize={measure}>
   <div class="media-focal-point-image-container" bind:this={container}>
     <img
-            width={intrinsicWidth}
-            height={intrinsicHeight}
-            class="media-focal-point-image"
-            src={preview}
-            alt={shortName}
+      width={intrinsicWidth}
+      height={intrinsicHeight}
+      class="media-focal-point-image"
+      src={preview}
+      alt={shortName}
     />
-    <div class="media-focal-point-backdrop"></div>
-    <div class="media-draggable-area"
-         style={draggableAreaStyle}
-    >
+    <div class="media-focal-point-backdrop" />
+    <div class="media-draggable-area" style={draggableAreaStyle}>
       <!-- 52px == 32px icon width + 10px padding -->
       <Draggable
-              draggableClass="media-draggable-area-inner"
-              indicatorClass="media-focal-point-indicator {imageLoaded ? '': 'hidden'} {dragging ? 'dragging' : ''}"
-              indicatorWidth={52}
-              indicatorHeight={52}
-              x={indicatorX}
-              y={indicatorY}
-              on:dragStart={onDragStart}
-              on:dragEnd={onDragEnd}
-              on:change={onDraggableChange}
+        draggableClass="media-draggable-area-inner"
+        indicatorClass="media-focal-point-indicator {imageLoaded ? '' : 'hidden'} {dragging ? 'dragging' : ''}"
+        indicatorWidth={52}
+        indicatorHeight={52}
+        x={indicatorX}
+        y={indicatorY}
+        on:dragStart={onDragStart}
+        on:dragEnd={onDragEnd}
+        on:change={onDraggableChange}
       >
-        <SvgIcon
-                className="media-focal-point-indicator-svg"
-                href="#fa-crosshairs"
-        />
+        <SvgIcon className="media-focal-point-indicator-svg" href="#fa-crosshairs" />
       </Draggable>
     </div>
   </div>
   <div class="media-focal-point-inputs">
     <div class="media-focal-point-input-pair">
-      <label for="media-focal-point-x-input-{realm}">
-        X
-      </label>
-      <input type="number"
-             step="0.01"
-             min="-1"
-             max="1"
-             inputmode="decimal"
-             placeholder="0"
-             id="media-focal-point-x-input-{realm}"
-             bind:value="{rawFocusX}"
+      <label for="media-focal-point-x-input-{realm}"> X </label>
+      <input
+        type="number"
+        step="0.01"
+        min="-1"
+        max="1"
+        inputmode="decimal"
+        placeholder="0"
+        id="media-focal-point-x-input-{realm}"
+        bind:value={rawFocusX}
       />
     </div>
     <div class="media-focal-point-input-pair">
-      <label for="media-focal-point-y-input-{realm}">
-        Y
-      </label>
-      <input type="number"
-             step="0.01"
-             min="-1"
-             max="1"
-             inputmode="decimal"
-             placeholder="0"
-             id="media-focal-point-y-input-{realm}"
-             bind:value="{rawFocusY}"
+      <label for="media-focal-point-y-input-{realm}"> Y </label>
+      <input
+        type="number"
+        step="0.01"
+        min="-1"
+        max="1"
+        inputmode="decimal"
+        placeholder="0"
+        id="media-focal-point-y-input-{realm}"
+        bind:value={rawFocusY}
       />
     </div>
   </div>
 </form>
+
 <style>
   .media-focal-point-container {
     display: flex;

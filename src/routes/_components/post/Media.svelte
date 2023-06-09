@@ -60,7 +60,7 @@
   $: url = media.url
   $: type = media.type
   $: inlineMediaStyle = (() => {
-    if ((type === 'Audio') || (blurhash && $largeInlineMedia)) {
+    if (type === 'Audio' || (blurhash && $largeInlineMedia)) {
       return ''
     } else {
       return `width: ${inlineWidthText}; height: ${inlineHeightText};`
@@ -68,19 +68,13 @@
   })()
   $: tabindex = showAsSensitive ? '-1' : '0'
   $: ariaHidden = showAsSensitive
-  $: imageButtonAriaLabel = (
-          formatIntl('intl.showImage', { animated: type === 'gifv', description })
-  )
-  $: videoOrAudioButtonLabel = (
-          formatIntl('intl.playVideoOrAudio', { audio: type === 'Audio', description })
-  )
-  $: animatedLabel = (
-          formatIntl('intl.animatedImage', { description })
-  )
+  $: imageButtonAriaLabel = formatIntl('intl.showImage', { animated: type === 'gifv', description })
+  $: videoOrAudioButtonLabel = formatIntl('intl.playVideoOrAudio', { audio: type === 'Audio', description })
+  $: animatedLabel = formatIntl('intl.animatedImage', { description })
   $: nftReference = media.partOf
 
-  function onClick () {
-    (async () => {
+  function onClick() {
+    ;(async () => {
       const showMediaDialog = await importShowMediaDialog()
       showMediaDialog(mediaAttachments, index)
     })()
@@ -93,88 +87,96 @@
 </script>
 
 {#if !blurhash && (type === 'Video' || type === 'Audio')}
-  <button id={elementId}
-          type="button"
-          class="inline-media play-video-button focus-after {$largeInlineMedia ? '' : 'fixed-size'} {type === 'Audio' ? 'play-audio-button' : ''}"
-          aria-label={videoOrAudioButtonLabel}
-          {tabindex}
-          aria-hidden={ariaHidden}
-          style={inlineMediaStyle}>
-    <PlayVideoIcon/>
+  <button
+    id={elementId}
+    type="button"
+    class="inline-media play-video-button focus-after {$largeInlineMedia ? '' : 'fixed-size'} {type === 'Audio'
+      ? 'play-audio-button'
+      : ''}"
+    aria-label={videoOrAudioButtonLabel}
+    {tabindex}
+    aria-hidden={ariaHidden}
+    style={inlineMediaStyle}
+  >
+    <PlayVideoIcon />
     {#if type === 'Video'}
       <!-- FIXME: src should be previewUrl. Update when video previews are available. -->
       <LazyImage
-              alt={description}
-              title={description}
-              src={oneTransparentPixel}
-              fallback={oneTransparentPixel}
-              {blurhash}
-              width={inlineWidth}
-              height={inlineHeight}
-              background="var(--loading-bg)"
-              {focus}
+        alt={description}
+        title={description}
+        src={oneTransparentPixel}
+        fallback={oneTransparentPixel}
+        {blurhash}
+        width={inlineWidth}
+        height={inlineHeight}
+        background="var(--loading-bg)"
+        {focus}
       />
     {/if}
   </button>
 {:else}
-  <button id={elementId}
-          type="button"
-          class="inline-media show-image-button focus-after {$largeInlineMedia ? '' : 'fixed-size'}"
-          aria-label={imageButtonAriaLabel}
-          title={description}
-          use:mouseover="{ (event) => { mouseoverVar = event } }"
-          style={inlineMediaStyle}
-          {tabindex}
-          aria-hidden={ariaHidden}
+  <button
+    id={elementId}
+    type="button"
+    class="inline-media show-image-button focus-after {$largeInlineMedia ? '' : 'fixed-size'}"
+    aria-label={imageButtonAriaLabel}
+    title={description}
+    use:mouseover={(event) => {
+      mouseoverVar = event
+    }}
+    style={inlineMediaStyle}
+    {tabindex}
+    aria-hidden={ariaHidden}
   >
     {#if type === 'gifv' && $autoplayGifs && !blurhash}
       <AutoplayVideo
-              ariaLabel={animatedLabel}
-              poster={previewUrl}
-              src={url}
-              width={inlineWidth}
-              height={inlineHeight}
-              {focus}
+        ariaLabel={animatedLabel}
+        poster={previewUrl}
+        src={url}
+        width={inlineWidth}
+        height={inlineHeight}
+        {focus}
       />
     {:else if type === 'gifv'}
       <NonAutoplayGifv
-              class={noNativeWidthHeight ? 'no-native-width-height' : ''}
-              label={animatedLabel}
-              poster={previewUrl}
-              {blurhash}
-              {blurhashToUse}
-              src={url}
-              staticSrc={previewUrl}
-              useWidthHeight={!blurhash}
-              width={inlineWidth}
-              height={inlineHeight}
-              playing={mouseoverVar}
-              {focus}
+        class={noNativeWidthHeight ? 'no-native-width-height' : ''}
+        label={animatedLabel}
+        poster={previewUrl}
+        {blurhash}
+        {blurhashToUse}
+        src={url}
+        staticSrc={previewUrl}
+        useWidthHeight={!blurhash}
+        width={inlineWidth}
+        height={inlineHeight}
+        playing={mouseoverVar}
+        {focus}
       />
     {:else}
       <LazyImage
-              alt={description}
-              title={description}
-              src={previewUrl}
-              fallback={blurhashToUse || oneTransparentPixel}
-              {blurhash}
-              width={inlineWidth}
-              height={inlineHeight}
-              background="var(--loading-bg)"
-              {focus}
+        alt={description}
+        title={description}
+        src={previewUrl}
+        fallback={blurhashToUse || oneTransparentPixel}
+        {blurhash}
+        width={inlineWidth}
+        height={inlineHeight}
+        background="var(--loading-bg)"
+        {focus}
       />
     {/if}
     {#if showNFT && nftReference}
-      <NFTMediaTag nft={nftReference}/>
+      <NFTMediaTag nft={nftReference} />
     {/if}
   </button>
 {/if}
-<style>
 
+<style>
   :global(.post-media video, .post-media img) {
     object-fit: cover;
   }
-  .play-video-button, .show-image-button {
+  .play-video-button,
+  .show-image-button {
     margin: auto;
     padding: 0;
     border-radius: 0;

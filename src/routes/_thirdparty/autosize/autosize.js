@@ -13,7 +13,7 @@ const doUpdate = inBrowser() && throttleTimer(requestAnimationFrame)
 
 const map = new Map()
 
-function assign (ta) {
+function assign(ta) {
   if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || map.has(ta)) {
     return
   }
@@ -22,7 +22,7 @@ function assign (ta) {
   const container = getScrollContainer()
   let heightOffset = null
 
-  function init () {
+  function init() {
     const style = window.getComputedStyle(ta, null)
 
     if (style.boxSizing === 'content-box') {
@@ -34,13 +34,13 @@ function assign (ta) {
     update()
   }
 
-  function resize () {
+  function resize() {
     mark('autosize:resize()')
     _resize()
     stop('autosize:resize()')
   }
 
-  function _resize () {
+  function _resize() {
     const originalHeight = ta.style.height
     const scrollTop = container.scrollTop
 
@@ -59,13 +59,13 @@ function assign (ta) {
 
   const deferredUpdate = () => doUpdate(update)
 
-  function update () {
+  function update() {
     mark('autosize:update()')
     _update()
     stop('autosize:update()')
   }
 
-  function _update () {
+  function _update() {
     resize()
   }
 
@@ -89,14 +89,14 @@ function assign (ta) {
   init()
 }
 
-function destroy (ta) {
+function destroy(ta) {
   const methods = map.get(ta)
   if (methods) {
     methods.destroy()
   }
 }
 
-function update (ta) {
+function update(ta) {
   const methods = map.get(ta)
   if (methods) {
     methods.update()
@@ -105,17 +105,17 @@ function update (ta) {
 
 const autosize = (el, options) => {
   if (el) {
-    Array.prototype.forEach.call(el.length ? el : [el], x => assign(x, options))
+    Array.prototype.forEach.call(el.length ? el : [el], (x) => assign(x, options))
   }
   return el
 }
-autosize.destroy = el => {
+autosize.destroy = (el) => {
   if (el) {
     Array.prototype.forEach.call(el.length ? el : [el], destroy)
   }
   return el
 }
-autosize.update = el => {
+autosize.update = (el) => {
   if (el) {
     Array.prototype.forEach.call(el.length ? el : [el], update)
   }

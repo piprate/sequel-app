@@ -25,7 +25,7 @@
   $: uploadInProgress = $uploadingMedia === realm
   $: hasOriginalToken = !!(media.data && media.data.partOf)
 
-  async function onEmojiClick () {
+  async function onEmojiClick() {
     const [showEmojiDialog] = await Promise.all([
       importShowEmojiDialog(),
       updateCustomEmojiForInstance($currentInstance)
@@ -33,21 +33,26 @@
     showEmojiDialog(realm)
   }
 
-  function onMediaClick () {
+  function onMediaClick() {
     input.click()
   }
 
-  async function onNFTSelectorClick () {
+  async function onNFTSelectorClick() {
     const showDialog = await importShowNFTSelectionDialog()
     // we pass empty current NFT values, as there may be multiple media items in the post
-    showDialog('', '', async function (event) {
-      const nft = event.detail
-      console.log('NFT selected', nft)
-      await doTokenMediaUpload(realm, '', nft, true, '')
-    }, '')
+    showDialog(
+      '',
+      '',
+      async function (event) {
+        const nft = event.detail
+        console.log('NFT selected', nft)
+        await doTokenMediaUpload(realm, '', nft, true, '')
+      },
+      ''
+    )
   }
 
-  async function onFileChange (e) {
+  async function onFileChange(e) {
     const { files } = e.target
     for (const file of files) {
       await doMediaUpload(realm, '', file, true, '')
@@ -55,76 +60,66 @@
     e.target.value = null
   }
 
-  async function onPostPrivacyClick () {
+  async function onPostPrivacyClick() {
     const showPostPrivacyDialog = await importShowPostPrivacyDialog()
     showPostPrivacyDialog(realm)
   }
 
-  async function onPostInputFormatClick () {
+  async function onPostInputFormatClick() {
     const showPostInputFormatDialog = await importShowPostInputFormatDialog()
     showPostInputFormatDialog(realm)
   }
 
-  function onContentWarningClick () {
+  function onContentWarningClick() {
     toggleContentWarningShown(realm)
   }
 </script>
 
 <div class="compose-box-toolbar">
   <div class="compose-box-toolbar-items">
+    <IconButton className="compose-toolbar-button" label={intl.addEmoji} href="#fa-smile" on:click={onEmojiClick} />
     <IconButton
-            className="compose-toolbar-button"
-            label="{intl.addEmoji}"
-            href="#fa-smile"
-            on:click="{onEmojiClick}"
-    />
-    <IconButton
-            className="compose-toolbar-button"
-            svgClassName={uploadInProgress ? 'spin' : ''}
-            label="{intl.addMedia}"
-            href={uploadInProgress ? '#fa-spinner' : '#fa-camera'}
-            on:click="{onMediaClick}"
-            disabled={$uploadingMedia || (media.length === 4)}
+      className="compose-toolbar-button"
+      svgClassName={uploadInProgress ? 'spin' : ''}
+      label={intl.addMedia}
+      href={uploadInProgress ? '#fa-spinner' : '#fa-camera'}
+      on:click={onMediaClick}
+      disabled={$uploadingMedia || media.length === 4}
     />
     {#if enableNFT}
       <IconButton
-              className="compose-toolbar-button"
-              svgClassName={uploadInProgress ? 'spin' : ''}
-              label="{intl.addNFTMedia}"
-              href={uploadInProgress ? '#fa-spinner' : '#nft-diamond'}
-              on:click="{onNFTSelectorClick}"
-              disabled={$uploadingMedia}
+        className="compose-toolbar-button"
+        svgClassName={uploadInProgress ? 'spin' : ''}
+        label={intl.addNFTMedia}
+        href={uploadInProgress ? '#fa-spinner' : '#nft-diamond'}
+        on:click={onNFTSelectorClick}
+        disabled={$uploadingMedia}
       />
     {/if}
     <IconButton
-            className="compose-toolbar-button"
-            label={postPrivacyLabel}
-            href={postPrivacy.icon}
-            on:click="{onPostPrivacyClick}"
+      className="compose-toolbar-button"
+      label={postPrivacyLabel}
+      href={postPrivacy.icon}
+      on:click={onPostPrivacyClick}
     />
-<!--    <IconButton-->
-<!--            className="compose-toolbar-button"-->
-<!--            label="{intl.addContentWarning}"-->
-<!--            pressedLabel="{intl.removeContentWarning}"-->
-<!--            href="#fa-exclamation-triangle"-->
-<!--            on:click="{onContentWarningClick}"-->
-<!--            pressable={true}-->
-<!--            pressed={contentWarningShown}-->
-<!--    />-->
+    <!--    <IconButton-->
+    <!--            className="compose-toolbar-button"-->
+    <!--            label="{intl.addContentWarning}"-->
+    <!--            pressedLabel="{intl.removeContentWarning}"-->
+    <!--            href="#fa-exclamation-triangle"-->
+    <!--            on:click="{onContentWarningClick}"-->
+    <!--            pressable={true}-->
+    <!--            pressed={contentWarningShown}-->
+    <!--    />-->
     <IconButton
-            className="compose-toolbar-button"
-            label="{intl.postInputFormat}"
-            href={textFormat.icon}
-            on:click="{onPostInputFormatClick}"
+      className="compose-toolbar-button"
+      label={intl.postInputFormat}
+      href={textFormat.icon}
+      on:click={onPostInputFormatClick}
     />
   </div>
-  
-  <input bind:this={input}
-         on:change="{onFileChange}"
-         style="display: none;"
-         type="file"
-         multiple
-         accept={mediaAccept} >
+
+  <input bind:this={input} on:change={onFileChange} style="display: none;" type="file" multiple accept={mediaAccept} />
 </div>
 
 <style>
@@ -136,7 +131,7 @@
     display: flex;
     align-items: center;
   }
-  
+
   @media (max-width: 320px) {
     :global(button.icon-button.compose-toolbar-button) {
       padding-left: 5px;

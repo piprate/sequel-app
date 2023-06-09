@@ -1,21 +1,22 @@
 <script>
   import LoadingSpinner from './LoadingSpinner.svelte'
-  import {onMount} from "svelte";
+  import { onMount } from 'svelte'
 
   const SPINNER_DELAY = 700
 
-  let shown = false;
+  let shown = false
 
   onMount(() => {
     setTimeout(() => {
-      shown = true;
+      shown = true
     }, SPINNER_DELAY)
-  });
+  })
 </script>
 
 <div class="loading-page {shown ? '' : 'hidden'}">
   <LoadingSpinner />
 </div>
+
 <style>
   .loading-page {
     position: absolute;

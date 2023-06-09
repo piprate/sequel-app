@@ -24,7 +24,7 @@
   let loading = true
   let worlds = []
 
-  function onClick (world) {
+  function onClick(world) {
     if (world.id === '') {
       dispatch('select', null)
     } else {
@@ -37,8 +37,8 @@
     id: world.id,
     index,
     name: world.name,
-    selected: (selectedWorld === world.id),
-    label: formatIntl('intl.selectedWorldLabel', { world: world.name, selected: (selectedWorld === world.id) }),
+    selected: selectedWorld === world.id,
+    label: formatIntl('intl.selectedWorldLabel', { world: world.name, selected: selectedWorld === world.id }),
     switchLabel: formatIntl('intl.switchToNameOfWorld', { world: world.name }),
     data: world
   }))
@@ -47,7 +47,7 @@
     try {
       worlds = [
         {
-          id: '', // entry for 'Not assigned' option
+          id: '' // entry for 'Not assigned' option
         }
       ].concat(await getWorldList($currentInstance, $accessToken))
     } catch (e) {
@@ -58,30 +58,29 @@
   })
 </script>
 
-<ModalDialog
-        {id}
-        {label}
-        {title}
-        shrinkWidthToFit={true}
-        background="var(--main-bg)"
->
+<ModalDialog {id} {label} {title} shrinkWidthToFit={true} background="var(--main-bg)">
   {#if loading}
     <LoadingPage />
-  {:else}
-    {#if worlds && worlds.length}
-      <RadioGroup id="world-selector" className="world-selection-radio" label="{intl.selectWorldFromList}" length={worlds.length}>
-        <ul class="worlds-results" aria-label="{intl.worldList}">
-          {#each worldStates as world}
-            <li class="search-result">
-              <RadioGroupButton
-                      id="world-selector={world.id}"
-                      className="world-selector-button"
-                      label={world.switchLabel}
-                      checked={world.selected}
-                      index={world.index}
-                      on:click="{ (e) => onClick(world) }">
-                <div class="search-result-world">
-                  {#if world.id}
+  {:else if worlds && worlds.length}
+    <RadioGroup
+      id="world-selector"
+      className="world-selection-radio"
+      label={intl.selectWorldFromList}
+      length={worlds.length}
+    >
+      <ul class="worlds-results" aria-label={intl.worldList}>
+        {#each worldStates as world}
+          <li class="search-result">
+            <RadioGroupButton
+              id="world-selector={world.id}"
+              className="world-selector-button"
+              label={world.switchLabel}
+              checked={world.selected}
+              index={world.index}
+              on:click={(e) => onClick(world)}
+            >
+              <div class="search-result-world">
+                {#if world.id}
                   <div class="search-result-world-avatar">
                     <Avatar entity={world.data} size="small" />
                   </div>
@@ -89,30 +88,30 @@
                     <WorldDisplayName world={world.data} />
                   </div>
                   <div class="search-result-world-stats">
-                    Posts: {world.data.postCount || 0} Bubbles: {world.data.bubbleCount || 0} Members: {world.data.memberCount || 0}
+                    Posts: {world.data.postCount || 0} Bubbles: {world.data.bubbleCount || 0} Members: {world.data
+                      .memberCount || 0}
                   </div>
                   <div class="search-result-world-summary">
-                    {world.data.summary ?
-                            world.data.summary.length > 250 ?
-                                    world.data.summary.substring(0, 250) + "..." : world.data.summary
-                            : ''}
+                    {world.data.summary
+                      ? world.data.summary.length > 250
+                        ? world.data.summary.substring(0, 250) + '...'
+                        : world.data.summary
+                      : ''}
                   </div>
-                  {:else}
-                    <div class="world-not-assigned">{intl.worldNotAssigned}</div>
-                  {/if}
-                  <div class="world-selector-button-wrapper">
-                    <SvgIcon className="world-selector-button-svg {world.selected ? '' : 'hidden'}"
-                             href="#fa-check" />
-                  </div>
+                {:else}
+                  <div class="world-not-assigned">{intl.worldNotAssigned}</div>
+                {/if}
+                <div class="world-selector-button-wrapper">
+                  <SvgIcon className="world-selector-button-svg {world.selected ? '' : 'hidden'}" href="#fa-check" />
                 </div>
-              </RadioGroupButton>
-            </li>
-          {/each}
-        </ul>
-      </RadioGroup>
-    {:else}
-     no worlds found
-    {/if}
+              </div>
+            </RadioGroupButton>
+          </li>
+        {/each}
+      </ul>
+    </RadioGroup>
+  {:else}
+    no worlds found
   {/if}
 </ModalDialog>
 
@@ -168,9 +167,9 @@
     flex: 1;
     display: grid;
     grid-template-areas:
-      "avatar    name     button"
-      "avatar    stats    button"
-      "summary   summary  button";
+      'avatar    name     button'
+      'avatar    stats    button'
+      'summary   summary  button';
     grid-column-gap: 20px;
     grid-template-columns: max-content 1fr max-content;
     align-items: center;

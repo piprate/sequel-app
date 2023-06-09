@@ -7,7 +7,7 @@ if (inBrowser()) {
   window.__eventBus = eventBus
 }
 
-export function on (eventName, callback) {
+export function on(eventName, callback) {
   eventBus.on(eventName, callback)
   return () => {
     eventBus.removeListener(eventName, callback)

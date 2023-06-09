@@ -6,7 +6,7 @@ import { accessToken } from '../../_store/instance'
 import { bookmarkBubble, unbookmarkBubble } from '../../_api/bookmarkBubble'
 import { updateLocalBubbleRelationship } from '../bubbles'
 
-export async function setBubbleBookmarked (bubbleId, bookmarked, asSpark, toastOnSuccess) {
+export async function setBubbleBookmarked(bubbleId, bookmarked, asSpark, toastOnSuccess) {
   if (!online.get()) {
     /* no await */
     toast.say(bookmarked ? 'intl.cannotBookmarkOffline' : 'intl.cannotUnbookmarkOffline')
@@ -36,8 +36,8 @@ export async function setBubbleBookmarked (bubbleId, bookmarked, asSpark, toastO
     /* no await */
     toast.say(
       bookmarked
-        ? formatIntl('intl.unableToBookmark', { error: (e.message || '') })
-        : formatIntl('intl.unableToUnbookmark', { error: (e.message || '') })
+        ? formatIntl('intl.unableToBookmark', { error: e.message || '' })
+        : formatIntl('intl.unableToUnbookmark', { error: e.message || '' })
     )
   }
 }

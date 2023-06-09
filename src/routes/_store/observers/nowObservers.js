@@ -8,12 +8,12 @@ export const now = transientStore(Date.now())
 
 const POLL_INTERVAL = 10000
 
-export function nowObservers () {
-  function updateNow () {
+export function nowObservers() {
+  function updateNow() {
     now.set(Date.now())
   }
 
-  function updateNowLazily () {
+  function updateNowLazily() {
     scheduleIdleTask(updateNow)
   }
 

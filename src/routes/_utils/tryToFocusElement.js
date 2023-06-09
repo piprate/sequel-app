@@ -4,12 +4,12 @@ import { scheduleIdleTask } from './scheduleIdleTask'
 const RETRIES = 5
 const TIMEOUT = 50
 
-export async function tryToFocusElement (id) {
+export async function tryToFocusElement(id) {
   for (let i = 0; i < RETRIES; i++) {
     if (i > 0) {
-      await new Promise(resolve => setTimeout(resolve, TIMEOUT))
+      await new Promise((resolve) => setTimeout(resolve, TIMEOUT))
     }
-    await new Promise(resolve => scheduleIdleTask(resolve))
+    await new Promise((resolve) => scheduleIdleTask(resolve))
     const element = document.getElementById(id)
     if (element) {
       try {

@@ -30,9 +30,10 @@
   </p>
 {/if}
 {#if media.length}
-  <ul class="compose-media-container"
-      aria-label="{intl.mediaUploads}"
-      style="grid-template-columns: repeat({media.length}, 1fr);"
+  <ul
+    class="compose-media-container"
+    aria-label={intl.mediaUploads}
+    style="grid-template-columns: repeat({media.length}, 1fr);"
   >
     {#each media as mediaItem, index}
       <MediaItem {realm} {mediaItem} {index} {media} />

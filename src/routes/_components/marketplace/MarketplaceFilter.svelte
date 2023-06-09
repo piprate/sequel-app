@@ -1,7 +1,7 @@
 <script>
   import TabSet from '../TabSet.svelte'
 
-  export let filter;
+  export let filter
 
   $: tabs = [
     {
@@ -19,17 +19,13 @@
       label: 'intl.listingHistory',
       href: `/marketplace/history`
     }
-  ];
+  ]
 </script>
 
-<TabSet
-        label="{intl.filters}"
-        currentTabName={filter}
-        {tabs}
-        className="marketplace-browser-filters"
-/>
+<TabSet label={intl.filters} currentTabName={filter} {tabs} className="marketplace-browser-filters" />
+
 <style>
-    :global(.marketplace-browser-filters) {
-        background: var(--spark-profile-bg);
-    }
+  :global(.marketplace-browser-filters) {
+    background: var(--spark-profile-bg);
+  }
 </style>

@@ -4,7 +4,7 @@ import * as fcl from '@onflow/fcl'
 import { configureFlow } from '../../_actions/flow'
 import { inNode } from '../../_utils/browserOrNode'
 
-export async function flowObservers () {
+export async function flowObservers() {
   if (inNode()) {
     return
   }
@@ -21,7 +21,7 @@ export async function flowObservers () {
     flowLoggedInAccount.set('')
   }
 
-  fcl.currentUser().subscribe(user => {
+  fcl.currentUser().subscribe((user) => {
     console.log('USER event received', user)
     if (user.loggedIn) {
       flowLoggedInAccount.set(user.addr)

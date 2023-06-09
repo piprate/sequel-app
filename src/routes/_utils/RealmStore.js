@@ -6,7 +6,7 @@ import { mark, stop } from './marks'
 import { requestPostAnimationFrame } from './requestPostAnimationFrame'
 import { derived, writable } from 'svelte/store'
 
-export function realmStore (maxSize) {
+export function realmStore(maxSize) {
   let currentRealm = null
   const realms = new QuickLRU({ maxSize: maxSize })
   const _batches = {}
@@ -99,13 +99,10 @@ export function realmStore (maxSize) {
   }
 }
 
-export function deriveFromRealmStore (store, key, defaultValue) {
-  return derived(
-    store,
-    $store => {
-      const { currentRealm, realms } = $store
-      const realmData = realms.get(currentRealm)
-      return (realmData && realmData[key]) || defaultValue
-    }
-  )
+export function deriveFromRealmStore(store, key, defaultValue) {
+  return derived(store, ($store) => {
+    const { currentRealm, realms } = $store
+    const realmData = realms.get(currentRealm)
+    return (realmData && realmData[key]) || defaultValue
+  })
 }

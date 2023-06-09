@@ -4,6 +4,6 @@
   import pageComponent from '../../_pages/worlds/explore.svelte'
 </script>
 
-<Title name="{intl.worldExploreTitle}" />
+<Title name={intl.worldExploreTitle} />
 
 <LazyPage {pageComponent} />

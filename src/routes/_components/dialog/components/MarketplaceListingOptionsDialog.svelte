@@ -7,7 +7,7 @@
   import { goto } from '$app/navigation'
   import { unwrap } from '../../../_utils/mapper'
   import { doDeleteWorld } from '../../../_actions/deleteWorld'
-  import { importShowWithdrawDialog } from '../asyncDialogs/importShowWithdrawDialog';
+  import { importShowWithdrawDialog } from '../asyncDialogs/importShowWithdrawDialog'
 
   export let id
   export let label
@@ -23,7 +23,7 @@
   $: listingName = (listing && listing.name) || 'unnamed'
   $: listingOwner = listing && listing.seller
   $: withdrawLabel = 'intl.withdrawListing'
-  $: isOwner = relationship && listingOwner === ourSparkId  // refer to relationship to suppress warnings
+  $: isOwner = relationship && listingOwner === ourSparkId // refer to relationship to suppress warnings
   $: items = [
     isOwner && {
       key: 'edit',
@@ -42,7 +42,7 @@
     }
   ].filter(Boolean)
 
-  function onClick (event) {
+  function onClick(event) {
     switch (event.detail.key) {
       case 'withdraw':
         return onWithdrawClicked()
@@ -53,18 +53,18 @@
     }
   }
 
-  async function onWithdrawClicked () {
+  async function onWithdrawClicked() {
     const showWithdrawDialog = await importShowWithdrawDialog()
     showWithdrawDialog(listingId, id)
   }
 
-  async function onCopyClicked () {
+  async function onCopyClicked() {
     const url = `${location.origin}${location.pathname}`
     close(id)
     await copyText(url)
   }
 
-  function onEdit () {
+  function onEdit() {
     close(id)
     setTimeout(() => {
       goto(`/marketplace/${listingId}/edit`)
@@ -72,12 +72,6 @@
   }
 </script>
 
-<ModalDialog
-  {id}
-  {label}
-  {title}
-  shrinkWidthToFit={true}
-  background="var(--main-bg)"
->
-  <GenericDialogList selectable={false} {items} on:click="{onClick}"/>
+<ModalDialog {id} {label} {title} shrinkWidthToFit={true} background="var(--main-bg)">
+  <GenericDialogList selectable={false} {items} on:click={onClick} />
 </ModalDialog>

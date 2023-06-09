@@ -15,57 +15,58 @@
   params = undefined
   const intl = {}
 
-  $: myWorldsFetcher = () => $currentSparkId ? getSparkWorldList($currentInstance, $accessToken, unwrap($currentSparkId), true) : []
-  $: allWorldsFetcher = () => $isUserLoggedIn ? getWorldList($currentInstance, $accessToken) : []
+  $: myWorldsFetcher = () =>
+    $currentSparkId ? getSparkWorldList($currentInstance, $accessToken, unwrap($currentSparkId), true) : []
+  $: allWorldsFetcher = () => ($isUserLoggedIn ? getWorldList($currentInstance, $accessToken) : [])
 </script>
 
-{#if $isUserLoggedIn }
-    {#if $isAuthenticated}
-        {#if $pinnedPage !== '/worlds'}
-            <DynamicPageBanner title="{intl.worlds}" icon="#fa-globe"/>
-        {/if}
-        <WorldBrowserFilter filter="my_stuff" />
-        <WorldsListPage worldsFetcher={myWorldsFetcher} >
-            <span slot="is-empty">
-                {#if $currentSpark }
-                    <div class="new-world-button">
-                        <a class="button primary" data-sveltekit-preload-data href="/worlds/new">{intl.createNewWorld}</a>
-                    </div>
-                   <InfoAside className="new-entity-notice-aside">
-                        {intl.worldCreationNotice}
-                    </InfoAside>
-                {:else if $isAuthenticated }
-                    <InfoAside className="select-spark-aside">
-                        {intl.selectSparkBeforeCreatingWorld}
-                    </InfoAside>
-                {/if}
-            </span>
-        </WorldsListPage>
-    {:else}
-        <DynamicPageBanner title="{intl.exploreSequelWorlds}" icon="#fa-globe" disableBackButton="true" />
-        <div class="notice">
-            {intl.visitorWorldsNotice}
-        </div>
-        <WorldsListPage worldsFetcher={allWorldsFetcher} />
+{#if $isUserLoggedIn}
+  {#if $isAuthenticated}
+    {#if $pinnedPage !== '/worlds'}
+      <DynamicPageBanner title={intl.worlds} icon="#fa-globe" />
     {/if}
+    <WorldBrowserFilter filter="my_stuff" />
+    <WorldsListPage worldsFetcher={myWorldsFetcher}>
+      <span slot="is-empty">
+        {#if $currentSpark}
+          <div class="new-world-button">
+            <a class="button primary" data-sveltekit-preload-data href="/worlds/new">{intl.createNewWorld}</a>
+          </div>
+          <InfoAside className="new-entity-notice-aside">
+            {intl.worldCreationNotice}
+          </InfoAside>
+        {:else if $isAuthenticated}
+          <InfoAside className="select-spark-aside">
+            {intl.selectSparkBeforeCreatingWorld}
+          </InfoAside>
+        {/if}
+      </span>
+    </WorldsListPage>
+  {:else}
+    <DynamicPageBanner title={intl.exploreSequelWorlds} icon="#fa-globe" disableBackButton="true" />
+    <div class="notice">
+      {intl.visitorWorldsNotice}
+    </div>
+    <WorldsListPage worldsFetcher={allWorldsFetcher} />
+  {/if}
 {:else}
-    <RestrictedPageWarning message="{intl.loginToAccess}" offerVisitorMode={true} />
+  <RestrictedPageWarning message={intl.loginToAccess} offerVisitorMode={true} />
 {/if}
 
 <style>
-    .notice {
-        margin: 20px 10px 0 10px;
-        font-size: 1.1em;
-        color: var(--deemphasized-text-color);
-        align-items: center;
-    }
-    :global(.select-spark-aside) {
-        margin: 20px 10px 0px 10px;
-    }
-    :global(.new-world-button) {
-        margin: 25px 0px;
-    }
-    :global(.new-entity-notice-aside) {
-        margin: 10px 10px 0 0;
-    }
+  .notice {
+    margin: 20px 10px 0 10px;
+    font-size: 1.1em;
+    color: var(--deemphasized-text-color);
+    align-items: center;
+  }
+  :global(.select-spark-aside) {
+    margin: 20px 10px 0px 10px;
+  }
+  :global(.new-world-button) {
+    margin: 25px 0px;
+  }
+  :global(.new-entity-notice-aside) {
+    margin: 10px 10px 0 0;
+  }
 </style>

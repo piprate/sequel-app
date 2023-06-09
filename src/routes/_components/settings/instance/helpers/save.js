@@ -2,7 +2,7 @@ import { updateAlerts } from '../../../../_actions/pushSubscription'
 import { parseSettings, saveSettings } from '../../../../_actions/settings'
 import { switchToTheme } from '../../../../_utils/themeEngine'
 
-export function saveInstanceSettings (instanceName) {
+export function saveInstanceSettings(instanceName) {
   const themeForm = document.getElementById('theme-settings')
   const pushNotificationForm = document.getElementById('push-notification-settings')
   const notificationFilterForm = document.getElementById('notification-filter-settings')

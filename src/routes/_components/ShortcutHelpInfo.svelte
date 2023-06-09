@@ -2,14 +2,12 @@
   import { leftRightChangesFocus } from '../_store/local'
   import { formatIntl } from '../_utils/formatIntl'
 
-  let inDialog = false;
+  let inDialog = false
 
-  $: globalHotkeysText = formatIntl('intl.globalHotkeys', { leftRightChangesFocus: $leftRightChangesFocus });
+  $: globalHotkeysText = formatIntl('intl.globalHotkeys', { leftRightChangesFocus: $leftRightChangesFocus })
 </script>
 
-<div class="shortcut-help-info {inDialog ? 'in-dialog' : ''}"
-     tabindex="{inDialog ? '0' : '-1'}"
->
+<div class="shortcut-help-info {inDialog ? 'in-dialog' : ''}" tabindex={inDialog ? '0' : '-1'}>
   <h2>{intl.global}</h2>
   <div class="hotkey-group">
     <ul>
@@ -31,6 +29,7 @@
     </div>
   {/if}
 </div>
+
 <style>
   .shortcut-help-info.in-dialog {
     overflow-y: auto;

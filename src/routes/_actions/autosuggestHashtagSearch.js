@@ -15,12 +15,12 @@ import { accessToken } from '../_store/instance'
 
 const HASHTAG_SEARCH_LIMIT = 10
 
-function getUses (historyItem) {
+function getUses(historyItem) {
   return historyItem.uses
 }
 
 // Show the most common hashtags first, then sort by name
-function byUsesThenName (a, b) {
+function byUsesThenName(a, b) {
   if (a.history && b.history && a.history.length && b.history.length) {
     const aCount = sum(a.history.map(getUses))
     const bCount = sum(b.history.map(getUses))
@@ -29,15 +29,13 @@ function byUsesThenName (a, b) {
   return a.name < b.name ? -1 : a.name > b.name ? 1 : 0
 }
 
-export function doHashtagSearch (searchText) {
+export function doHashtagSearch(searchText) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   const requestThrottler = new RequestThrottler(searchHashtags)
 
-  async function searchHashtags (signal) {
-    const results = await search(
-      _currentInstance, _accessToken, searchText, false, HASHTAG_SEARCH_LIMIT, true, signal
-    )
+  async function searchHashtags(signal) {
+    const results = await search(_currentInstance, _accessToken, searchText, false, HASHTAG_SEARCH_LIMIT, true, signal)
     return results.hashtags.sort(byUsesThenName).slice(0, SEARCH_RESULTS_LIMIT)
   }
 

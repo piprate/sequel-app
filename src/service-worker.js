@@ -10,20 +10,20 @@ const ASSETS = `cache${version}`
 const to_cache = build.concat(files)
 const staticAssets = new Set(to_cache)
 
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(ASSETS)
-      .then(cache => cache.addAll(to_cache))
+      .then((cache) => cache.addAll(to_cache))
       .then(() => {
         self.skipWaiting()
       })
   )
 })
 
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(async keys => {
+    caches.keys().then(async (keys) => {
       // delete old caches
       for (const key of keys) {
         if (key !== ASSETS) await caches.delete(key)
@@ -38,7 +38,7 @@ self.addEventListener('activate', event => {
  * Fetch the asset from the network and store it in the cache.
  * Fall back to the cache if the user is offline.
  */
-async function fetchAndCache (request) {
+async function fetchAndCache(request) {
   const cache = await caches.open(`offline${version}`)
 
   try {
@@ -53,7 +53,7 @@ async function fetchAndCache (request) {
   }
 }
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET' || event.request.headers.has('range')) return
 
   const url = new URL(event.request.url)
@@ -73,7 +73,7 @@ self.addEventListener('fetch', event => {
         // always serve static files and bundler-generated assets from cache.
         // if your application has other URLs with data that will never change,
         // set this variable to true for them and they will only be fetched once.
-        const cachedAsset = isStaticAsset && await caches.match(event.request)
+        const cachedAsset = isStaticAsset && (await caches.match(event.request))
 
         // for pages, you might want to serve a build `service-worker-index.html` file,
         // which Sapper has generated for you. It's not right for every
@@ -91,34 +91,40 @@ self.addEventListener('fetch', event => {
   }
 })
 
-self.addEventListener('push', event => {
-  event.waitUntil((async () => {
-    const data = event.data.json()
-    // If there is only once instance, then we know for sure that the push notification came from it
-    const knownInstances = await getKnownInstances()
-    if (knownInstances.length !== 1) {
-      // TODO: Mastodon currently does not tell us which instance the push notification came from.
-      // So we have to guess and currently just choose the first one. We _could_ locally store the instance that
-      // currently has push notifications enabled, but this would only work for one instance at a time.
-      // See: https://github.com/mastodon/mastodon/issues/22183
-      await showSimpleNotification(data)
-      return
-    }
+self.addEventListener('push', (event) => {
+  event.waitUntil(
+    (async () => {
+      const data = event.data.json()
+      // If there is only once instance, then we know for sure that the push notification came from it
+      const knownInstances = await getKnownInstances()
+      if (knownInstances.length !== 1) {
+        // TODO: Mastodon currently does not tell us which instance the push notification came from.
+        // So we have to guess and currently just choose the first one. We _could_ locally store the instance that
+        // currently has push notifications enabled, but this would only work for one instance at a time.
+        // See: https://github.com/mastodon/mastodon/issues/22183
+        await showSimpleNotification(data)
+        return
+      }
 
-    const origin = basename(knownInstances[0])
-    try {
-      const notification = await get(`${origin}/api/v1/notifications/${data.notification_id}`, {
-        Authorization: `Bearer ${data.access_token}`
-      }, { timeout: 2000 })
+      const origin = basename(knownInstances[0])
+      try {
+        const notification = await get(
+          `${origin}/api/v1/notifications/${data.notification_id}`,
+          {
+            Authorization: `Bearer ${data.access_token}`
+          },
+          { timeout: 2000 }
+        )
 
-      await showRichNotification(data, notification)
-    } catch (e) {
-      await showSimpleNotification(data)
-    }
-  })())
+        await showRichNotification(data, notification)
+      } catch (e) {
+        await showSimpleNotification(data)
+      }
+    })()
+  )
 })
 
-async function showSimpleNotification (data) {
+async function showSimpleNotification(data) {
   await self.registration.showNotification(data.title, {
     badge: '/icon-push-badge.png',
     icon: data.icon,
@@ -130,7 +136,7 @@ async function showSimpleNotification (data) {
   })
 }
 
-async function showRichNotification (data, notification) {
+async function showRichNotification(data, notification) {
   const { icon, body } = data
   const tag = notification.id
   const { origin } = self.location
@@ -200,7 +206,7 @@ async function showRichNotification (data, notification) {
   }
 }
 
-const cloneNotification = notification => {
+const cloneNotification = (notification) => {
   const clone = {}
 
   for (const k in notification) {
@@ -217,37 +223,39 @@ const cloneNotification = notification => {
 const updateNotificationWithoutAction = (notification, action) => {
   const newNotification = cloneNotification(notification)
 
-  newNotification.actions = newNotification.actions.filter(item => item.action !== action)
+  newNotification.actions = newNotification.actions.filter((item) => item.action !== action)
 
   return self.registration.showNotification(newNotification.title, newNotification)
 }
 
-self.addEventListener('notificationclick', event => {
-  event.waitUntil((async () => {
-    switch (event.action) {
-      case 'reblog': {
-        const url = `${event.notification.data.instance}/api/v1/statuses/${event.notification.data.status_id}/reblog`
-        await post(url, null, {
-          Authorization: `Bearer ${event.notification.data.access_token}`
-        })
-        await updateNotificationWithoutAction(event.notification, 'reblog')
-        break
+self.addEventListener('notificationclick', (event) => {
+  event.waitUntil(
+    (async () => {
+      switch (event.action) {
+        case 'reblog': {
+          const url = `${event.notification.data.instance}/api/v1/statuses/${event.notification.data.status_id}/reblog`
+          await post(url, null, {
+            Authorization: `Bearer ${event.notification.data.access_token}`
+          })
+          await updateNotificationWithoutAction(event.notification, 'reblog')
+          break
+        }
+        case 'favourite': {
+          const url = `${event.notification.data.instance}/api/v1/statuses/${event.notification.data.status_id}/favourite`
+          await post(url, null, {
+            Authorization: `Bearer ${event.notification.data.access_token}`
+          })
+          await updateNotificationWithoutAction(event.notification, 'favourite')
+          break
+        }
+        default: {
+          await self.clients.openWindow(event.notification.data.url)
+          await event.notification.close()
+          break
+        }
       }
-      case 'favourite': {
-        const url = `${event.notification.data.instance}/api/v1/statuses/${event.notification.data.status_id}/favourite`
-        await post(url, null, {
-          Authorization: `Bearer ${event.notification.data.access_token}`
-        })
-        await updateNotificationWithoutAction(event.notification, 'favourite')
-        break
-      }
-      default: {
-        await self.clients.openWindow(event.notification.data.url)
-        await event.notification.close()
-        break
-      }
-    }
-  })())
+    })()
+  )
 })
 
 self.addEventListener('message', (event) => {

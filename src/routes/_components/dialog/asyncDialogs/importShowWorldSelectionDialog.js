@@ -1,3 +1,2 @@
-export const importShowWorldSelectionDialog = () => import(
-  '../creators/showWorldSelectionDialog'
-).then(mod => mod.default)
+export const importShowWorldSelectionDialog = () =>
+  import('../creators/showWorldSelectionDialog').then((mod) => mod.default)

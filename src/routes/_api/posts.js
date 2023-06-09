@@ -3,7 +3,19 @@ import { DEFAULT_TIMEOUT, get, post, put, WRITE_TIMEOUT } from '../_utils/ajax'
 import { unwrap } from '../_utils/mapper'
 import { populatePostMediaURLs } from './media'
 
-export async function sendPost (instanceName, accessToken, bubbleId, asSpark, text, originalPostId, inReplyToId, media, visibility, textFormatKey, mentions) {
+export async function sendPost(
+  instanceName,
+  accessToken,
+  bubbleId,
+  asSpark,
+  text,
+  originalPostId,
+  inReplyToId,
+  media,
+  visibility,
+  textFormatKey,
+  mentions
+) {
   let url = `${basename(instanceName)}/bubble/${bubbleId}/post`
   let method = post
 
@@ -41,7 +53,7 @@ export async function sendPost (instanceName, accessToken, bubbleId, asSpark, te
   })
 }
 
-export async function getPostContext (instanceName, accessToken, postId) {
+export async function getPostContext(instanceName, accessToken, postId) {
   const url = `${base(instanceName, accessToken)}/post/${postId}/context`
   return get(url, auth(accessToken), { timeout: DEFAULT_TIMEOUT }).then((ctx) => {
     for (const post of ctx.ancestors) {
@@ -54,7 +66,7 @@ export async function getPostContext (instanceName, accessToken, postId) {
   })
 }
 
-export async function getPost (instanceName, accessToken, postId, asSpark) {
+export async function getPost(instanceName, accessToken, postId, asSpark) {
   const url = `${base(instanceName, accessToken)}/post/${postId}`
   return get(url, sequelAuth(accessToken, asSpark), { timeout: DEFAULT_TIMEOUT }).then((post) => {
     populatePostMediaURLs(post, instanceName, accessToken)

@@ -12,7 +12,7 @@
   let instance
   let recoveryCode
 
-  async function setValues (values) {
+  async function setValues(values) {
     recoveryCode = values.recoveryCode
     email = values.email
     instance = values.instance

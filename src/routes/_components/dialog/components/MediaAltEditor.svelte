@@ -13,7 +13,7 @@
   import { formatIntl } from '../../../_utils/formatIntl'
   import { database } from '../../../_database/database'
   import { createEventDispatcher, onMount } from 'svelte'
-  import SvgIcon from '../../SvgIcon.svelte';
+  import SvgIcon from '../../SvgIcon.svelte'
 
   const dispatch = createEventDispatcher()
 
@@ -44,7 +44,7 @@
     return extractButtonText
   })()
 
-  function updateMediaItem () {
+  function updateMediaItem() {
     if (field) {
       setComposeData(realm, { [field]: mediaItem })
     } else {
@@ -54,7 +54,7 @@
 
   let textarea
 
-  function mediaObserver (mediaItem) {
+  function mediaObserver(mediaItem) {
     const text = mediaItem.description || ''
     if (rawText !== text) {
       rawText = text
@@ -63,7 +63,7 @@
 
   $: mediaObserver(mediaItem)
 
-  function rawTextObserver (rawText) {
+  function rawTextObserver(rawText) {
     updateRawTextInStore(() => {
       if (mediaItem.description !== rawText) {
         mediaItem.description = rawText
@@ -75,7 +75,7 @@
 
   $: rawTextObserver(rawText)
 
-  function setupAutosize () {
+  function setupAutosize() {
     requestPostAnimationFrame(() => {
       mark('autosize()')
       autosize(textarea)
@@ -83,27 +83,28 @@
     })
   }
 
-  function teardownAutosize () {
+  function teardownAutosize() {
     mark('autosize.destroy()')
     autosize.destroy(textarea)
     stop('autosize.destroy()')
   }
 
-  export function measure () {
+  export function measure() {
     autosize.update(textarea)
   }
 
-  async function onClick () {
+  async function onClick() {
     extracting = true
     try {
-      const onProgress = progress => {
+      const onProgress = (progress) => {
         requestAnimationFrame(() => {
           extractionProgress = progress * 100
         })
       }
       const file = await database.getCachedMediaFile(mediaId)
       let text
-      if (file) { // Avoid downloading from the network a file that the user *just* uploaded
+      if (file) {
+        // Avoid downloading from the network a file that the user *just* uploaded
         const fileUrl = URL.createObjectURL(file)
         try {
           text = await runTesseract(fileUrl, onProgress)
@@ -141,42 +142,30 @@
 
 <div class="media-alt-editor {className}">
   <textarea
-          id="the-media-alt-input-{realm}-{index}"
-          class="media-alt-input"
-          placeholder="{intl.altLabel}"
-          bind:this={textarea}
-          bind:value={rawText}
-  ></textarea>
+    id="the-media-alt-input-{realm}-{index}"
+    class="media-alt-input"
+    placeholder={intl.altLabel}
+    bind:this={textarea}
+    bind:value={rawText}
+  />
   <label for="the-media-alt-input-{realm}-{index}" class="sr-only">
     {intl.altLabel}
   </label>
-  <LengthGauge
-          {length}
-          {overLimit}
-          max={mediaAltCharLimit}
-  />
-  <LengthIndicator
-          {length}
-          {overLimit}
-          max={mediaAltCharLimit}
-          style="width: 100%; text-align: right;"
-  />
- <button class="extract-text-button" type="button"
-         on:click="{onClick}"
-         disabled={extracting}
-         aria-label={extractButtonLabel}
- >
-   <SvgIcon href="{extracting ? '#fa-spinner' : '#fa-magic'}"
-            className="extract-text-svg {extracting ? 'spin' : ''}"
-   />
-   <span>{extractButtonText}</span>
- </button>
- <LengthGauge
-         length={extractionProgress}
-         overLimit={false}
-         max={100}
- />
+  <LengthGauge {length} {overLimit} max={mediaAltCharLimit} />
+  <LengthIndicator {length} {overLimit} max={mediaAltCharLimit} style="width: 100%; text-align: right;" />
+  <button
+    class="extract-text-button"
+    type="button"
+    on:click={onClick}
+    disabled={extracting}
+    aria-label={extractButtonLabel}
+  >
+    <SvgIcon href={extracting ? '#fa-spinner' : '#fa-magic'} className="extract-text-svg {extracting ? 'spin' : ''}" />
+    <span>{extractButtonText}</span>
+  </button>
+  <LengthGauge length={extractionProgress} overLimit={false} max={100} />
 </div>
+
 <style>
   .media-alt-editor {
     display: flex;
@@ -195,20 +184,20 @@
   }
 
   .extract-text-button {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
   }
 
   .extract-text-button span {
-   margin-left: 15px;
+    margin-left: 15px;
   }
 
   :global(.extract-text-svg) {
-   fill: var(--button-text);
-   width: 18px;
-   height: 18px;
+    fill: var(--button-text);
+    width: 18px;
+    height: 18px;
   }
 
   @media (max-height: 767px) {
@@ -218,10 +207,10 @@
       overflow: auto;
     }
     .extract-text-button {
-     margin-top: 0;
+      margin-top: 0;
     }
     button.extract-text-button {
-     padding: 7px 10px;
+      padding: 7px 10px;
     }
   }
 

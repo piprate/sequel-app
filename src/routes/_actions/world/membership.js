@@ -7,7 +7,7 @@ import { get } from 'svelte/store'
 import { accessToken } from '../../_store/instance'
 import { unwrap } from '../../_utils/mapper'
 
-export async function updateMembership (worldId, join, asSpark, toastOnSuccess) {
+export async function updateMembership(worldId, join, asSpark, toastOnSuccess) {
   worldId = unwrap(worldId)
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
@@ -26,9 +26,10 @@ export async function updateMembership (worldId, join, asSpark, toastOnSuccess) 
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(join
-      ? formatIntl('intl.unableToJoinWorld', { error: (e.message || '') })
-      : formatIntl('intl.unableToLeaveWorld', { error: (e.message || '') })
+    toast.say(
+      join
+        ? formatIntl('intl.unableToJoinWorld', { error: e.message || '' })
+        : formatIntl('intl.unableToLeaveWorld', { error: e.message || '' })
     )
   }
 }

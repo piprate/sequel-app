@@ -9,7 +9,7 @@ import { accessToken } from '../_store/instance'
 
 export const uploadingMedia = writable('')
 
-export async function doMediaUpload (realm, field, file, calculateBlurhash, mediaProfile) {
+export async function doMediaUpload(realm, field, file, calculateBlurhash, mediaProfile) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   uploadingMedia.set(realm + field)
@@ -49,13 +49,13 @@ export async function doMediaUpload (realm, field, file, calculateBlurhash, medi
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(formatIntl('intl.failedToUploadMedia', { error: (e.message || '') }))
+    toast.say(formatIntl('intl.failedToUploadMedia', { error: e.message || '' }))
   } finally {
     uploadingMedia.set('')
   }
 }
 
-export async function doTokenMediaUpload (realm, field, nft, calculateBlurhash, mediaProfile) {
+export async function doTokenMediaUpload(realm, field, nft, calculateBlurhash, mediaProfile) {
   const _currentInstance = currentInstance.get()
   const _accessToken = get(accessToken)
   uploadingMedia.set(realm + field)
@@ -97,13 +97,13 @@ export async function doTokenMediaUpload (realm, field, nft, calculateBlurhash, 
   } catch (e) {
     console.error(e)
     /* no await */
-    toast.say(formatIntl('intl.failedToUploadMedia', { error: (e.message || '') }))
+    toast.say(formatIntl('intl.failedToUploadMedia', { error: e.message || '' }))
   } finally {
     uploadingMedia.set('')
   }
 }
 
-export function deleteMedia (realm, field, i) {
+export function deleteMedia(realm, field, i) {
   if (field) {
     clearComposeData(realm, field)
   } else {
@@ -123,7 +123,7 @@ export function deleteMedia (realm, field, i) {
   }
 }
 
-export function setComposeImage (realm, entity, field) {
+export function setComposeImage(realm, entity, field) {
   const obj = {
     data: entity[field],
     url: entity[field].url,
@@ -137,7 +137,7 @@ export function setComposeImage (realm, entity, field) {
   })
 }
 
-export function prepareMediaItem (mediaItem) {
+export function prepareMediaItem(mediaItem) {
   if (!mediaItem.data.meta) {
     mediaItem.data.meta = {}
   }
