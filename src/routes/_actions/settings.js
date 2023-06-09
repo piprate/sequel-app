@@ -7,6 +7,7 @@ import { DEFAULT_THEME } from '../_utils/themeEngine'
 import { inBrowser } from '../_utils/browserOrNode'
 import { isKaiOS } from '../_utils/userAgent/isKaiOS'
 import { get } from '../_utils/lodash-lite'
+import { toast } from '../_components/toast/toast'
 
 const defaultSettings = {
   general: {
@@ -163,6 +164,9 @@ export async function saveSettings (settings, section, group = undefined, overwr
     const _currentInstance = currentInstance.get()
     const savedSettings = _currentInstance ? await saveSettingsToRemote(_settings) : { settings: _settings }
     saveSettingsToLocal(savedSettings, section)
+
+    /* no await */
+    toast.say('intl.savedSettings')
   }
 }
 
