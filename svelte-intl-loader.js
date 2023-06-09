@@ -5,7 +5,9 @@ import { getIntl, warningOrError, trimWhitespace } from './bin/getIntl.js'
 
 export default function (source) {
   const res = source
-    // replace {@intl.foo}
+    // replace ={intl.foo}
+    .replace(/={intl\.([^}]+)}/g, (match, p1) => '="' + trimWhitespace(getIntl(p1)) + '"')
+    // replace {intl.foo}
     .replace(/{intl\.([^}]+)}/g, (match, p1) => trimWhitespace(getIntl(p1)))
     // replace {@html intl.foo}
     .replace(/{@html intl\.([^}]+)}/g, (match, p1) => {

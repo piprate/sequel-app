@@ -1,0 +1,24 @@
+.DS_Store
+node_modules
+/build
+/.svelte-kit
+/.vercel
+/dist
+.env
+.env.*
+!.env.example
+
+src/app.html
+
+/static/*.css
+/static/icons.svg
+/static/inline-script.js.map
+/static/emoji-*.json
+/static/manifest.json
+/src/inline-script/checksum.js
+.eslintrc.cjs
+
+# Ignore files for PNPM, NPM and YARN
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
