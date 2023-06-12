@@ -1,7 +1,7 @@
 <script>
   import ModalDialog from './ModalDialog.svelte'
-  import { autoplayGifs, enableGrayscale, isUserTouching } from '../../../_store/local'
-  import { currentCustomEmoji, currentTheme } from '../../../_store/instance'
+  import { autoplayGifs, enableGrayscale, isUserTouching, selectedTheme } from '../../../_store/local'
+  import { currentCustomEmoji } from '../../../_store/instance'
   import { insertEmoji } from '../../../_actions/emoji'
   import { close } from '../helpers/closeDialog'
   import { isDarkTheme } from '../../../_utils/isDarkTheme'
@@ -19,7 +19,7 @@
   export let title
   export let realm
 
-  $: darkMode = isDarkTheme($currentTheme)
+  $: darkMode = isDarkTheme($selectedTheme)
   $: customEmoji = convertCustomEmojiToEmojiPickerFormat($currentCustomEmoji, $autoplayGifs)
 
   let picker
