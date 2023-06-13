@@ -28,3 +28,8 @@ jobs:
           cache: 'npm'
       - run: npm install
       - run: npm run test
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker build -f build/docker/app/Dockerfile .
