@@ -13,6 +13,7 @@
   import { loadSecureMedia } from '../_api/media'
   import { accessToken } from '../_store/instance'
   import { inBrowser } from '../_utils/browserOrNode'
+  import AudioPlayer from './AudioPlayer.svelte'
 
   const updateMediaInStore = throttleTimer(scheduleIdleTask)
   const resizeTextarea = inBrowser() && throttleTimer(requestAnimationFrame)
@@ -106,12 +107,10 @@
   let preview = ONE_TRANSPARENT_PIXEL
 
   async function loadPreview(mediaItem) {
-    if (type !== 'Audio') {
-      try {
-        preview = await loadSecureMedia($accessToken, mediaItem.previewUrl)
-      } catch (e) {
-        console.error('Image loading error', mediaItem.previewUrl, e)
-      }
+    try {
+      preview = await loadSecureMedia($accessToken, mediaItem.previewUrl)
+    } catch (e) {
+      console.error('Image loading error', mediaItem.previewUrl, e)
     }
   }
 
@@ -124,14 +123,14 @@
   })
 </script>
 
-<li class="compose-media compose-media-realm-{realm}" aria-label={shortName}>
-  <img
-    alt=""
-    class={type === 'audio' ? 'audio-preview' : ''}
-    style="object-position: {objectPosition};"
-    src={preview}
-    aria-hidden="true"
-  />
+<li class="compose-media compose-media-realm-{realm} {type === 'Audio' ? 'audio-media' : ''}" aria-label={shortName}>
+  {#if type === 'Audio'}
+    <div class="audio-player-container">
+      <AudioPlayer sound={preview} />
+    </div>
+  {:else}
+    <img alt="" style="object-position: {objectPosition};" src={preview} aria-hidden="true" />
+  {/if}
   <div class="compose-media-buttons">
     <button
       class="compose-media-button compose-media-focal-button"
@@ -176,6 +175,14 @@
     background: var(--main-bg);
   }
 
+  .compose-media.audio-media {
+    height: 140px;
+  }
+
+  .compose-media.audio-media .compose-media-focal-button {
+    visibility: hidden;
+  }
+
   .compose-media img {
     object-fit: contain;
     flex: 1;
@@ -191,6 +198,10 @@
     right: 0;
     display: flex;
     justify-content: center;
+  }
+
+  .compose-media.audio-media .compose-media-alt {
+    position: inherit;
   }
 
   .compose-media-alt-input {
@@ -238,8 +249,9 @@
     height: 18px;
   }
 
-  .audio-preview {
-    background: var(--audio-bg);
+  .audio-player-container {
+    width: 100%;
+    margin: auto auto 0;
   }
 
   .compose-media-realm-dialog {

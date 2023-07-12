@@ -17,6 +17,8 @@ export default [
   { id: 'fa-ellipsis-h', src: 'src/thirdparty/font-awesome-svg-png/white/svg/ellipsis-h.svg' },
   { id: 'fa-spinner', src: 'src/thirdparty/font-awesome-svg-png/white/svg/spinner.svg' },
   { id: 'fa-user', src: 'src/thirdparty/font-awesome-svg-png/white/svg/user.svg' },
+  { id: 'fa-pause', src: 'src/thirdparty/font-awesome-svg-png/white/svg/pause.svg' },
+  { id: 'fa-play', src: 'src/thirdparty/font-awesome-svg-png/white/svg/play.svg' },
   { id: 'fa-play-circle', src: 'src/thirdparty/font-awesome-svg-png/white/svg/play-circle.svg' },
   { id: 'fa-eye', src: 'src/thirdparty/font-awesome-svg-png/white/svg/eye.svg' },
   { id: 'fa-eye-slash', src: 'src/thirdparty/font-awesome-svg-png/white/svg/eye-slash.svg' },

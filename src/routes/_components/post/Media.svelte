@@ -12,6 +12,9 @@
   import { convertCssPropertyToDataUrl } from '../../_utils/convertCssPropertyToDataUrl'
   import { formatIntl } from '../../_utils/formatIntl'
   import { onMount } from 'svelte'
+  import { accessToken } from '../../_store/instance'
+  import { loadSecureMedia } from '../../_api/media'
+  import AudioPlayer from '../AudioPlayer.svelte'
 
   export let media
   export let uuid
@@ -22,6 +25,7 @@
 
   let oneTransparentPixel = ONE_TRANSPARENT_PIXEL
   let mouseoverVar = undefined
+  let audio = undefined
 
   $: focus = meta && meta.focus
   // width/height to show inline
@@ -81,12 +85,18 @@
     return true
   }
 
-  onMount(() => {
+  $: loadSecureMedia($accessToken, media.url).then((result) => {
+    audio = result
+  })
+
+  onMount(async () => {
     return registerClickDelegate(elementId, () => onClick())
   })
 </script>
 
-{#if !blurhash && (type === 'Video' || type === 'Audio')}
+{#if type === 'Audio'}
+  <AudioPlayer sound={audio} />
+{:else if !blurhash && type === 'Video'}
   <button
     id={elementId}
     type="button"
@@ -175,6 +185,7 @@
   :global(.post-media video, .post-media img) {
     object-fit: cover;
   }
+
   .play-video-button,
   .show-image-button {
     margin: auto;
