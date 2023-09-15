@@ -9,7 +9,8 @@
     instanceNameInSearch,
     logInToInstanceError,
     logInToInstanceErrorForText,
-    logInToInstanceLoading
+    logInToInstanceLoading,
+    redirectToPage
   } from '../../../_store/local'
   import { onMount } from 'svelte'
   import { copyText } from '../../../_actions/copyText'
@@ -78,7 +79,15 @@
 
   function onContinue() {
     // go to Flow setup page
-    goto('/settings/flow?new')
+    // goto('/settings/flow?new')
+
+    const _redirectToPage = $redirectToPage
+    if (_redirectToPage) {
+      $redirectToPage = ''
+      goto(_redirectToPage)
+    } else {
+      goto('/')
+    }
   }
 
   function onChangeInstance() {
