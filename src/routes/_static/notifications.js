@@ -8,6 +8,11 @@ const NOTIFICATION_TYPES = {
     actionText: 'intl.tmmedYou',
     label: parse('intl.labelTmmedYou')
   },
+  mention: {
+    icon: '#fa-user',
+    actionText: 'intl.mentionedYou',
+    label: parse('intl.labelMentionedYou')
+  },
   comment: {
     icon: '#fa-reply',
     actionText: 'intl.commented',
