@@ -40,7 +40,7 @@
 
   const payload = {
     unitPrice: null,
-    currency: 'Flow',
+    currency: 'FlowToken',
     evergreenProfile: '',
     maxEditions: editions,
     release: '',
@@ -153,8 +153,8 @@
     <div id="currency" class="field">
       <label for="currency-input">Currency</label>
       <select name="currency" id="currency-input" bind:value={payload.currency}>
-        <option value="Flow">Flow</option>
-        <option value="FUSD">FUSD</option>
+        <option value="FlowToken">Flow</option>
+<!--        <option value="FUSD">FUSD</option>-->
       </select>
     </div>
     <div id="max-editions" class="field">

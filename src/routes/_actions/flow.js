@@ -1,7 +1,6 @@
 import * as fcl from '@onflow/fcl'
-import { send as transportGRPC } from '@onflow/transport-grpc'
 import { currentInstance, loggedInInstances } from '../_store/local'
-import { populateDigitalArtPreviewURLs, populateExternalNFTPreviewURLs } from '../_api/nft'
+import { populateDigitalArtPreviewURLs } from '../_api/nft'
 import { get } from 'svelte/store'
 import { accessToken, currentSparkId } from '../_store/instance'
 import { confirmMintOnDemand, getMintOnDemandSignature, initialiseMintOnDemand } from '../_api/marketplace'
@@ -45,39 +44,36 @@ export async function getFlowBalance(addr) {
         import FungibleToken from 0xFungibleToken
         import FlowToken from 0xFlowToken
 
-        pub fun main(address: Address): UFix64 {
-          let account = getAccount(address)
+        access(all) fun main(account: Address): UFix64 {
+            let vaultRef = getAccount(account)
+                .capabilities.borrow<&FlowToken.Vault>(/public/flowTokenBalance)
+                ?? panic("Could not borrow Balance reference to the Vault")
 
-          let vaultRef = account
-            .getCapability(/public/flowTokenBalance)
-            .borrow<&FlowToken.Vault{FungibleToken.Balance}>()
-            ?? panic("Cannot borrow FlowToken vault from account storage")
-
-          return vaultRef.balance
+            return vaultRef.balance
         }
       `,
     args: (arg, t) => [arg(addr, t.Address)]
   })
 }
 
-export async function getFUSDBalance(addr) {
+export async function getUSDCBalance(addr) {
   return await fcl.query({
     cadence: `
-        import FungibleToken from 0xFungibleToken
-        import FUSD from 0xFUSD
+import FungibleToken from 0xFungibleToken
+import USDCFlow from 0xUSDCFlow
 
-        pub fun main(address: Address): UFix64 {
-            let account = getAccount(address)
+access(all) fun main(address: Address): UFix64 {
+    let account = getAccount(address)
+    let vaultRef = account.capabilities.get<&USDCFlow.Vault>
+        (USDCFlow.VaultPublicPath)
+        .borrow()
 
-            let vaultRef = account.getCapability(/public/fusdBalance)!
-                .borrow<&FUSD.Vault{FungibleToken.Balance}>()
-
-            if vaultRef !=  nil {
-                return vaultRef!.balance
-            } else {
-                return 0.0
-            }
-        }
+    if vaultRef != nil {
+        return vaultRef!.balance
+    } else {
+        return 0.0
+    }
+}
       `,
     args: (arg, t) => [arg(addr, t.Address)]
   })
@@ -89,17 +85,16 @@ export async function getRoyaltyVaultTypes(addr) {
 import FungibleTokenSwitchboard from 0xFungibleTokenSwitchboard
 import FungibleToken from 0xFungibleToken
 
-pub fun main(account: Address): [Type] {
+access(all) fun main(account: Address): [Type] {
     let acct = getAccount(account)
     // Get a reference to the switchboard conforming to SwitchboardPublic
-    let switchboardRef = acct.getCapability(FungibleTokenSwitchboard.PublicPath)
-        .borrow<&FungibleTokenSwitchboard.Switchboard{FungibleTokenSwitchboard.SwitchboardPublic}>()
+    let switchboardRef = acct.capabilities.borrow<&{FungibleToken.Receiver}>(FungibleTokenSwitchboard.ReceiverPublicPath)
 
     if switchboardRef == nil {
       return []
     }
 
-    return switchboardRef!.getVaultTypes()
+    return switchboardRef!.getSupportedVaultTypes().keys
 }
       `,
     args: (arg, t) => [arg(addr, t.Address)]
@@ -109,100 +104,124 @@ pub fun main(account: Address): [Type] {
 export async function setupRoyaltyReceiver(addr) {
   try {
     const txHash = await fcl.send([
+      // source: account_royalty_receiver_setup.cdc
       fcl.transaction(`
 import FungibleTokenSwitchboard from 0xFungibleTokenSwitchboard
 import FungibleToken from 0xFungibleToken
+import FungibleTokenMetadataViews from 0xFungibleTokenMetadataViews
 import FlowToken from 0xFlowToken
-import FUSD from 0xFUSD
 import MetadataViews from 0xMetadataViews
 
-transaction {
+transaction(extraTokenContractAddresses: [Address], extraTokenContractNames: [String]) {
 
-    let flowTokenVaultCap: Capability<&{FungibleToken.Receiver}>
-    let fusdTokenVaultCap: Capability<&{FungibleToken.Receiver}>
-    let switchboardRef:  &FungibleTokenSwitchboard.Switchboard
+    let tokenVaultCapabilities: [Capability<&{FungibleToken.Receiver}>]
+    let switchboardRef:  auth(FungibleTokenSwitchboard.Owner) &FungibleTokenSwitchboard.Switchboard
 
-    prepare(acct: AuthAccount) {
+    prepare(signer: auth(BorrowValue, SaveValue, IssueStorageCapabilityController, PublishCapability, UnpublishCapability) &Account) {
+        assert(extraTokenContractAddresses.length == extraTokenContractNames.length, message: "lengths of extraTokenContractAddresses and extraTokenContractNames should be equal")
+
         // Check if the account already has a Switchboard resource
-        if acct.borrow<&FungibleTokenSwitchboard.Switchboard>
-          (from: FungibleTokenSwitchboard.StoragePath) == nil {
-
-            // Create a new Switchboard resource and put it into storage
-            acct.save(
-                <- FungibleTokenSwitchboard.createSwitchboard(),
-                to: FungibleTokenSwitchboard.StoragePath)
-
-            // Create a public capability to the Switchboard exposing the deposit
-            // function through the {FungibleToken.Receiver} interface
-            acct.link<&FungibleTokenSwitchboard.Switchboard{FungibleToken.Receiver}>(
-                FungibleTokenSwitchboard.ReceiverPublicPath,
-                target: FungibleTokenSwitchboard.StoragePath
-            )
-
-            // Create a public capability to the Switchboard exposing both the
-            // deposit function and the getVaultCapabilities function through the
-            // {FungibleTokenSwitchboard.SwitchboardPublic} interface
-            acct.link<&FungibleTokenSwitchboard.Switchboard{FungibleTokenSwitchboard.SwitchboardPublic}>(
-                FungibleTokenSwitchboard.PublicPath,
-                target: FungibleTokenSwitchboard.StoragePath
-            )
+        if signer.storage.borrow<&FungibleTokenSwitchboard.Switchboard>(from: FungibleTokenSwitchboard.StoragePath) == nil {
+            // Create a new Switchboard and save it in storage
+            signer.storage.save(<-FungibleTokenSwitchboard.createSwitchboard(), to: FungibleTokenSwitchboard.StoragePath)
+            // Clear existing Capabilities at canonical paths
+            signer.capabilities.unpublish(FungibleTokenSwitchboard.ReceiverPublicPath)
+            signer.capabilities.unpublish(FungibleTokenSwitchboard.PublicPath)
+            // Issue Receiver & Switchboard Capabilities
+            let receiverCap = signer.capabilities.storage.issue<&{FungibleToken.Receiver}>(
+                    FungibleTokenSwitchboard.StoragePath
+                )
+            let switchboardPublicCap = signer.capabilities.storage.issue<&{FungibleTokenSwitchboard.SwitchboardPublic, FungibleToken.Receiver}>(
+                    FungibleTokenSwitchboard.StoragePath
+                )
+            // Publish Capabilities
+            signer.capabilities.publish(receiverCap, at: FungibleTokenSwitchboard.ReceiverPublicPath)
+            signer.capabilities.publish(switchboardPublicCap, at: FungibleTokenSwitchboard.PublicPath)
         }
 
-        // Get a reference to the signers switchboard
-        self.switchboardRef = acct.borrow<&FungibleTokenSwitchboard.Switchboard>
-            (from: FungibleTokenSwitchboard.StoragePath)
+        // Get a reference to the account's switchboard
+        self.switchboardRef = signer.storage.borrow<auth(FungibleTokenSwitchboard.Owner) &FungibleTokenSwitchboard.Switchboard>(
+                from: FungibleTokenSwitchboard.StoragePath)
             ?? panic("Could not borrow reference to switchboard")
 
-        if acct.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault) == nil {
+        if signer.storage.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault) == nil {
             // Create a new flowToken Vault and put it in storage
-            acct.save(<-FlowToken.createEmptyVault(), to: /storage/flowTokenVault)
+            signer.storage.save(<-FlowToken.createEmptyVault(vaultType: Type<@FlowToken.Vault>()), to: /storage/flowTokenVault)
 
             // Create a public capability to the Vault that only exposes
             // the deposit function through the Receiver interface
-            acct.link<&FlowToken.Vault{FungibleToken.Receiver}>(
-                /public/flowTokenReceiver,
-                target: /storage/flowTokenVault
+            let vaultCap = signer.capabilities.storage.issue<&FlowToken.Vault>(
+                /storage/flowTokenVault
+            )
+
+            signer.capabilities.publish(
+                vaultCap,
+                at: /public/flowTokenReceiver
             )
 
             // Create a public capability to the Vault that only exposes
             // the balance field through the Balance interface
-            acct.link<&FlowToken.Vault{FungibleToken.Balance}>(
-                /public/flowTokenBalance,
-                target: /storage/flowTokenVault
+            let balanceCap = signer.capabilities.storage.issue<&FlowToken.Vault>(
+                /storage/flowTokenVault
+            )
+
+            signer.capabilities.publish(
+                balanceCap,
+                at: /public/flowTokenBalance
             )
         }
 
-        self.flowTokenVaultCap =
-            acct.getCapability<&{FungibleToken.Receiver}>(/public/flowTokenReceiver)
+        self.tokenVaultCapabilities = [signer.capabilities.get<&{FungibleToken.Receiver}>(/public/flowTokenReceiver)]
 
-        if(acct.borrow<&FUSD.Vault>(from: /storage/fusdVault) == nil) {
-            // Create a new FUSD Vault and put it in storage
-            acct.save(<-FUSD.createEmptyVault(), to: /storage/fusdVault)
+        var i = 0
+        for contractAddress in extraTokenContractAddresses {
+            let contractName = extraTokenContractNames[i]
 
-            // Create a public capability to the Vault that only exposes
-            // the deposit function through the Receiver interface
-            acct.link<&FUSD.Vault{FungibleToken.Receiver}>(
-                /public/fusdReceiver,
-                target: /storage/fusdVault
-            )
+            // Borrow a reference to the vault stored on the passed account at the passed publicPath
+            let resolverRef = getAccount(contractAddress)
+                .contracts.borrow<&{FungibleToken}>(name: contractName)
+                    ?? panic("Could not borrow FungibleToken reference to the contract. Make sure the provided contract name ("
+                              .concat(contractName).concat(") and address (").concat(contractAddress.toString()).concat(") are correct!"))
 
-            // Create a public capability to the Vault that only exposes
-            // the balance field through the Balance interface
-            acct.link<&FUSD.Vault{FungibleToken.Balance}>(
-                /public/fusdBalance,
-                target: /storage/fusdVault
-            )
+            // Use that reference to retrieve the FTView
+            let ftVaultData = resolverRef.resolveContractView(resourceType: nil, viewType: Type<FungibleTokenMetadataViews.FTVaultData>()) as! FungibleTokenMetadataViews.FTVaultData?
+                ?? panic("Could not resolve FTVaultData view. The ".concat(contractName)
+                    .concat(" contract needs to implement the FTVaultData Metadata view in order to execute this transaction."))
+
+            if signer.storage.borrow<&{FungibleToken.Vault}>(from: ftVaultData.storagePath) == nil {
+                // Create a new empty vault using the createEmptyVault function inside the FTVaultData
+                let emptyVault <-ftVaultData.createEmptyVault()
+
+                // Save it to the account
+                signer.storage.save(<-emptyVault, to: ftVaultData.storagePath)
+
+                // Create a public capability for the vault which includes the .Resolver interface
+                let vaultCap = signer.capabilities.storage.issue<&{FungibleToken.Vault}>(ftVaultData.storagePath)
+                signer.capabilities.publish(vaultCap, at: ftVaultData.metadataPath)
+
+                // Create a public capability for the vault exposing the receiver interface
+                let receiverCap = signer.capabilities.storage.issue<&{FungibleToken.Receiver}>(ftVaultData.storagePath)
+                signer.capabilities.publish(receiverCap, at: ftVaultData.receiverPath)
+            }
+
+            let cap = signer.capabilities.get<&{FungibleToken.Receiver}>(ftVaultData.receiverPath)
+            self.tokenVaultCapabilities.append(cap)
+
+            i = i + 1
         }
-
-        self.fusdTokenVaultCap =
-            acct.getCapability<&{FungibleToken.Receiver}>(/public/fusdReceiver)
     }
 
     execute {
-      self.switchboardRef.addNewVault(capability: self.flowTokenVaultCap)
-      self.switchboardRef.addNewVault(capability: self.fusdTokenVaultCap)
+        for cap in self.tokenVaultCapabilities {
+            self.switchboardRef.addNewVault(capability: cap)
+        }
+
     }
 }`),
+      fcl.args([
+        fcl.arg([], types.Array(types.Address)),
+        fcl.arg([], types.Array(types.String))
+      ]),
       fcl.payer(fcl.currentUser),
       fcl.proposer(fcl.currentUser),
       fcl.authorizations([fcl.authz]),
@@ -299,6 +318,8 @@ export async function mintOnDemand(listingId, numEditions, minterAddress, status
         fcl.arg(modParams.asset, types.String),
         fcl.arg(String(numEditions), types.UInt64),
         fcl.arg(modParams.unitPrice, types.UFix64),
+        fcl.arg(modParams.ftContractAddress, types.Address),
+        fcl.arg(modParams.ftContractName, types.String),
         fcl.arg(String(listingId), types.UInt64)
       ]),
       fcl.payer(payer),
@@ -376,6 +397,7 @@ function extractMintedTokens(result) {
 }
 
 // this function is inspired by https://github.com/jacob-tucker/multi-sign/blob/master/frontend/src/serverSigner.js
+// see also https://github.com/onflow/fcl-js/blob/d8b2a8e33ce0ec60ef5d36073dab99c949564167/packages/fcl-core/src/wallet-provider-spec/authorization-function.md
 const serverAuthorization =
   (
     instanceName,
@@ -388,27 +410,27 @@ const serverAuthorization =
     sequelAdminKeyID,
     statusCallback
   ) =>
-  async (account) => {
+async (account) => {
     // authorization function need to return an account
     return {
       ...account, // bunch of defaults in here, we want to overload some of them though
       tempId: `${sequelAdminAddress}-${sequelAdminKeyID}`, // tempIds are more of an advanced topic, for 99% of the times where you know the address and keyId you will want it to be a unique string per that address and keyId
       addr: fcl.sansPrefix(sequelAdminAddress), // the address of the signatory, currently it needs to be without a prefix right now
       keyId: Number(sequelAdminKeyID), // this is the keyId for the accounts registered key that will be used to sign, make extra sure this is a number and not a string
-      signingFunction: async (signable) => {
+      signingFunction: async signable => {
         statusCallback('tx_signing')
         // Signing functions are passed a signable and need to return a composite signature
         // signable.message is a hex string of what needs to be signed.
         let signature
         try {
           signature = await getMintOnDemandSignature(
-            instanceName,
-            accessToken,
-            id,
-            buyerAddress,
-            numEditions,
-            signable,
-            asSpark
+              instanceName,
+              accessToken,
+              id,
+              buyerAddress,
+              numEditions,
+              signable,
+              asSpark
           )
         } catch (e) {
           console.error(e)
@@ -422,23 +444,24 @@ const serverAuthorization =
         }
       }
     }
-  }
+}
 
 export async function readNFTCollections(addr) {
   const res = await fcl.query({
+    // source: nft_catalog/get_collections.cdc
     cadence: `
 import MetadataViews from 0xMetadataViews
 import NFTCatalog from 0xNFTCatalog
-import NFTRetrieval from 0xNFTRetrieval
+import ViewResolver from 0xViewResolver
 
-pub struct NFTCollection {
-    pub let id: String
-    pub let name: String
-    pub let description: String
-    pub let squareImage: String
-    pub let bannerImage: String
-    pub let externalURL: String
-    pub let count: Number
+access(all) struct NFTCollection {
+    access(all) let id: String
+    access(all) let name: String
+    access(all) let description: String
+    access(all) let squareImage: String
+    access(all) let bannerImage: String
+    access(all) let externalURL: String
+    access(all) let count: Number
 
     init(
         id: String,
@@ -459,21 +482,55 @@ pub struct NFTCollection {
     }
 }
 
-pub fun main(ownerAddress: Address): {String: NFTCollection} {
+access(all) fun main(ownerAddress: Address): {String: NFTCollection} {
     let account = getAccount(ownerAddress)
     let collections: {String: NFTCollection} = {}
 
+    fun hasMultipleCollectionsFn(nftTypeIdentifier : String): Bool {
+        let typeCollections = NFTCatalog.getCollectionsForType(nftTypeIdentifier: nftTypeIdentifier)!
+        var numberOfCollections = 0
+        for identifier in typeCollections.keys {
+            let existence = typeCollections[identifier]!
+            if existence {
+                numberOfCollections = numberOfCollections + 1
+            }
+            if numberOfCollections > 1 {
+                return true
+            }
+        }
+        return false
+    }
+
     NFTCatalog.forEachCatalogKey(fun (collectionIdentifier: String):Bool {
+        // skip the Catalog entry for pre-Crescendo contract
+        if collectionIdentifier == "SequelDigitalArt" {
+          return true
+        }
+
         let value = NFTCatalog.getCatalogEntry(collectionIdentifier: collectionIdentifier)!
 
-        let collectionCap = account
-          .getCapability<&AnyResource{MetadataViews.ResolverCollection}>(value.collectionData.publicPath)
+        let collectionCap = account.capabilities.get<&{ViewResolver.ResolverCollection}>(value.collectionData.publicPath)
 
         if !collectionCap.check() {
             return true
         }
 
-        let count = NFTRetrieval.getNFTCountFromCap(collectionIdentifier: collectionIdentifier, collectionCap: collectionCap)
+        // Check if we have multiple collections for the NFT type...
+        let hasMultipleCollections = hasMultipleCollectionsFn(nftTypeIdentifier : value.nftType.identifier)
+
+        var count : UInt64 = 0
+        let collectionRef = collectionCap.borrow()!
+        if !hasMultipleCollections {
+            count = UInt64(collectionRef.getIDs().length)
+        } else {
+            for id in collectionRef.getIDs() {
+                let nftResolver = collectionRef.borrowViewResolver(id: id)
+                let nftViews = MetadataViews.getNFTView(id: id, viewResolver: nftResolver!)
+                if nftViews.display!.name == value.collectionDisplay.name {
+                    count = count + 1
+                }
+            }
+        }
 
         if count != 0 {
             collections[collectionIdentifier] = NFTCollection(
@@ -490,8 +547,7 @@ pub fun main(ownerAddress: Address): {String: NFTCollection} {
     })
 
     return collections
-}
-      `,
+}`,
     args: (arg, t) => [arg(addr, t.Address)]
   })
 
@@ -562,22 +618,22 @@ export async function readSequelDigitalArtCollection(account) {
 async function getSequelDigitalArtCollection(addr) {
   return await fcl.query({
     cadence: `
-        import DigitalArt from 0xDigitalArt
+      import DigitalArt from 0xDigitalArt
 
-        pub fun main(address: Address): { UInt64: DigitalArt.Metadata } {
-          let acct = getAccount(address)
+      access(all) fun main(address: Address): { UInt64: DigitalArt.Metadata } {
+        let acct = getAccount(address)
 
-          let res : { UInt64: DigitalArt.Metadata } = {}
-          if let collection = acct.getCapability(DigitalArt.CollectionPublicPath).borrow<&{DigitalArt.CollectionPublic}>()  {
-            for id in collection.getIDs() {
-              var da = collection.borrowDigitalArt(id: id)!
-              if let view = da.resolveView(Type<DigitalArt.Metadata>()) {
-                res[id] = view as! DigitalArt.Metadata
-              }
+        let res : { UInt64: DigitalArt.Metadata } = {}
+        if let collection = acct.capabilities.borrow<&{DigitalArt.CollectionPublic}>(DigitalArt.CollectionPublicPath) {
+          for id in collection.getIDs() {
+            var da = collection.borrowDigitalArt(id: id)!
+            if let view = da.resolveView(Type<DigitalArt.Metadata>()) {
+              res[id] = view as! DigitalArt.Metadata
             }
           }
+        }
 
-          return res
+        return res
       }`,
     args: (arg, t) => [arg(addr, t.Address)]
   })
@@ -585,17 +641,17 @@ async function getSequelDigitalArtCollection(addr) {
 
 async function getNFTCatalogCollection(addr, collectionID) {
   return await fcl.query({
+    // source: nft_catalog/get_collection_tokens.cdc
     cadence: `
 import MetadataViews from 0xMetadataViews
 import NFTCatalog from 0xNFTCatalog
-import NFTRetrieval from 0xNFTRetrieval
 
-pub struct NFT {
-    pub let id: UInt64
-    pub let name: String
-    pub let description: String
-    pub let thumbnail: String
-    pub let externalURL: String
+access(all) struct NFT {
+    access(all) let id: UInt64
+    access(all) let name: String
+    access(all) let description: String
+    access(all) let thumbnail: String
+    access(all) let externalURL: String
 
     init(
         id: UInt64,
@@ -612,7 +668,7 @@ pub struct NFT {
     }
 }
 
-pub fun main(ownerAddress: Address, collectionIdentifier: String): [NFT] {
+access(all) fun main(ownerAddress: Address, collectionIdentifier: String): [NFT] {
     let account = getAuthAccount(ownerAddress)
 
     let value = NFTCatalog.getCatalogEntry(collectionIdentifier: collectionIdentifier)!
@@ -620,18 +676,45 @@ pub fun main(ownerAddress: Address, collectionIdentifier: String): [NFT] {
     let tempPathStr = "catalog".concat(keyHash)
     let tempPublicPath = PublicPath(identifier: tempPathStr)!
 
-    account.link<&{MetadataViews.ResolverCollection}>(
-        tempPublicPath,
-        target: value.collectionData.storagePath
-    )
-
     let collectionCap = account.getCapability<&AnyResource{MetadataViews.ResolverCollection}>(tempPublicPath)
 
     if !collectionCap.check() {
         return []
     }
 
-    let views = NFTRetrieval.getNFTViewsFromCap(collectionIdentifier: collectionIdentifier, collectionCap: collectionCap)
+    fun hasMultipleCollectionsFn(nftTypeIdentifier : String): Bool {
+        let typeCollections = NFTCatalog.getCollectionsForType(nftTypeIdentifier: nftTypeIdentifier)!
+        var numberOfCollections = 0
+        for identifier in typeCollections.keys {
+            let existence = typeCollections[identifier]!
+            if existence {
+                numberOfCollections = numberOfCollections + 1
+            }
+            if numberOfCollections > 1 {
+                return true
+            }
+        }
+        return false
+    }
+
+    let views : [MetadataViews.NFTView] = []
+
+    // Check if we have multiple collections for the NFT type...
+    let hasMultipleCollections = self.hasMultipleCollections(nftTypeIdentifier : value.nftType.identifier)
+
+    if collectionCap.check() {
+        let collectionRef = collectionCap.borrow()!
+        for id in collectionRef.getIDs() {
+            let nftResolver = collectionRef.borrowViewResolver(id: id)
+            let nftViews = MetadataViews.getNFTView(id: id, viewResolver: nftResolver!)
+            if !hasMultipleCollections {
+                views.append(nftViews)
+            } else if nftViews.display!.name == value.collectionDisplay.name {
+                views.append(nftViews)
+            }
+
+        }
+    }
 
     let items: [NFT] = []
 

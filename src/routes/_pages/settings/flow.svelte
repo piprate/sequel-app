@@ -16,7 +16,7 @@
     configureFlow,
     disconnectFromFlow,
     getFlowBalance,
-    getFUSDBalance,
+    getUSDCBalance,
     getRoyaltyVaultTypes,
     setupRoyaltyReceiver
   } from '../../_actions/flow'
@@ -74,15 +74,15 @@
     configureFlow($currentInstance)
 
     flowBalance = await getFlowBalance(addr)
-    fusdBalance = await getFUSDBalance(addr)
+    // fusdBalance = await getUSDCBalance(addr)
     const vaultTypes = await getRoyaltyVaultTypes(addr)
     royaltyReceiverVaults = []
     vaultTypes.forEach((vaultType) => {
       if (vaultType.typeID.includes('FlowToken')) {
         royaltyReceiverVaults.push('Flow')
       }
-      if (vaultType.typeID.includes('FUSD')) {
-        royaltyReceiverVaults.push('FUSD')
+      if (vaultType.typeID.includes('USDCFlow')) {
+        royaltyReceiverVaults.push('USDC')
       }
     })
   }

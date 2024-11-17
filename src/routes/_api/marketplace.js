@@ -1,7 +1,6 @@
 import { base, sequelAuth } from './utils'
 import { DEFAULT_TIMEOUT, get, paramsString, post, WRITE_TIMEOUT } from '../_utils/ajax'
 import { populateMediaURLsInMarketplaceListings, populateMediaURLsInSingleListing } from './media'
-import { unwrap } from '../_utils/mapper'
 
 export function getListing(instanceName, accessToken, id, asSpark) {
   const url = `${base(instanceName, accessToken)}/marketplace/${id}`
