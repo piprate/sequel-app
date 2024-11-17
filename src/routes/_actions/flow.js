@@ -218,10 +218,7 @@ transaction(extraTokenContractAddresses: [Address], extraTokenContractNames: [St
 
     }
 }`),
-      fcl.args([
-        fcl.arg([], types.Array(types.Address)),
-        fcl.arg([], types.Array(types.String))
-      ]),
+      fcl.args([fcl.arg([], types.Array(types.Address)), fcl.arg([], types.Array(types.String))]),
       fcl.payer(fcl.currentUser),
       fcl.proposer(fcl.currentUser),
       fcl.authorizations([fcl.authz]),
@@ -410,27 +407,27 @@ const serverAuthorization =
     sequelAdminKeyID,
     statusCallback
   ) =>
-async (account) => {
+  async (account) => {
     // authorization function need to return an account
     return {
       ...account, // bunch of defaults in here, we want to overload some of them though
       tempId: `${sequelAdminAddress}-${sequelAdminKeyID}`, // tempIds are more of an advanced topic, for 99% of the times where you know the address and keyId you will want it to be a unique string per that address and keyId
       addr: fcl.sansPrefix(sequelAdminAddress), // the address of the signatory, currently it needs to be without a prefix right now
       keyId: Number(sequelAdminKeyID), // this is the keyId for the accounts registered key that will be used to sign, make extra sure this is a number and not a string
-      signingFunction: async signable => {
+      signingFunction: async (signable) => {
         statusCallback('tx_signing')
         // Signing functions are passed a signable and need to return a composite signature
         // signable.message is a hex string of what needs to be signed.
         let signature
         try {
           signature = await getMintOnDemandSignature(
-              instanceName,
-              accessToken,
-              id,
-              buyerAddress,
-              numEditions,
-              signable,
-              asSpark
+            instanceName,
+            accessToken,
+            id,
+            buyerAddress,
+            numEditions,
+            signable,
+            asSpark
           )
         } catch (e) {
           console.error(e)
@@ -444,7 +441,7 @@ async (account) => {
         }
       }
     }
-}
+  }
 
 export async function readNFTCollections(addr) {
   const res = await fcl.query({
