@@ -1,11 +1,11 @@
 $main-theme-color: #bf4564;
-$main-bg-color: #0F1015;
+$main-bg-color: #0f1015;
 $body-bg-color: darken($main-bg-color, 5%);
 $anchor-color: $main-theme-color;
-$main-text-color: #B0A8B9;
+$main-text-color: #b0a8b9;
 $border-color: lighten($body-bg-color, 10%);
 $secondary-text-color: #dfdfdf;
-$secondary-accent-color: #2A6F73;
+$secondary-accent-color: #2a6f73;
 $toast-border: $secondary-accent-color;
 $toast-bg: #333;
 $focus-outline: lighten($main-theme-color, 50%);
