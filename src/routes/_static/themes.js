@@ -3,6 +3,12 @@ const themes = [
     name: 'sequel-light',
     label: 'intl.themeSequelLight',
     dark: false,
+    color: '#d94f70'
+  },
+  {
+    name: 'sequel21-light',
+    label: 'intl.themeSequel21Light',
+    dark: false,
     color: '#a75fcf'
   },
   {
@@ -56,6 +62,12 @@ const themes = [
   {
     name: 'default',
     label: 'intl.themeSequel',
+    dark: true,
+    color: '#d94f70'
+  },
+  {
+    name: 'sequel21',
+    label: 'intl.themeSequel21',
     dark: true,
     color: '#a75fcf'
   },

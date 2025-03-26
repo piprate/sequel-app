@@ -1,11 +1,12 @@
-$main-theme-color: #a75fcf;
+$main-theme-color: #bf4564;
 $body-bg-color: lighten($main-theme-color, 38%);
 $anchor-color: $main-theme-color;
 $main-text-color: #333;
 $border-color: #dadada;
 $main-bg-color: white;
 $secondary-text-color: white;
-$toast-border: #fafafa;
+$secondary-accent-color: #2A6F73;
+$toast-border: $secondary-accent-color;
 $toast-bg: #333;
 $focus-outline: lighten($main-theme-color, 30%);
 $compose-background: lighten($main-theme-color, 32%);

@@ -34,8 +34,8 @@
   --nav-a-selected-active-bg: #{lighten($main-theme-color, 17%)};
   --nav-svg-fill: #{$secondary-text-color};
   --nav-text-color: #{$secondary-text-color};
-  --nav-indicator-bg: #{rgba($secondary-text-color, 0.8)};
-  --nav-indicator-bg-hover: #{rgba($secondary-text-color, 0.85)};
+  --nav-indicator-bg: #{rgba($secondary-accent-color, 0.8)};
+  --nav-indicator-bg-hover: #{rgba($secondary-accent-color, 0.85)};
 
   --nav-a-selected-border-hover: #{$secondary-text-color};
   --nav-a-selected-bg-hover: #{lighten($main-theme-color, 15%)};
@@ -77,19 +77,19 @@
   --mask-opaque-bg: #{rgba($toast-bg, 0.8)};
   --loading-bg: #{#ededed};
 
-  --spark-profile-bg-backdrop-filter: #{rgba($main-bg-color, 0.7)};
+  --spark-profile-bg-backdrop-filter: #{rgba($main-bg-color, 0.8)};
   --spark-profile-bg: #{rgba($main-bg-color, 0.9)};
 
-  --world-profile-bg-backdrop-filter: #{rgba($main-bg-color, 0.7)};
+  --world-profile-bg-backdrop-filter: #{rgba($main-bg-color, 0.8)};
   --world-profile-bg: #{rgba($main-bg-color, 0.9)};
 
-  --bubble-profile-bg-backdrop-filter: #{rgba($main-bg-color, 0.7)};
+  --bubble-profile-bg-backdrop-filter: #{rgba($main-bg-color, 0.8)};
   --bubble-profile-bg: #{rgba($main-bg-color, 0.9)};
 
-  --listing-bg-backdrop-filter: #{rgba($main-bg-color, 0.7)};
+  --listing-bg-backdrop-filter: #{rgba($main-bg-color, 0.8)};
   --listing-bg: #{rgba($main-bg-color, 0.9)};
 
-  --digital-art-bg-backdrop-filter: #{rgba($main-bg-color, 0.7)};
+  --digital-art-bg-backdrop-filter: #{rgba($main-bg-color, 0.8)};
   --digital-art-bg: #{rgba($main-bg-color, 0.9)};
 
   --deemphasized-text-color: #{$deemphasized-color};

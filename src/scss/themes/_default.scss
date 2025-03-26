@@ -1,11 +1,12 @@
-$main-theme-color: #a75fcf;
-$main-bg-color: #28252e;
+$main-theme-color: #bf4564;
+$main-bg-color: #0F1015;
 $body-bg-color: darken($main-bg-color, 5%);
 $anchor-color: $main-theme-color;
-$main-text-color: #dfdfdf;
+$main-text-color: #B0A8B9;
 $border-color: lighten($body-bg-color, 10%);
 $secondary-text-color: #dfdfdf;
-$toast-border: #fafafa;
+$secondary-accent-color: #2A6F73;
+$toast-border: $secondary-accent-color;
 $toast-bg: #333;
 $focus-outline: lighten($main-theme-color, 50%);
 $compose-background: lighten($main-theme-color, 52%);

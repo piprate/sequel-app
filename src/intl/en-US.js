@@ -152,7 +152,7 @@ const intl = {
     explore Sequel <a href="/worlds" data-sveltekit-preload-data>worlds</a> and <a href="/bubbles" data-sveltekit-preload-data>bubbles</a>.
     Write your first post by either joining an existing bubble or creating your own one.`,
 
-  createNewSpark: 'Create new spark',
+  createNewSpark: 'New Spark',
   selectSpark: 'Select',
   currentSparkLabel: `{spark} {current, select,
     true {(current spark)}
@@ -407,7 +407,7 @@ const intl = {
   descriptionLabel: 'Describe for the visually impaired (image, video) or auditorily impaired (audio, video)',
   markAsSensitive: 'Mark media as sensitive',
   // Polls
-  createPoll: 'Create poll',
+  createPoll: 'Create Poll',
   removePollChoice: 'Remove choice {index}',
   pollChoiceLabel: 'Choice {index}',
   multipleChoice: 'Multiple choice',
@@ -541,9 +541,9 @@ const intl = {
   isSubscriber: 'Is a subscriber',
   avatarForSpark: 'Avatar for {spark}',
   bubblesFromSpark: 'Bubbles from {spark}',
-  createNewBubble: 'Create new bubble',
-  createNewWorld: 'Create new world',
-  editDigitalArt: 'Edit digital art',
+  createNewBubble: 'New Bubble',
+  createNewWorld: 'New World',
+  editDigitalArt: 'Edit Digital Art',
   createNewDigitalArt: 'New Digital Art',
   selectSparkBeforeCreatingWorld:
     'You need to <a href="/switch" data-sveltekit-preload-data>select</a> a spark before creating worlds.',
@@ -606,8 +606,7 @@ const intl = {
   <p>
     <ul>
         <li>Mastodon: <a rel="noopener" target="_blank" href="https://mastodon.social/@sequel">@sequel@mastodon.social</a></li>
-        <li>Discord: <a rel="noopener" target="_blank" href="https://discord.gg/YaR7BFuXNk">Sequel</a></li>
-        <li>Twitter: <a rel="noopener" target="_blank" href="https://twitter.com/sequelspace">@sequelspace</a></li>
+        <li>X: <a rel="noopener" target="_blank" href="https://x.com/sequelspace">@sequelspace</a></li>
         <li>Email: <a rel="noopener" target="_blank" href="mailto:info@sequel.space">info@sequel.space</a></li>
         <li>Matrix: <a rel="noopener" target="_blank" href="https://matrix.to/#/#sequel:matrix.org">#sequel:matrix.org</a></li>
         <li>Gemini: <a rel="noopener" target="_blank" href="gemini://sequel.space">gemini://sequel.space</a></li>
@@ -851,6 +850,7 @@ const intl = {
   subscribersOnly: 'Subscribers-only',
   // Themes
   themeSequelLight: 'Sequel Light',
+  themeSequel21Light: 'Sequel 21 Light',
   themeRoyal: 'Royal',
   themeScarlet: 'Scarlet',
   themeSeafoam: 'Seafoam',
@@ -865,6 +865,7 @@ const intl = {
   themePunk: 'Punk',
   themeRiot: 'Riot',
   themeSequel: 'Sequel',
+  themeSequel21: 'Sequel 21',
   themeHacker: 'Hacker',
   themeMastodon: 'Mastodon',
   themePitchBlack: 'Pitch Black',
